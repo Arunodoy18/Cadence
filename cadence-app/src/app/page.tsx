@@ -502,9 +502,9 @@ export default function App() {
   ];
 
   return (
-    <div style={{ background: '#E7E1D5', minHeight: '100vh', width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '18px', padding: '36px 20px', boxSizing: 'border-box' }}>
+    <div className="cd-outer" style={{ background: '#E7E1D5', minHeight: '100vh', width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '18px', padding: '36px 20px', boxSizing: 'border-box' }}>
       
-      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+      <div className="cd-demo-label" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
         <div style={{ width: '28px', height: '28px', borderRadius: '8px', background: '#DB5338', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <div style={{ width: '11px', height: '11px', border: '2.2px solid #FBF6EE', borderRadius: '50%', borderRightColor: 'transparent', transform: 'rotate(-45deg)' }}></div>
         </div>
@@ -515,8 +515,9 @@ export default function App() {
       </div>
 
       {/* PHONE FRAME */}
-      <div style={{ width: '330px', height: '710px', background: '#1c1714', borderRadius: '46px', padding: '12px', boxShadow: '0 36px 70px -24px rgba(40,30,20,.55)', flex: 'none' }}>
-        <div style={{ width: '100%', height: '100%', background: view === 'complete' ? '#2F8F83' : (view === 'convo' || view === 'review' ? '#241C2A' : '#FBF6EE'), borderRadius: '34px', overflow: 'hidden', position: 'relative', display: 'flex', flexDirection: 'column' }}>
+      <div className="cd-phone-shell" style={{ width: '330px', height: '710px', background: '#1c1714', borderRadius: '46px', padding: '12px', boxShadow: '0 36px 70px -24px rgba(40,30,20,.55)', flex: 'none' }}>
+        <div className="cd-phone-inner" style={{ width: '100%', height: '100%', background: view === 'complete' ? '#2F8F83' : (view === 'convo' || view === 'review' ? '#241C2A' : '#FBF6EE'), borderRadius: '34px', overflow: 'hidden', position: 'relative', display: 'flex', flexDirection: 'column' }}>
+
 
           {/* STATUS BAR */}
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 24px 0', fontSize: '12px', fontWeight: 600, flex: 'none', zIndex: 5, color: (view === 'complete' || view === 'convo' || view === 'review') ? '#F3ECE2' : '#2A2320' }}>

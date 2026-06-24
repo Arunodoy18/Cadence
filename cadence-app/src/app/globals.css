@@ -139,3 +139,32 @@ body {
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
+@media (max-width: 600px) {
+  /* Hide the desktop demo phone shell */
+  .cd-phone-shell { display: none !important; }
+  
+  /* Make the inner app content fill the full screen */
+  .cd-phone-inner {
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 0 !important;
+    overflow-y: auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    background: #FBF6EE !important;
+  }
+  
+  /* Hide demo chrome */
+  .cd-outer { 
+    background: #FBF6EE !important; 
+    padding: 0 !important; 
+  }
+  .cd-quicknav { display: none !important; }
+  .cd-demo-label { display: none !important; }
+  
+  body { background: #FBF6EE !important; }
+}
+
