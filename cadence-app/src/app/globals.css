@@ -141,8 +141,15 @@ body {
 }
 
 @media (max-width: 600px) {
-  /* Hide the desktop demo phone shell */
-  .cd-phone-shell { display: none !important; }
+  /* Reset desktop phone shell styling so it is transparent and doesn't clip content */
+  .cd-phone-shell {
+    width: 100% !important;
+    height: 100% !important;
+    background: transparent !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+  }
   
   /* Make the inner app content fill the full screen */
   .cd-phone-inner {
