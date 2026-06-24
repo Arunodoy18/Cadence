@@ -1,0 +1,141 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  margin: 0;
+  background: #E7E1D5;
+  color: #2A2320;
+  font-family: 'Hanken Grotesk', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: #DB5338;
+  color: #fff;
+}
+
+.cd-scroll::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+.cd-scroll {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+/* Language specific fonts */
+.jp {
+  font-family: 'Noto Sans JP', 'Hanken Grotesk', sans-serif;
+}
+
+.kr {
+  font-family: 'Noto Sans KR', 'Hanken Grotesk', sans-serif;
+}
+
+.hi {
+  font-family: 'Noto Sans Devanagari', 'Hanken Grotesk', sans-serif;
+}
+
+.ar {
+  font-family: 'Noto Sans Arabic', 'Hanken Grotesk', sans-serif;
+  direction: rtl;
+}
+
+.zh {
+  font-family: 'Noto Sans SC', 'Hanken Grotesk', sans-serif;
+}
+
+.th {
+  font-family: 'Noto Sans Thai', 'Hanken Grotesk', sans-serif;
+}
+
+.he {
+  font-family: 'Noto Sans Hebrew', 'Hanken Grotesk', sans-serif;
+  direction: rtl;
+}
+
+.noto {
+  font-family: 'Noto Sans', 'Hanken Grotesk', sans-serif;
+}
+
+.bn {
+  font-family: 'Noto Sans Bengali', 'Hanken Grotesk', sans-serif;
+}
+
+@keyframes cdIn {
+  from {
+    transform: translateY(10px);
+    opacity: 0.8;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+@keyframes cdDots {
+  0%, 60%, 100% {
+    opacity: .25;
+  }
+  30% {
+    opacity: 1;
+  }
+}
+
+@keyframes cdPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(219, 83, 56, 0.45);
+  }
+  70% {
+    box-shadow: 0 0 0 14px rgba(219, 83, 56, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(219, 83, 56, 0);
+  }
+}
+
+.cd-screen {
+  opacity: 1;
+  animation: cdIn .32s cubic-bezier(.2, .7, .2, 1) both;
+}
+
+.cd-dot {
+  animation: cdDots 1s infinite;
+}
+
+.cd-listening {
+  animation: cdPulse 1.3s infinite;
+}
+
+.cd-input {
+  outline: none;
+  border: none;
+  background: transparent;
+  color: #F3ECE2;
+  font-family: 'Hanken Grotesk', sans-serif;
+}
+
+.cd-input::placeholder {
+  color: #8E84A0;
+}
+
+.cd-input-l {
+  outline: none;
+  border: none;
+  background: transparent;
+  color: #2A2320;
+  font-family: 'Hanken Grotesk', sans-serif;
+}
+
+.cd-input-l::placeholder {
+  color: #A8927C;
+}
+
+/* Custom UI styling details */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}

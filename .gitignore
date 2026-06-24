@@ -1,0 +1,8 @@
+.env
+.env.local
+.DS_Store
+node_modules/
+.next/
+/cadence-app/.env.local
+/cadence-app/node_modules/
+/cadence-app/.next/
