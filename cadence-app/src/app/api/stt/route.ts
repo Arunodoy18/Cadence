@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import OpenAI, { toFile } from 'openai';
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-
 export async function POST(req: NextRequest) {
   try {
+    const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || 'dummy-key' });
+
     const formData = await req.formData();
     const audioFile = formData.get('file') as File;
     if (!audioFile) {

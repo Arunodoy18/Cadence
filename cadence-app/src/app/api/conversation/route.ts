@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import OpenAI from 'openai';
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-
 export async function POST(req: NextRequest) {
   try {
+    const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || 'dummy-key' });
+
     const { messages, lang, scenario, partnerName, persona, level } = await req.json();
 
     // Build the system prompt exactly like the prototype's aiReply()
