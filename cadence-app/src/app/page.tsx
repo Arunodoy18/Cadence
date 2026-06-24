@@ -515,14 +515,17 @@ export default function App() {
       </div>
 
       {/* PHONE FRAME */}
-      <div className="cd-phone-shell" style={{ width: '330px', height: '710px', background: '#1c1714', borderRadius: '46px', padding: '12px', boxShadow: '0 36px 70px -24px rgba(40,30,20,.55)', flex: 'none' }}>
-        <div className="cd-phone-inner" style={{ width: '100%', height: '100%', background: view === 'complete' ? '#2F8F83' : (view === 'convo' || view === 'review' ? '#241C2A' : '#FBF6EE'), borderRadius: '34px', overflow: 'hidden', position: 'relative', display: 'flex', flexDirection: 'column' }}>
+      <div style={{ position: 'relative', width: '330px', height: '710px', flex: 'none' }}>
+        <div className="cd-phone-shell" style={{ position: 'absolute', inset: 0, background: '#1c1714', borderRadius: '46px', padding: '12px', boxShadow: '0 36px 70px -24px rgba(40,30,20,.55)' }}></div>
+        <div className="cd-phone-inner" style={{ position: 'absolute', top: '12px', left: '12px', right: '12px', bottom: '12px', background: view === 'complete' ? '#2F8F83' : (view === 'convo' || view === 'review' ? '#241C2A' : '#FBF6EE'), borderRadius: '34px', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+
 
 
           {/* STATUS BAR */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 24px 0', fontSize: '12px', fontWeight: 600, flex: 'none', zIndex: 5, color: (view === 'complete' || view === 'convo' || view === 'review') ? '#F3ECE2' : '#2A2320' }}>
+          <div className="cd-status-bar" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 24px 0', fontSize: '12px', fontWeight: 600, flex: 'none', zIndex: 5, color: (view === 'complete' || view === 'convo' || view === 'review') ? '#F3ECE2' : '#2A2320' }}>
             <span>9:41</span><span>●●● ◔</span>
           </div>
+
 
           {/* ===== WELCOME SCREEN ===== */}
           {view === 'welcome' && (
@@ -946,9 +949,10 @@ export default function App() {
           {/* ===== COMPLETE SCREEN ===== */}
           {view === 'complete' && (
             <div className="cd-screen" style={{ position: 'absolute', inset: 0, background: '#2F8F83', color: '#F2F7F5', display: 'flex', flexDirection: 'column' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 24px 0', fontSize: '12px', fontWeight: 600 }}>
+              <div className="cd-status-bar" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 24px 0', fontSize: '12px', fontWeight: 600 }}>
                 <span>9:41</span><span>●●● ◔</span>
               </div>
+
               <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: '0 30px', textAlign: 'center' }}>
                 <div style={{ width: '80px', height: '80px', borderRadius: '50%', background: 'rgba(255,255,255,.16)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '36px', marginBottom: '22px' }}>☕</div>
                 <div style={{ fontSize: '11px', letterSpacing: '.14em', textTransform: 'uppercase', opacity: .8, marginBottom: '10px' }}>New milestone unlocked</div>

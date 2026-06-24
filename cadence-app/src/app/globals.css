@@ -10,7 +10,10 @@ body {
   color: #2A2320;
   font-family: 'Hanken Grotesk', sans-serif;
   -webkit-font-smoothing: antialiased;
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
 }
+
 
 ::selection {
   background: #DB5338;
@@ -141,37 +144,34 @@ body {
 }
 
 @media (max-width: 600px) {
-  /* Reset desktop phone shell styling so it is transparent and doesn't clip content */
-  .cd-phone-shell {
-    width: 100% !important;
-    height: 100% !important;
-    background: transparent !important;
-    border-radius: 0 !important;
-    padding: 0 !important;
-    box-shadow: none !important;
-  }
-  
-  /* Make the inner app content fill the full screen */
-  .cd-phone-inner {
-    position: fixed !important;
-    inset: 0 !important;
-    width: 100% !important;
-    height: 100% !important;
-    border-radius: 0 !important;
-    overflow-y: auto !important;
-    display: flex !important;
-    flex-direction: column !important;
-    background: #FBF6EE !important;
-  }
-  
-  /* Hide demo chrome */
-  .cd-outer { 
-    background: #FBF6EE !important; 
-    padding: 0 !important; 
-  }
+  .cd-status-bar { display: none !important; }
+  .cd-phone-shell { display: none !important; }
   .cd-quicknav { display: none !important; }
   .cd-demo-label { display: none !important; }
   
-  body { background: #FBF6EE !important; }
+  .cd-outer {
+    background: #FBF6EE !important;
+    padding: 0 !important;
+    min-height: 100vh !important;
+    align-items: stretch !important;
+  }
+  
+  .cd-phone-inner {
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    border-radius: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding-top: env(safe-area-inset-top) !important;
+    padding-bottom: env(safe-area-inset-bottom) !important;
+  }
+  
+  body {
+    background: #FBF6EE !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
 }
 
