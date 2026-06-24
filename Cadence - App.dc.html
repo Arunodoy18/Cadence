@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Hanken+Grotesk:ital,wght@0,300..800;1,400..600&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;}
+  body{margin:0;}
+  ::selection{background:#DB5338;color:#fff;}
+</style>
+</helmet>
+
+<div style="background:#E7E1D5;width:max-content;min-width:100%;min-height:100vh;padding:48px;box-sizing:border-box;font-family:'Hanken Grotesk',sans-serif;color:#2A2320;-webkit-font-smoothing:antialiased;">
+
+  <!-- gallery title -->
+  <div style="margin-bottom:40px;">
+    <div style="display:flex;align-items:center;gap:11px;margin-bottom:10px;">
+      <div style="width:34px;height:34px;border-radius:9px;background:#DB5338;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(219,83,56,.32);">
+        <div style="width:13px;height:13px;border:2.5px solid #FBF6EE;border-radius:50%;border-right-color:transparent;transform:rotate(-45deg);"></div>
+      </div>
+      <span style="font-size:22px;letter-spacing:-.01em;font-weight:600;">Cadence</span>
+      <span style="font-family:'Instrument Serif',serif;font-style:italic;font-size:22px;color:#8A7E73;">— the whole app</span>
+    </div>
+    <div style="font-size:14px;color:#7C7066;max-width:60ch;">English → Spanish demo · static screens, full flow. Scroll right within a row, down through the journey.</div>
+  </div>
+
+  <!-- ============ SECTION: GET STARTED ============ -->
+  <div style="margin-bottom:54px;">
+    <div style="display:flex;align-items:baseline;gap:13px;margin-bottom:20px;">
+      <span style="font-family:'Instrument Serif',serif;font-style:italic;font-size:24px;color:#DB5338;">01</span>
+      <span style="font-size:13px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#8A7E73;">Get started</span>
+      <span style="font-size:13px;color:#A0948A;">Goal-first intake, placement by real conversation — not five taps and a streak.</span>
+    </div>
+    <div style="display:flex;gap:32px;align-items:flex-start;">
+
+      <!-- WELCOME -->
+      <div style="flex:none;">
+        <div style="width:300px;height:620px;background:#1c1714;border-radius:42px;padding:11px;box-shadow:0 30px 60px -22px rgba(40,30,20,.5);">
+          <div style="width:100%;height:100%;background:#FBF6EE;border-radius:32px;overflow:hidden;position:relative;display:flex;flex-direction:column;">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 22px 0;font-size:12px;font-weight:600;"><span>9:41</span><span style="letter-spacing:1px;">●●● ◔</span></div>
+            <div style="padding:18px 26px 0;display:flex;justify-content:center;">
+              <div style="display:inline-flex;align-items:center;gap:7px;background:#fff;border:1px solid #EDE4D6;border-radius:99px;padding:6px 13px;font-size:12.5px;font-weight:600;">🇬🇧 EN <span style="color:#C9AE97;">→</span> 🇪🇸 ES <span style="color:#9A8E84;font-weight:400;">▾</span></div>
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:0 28px;">
+              <div style="font-family:'Instrument Serif',serif;font-size:46px;line-height:0.98;letter-spacing:-.01em;margin-bottom:18px;">Speak Spanish<br><span style="color:#DB5338;font-style:italic;">for real.</span></div>
+              <div style="font-size:15px;line-height:1.5;color:#5C5048;">Not flashcards forever. Real conversation from day one, culture in every lesson, and a path that doesn't stop at “tourist.”</div>
+            </div>
+            <div style="padding:0 26px 34px;">
+              <div style="background:#DB5338;color:#FBF6EE;border-radius:16px;padding:16px;text-align:center;font-size:16px;font-weight:600;box-shadow:0 8px 20px -6px rgba(219,83,56,.5);margin-bottom:11px;">Start — it's free</div>
+              <div style="text-align:center;font-size:14px;color:#8A7E73;">I already have an account</div>
+            </div>
+          </div>
+        </div>
+        <div style="font-size:12.5px;color:#7C7066;margin-top:14px;text-align:center;">Welcome</div>
+      </div>
+
+      <!-- GOALS -->
+      <div style="flex:none;">
+        <div style="width:300px;height:620px;background:#1c1714;border-radius:42px;padding:11px;box-shadow:0 30px 60px -22px rgba(40,30,20,.5);">
+          <div style="width:100%;height:100%;background:#FBF6EE;border-radius:32px;overflow:hidden;position:relative;">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 22px 0;font-size:12px;font-weight:600;"><span>9:41</span><span style="letter-spacing:1px;">●●● ◔</span></div>
+            <div style="padding:14px 24px 0;">
+              <div style="display:flex;gap:6px;margin-bottom:22px;"><div style="height:4px;flex:1;background:#DB5338;border-radius:99px;"></div><div style="height:4px;flex:1;background:#EDE4D6;border-radius:99px;"></div><div style="height:4px;flex:1;background:#EDE4D6;border-radius:99px;"></div></div>
+              <div style="font-family:'Instrument Serif',serif;font-size:29px;line-height:1.08;margin-bottom:6px;">What's pulling you to Spanish?</div>
+              <div style="font-size:13px;color:#8A7E73;margin-bottom:18px;">Pick any. We'll shape your path around it.</div>
+              <sc-for list="{{ goals }}" as="g" hint-placeholder-count="6">
+                <div style="display:flex;align-items:center;gap:13px;background:{{ g.bg }};border:{{ g.bd }};border-radius:14px;padding:13px 15px;margin-bottom:9px;">
+                  <span style="font-size:19px;width:22px;text-align:center;">{{ g.icon }}</span>
+                  <span style="font-size:15px;font-weight:{{ g.fw }};flex:1;">{{ g.label }}</span>
+                  <span style="font-size:15px;color:{{ g.tick }};">{{ g.mark }}</span>
+                </div>
+              </sc-for>
+            </div>
+            <div style="position:absolute;bottom:0;left:0;right:0;padding:14px 24px 26px;background:linear-gradient(180deg,rgba(251,246,238,0),#FBF6EE 38%);">
+              <div style="background:#DB5338;color:#FBF6EE;border-radius:16px;padding:15px;text-align:center;font-size:16px;font-weight:600;">Continue</div>
+            </div>
+          </div>
+        </div>
+        <div style="font-size:12.5px;color:#7C7066;margin-top:14px;text-align:center;">Your goal</div>
+      </div>
+
+      <!-- PLACEMENT CHAT -->
+      <div style="flex:none;">
+        <div style="width:300px;height:620px;background:#1c1714;border-radius:42px;padding:11px;box-shadow:0 30px 60px -22px rgba(40,30,20,.5);">
+          <div style="width:100%;height:100%;background:#FBF6EE;border-radius:32px;overflow:hidden;position:relative;">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 22px 0;font-size:12px;font-weight:600;"><span>9:41</span><span style="letter-spacing:1px;">●●● ◔</span></div>
+            <div style="padding:12px 22px 10px;border-bottom:1px solid #EDE4D6;">
+              <div style="font-size:12px;color:#8A7E73;margin-bottom:2px;">No quiz. A quick chat.</div>
+              <div style="display:flex;align-items:center;justify-content:space-between;">
+                <div style="font-family:'Instrument Serif',serif;font-size:22px;">Let's find your level</div>
+                <div style="text-align:right;"><div style="font-size:10px;letter-spacing:.08em;color:#BFA38C;text-transform:uppercase;">Estimating</div><div style="font-size:18px;font-weight:700;color:#2F8F83;">A2</div></div>
+              </div>
+            </div>
+            <div style="padding:16px 18px;">
+              <div style="display:flex;gap:9px;margin-bottom:13px;">
+                <div style="width:30px;height:30px;border-radius:50%;background:linear-gradient(140deg,#E1A23A,#DB5338);flex-shrink:0;"></div>
+                <div style="background:#fff;border:1px solid #EDE4D6;border-radius:14px 14px 14px 4px;padding:11px 13px;max-width:78%;">
+                  <div style="font-size:14px;line-height:1.4;">Hola, soy Mateo. ¿De dónde eres y por qué aprendes español?</div>
+                  <div style="font-size:11.5px;color:#9A8E84;margin-top:5px;border-top:1px dashed #EDE4D6;padding-top:5px;">Hi, I'm Mateo. Where are you from, and why are you learning Spanish?</div>
+                </div>
+              </div>
+              <div style="background:#DB5338;color:#FBF6EE;border-radius:14px 14px 4px 14px;padding:11px 13px;max-width:80%;margin-left:auto;margin-bottom:13px;">
+                <div style="font-size:14px;line-height:1.4;">Soy de Londres. Quiero hablar con la familia de mi novia.</div>
+              </div>
+              <div style="display:flex;gap:9px;">
+                <div style="width:30px;height:30px;border-radius:50%;background:linear-gradient(140deg,#E1A23A,#DB5338);flex-shrink:0;"></div>
+                <div style="background:#fff;border:1px solid #EDE4D6;border-radius:14px 14px 14px 4px;padding:11px 13px;max-width:78%;">
+                  <div style="font-size:14px;line-height:1.4;">¡Qué bien! ¿Y ya los conoces en persona?</div>
+                  <div style="display:flex;gap:5px;margin-top:8px;"><span style="width:5px;height:5px;border-radius:50%;background:#C9AE97;"></span><span style="width:5px;height:5px;border-radius:50%;background:#C9AE97;"></span><span style="width:5px;height:5px;border-radius:50%;background:#C9AE97;"></span></div>
+                </div>
+              </div>
+            </div>
+            <div style="position:absolute;bottom:0;left:0;right:0;padding:14px 18px 24px;background:linear-gradient(180deg,rgba(251,246,238,0),#FBF6EE 30%);">
+              <div style="display:flex;align-items:center;gap:10px;background:#fff;border:1px solid #EDE4D6;border-radius:99px;padding:8px 8px 8px 16px;">
+                <span style="flex:1;font-size:13.5px;color:#A8927C;">Type your reply…</span>
+                <div style="width:38px;height:38px;border-radius:50%;background:#2F8F83;display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px;">🎙</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="font-size:12.5px;color:#7C7066;margin-top:14px;text-align:center;">Placement — by conversation</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============ SECTION: LEARN ============ -->
+  <div style="margin-bottom:54px;">
+    <div style="display:flex;align-items:baseline;gap:13px;margin-bottom:20px;">
+      <span style="font-family:'Instrument Serif',serif;font-style:italic;font-size:24px;color:#DB5338;">02</span>
+      <span style="font-size:13px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#8A7E73;">Learn every day</span>
+      <span style="font-size:13px;color:#A0948A;">A journey toward real-world goals. Production over translation, culture and grammar woven in.</span>
+    </div>
+    <div style="display:flex;gap:32px;align-items:flex-start;">
+
+      <!-- HOME JOURNEY -->
+      <div style="flex:none;">
+        <div style="width:300px;height:620px;background:#1c1714;border-radius:42px;padding:11px;box-shadow:0 30px 60px -22px rgba(40,30,20,.5);">
+          <div style="width:100%;height:100%;background:#FBF6EE;border-radius:32px;overflow:hidden;position:relative;">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 22px 6px;font-size:12px;font-weight:600;"><span>9:41</span><span style="letter-spacing:1px;">●●● ◔</span></div>
+            <div style="padding:6px 22px 4px;display:flex;justify-content:space-between;align-items:flex-start;">
+              <div><div style="font-size:12px;color:#9A8E84;">Buenos días, Maya</div><div style="font-family:'Instrument Serif',serif;font-size:25px;line-height:1.05;">Chapter 3 · <span style="font-style:italic;">Café culture</span></div></div>
+              <div style="display:flex;align-items:center;gap:5px;background:#fff;border:1px solid #EDE4D6;border-radius:99px;padding:5px 10px;"><span style="color:#2F8F83;font-size:13px;">◇</span><span style="font-size:13px;font-weight:600;">14</span></div>
+            </div>
+            <div style="margin:12px 16px 0;background:linear-gradient(140deg,#DB5338,#B23E27);border-radius:20px;padding:17px;color:#FBF6EE;">
+              <div style="font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;opacity:.85;margin-bottom:7px;">Today's real-world goal</div>
+              <div style="font-family:'Instrument Serif',serif;font-size:22px;line-height:1.1;margin-bottom:13px;">“Order a coffee and make small talk.”</div>
+              <div style="height:6px;background:rgba(255,255,255,.25);border-radius:99px;overflow:hidden;"><div style="width:62%;height:100%;background:#FBF6EE;border-radius:99px;"></div></div>
+              <div style="font-size:11px;opacity:.85;margin-top:7px;">3 of 5 skills ready</div>
+            </div>
+            <div style="padding:16px 18px 0;">
+              <div style="display:flex;gap:12px;align-items:center;margin-bottom:13px;"><div style="width:38px;height:38px;border-radius:12px;background:#2F8F83;display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px;flex-shrink:0;">✓</div><div style="flex:1;"><div style="font-size:14px;font-weight:600;">Greetings & warmth</div><div style="font-size:11.5px;color:#9A8E84;">Lesson · done</div></div></div>
+              <div style="display:flex;gap:12px;align-items:center;margin-bottom:13px;"><div style="width:38px;height:38px;border-radius:12px;background:#fff;border:2px solid #DB5338;display:flex;align-items:center;justify-content:center;color:#DB5338;font-size:13px;flex-shrink:0;">▶</div><div style="flex:1;"><div style="font-size:14px;font-weight:600;">Talk to the barista</div><div style="font-size:11.5px;color:#DB5338;">Live conversation · free</div></div></div>
+              <div style="display:flex;gap:12px;align-items:center;margin-bottom:13px;opacity:.55;"><div style="width:38px;height:38px;border-radius:12px;background:#F0E7D8;display:flex;align-items:center;justify-content:center;color:#A8927C;font-size:14px;flex-shrink:0;">❖</div><div style="flex:1;"><div style="font-size:14px;font-weight:600;">Café culture note</div><div style="font-size:11.5px;color:#9A8E84;">Why Spaniards linger</div></div></div>
+            </div>
+            <div style="position:absolute;bottom:0;left:0;right:0;height:60px;background:#fff;border-top:1px solid #EDE4D6;display:flex;justify-content:space-around;align-items:center;font-size:11px;color:#B5A99E;">
+              <span style="color:#DB5338;font-weight:600;">◎ Learn</span><span>◇ Speak</span><span>❖ Immerse</span><span>◔ You</span>
+            </div>
+          </div>
+        </div>
+        <div style="font-size:12.5px;color:#7C7066;margin-top:14px;text-align:center;">Home — a journey</div>
+      </div>
+
+      <!-- LESSON LOOP -->
+      <div style="flex:none;">
+        <div style="width:300px;height:620px;background:#1c1714;border-radius:42px;padding:11px;box-shadow:0 30px 60px -22px rgba(40,30,20,.5);">
+          <div style="width:100%;height:100%;background:#FBF6EE;border-radius:32px;overflow:hidden;position:relative;">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 22px 0;font-size:12px;font-weight:600;"><span>9:41</span><span style="letter-spacing:1px;">●●● ◔</span></div>
+            <div style="display:flex;align-items:center;gap:12px;padding:12px 20px 0;">
+              <span style="font-size:18px;color:#B5A99E;">✕</span>
+              <div style="flex:1;height:7px;background:#EDE4D6;border-radius:99px;overflow:hidden;"><div style="width:45%;height:100%;background:#2F8F83;border-radius:99px;"></div></div>
+            </div>
+            <div style="padding:24px 24px 0;">
+              <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#BFA38C;margin-bottom:8px;">Build the sentence · say it out loud</div>
+              <div style="font-size:19px;font-weight:600;line-height:1.3;margin-bottom:6px;">“I'd like a coffee with milk, please.”</div>
+              <div style="display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:#DB5338;border:1px solid #F2D9CF;background:#FBF1E9;border-radius:99px;padding:4px 11px;">Why “con”? <span style="opacity:.6;">tap to see grammar</span></div>
+            </div>
+            <div style="margin:22px 20px 0;min-height:84px;border-bottom:2px dashed #DDD2C0;display:flex;flex-wrap:wrap;gap:8px;align-content:flex-start;padding-bottom:14px;">
+              <span style="background:#fff;border:1px solid #E1D6C4;border-radius:11px;padding:9px 13px;font-size:15px;font-weight:600;box-shadow:0 1px 0 #E1D6C4;">Quería</span>
+              <span style="background:#fff;border:1px solid #E1D6C4;border-radius:11px;padding:9px 13px;font-size:15px;font-weight:600;box-shadow:0 1px 0 #E1D6C4;">un café</span>
+              <span style="background:#fff;border:1px solid #E1D6C4;border-radius:11px;padding:9px 13px;font-size:15px;font-weight:600;box-shadow:0 1px 0 #E1D6C4;">con leche</span>
+            </div>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;padding:18px 20px 0;">
+              <span style="background:#F0E7D8;color:#A8927C;border-radius:11px;padding:9px 13px;font-size:15px;font-weight:600;">por favor</span>
+              <span style="background:#fff;border:1px solid #E1D6C4;border-radius:11px;padding:9px 13px;font-size:15px;font-weight:600;">la cuenta</span>
+              <span style="background:#fff;border:1px solid #E1D6C4;border-radius:11px;padding:9px 13px;font-size:15px;font-weight:600;">sin</span>
+            </div>
+            <div style="position:absolute;bottom:0;left:0;right:0;padding:16px 20px 26px;background:linear-gradient(180deg,rgba(251,246,238,0),#FBF6EE 34%);display:flex;gap:11px;align-items:center;">
+              <div style="flex:1;background:#DB5338;color:#FBF6EE;border-radius:14px;padding:14px;text-align:center;font-size:15px;font-weight:600;">Check</div>
+              <div style="width:50px;height:50px;border-radius:14px;background:#2F8F83;display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;">🎙</div>
+            </div>
+          </div>
+        </div>
+        <div style="font-size:12.5px;color:#7C7066;margin-top:14px;text-align:center;">Lesson — produce, don't translate</div>
+      </div>
+
+      <!-- CULTURE NOTE -->
+      <div style="flex:none;">
+        <div style="width:300px;height:620px;background:#1c1714;border-radius:42px;padding:11px;box-shadow:0 30px 60px -22px rgba(40,30,20,.5);">
+          <div style="width:100%;height:100%;background:#FBF6EE;border-radius:32px;overflow:hidden;position:relative;">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 22px 0;font-size:12px;font-weight:600;"><span>9:41</span><span style="letter-spacing:1px;">●●● ◔</span></div>
+            <div style="display:flex;align-items:center;gap:12px;padding:12px 20px 0;"><span style="font-size:18px;color:#B5A99E;">✕</span><div style="flex:1;height:7px;background:#EDE4D6;border-radius:99px;overflow:hidden;"><div style="width:60%;height:100%;background:#2F8F83;border-radius:99px;"></div></div></div>
+            <div style="padding:18px 22px 0;">
+              <div style="display:inline-flex;align-items:center;gap:7px;background:#5B3A56;color:#F3ECE2;border-radius:99px;padding:5px 12px;font-size:11px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:14px;">❖ Culture note</div>
+              <div style="height:118px;border-radius:16px;background:linear-gradient(150deg,#E1A23A,#DB5338);margin-bottom:16px;position:relative;overflow:hidden;">
+                <div style="position:absolute;inset:0;display:flex;align-items:flex-end;padding:12px;"><span style="color:rgba(255,255,255,.92);font-size:12px;font-weight:600;">A café in Sevilla · 11am</span></div>
+              </div>
+              <div style="font-family:'Instrument Serif',serif;font-size:25px;line-height:1.12;margin-bottom:10px;">A coffee is never just a coffee</div>
+              <div style="font-size:14px;line-height:1.55;color:#5C5048;margin-bottom:14px;">In Spain, ordering “para llevar” (to go) is rare — coffee is a moment to sit, not fuel to grab. Lingering at the table is the point, and no waiter will rush you.</div>
+              <div style="background:#fff;border:1px solid #EDE4D6;border-radius:13px;padding:12px 14px;display:flex;gap:11px;align-items:center;">
+                <span style="font-size:18px;">💬</span>
+                <div style="font-size:13px;line-height:1.4;"><strong>“¿Me cobras?”</strong> — how locals ask for the bill, instead of waving.</div>
+              </div>
+            </div>
+            <div style="position:absolute;bottom:0;left:0;right:0;padding:16px 22px 26px;background:linear-gradient(180deg,rgba(251,246,238,0),#FBF6EE 34%);">
+              <div style="background:#DB5338;color:#FBF6EE;border-radius:14px;padding:14px;text-align:center;font-size:15px;font-weight:600;">Got it — keep going</div>
+            </div>
+          </div>
+        </div>
+        <div style="font-size:12.5px;color:#7C7066;margin-top:14px;text-align:center;">Culture, in every lesson</div>
+      </div>
+
+      <!-- LESSON COMPLETE -->
+      <div style="flex:none;">
+        <div style="width:300px;height:620px;background:#1c1714;border-radius:42px;padding:11px;box-shadow:0 30px 60px -22px rgba(40,30,20,.5);">
+          <div style="width:100%;height:100%;background:#2F8F83;border-radius:32px;overflow:hidden;position:relative;color:#F2F7F5;display:flex;flex-direction:column;">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 22px 0;font-size:12px;font-weight:600;color:#F2F7F5;"><span>9:41</span><span style="letter-spacing:1px;">●●● ◔</span></div>
+            <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:0 28px;text-align:center;">
+              <div style="width:78px;height:78px;border-radius:50%;background:rgba(255,255,255,.16);display:flex;align-items:center;justify-content:center;font-size:34px;margin-bottom:22px;">☕</div>
+              <div style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;opacity:.8;margin-bottom:10px;">New milestone unlocked</div>
+              <div style="font-family:'Instrument Serif',serif;font-size:34px;line-height:1.05;margin-bottom:14px;">You can now order a coffee — and chat while you do.</div>
+              <div style="font-size:14px;opacity:.85;line-height:1.5;">That's a real thing you can do in Spain now. Not a streak number — a skill.</div>
+            </div>
+            <div style="padding:0 24px;display:flex;gap:10px;margin-bottom:20px;">
+              <div style="flex:1;background:rgba(255,255,255,.13);border-radius:14px;padding:13px;text-align:center;"><div style="font-size:21px;font-weight:700;">8</div><div style="font-size:11px;opacity:.8;">new words</div></div>
+              <div style="flex:1;background:rgba(255,255,255,.13);border-radius:14px;padding:13px;text-align:center;"><div style="font-size:21px;font-weight:700;">92%</div><div style="font-size:11px;opacity:.8;">pronunciation</div></div>
+              <div style="flex:1;background:rgba(255,255,255,.13);border-radius:14px;padding:13px;text-align:center;"><div style="font-size:21px;font-weight:700;">4m</div><div style="font-size:11px;opacity:.8;">today</div></div>
+            </div>
+            <div style="padding:0 24px 30px;">
+              <div style="background:#FBF6EE;color:#B23E27;border-radius:14px;padding:15px;text-align:center;font-size:15px;font-weight:600;margin-bottom:10px;">Try it for real → talk to the barista</div>
+              <div style="text-align:center;font-size:13.5px;opacity:.85;">Come back tomorrow for Chapter 3</div>
+            </div>
+          </div>
+        </div>
+        <div style="font-size:12.5px;color:#7C7066;margin-top:14px;text-align:center;">Complete — a skill, not a score</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============ SECTION: SPEAK ============ -->
+  <div style="margin-bottom:54px;">
+    <div style="display:flex;align-items:baseline;gap:13px;margin-bottom:20px;">
+      <span style="font-family:'Instrument Serif',serif;font-style:italic;font-size:24px;color:#DB5338;">03</span>
+      <span style="font-size:13px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#8A7E73;">Speak — free, from day one</span>
+      <span style="font-size:13px;color:#A0948A;">The feature Duolingo hides behind its priciest tier is our core. Roleplay, free-talk, any region.</span>
+    </div>
+    <div style="display:flex;gap:32px;align-items:flex-start;">
+
+      <!-- SPEAK HUB -->
+      <div style="flex:none;">
+        <div style="width:300px;height:620px;background:#1c1714;border-radius:42px;padding:11px;box-shadow:0 30px 60px -22px rgba(40,30,20,.5);">
+          <div style="width:100%;height:100%;background:#FBF6EE;border-radius:32px;overflow:hidden;position:relative;">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 22px 4px;font-size:12px;font-weight:600;"><span>9:41</span><span style="letter-spacing:1px;">●●● ◔</span></div>
+            <div style="padding:8px 22px 0;">
+              <div style="font-family:'Instrument Serif',serif;font-size:27px;line-height:1.05;">Who do you want to talk to?</div>
+              <div style="font-size:12.5px;color:#8A7E73;margin-top:3px;">Speaks at your level · always free</div>
+            </div>
+            <div style="padding:16px 18px 0;">
+              <div style="background:linear-gradient(140deg,#DB5338,#B23E27);border-radius:18px;padding:16px;color:#FBF6EE;margin-bottom:11px;">
+                <div style="font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;opacity:.85;margin-bottom:6px;">Recommended for your goal</div>
+                <div style="font-family:'Instrument Serif',serif;font-size:21px;line-height:1.1;margin-bottom:4px;">Meet your novia's family</div>
+                <div style="font-size:12.5px;opacity:.9;">Roleplay · warm, lots of questions about you</div>
+              </div>
+              <div style="display:flex;gap:11px;margin-bottom:11px;">
+                <div style="flex:1;background:#fff;border:1px solid #EDE4D6;border-radius:15px;padding:13px;"><div style="font-size:22px;margin-bottom:6px;">☕</div><div style="font-size:13.5px;font-weight:600;line-height:1.2;">At the café</div><div style="font-size:11px;color:#9A8E84;">Madrid accent</div></div>
+                <div style="flex:1;background:#fff;border:1px solid #EDE4D6;border-radius:15px;padding:13px;"><div style="font-size:22px;margin-bottom:6px;">💬</div><div style="font-size:13.5px;font-weight:600;line-height:1.2;">Free talk</div><div style="font-size:11px;color:#9A8E84;">Any topic</div></div>
+              </div>
+              <div style="display:flex;gap:11px;">
+                <div style="flex:1;background:#fff;border:1px solid #EDE4D6;border-radius:15px;padding:13px;"><div style="font-size:22px;margin-bottom:6px;">⚕</div><div style="font-size:13.5px;font-weight:600;line-height:1.2;">At the doctor</div><div style="font-size:11px;color:#9A8E84;">Useful vocab</div></div>
+                <div style="flex:1;background:#fff;border:1px solid #EDE4D6;border-radius:15px;padding:13px;"><div style="font-size:22px;margin-bottom:6px;">⚖</div><div style="font-size:13.5px;font-weight:600;line-height:1.2;">Debate</div><div style="font-size:11px;color:#9A8E84;">B2+ challenge</div></div>
+              </div>
+            </div>
+            <div style="position:absolute;bottom:0;left:0;right:0;height:60px;background:#fff;border-top:1px solid #EDE4D6;display:flex;justify-content:space-around;align-items:center;font-size:11px;color:#B5A99E;">
+              <span>◎ Learn</span><span style="color:#DB5338;font-weight:600;">◇ Speak</span><span>❖ Immerse</span><span>◔ You</span>
+            </div>
+          </div>
+        </div>
+        <div style="font-size:12.5px;color:#7C7066;margin-top:14px;text-align:center;">Speak hub</div>
+      </div>
+
+      <!-- AI CONVERSATION (live) -->
+      <div style="flex:none;">
+        <div style="width:300px;height:620px;background:#1c1714;border-radius:42px;padding:11px;box-shadow:0 30px 60px -22px rgba(40,30,20,.5);">
+          <div style="width:100%;height:100%;background:#241C2A;border-radius:32px;overflow:hidden;position:relative;color:#F3ECE2;">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 22px 6px;font-size:12px;font-weight:600;color:#F3ECE2;"><span>9:41</span><span style="letter-spacing:1px;">●●● ◔</span></div>
+            <div style="text-align:center;padding:12px 0 6px;">
+              <div style="width:72px;height:72px;border-radius:50%;margin:0 auto 10px;background:linear-gradient(140deg,#E1A23A,#DB5338);display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:600;color:#fff;">L</div>
+              <div style="font-family:'Instrument Serif',serif;font-size:20px;">Lucía · barista</div>
+              <div style="font-size:11.5px;color:#A99FB0;">Madrid café · speaking slowly for you</div>
+            </div>
+            <div style="padding:10px 18px;">
+              <div style="background:#352B3D;border-radius:16px 16px 16px 4px;padding:12px 14px;margin-bottom:10px;max-width:82%;"><div style="font-size:14px;line-height:1.4;">¿Qué te pongo, guapa?</div><div style="font-size:11.5px;color:#A99FB0;margin-top:4px;">What can I get you, dear?</div></div>
+              <div style="background:#DB5338;border-radius:16px 16px 4px 16px;padding:12px 14px;margin-bottom:10px;max-width:82%;margin-left:auto;"><div style="font-size:14px;line-height:1.4;">Un café con leche, por favor.</div></div>
+              <div style="display:flex;gap:7px;align-items:center;background:#2F8F83;border-radius:99px;padding:7px 12px;width:max-content;"><span style="font-size:12px;">✦</span><span style="font-size:12px;font-weight:600;">Nice — add “para llevar” to say to-go</span></div>
+            </div>
+            <div style="position:absolute;bottom:0;left:0;right:0;padding:18px 0 26px;background:linear-gradient(180deg,rgba(36,28,42,0),#241C2A 40%);display:flex;flex-direction:column;align-items:center;gap:9px;">
+              <div style="display:flex;gap:3px;align-items:flex-end;height:22px;"><div style="width:3px;height:10px;background:#E1A23A;border-radius:2px;"></div><div style="width:3px;height:18px;background:#E1A23A;border-radius:2px;"></div><div style="width:3px;height:22px;background:#DB5338;border-radius:2px;"></div><div style="width:3px;height:14px;background:#E1A23A;border-radius:2px;"></div><div style="width:3px;height:20px;background:#DB5338;border-radius:2px;"></div><div style="width:3px;height:9px;background:#E1A23A;border-radius:2px;"></div></div>
+              <div style="width:62px;height:62px;border-radius:50%;background:#DB5338;display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 0 0 8px rgba(219,83,56,.18);">🎙</div>
+              <div style="font-size:11.5px;color:#A99FB0;">Hold to speak · or tap for a hint</div>
+            </div>
+          </div>
+        </div>
+        <div style="font-size:12.5px;color:#7C7066;margin-top:14px;text-align:center;">Live conversation</div>
+      </div>
+
+      <!-- CONVERSATION DEBRIEF -->
+      <div style="flex:none;">
+        <div style="width:300px;height:620px;background:#1c1714;border-radius:42px;padding:11px;box-shadow:0 30px 60px -22px rgba(40,30,20,.5);">
+          <div style="width:100%;height:100%;background:#FBF6EE;border-radius:32px;overflow:hidden;position:relative;">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 22px 0;font-size:12px;font-weight:600;"><span>9:41</span><span style="letter-spacing:1px;">●●● ◔</span></div>
+            <div style="padding:14px 22px 0;">
+              <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#BFA38C;margin-bottom:6px;">Conversation debrief</div>
+              <div style="font-family:'Instrument Serif',serif;font-size:26px;line-height:1.05;margin-bottom:4px;">You held a 2-minute chat 🎉</div>
+              <div style="font-size:13px;color:#5C5048;">…and Lucía understood you the whole way.</div>
+            </div>
+            <div style="padding:16px 20px 0;">
+              <div style="display:flex;gap:10px;margin-bottom:16px;">
+                <div style="flex:1;background:#fff;border:1px solid #EDE4D6;border-radius:13px;padding:12px;text-align:center;"><div style="font-size:19px;font-weight:700;color:#2F8F83;">88%</div><div style="font-size:10.5px;color:#9A8E84;">understood</div></div>
+                <div style="flex:1;background:#fff;border:1px solid #EDE4D6;border-radius:13px;padding:12px;text-align:center;"><div style="font-size:19px;font-weight:700;color:#2F8F83;">12</div><div style="font-size:10.5px;color:#9A8E84;">words used</div></div>
+                <div style="flex:1;background:#fff;border:1px solid #EDE4D6;border-radius:13px;padding:12px;text-align:center;"><div style="font-size:19px;font-weight:700;color:#E1A23A;">3</div><div style="font-size:10.5px;color:#9A8E84;">to polish</div></div>
+              </div>
+              <div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#BFA38C;margin-bottom:9px;">Worth a second look</div>
+              <div style="background:#fff;border:1px solid #EDE4D6;border-radius:13px;padding:12px 14px;margin-bottom:9px;">
+                <div style="font-size:14px;font-weight:600;margin-bottom:3px;">“para <span style="color:#DB5338;">yevar</span>” → para <span style="color:#2F8F83;">llevar</span></div>
+                <div style="font-size:12px;color:#6B5F58;line-height:1.4;">Your “ll” sounded like a soft y — close! In Spain it's a firmer “ly”.</div>
+              </div>
+              <div style="background:#fff;border:1px solid #EDE4D6;border-radius:13px;padding:12px 14px;">
+                <div style="font-size:14px;font-weight:600;margin-bottom:3px;">More natural: “¿Me cobras?”</div>
+                <div style="font-size:12px;color:#6B5F58;line-height:1.4;">You asked for “la cuenta” — locals say this in a café.</div>
+              </div>
+            </div>
+            <div style="position:absolute;bottom:0;left:0;right:0;padding:14px 20px 26px;background:linear-gradient(180deg,rgba(251,246,238,0),#FBF6EE 34%);">
+              <div style="background:#DB5338;color:#FBF6EE;border-radius:14px;padding:14px;text-align:center;font-size:15px;font-weight:600;">Save 3 words to review</div>
+            </div>
+          </div>
+        </div>
+        <div style="font-size:12.5px;color:#7C7066;margin-top:14px;text-align:center;">Debrief — kind, specific feedback</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============ SECTION: IMMERSE ============ -->
+  <div style="margin-bottom:54px;">
+    <div style="display:flex;align-items:baseline;gap:13px;margin-bottom:20px;">
+      <span style="font-family:'Instrument Serif',serif;font-style:italic;font-size:24px;color:#DB5338;">04</span>
+      <span style="font-size:13px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#8A7E73;">Immerse</span>
+      <span style="font-size:13px;color:#A0948A;">Real articles, clips and audio — graded to your level, the bridge to C2 that Duolingo never builds.</span>
+    </div>
+    <div style="display:flex;gap:32px;align-items:flex-start;">
+
+      <!-- LIBRARY -->
+      <div style="flex:none;">
+        <div style="width:300px;height:620px;background:#1c1714;border-radius:42px;padding:11px;box-shadow:0 30px 60px -22px rgba(40,30,20,.5);">
+          <div style="width:100%;height:100%;background:#FBF6EE;border-radius:32px;overflow:hidden;position:relative;">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 22px 4px;font-size:12px;font-weight:600;"><span>9:41</span><span style="letter-spacing:1px;">●●● ◔</span></div>
+            <div style="padding:8px 22px 0;display:flex;justify-content:space-between;align-items:center;">
+              <div style="font-family:'Instrument Serif',serif;font-size:27px;">Immerse</div>
+              <div style="font-size:12px;font-weight:600;color:#2F8F83;border:1px solid #BFE0DA;background:#E6F0EE;border-radius:99px;padding:4px 11px;">Matched to A2</div>
+            </div>
+            <div style="display:flex;gap:7px;padding:14px 22px 0;overflow:hidden;">
+              <span style="font-size:12px;font-weight:600;background:#2A2320;color:#FBF6EE;border-radius:99px;padding:5px 12px;">For you</span>
+              <span style="font-size:12px;background:#fff;border:1px solid #EDE4D6;border-radius:99px;padding:5px 12px;">Articles</span>
+              <span style="font-size:12px;background:#fff;border:1px solid #EDE4D6;border-radius:99px;padding:5px 12px;">Clips</span>
+              <span style="font-size:12px;background:#fff;border:1px solid #EDE4D6;border-radius:99px;padding:5px 12px;">Audio</span>
+            </div>
+            <div style="padding:14px 18px 0;">
+              <div style="background:#fff;border:1px solid #EDE4D6;border-radius:16px;overflow:hidden;margin-bottom:12px;">
+                <div style="height:96px;background:linear-gradient(150deg,#5B3A56,#DB5338);position:relative;"><span style="position:absolute;left:11px;top:11px;font-size:10px;font-weight:600;color:#fff;background:rgba(0,0,0,.25);border-radius:99px;padding:3px 9px;">▶ Clip · 1:40</span></div>
+                <div style="padding:12px 14px;">
+                  <div style="font-size:14.5px;font-weight:600;line-height:1.2;margin-bottom:5px;">La Tomatina, explained by locals</div>
+                  <div style="display:flex;align-items:center;gap:8px;"><div style="flex:1;height:5px;background:#EDE4D6;border-radius:99px;overflow:hidden;"><div style="width:94%;height:100%;background:#2F8F83;"></div></div><span style="font-size:11px;color:#2F8F83;font-weight:600;">94% known</span></div>
+                </div>
+              </div>
+              <div style="background:#fff;border:1px solid #EDE4D6;border-radius:16px;padding:13px 14px;display:flex;gap:12px;align-items:center;margin-bottom:12px;">
+                <div style="width:46px;height:46px;border-radius:11px;background:linear-gradient(150deg,#E1A23A,#DB5338);flex-shrink:0;"></div>
+                <div style="flex:1;"><div style="font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:#BFA38C;margin-bottom:2px;">Article · 3 min</div><div style="font-size:14px;font-weight:600;line-height:1.2;">El secreto del café con hielo</div></div>
+              </div>
+              <div style="background:#fff;border:1px solid #EDE4D6;border-radius:16px;padding:13px 14px;display:flex;gap:12px;align-items:center;">
+                <div style="width:46px;height:46px;border-radius:11px;background:#241C2A;flex-shrink:0;display:flex;align-items:center;justify-content:center;color:#E1A23A;font-size:18px;">♪</div>
+                <div style="flex:1;"><div style="font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:#BFA38C;margin-bottom:2px;">Podcast · 8 min</div><div style="font-size:14px;font-weight:600;line-height:1.2;">Café con Mateo — ep. 4</div></div>
+              </div>
+            </div>
+            <div style="position:absolute;bottom:0;left:0;right:0;height:60px;background:#fff;border-top:1px solid #EDE4D6;display:flex;justify-content:space-around;align-items:center;font-size:11px;color:#B5A99E;"><span>◎ Learn</span><span>◇ Speak</span><span style="color:#DB5338;font-weight:600;">❖ Immerse</span><span>◔ You</span></div>
+          </div>
+        </div>
+        <div style="font-size:12.5px;color:#7C7066;margin-top:14px;text-align:center;">Immerse library</div>
+      </div>
+
+      <!-- READER -->
+      <div style="flex:none;">
+        <div style="width:300px;height:620px;background:#1c1714;border-radius:42px;padding:11px;box-shadow:0 30px 60px -22px rgba(40,30,20,.5);">
+          <div style="width:100%;height:100%;background:#FBF6EE;border-radius:32px;overflow:hidden;position:relative;">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 22px 0;font-size:12px;font-weight:600;"><span>9:41</span><span style="letter-spacing:1px;">●●● ◔</span></div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 20px 12px;border-bottom:1px solid #EDE4D6;">
+              <span style="font-size:18px;color:#B5A99E;">‹</span>
+              <span style="font-size:12.5px;font-weight:600;color:#8A7E73;">Article · 3 min · A2</span>
+              <span style="font-size:15px;color:#B5A99E;">Aa</span>
+            </div>
+            <div style="padding:18px 24px 0;">
+              <div style="font-family:'Instrument Serif',serif;font-size:25px;line-height:1.12;margin-bottom:14px;">El secreto del café con hielo</div>
+              <div style="font-size:15.5px;line-height:1.7;color:#33291F;">
+                En el sur de España, cuando hace calor, mucha gente pide un
+                <span style="background:#FBE3D9;border-bottom:2px solid #DB5338;border-radius:3px;padding:0 2px;">café con hielo</span>.
+                El camarero trae un café caliente y un vaso
+                <span style="background:#FBE3D9;border-bottom:2px solid #DB5338;border-radius:3px;padding:0 2px;">aparte</span>
+                lleno de hielo. Tú mismo lo mezclas. Es un pequeño ritual del verano andaluz.
+              </div>
+            </div>
+            <!-- tap-to-translate popover -->
+            <div style="margin:18px 24px 0;background:#2A2320;color:#F3ECE2;border-radius:14px;padding:13px 15px;">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;"><div style="font-size:16px;font-weight:700;">aparte</div><span style="font-size:12px;color:#E1A23A;">♪ hear it</span></div>
+              <div style="font-size:13px;color:#C9BFB4;margin-bottom:9px;">adv. · separate, on the side</div>
+              <div style="display:flex;gap:8px;"><div style="flex:1;background:#DB5338;border-radius:9px;padding:8px;text-align:center;font-size:12.5px;font-weight:600;">+ Save word</div><div style="background:rgba(255,255,255,.12);border-radius:9px;padding:8px 12px;font-size:12.5px;">Examples</div></div>
+            </div>
+            <div style="position:absolute;bottom:0;left:0;right:0;padding:14px 22px 24px;background:linear-gradient(180deg,rgba(251,246,238,0),#FBF6EE 36%);display:flex;align-items:center;gap:11px;">
+              <div style="width:46px;height:46px;border-radius:50%;background:#2F8F83;display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px;flex-shrink:0;">▶</div>
+              <div style="flex:1;"><div style="height:5px;background:#EDE4D6;border-radius:99px;overflow:hidden;"><div style="width:38%;height:100%;background:#2F8F83;"></div></div><div style="font-size:11px;color:#9A8E84;margin-top:5px;">Listen along · 0:42 / 1:50</div></div>
+            </div>
+          </div>
+        </div>
+        <div style="font-size:12.5px;color:#7C7066;margin-top:14px;text-align:center;">Reader — tap any word</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============ SECTION: GROW ============ -->
+  <div style="margin-bottom:20px;">
+    <div style="display:flex;align-items:baseline;gap:13px;margin-bottom:20px;">
+      <span style="font-family:'Instrument Serif',serif;font-style:italic;font-size:24px;color:#DB5338;">05</span>
+      <span style="font-size:13px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#8A7E73;">Grow</span>
+      <span style="font-size:13px;color:#A0948A;">Progress measured in real fluency, gentle rhythm instead of guilt, and an honest paywall.</span>
+    </div>
+    <div style="display:flex;gap:32px;align-items:flex-start;">
+
+      <!-- PROGRESS / PROFILE -->
+      <div style="flex:none;">
+        <div style="width:300px;height:620px;background:#1c1714;border-radius:42px;padding:11px;box-shadow:0 30px 60px -22px rgba(40,30,20,.5);">
+          <div style="width:100%;height:100%;background:#FBF6EE;border-radius:32px;overflow:hidden;position:relative;">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 22px 4px;font-size:12px;font-weight:600;"><span>9:41</span><span style="letter-spacing:1px;">●●● ◔</span></div>
+            <div style="padding:8px 22px 0;">
+              <div style="font-family:'Instrument Serif',serif;font-size:27px;">Your Spanish</div>
+            </div>
+            <div style="margin:12px 18px 0;background:#2A2320;border-radius:20px;padding:18px;color:#F3ECE2;">
+              <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:12px;"><div><div style="font-size:11px;color:#A99C90;letter-spacing:.06em;text-transform:uppercase;">Now</div><div style="font-family:'Instrument Serif',serif;font-size:34px;line-height:1;">A2<span style="font-size:16px;color:#A99C90;"> → B1</span></div></div><div style="text-align:right;"><div style="font-size:11px;color:#A99C90;">to B1</div><div style="font-size:18px;font-weight:700;color:#E1A23A;">71%</div></div></div>
+              <div style="height:7px;background:rgba(255,255,255,.14);border-radius:99px;overflow:hidden;"><div style="width:71%;height:100%;background:linear-gradient(90deg,#E1A23A,#DB5338);border-radius:99px;"></div></div>
+            </div>
+            <div style="padding:16px 20px 0;">
+              <div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#BFA38C;margin-bottom:10px;">Real-world milestones</div>
+              <div style="display:flex;gap:10px;align-items:center;margin-bottom:10px;"><div style="width:30px;height:30px;border-radius:9px;background:#2F8F83;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;">✓</div><div style="font-size:13.5px;font-weight:600;">Order food & coffee</div></div>
+              <div style="display:flex;gap:10px;align-items:center;margin-bottom:10px;"><div style="width:30px;height:30px;border-radius:9px;background:#2F8F83;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;">✓</div><div style="font-size:13.5px;font-weight:600;">Small talk with strangers</div></div>
+              <div style="display:flex;gap:10px;align-items:center;opacity:.5;"><div style="width:30px;height:30px;border-radius:9px;background:#F0E7D8;color:#A8927C;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;">◷</div><div style="font-size:13.5px;font-weight:600;">Tell a story in past tense</div></div>
+            </div>
+            <div style="margin:16px 20px 0;background:#E6F0EE;border:1px solid #BFE0DA;border-radius:14px;padding:13px 15px;display:flex;align-items:center;gap:12px;">
+              <div style="font-size:22px;">🌱</div>
+              <div style="flex:1;"><div style="font-size:13.5px;font-weight:600;">A 12-day rhythm</div><div style="font-size:11.5px;color:#5C7C76;">Missed Tuesday? No problem — it's still going.</div></div>
+            </div>
+            <div style="position:absolute;bottom:0;left:0;right:0;height:60px;background:#fff;border-top:1px solid #EDE4D6;display:flex;justify-content:space-around;align-items:center;font-size:11px;color:#B5A99E;"><span>◎ Learn</span><span>◇ Speak</span><span>❖ Immerse</span><span style="color:#DB5338;font-weight:600;">◔ You</span></div>
+          </div>
+        </div>
+        <div style="font-size:12.5px;color:#7C7066;margin-top:14px;text-align:center;">Progress — fluency, not streak fear</div>
+      </div>
+
+      <!-- REVIEW (spaced repetition) -->
+      <div style="flex:none;">
+        <div style="width:300px;height:620px;background:#1c1714;border-radius:42px;padding:11px;box-shadow:0 30px 60px -22px rgba(40,30,20,.5);">
+          <div style="width:100%;height:100%;background:#5B3A56;border-radius:32px;overflow:hidden;position:relative;color:#F3ECE2;display:flex;flex-direction:column;">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 22px 0;font-size:12px;font-weight:600;color:#F3ECE2;"><span>9:41</span><span style="letter-spacing:1px;">●●● ◔</span></div>
+            <div style="display:flex;align-items:center;gap:12px;padding:14px 22px 0;"><span style="font-size:18px;color:rgba(255,255,255,.5);">✕</span><div style="flex:1;height:6px;background:rgba(255,255,255,.18);border-radius:99px;overflow:hidden;"><div style="width:30%;height:100%;background:#E1A23A;border-radius:99px;"></div></div><span style="font-size:12px;color:rgba(255,255,255,.7);">3/10</span></div>
+            <div style="text-align:center;padding:16px 24px 0;"><div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.6);">Words about to fade — let's refresh</div></div>
+            <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:0 28px;text-align:center;">
+              <div style="font-family:'Instrument Serif',serif;font-size:46px;line-height:1;margin-bottom:14px;">llevar</div>
+              <div style="font-size:13px;color:rgba(255,255,255,.7);margin-bottom:20px;">from your café conversation, 4 days ago</div>
+              <div style="border:1px dashed rgba(255,255,255,.35);border-radius:14px;padding:14px 20px;font-size:14px;color:rgba(255,255,255,.85);">Tap to reveal meaning</div>
+            </div>
+            <div style="padding:0 24px 30px;">
+              <div style="font-size:11px;text-align:center;color:rgba(255,255,255,.55);margin-bottom:12px;">How well did you know it?</div>
+              <div style="display:flex;gap:9px;">
+                <div style="flex:1;background:rgba(255,255,255,.12);border-radius:12px;padding:12px;text-align:center;font-size:13px;font-weight:600;">Forgot</div>
+                <div style="flex:1;background:rgba(255,255,255,.12);border-radius:12px;padding:12px;text-align:center;font-size:13px;font-weight:600;">Hard</div>
+                <div style="flex:1;background:#E1A23A;color:#3A2417;border-radius:12px;padding:12px;text-align:center;font-size:13px;font-weight:700;">Easy</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="font-size:12.5px;color:#7C7066;margin-top:14px;text-align:center;">Review — your words, right on time</div>
+      </div>
+
+      <!-- GRAMMAR REFERENCE -->
+      <div style="flex:none;">
+        <div style="width:300px;height:620px;background:#1c1714;border-radius:42px;padding:11px;box-shadow:0 30px 60px -22px rgba(40,30,20,.5);">
+          <div style="width:100%;height:100%;background:#FBF6EE;border-radius:32px;overflow:hidden;position:relative;">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 22px 0;font-size:12px;font-weight:600;"><span>9:41</span><span style="letter-spacing:1px;">●●● ◔</span></div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 20px 12px;border-bottom:1px solid #EDE4D6;"><span style="font-size:18px;color:#B5A99E;">‹</span><span style="font-size:12.5px;font-weight:600;color:#8A7E73;">Grammar · on demand</span><span style="font-size:14px;color:#B5A99E;">★</span></div>
+            <div style="padding:18px 22px 0;">
+              <div style="display:inline-flex;align-items:center;gap:7px;background:#FBF1E9;color:#B23E27;border:1px solid #F2D9CF;border-radius:99px;padding:5px 12px;font-size:11px;letter-spacing:.05em;text-transform:uppercase;margin-bottom:14px;">From your last lesson</div>
+              <div style="font-family:'Instrument Serif',serif;font-size:26px;line-height:1.08;margin-bottom:10px;">“por” vs “para” — the 10-second rule</div>
+              <div style="font-size:14px;line-height:1.55;color:#5C5048;margin-bottom:16px;">Both become “for” in English. The split is simpler than it looks:</div>
+              <div style="background:#fff;border:1px solid #EDE4D6;border-radius:14px;padding:14px;margin-bottom:11px;">
+                <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:6px;"><span style="font-family:'Instrument Serif',serif;font-size:22px;color:#DB5338;">por</span><span style="font-size:12px;color:#9A8E84;">cause / reason — “because of”</span></div>
+                <div style="font-size:14px;color:#33291F;">Gracias <strong style="color:#DB5338;">por</strong> el café.</div>
+              </div>
+              <div style="background:#fff;border:1px solid #EDE4D6;border-radius:14px;padding:14px;">
+                <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:6px;"><span style="font-family:'Instrument Serif',serif;font-size:22px;color:#2F8F83;">para</span><span style="font-size:12px;color:#9A8E84;">goal / destination — “in order to”</span></div>
+                <div style="font-size:14px;color:#33291F;">Un café <strong style="color:#2F8F83;">para</strong> llevar.</div>
+              </div>
+            </div>
+            <div style="position:absolute;bottom:0;left:0;right:0;padding:14px 22px 24px;background:linear-gradient(180deg,rgba(251,246,238,0),#FBF6EE 34%);"><div style="background:#2A2320;color:#FBF6EE;border-radius:14px;padding:14px;text-align:center;font-size:15px;font-weight:600;">Practice this in 3 questions</div></div>
+          </div>
+        </div>
+        <div style="font-size:12.5px;color:#7C7066;margin-top:14px;text-align:center;">Grammar — clear, never buried</div>
+      </div>
+
+      <!-- PLANS / PAYWALL -->
+      <div style="flex:none;">
+        <div style="width:300px;height:620px;background:#1c1714;border-radius:42px;padding:11px;box-shadow:0 30px 60px -22px rgba(40,30,20,.5);">
+          <div style="width:100%;height:100%;background:#FBF6EE;border-radius:32px;overflow:hidden;position:relative;">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 22px 0;font-size:12px;font-weight:600;"><span>9:41</span><span style="letter-spacing:1px;">●●● ◔</span></div>
+            <div style="padding:14px 24px 0;text-align:center;">
+              <div style="font-family:'Instrument Serif',serif;font-size:28px;line-height:1.05;">Conversation is free.<br><span style="font-style:italic;color:#DB5338;">Always.</span></div>
+              <div style="font-size:13px;color:#8A7E73;margin-top:6px;">Plus adds depth — never the basics.</div>
+            </div>
+            <div style="padding:18px 18px 0;">
+              <div style="background:#fff;border:1px solid #EDE4D6;border-radius:16px;padding:15px 16px;margin-bottom:12px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;"><div style="font-size:15px;font-weight:700;">Free</div><div style="font-size:12px;color:#2F8F83;font-weight:600;">Your plan</div></div>
+                <div style="font-size:13px;line-height:1.9;color:#5C5048;">✓ Daily lessons & culture<br>✓ AI conversation, any scenario<br>✓ Placement & milestones</div>
+              </div>
+              <div style="background:#2A2320;border-radius:16px;padding:15px 16px;color:#F3ECE2;position:relative;overflow:hidden;">
+                <div style="position:absolute;right:-20px;top:14px;background:#E1A23A;color:#3A2417;font-size:10px;font-weight:700;letter-spacing:.05em;padding:3px 26px;transform:rotate(38deg);">DEPTH</div>
+                <div style="font-size:15px;font-weight:700;margin-bottom:2px;">Cadence Plus</div>
+                <div style="font-size:12px;color:#A99C90;margin-bottom:10px;">$9 / mo · 7-day free trial</div>
+                <div style="font-size:13px;line-height:1.9;color:#E8DFD4;">✦ Unlimited immersion library<br>✦ Offline & download<br>✦ Personalized exam prep<br>✦ Deep grammar deep-dives</div>
+              </div>
+            </div>
+            <div style="position:absolute;bottom:0;left:0;right:0;padding:14px 22px 26px;background:linear-gradient(180deg,rgba(251,246,238,0),#FBF6EE 34%);"><div style="background:#DB5338;color:#FBF6EE;border-radius:14px;padding:15px;text-align:center;font-size:15px;font-weight:600;">Try Plus free for 7 days</div></div>
+          </div>
+        </div>
+        <div style="font-size:12.5px;color:#7C7066;margin-top:14px;text-align:center;">Plans — honest paywall</div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      goals: [
+        { icon: "✈", label: "Travel & adventure", bg: "#FBF1E9", bd: "1.5px solid #DB5338", fw: "600", mark: "✓", tick: "#DB5338" },
+        { icon: "❤", label: "Family & roots", bg: "#FBF1E9", bd: "1.5px solid #DB5338", fw: "600", mark: "✓", tick: "#DB5338" },
+        { icon: "💼", label: "Work & career", bg: "#fff", bd: "1px solid #EDE4D6", fw: "500", mark: "+", tick: "#C9AE97" },
+        { icon: "❖", label: "Culture, film & music", bg: "#fff", bd: "1px solid #EDE4D6", fw: "500", mark: "+", tick: "#C9AE97" },
+        { icon: "✦", label: "Exam / certification", bg: "#fff", bd: "1px solid #EDE4D6", fw: "500", mark: "+", tick: "#C9AE97" },
+        { icon: "◔", label: "Just for the joy of it", bg: "#fff", bd: "1px solid #EDE4D6", fw: "500", mark: "+", tick: "#C9AE97" }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

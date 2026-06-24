@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Hanken+Grotesk:wght@300..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;}
+  body{margin:0;}
+  ::selection{background:#DB5338;color:#fff;}
+  code,.mono{font-family:'JetBrains Mono',monospace;}
+</style>
+</helmet>
+
+<div style="background:#FBF6EE;color:#2A2320;font-family:'Hanken Grotesk',sans-serif;min-height:100vh;width:100%;-webkit-font-smoothing:antialiased;">
+
+  <!-- HEADER -->
+  <div style="max-width:920px;margin:0 auto;padding:48px 40px 0;">
+    <div style="display:flex;align-items:center;gap:11px;margin-bottom:30px;">
+      <div style="width:32px;height:32px;border-radius:9px;background:#DB5338;display:flex;align-items:center;justify-content:center;"><div style="width:13px;height:13px;border:2.5px solid #FBF6EE;border-radius:50%;border-right-color:transparent;transform:rotate(-45deg);"></div></div>
+      <span style="font-size:19px;font-weight:600;">Cadence</span>
+      <span style="font-family:'Instrument Serif',serif;font-style:italic;font-size:18px;color:#8A7E73;">— build spec for engineering</span>
+    </div>
+    <h1 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:52px;line-height:1.02;letter-spacing:-.02em;margin:0 0 18px;">From prototype to a live app</h1>
+    <p style="font-size:17px;line-height:1.55;color:#5C5048;max-width:64ch;margin:0 0 14px;">The design is done — every screen and flow exists in <strong>Cadence — Prototype.dc.html</strong>. This is the spec for wiring the brain: your stack (GPT · ElevenLabs · Whisper · Azure Pronunciation · Neon Postgres · Stripe/Razorpay) plus the adaptive engine. Built for an agentic build in Google Antigravity.</p>
+    <div style="display:inline-flex;align-items:center;gap:8px;padding:6px 13px;border:1px solid #E7DECF;border-radius:99px;font-size:12.5px;color:#8A7E73;background:#fff;">The prototype IS the source of truth for UI. Match it screen-for-screen.</div>
+  </div>
+
+  <!-- ARCHITECTURE -->
+  <div style="max-width:920px;margin:0 auto;padding:48px 40px 0;">
+    <div style="display:flex;align-items:baseline;gap:13px;margin-bottom:20px;"><span style="font-family:'Instrument Serif',serif;font-style:italic;font-size:24px;color:#DB5338;">01</span><h2 style="font-size:14px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#8A7E73;margin:0;">Architecture</h2></div>
+    <div style="background:#fff;border:1px solid #EDE4D6;border-radius:18px;padding:26px;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:2;color:#33291F;white-space:pre-wrap;">React Native / Expo app  (port the prototype's screens 1:1)
+        │
+        ▼  HTTPS (user's session JWT)
+Your backend  —  Node/Express or serverless (Vercel / Render)
+        │   keeps ALL secret keys server-side. The app never sees them.
+        ├──▶ OpenAI GPT          conversation + placement + debrief
+        ├──▶ OpenAI Whisper      speech → text  (mic audio)
+        ├──▶ ElevenLabs          text → native voice  (TTS)
+        ├──▶ Azure Pronunciation pronunciation scoring (per-phoneme)
+        ├──▶ Neon Postgres       users, progress, decks, logs
+        └──▶ Stripe / Razorpay   subscriptions + webhooks</div>
+    </div>
+    <p style="font-size:13.5px;color:#6B5F58;line-height:1.6;margin:16px 2px 0;"><strong>Golden rule:</strong> every third-party key lives only on the backend. The app calls <em>your</em> endpoints (e.g. <code style="background:#F0E7D8;padding:1px 6px;border-radius:5px;">POST /api/conversation</code>); your server attaches the key and proxies. This protects your billing and lets you swap providers without shipping an app update.</p>
+  </div>
+
+  <!-- INTEGRATIONS -->
+  <div style="max-width:920px;margin:0 auto;padding:48px 40px 0;">
+    <div style="display:flex;align-items:baseline;gap:13px;margin-bottom:20px;"><span style="font-family:'Instrument Serif',serif;font-style:italic;font-size:24px;color:#DB5338;">02</span><h2 style="font-size:14px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#8A7E73;margin:0;">Service integrations — where each plugs in</h2></div>
+    <div style="display:flex;flex-direction:column;gap:14px;">
+      <sc-for list="{{ integrations }}" as="it" hint-placeholder-count="6">
+        <div style="background:#fff;border:1px solid #EDE4D6;border-radius:16px;padding:20px 22px;">
+          <div style="display:flex;align-items:center;gap:11px;margin-bottom:9px;">
+            <div style="width:34px;height:34px;border-radius:9px;background:#FBF1E9;display:flex;align-items:center;justify-content:center;font-size:17px;">{{ it.icon }}</div>
+            <div style="font-size:16px;font-weight:600;">{{ it.name }}</div>
+            <div style="flex:1;"></div>
+            <div style="font-size:11px;font-weight:600;color:#2F8F83;background:#E6F0EE;border:1px solid #BFE0DA;border-radius:99px;padding:3px 10px;">{{ it.role }}</div>
+          </div>
+          <div style="font-size:13.5px;line-height:1.6;color:#5C5048;margin-bottom:8px;">{{ it.detail }}</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#8A5A4A;background:#FBF1E9;border-radius:9px;padding:9px 12px;">{{ it.endpoint }}</div>
+          <div style="font-size:12px;color:#8A7E73;margin-top:8px;">Replaces in prototype → <code style="background:#F0E7D8;padding:1px 6px;border-radius:5px;">{{ it.hook }}</code></div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <!-- DATA MODEL -->
+  <div style="max-width:920px;margin:0 auto;padding:48px 40px 0;">
+    <div style="display:flex;align-items:baseline;gap:13px;margin-bottom:20px;"><span style="font-family:'Instrument Serif',serif;font-style:italic;font-size:24px;color:#DB5338;">03</span><h2 style="font-size:14px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#8A7E73;margin:0;">Neon Postgres — data model</h2></div>
+    <div style="background:#1F1A24;border-radius:18px;padding:26px;overflow-x:auto;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.85;color:#E3DCEA;white-space:pre;">{{ schema }}</div>
+    </div>
+    <p style="font-size:13px;color:#6B5F58;line-height:1.6;margin:14px 2px 0;">The <code style="background:#F0E7D8;padding:1px 6px;border-radius:5px;">review_items</code> table is the heart of the adaptive engine — one row per (user, word/skill) with the FSRS scheduling state. Every answer writes an <code style="background:#F0E7D8;padding:1px 6px;border-radius:5px;">attempts</code> row; that log is what you'll later train ML on.</p>
+  </div>
+
+  <!-- AUTH + PAYMENTS -->
+  <div style="max-width:920px;margin:0 auto;padding:48px 40px 0;">
+    <div style="display:flex;align-items:baseline;gap:13px;margin-bottom:20px;"><span style="font-family:'Instrument Serif',serif;font-style:italic;font-size:24px;color:#DB5338;">04</span><h2 style="font-size:14px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#8A7E73;margin:0;">Auth & payments</h2></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+      <div style="background:#fff;border:1px solid #EDE4D6;border-radius:16px;padding:22px;">
+        <div style="font-size:16px;font-weight:600;margin-bottom:10px;">🔐 Auth</div>
+        <div style="font-size:13.5px;line-height:1.7;color:#5C5048;">Screens are designed (<em>Auth</em> + welcome-back toggle). Use <strong>Neon + a auth layer</strong>: either Auth.js (NextAuth) or Supabase Auth pointed at Neon, or Clerk. Support Google, Apple, and email/password — all three are in the design. Store only a <code style="background:#F0E7D8;padding:1px 5px;border-radius:5px;">user_id</code> + hashed credentials; issue a JWT the app sends on every API call.</div>
+      </div>
+      <div style="background:#fff;border:1px solid #EDE4D6;border-radius:16px;padding:22px;">
+        <div style="font-size:16px;font-weight:600;margin-bottom:10px;">💳 Payments</div>
+        <div style="font-size:13.5px;line-height:1.7;color:#5C5048;">Checkout screen is designed with Card + UPI/Razorpay toggle and a 7-day-trial summary. Use <strong>Stripe</strong> (global) or <strong>Razorpay</strong> (India). Create a subscription with a trial; listen to <code style="background:#F0E7D8;padding:1px 5px;border-radius:5px;">webhook</code> events to flip <code style="background:#F0E7D8;padding:1px 5px;border-radius:5px;">users.plan</code> to <code style="background:#F0E7D8;padding:1px 5px;border-radius:5px;">plus</code>. Never trust the client — the webhook is the source of truth.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADAPTIVE ENGINE -->
+  <div style="max-width:920px;margin:0 auto;padding:48px 40px 0;">
+    <div style="display:flex;align-items:baseline;gap:13px;margin-bottom:20px;"><span style="font-family:'Instrument Serif',serif;font-style:italic;font-size:24px;color:#DB5338;">05</span><h2 style="font-size:14px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#8A7E73;margin:0;">The adaptive engine — the brain, in 3 stages</h2></div>
+    <p style="font-size:15px;color:#5C5048;line-height:1.6;margin:0 0 20px;max-width:66ch;">Don't build deep ML on day one — you have no data yet. Ship Stage A, collect data, then graduate. This is exactly how Duolingo's "BirdBrain" evolved.</p>
+    <div style="display:flex;flex-direction:column;gap:14px;">
+      <sc-for list="{{ engine }}" as="e" hint-placeholder-count="3">
+        <div style="background:#fff;border:1px solid #EDE4D6;border-radius:16px;padding:22px 24px;">
+          <div style="display:flex;align-items:center;gap:11px;margin-bottom:10px;">
+            <div style="width:30px;height:30px;border-radius:50%;background:{{ e.dot }};color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;">{{ e.stage }}</div>
+            <div style="font-size:17px;font-weight:600;">{{ e.title }}</div>
+            <div style="flex:1;"></div>
+            <div style="font-size:11.5px;color:#8A7E73;">{{ e.when }}</div>
+          </div>
+          <div style="font-size:13.5px;line-height:1.65;color:#5C5048;margin-bottom:10px;">{{ e.body }}</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#3F6B64;background:#E6F0EE;border-radius:9px;padding:10px 13px;white-space:pre-wrap;">{{ e.tech }}</div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <!-- BUILD ORDER -->
+  <div style="max-width:920px;margin:0 auto;padding:48px 40px 90px;">
+    <div style="display:flex;align-items:baseline;gap:13px;margin-bottom:20px;"><span style="font-family:'Instrument Serif',serif;font-style:italic;font-size:24px;color:#DB5338;">06</span><h2 style="font-size:14px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#8A7E73;margin:0;">Build order for Antigravity</h2></div>
+    <div style="background:#fff;border:1px solid #EDE4D6;border-radius:18px;padding:10px 8px;">
+      <sc-for list="{{ steps }}" as="st" hint-placeholder-count="6">
+        <div style="display:flex;gap:14px;align-items:flex-start;padding:14px 16px;border-bottom:1px solid #F1E9DC;">
+          <div style="width:26px;height:26px;border-radius:8px;background:#2A2320;color:#FBF6EE;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex:none;font-family:'JetBrains Mono',monospace;">{{ st.n }}</div>
+          <div style="flex:1;"><div style="font-size:14.5px;font-weight:600;margin-bottom:2px;">{{ st.title }}</div><div style="font-size:12.5px;color:#6B5F58;line-height:1.5;">{{ st.body }}</div></div>
+        </div>
+      </sc-for>
+      <div style="padding:16px;font-size:13px;color:#2F8F83;font-weight:600;">After step 4 you have a genuinely shippable app. Step 6 (true ML) waits for real user data — and that's correct.</div>
+    </div>
+    <p style="font-size:12.5px;color:#A0948A;margin:22px 2px 0;line-height:1.6;">Deploy: build the app, deploy backend to Vercel/Render with keys as environment secrets, point Cadence.buildc3.tech at it via Netlify (frontend) + your API domain. The prototype can ship as the early-access web demo immediately while the native build proceeds.</p>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      integrations: [
+        { icon: "💬", name: "OpenAI GPT", role: "Conversation", detail: "Powers the live partner, placement chat, and the conversation debrief. Per-scenario system prompt sets the persona, level, and language. Already working in the prototype against a model — production adds streaming, memory, and safety guardrails.", endpoint: "POST /api/conversation  { scenario, lang, history } → { reply, english, tip }", hook: "aiReply() / aiPlacement()" },
+        { icon: "🎙", name: "OpenAI Whisper", role: "Speech → text", detail: "Replaces the browser's SpeechRecognition. Send recorded mic audio; get an accurate transcript back, far better for non-Latin scripts and accents.", endpoint: "POST /api/stt  (audio blob) → { transcript }", hook: "toggleMic() recognizer" },
+        { icon: "🔊", name: "ElevenLabs", role: "Text → voice", detail: "Replaces browser speechSynthesis with native-quality voices per language. Cache generated clips by (text, lang) to cut cost. Pick a voice id per language.", endpoint: "POST /api/tts  { text, lang } → audio stream", hook: "speak(text, locale)" },
+        { icon: "📊", name: "Azure Pronunciation", role: "Scoring", detail: "Send audio + the target sentence; get back accuracy / fluency / completeness and per-phoneme scores. Feeds the Pronunciation Lab's ring, word chips, and the coaching tip (lowest-scoring phoneme).", endpoint: "POST /api/pronounce  { audio, refText, lang } → { score, words[], phonemes[] }", hook: "Pronunciation Lab pronWords (hardcoded now)" },
+        { icon: "🗄", name: "Neon Postgres", role: "Data", detail: "Stores users, per-language progress, the vocab deck + FSRS state, and the attempts log. Serverless Postgres — connect from the backend with the pooled connection string.", endpoint: "Backend ORM (Prisma / Drizzle) — never queried from the app directly", hook: "all state currently in React state" },
+        { icon: "💳", name: "Stripe / Razorpay", role: "Payments", detail: "Subscription with a 7-day trial. The Checkout screen collects the method (Card or UPI). A webhook confirms payment and updates users.plan — the client is never trusted for entitlement.", endpoint: "POST /api/checkout → session  ·  POST /api/webhook (provider → you)", hook: "goCheckout() / goPaid()" }
+      ],
+      schema: "users\n  id            uuid pk\n  email         text unique\n  name          text\n  auth_provider text          -- google | apple | email\n  plan          text default 'free'   -- free | plus\n  native_lang   text default 'en'\n  created_at    timestamptz\n\nenrollments              -- one per language a user studies\n  id            uuid pk\n  user_id       uuid → users\n  lang          text          -- es | fr | ja ...\n  cefr_level    text          -- A1..C2 (set by placement)\n  goal          text          -- travel | family | work ...\n\nreview_items             -- the FSRS heart of the adaptive engine\n  id            uuid pk\n  enrollment_id uuid → enrollments\n  term          text          -- the word / skill\n  definition    text\n  stability     real          -- FSRS memory state\n  difficulty    real\n  due_at        timestamptz   -- when to resurface\n  reps          int\n\nattempts                 -- the ML training log (append-only)\n  id            uuid pk\n  user_id       uuid → users\n  item_id       uuid → review_items\n  lang          text\n  activity      text          -- lesson | convo | pronounce | review\n  correct       bool\n  score         real          -- e.g. pronunciation %\n  latency_ms    int\n  hints_used    int\n  created_at    timestamptz\n\nmilestones               -- real-world achievements (the gamification)\n  id, enrollment_id, key, earned_at\n\nsubscriptions            -- mirrors Stripe/Razorpay\n  id, user_id, provider, status, trial_ends_at, current_period_end",
+      engine: [
+        { stage: "A", dot: "#2F8F83", title: "Rules + spaced repetition", when: "Ship this first · no ML", body: "Make the Smart Plan real with FSRS (free, open, proven — the modern Anki algorithm) for vocab scheduling, plus simple rules for lesson selection (\"weakest skill → a speaking task\", \"due items first\"). This is a complete, competitive product on its own.", tech: "npm: ts-fsrs  →  schedule(review_items)\nrules: pick next = lowest-skill-area ∪ due_items ∪ next-lesson-in-chapter\nThe prototype's Smart Plan UI already shows the 'why' — feed it these reasons." },
+        { stage: "B", dot: "#E1A23A", title: "Predictive difficulty (light ML)", when: "After ~weeks of data", body: "Once the attempts log has volume, train a model predicting P(correct) for a user × item. Serve items at ~80% predicted success — the proven 'desirable difficulty' sweet spot. This IS BirdBrain: an IRT / half-life regression, not deep learning.", tech: "features: item difficulty, user skill, days since seen, past correctness, latency\nmodel: logistic regression or gradient-boosted trees (xgboost)\ntarget: P(correct) → pick items nearest 0.8" },
+        { stage: "C", dot: "#5B3A56", title: "Personalised paths (full ML)", when: "At scale", body: "With lots of users, add embeddings / matrix factorization to find which content sequences work for learners like this one, and tune the whole journey per person. Train offline, serve predictions from the backend.", tech: "user & item embeddings (matrix factorization / two-tower)\noffline training pipeline → model registry → /api/next-items\nA/B test every change against retention + real fluency gains" }
+      ],
+      steps: [
+        { n: "1", title: "Backend + Neon + auth", body: "Stand up the API, connect Neon, wire auth (Google/Apple/email) and JWTs. Persist real progress. Port the prototype screens to React Native/Expo." },
+        { n: "2", title: "Real voice", body: "Add /api/stt (Whisper) and /api/tts (ElevenLabs); swap them into the mic handler and speak()." },
+        { n: "3", title: "Real conversation", body: "Move the GPT calls behind /api/conversation with streaming + guardrails; per-scenario prompts already exist." },
+        { n: "4", title: "Pronunciation + FSRS engine", body: "Wire Azure scoring into the Lab, and FSRS + rules into the Smart Plan / review. ← shippable product here." },
+        { n: "5", title: "Payments", body: "Stripe/Razorpay subscription + trial + webhook → users.plan. Gate Plus-only features." },
+        { n: "6", title: "Adaptive ML (B → C)", body: "Once attempts data accrues, train the predictive model and graduate the engine. A/B test against retention." }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

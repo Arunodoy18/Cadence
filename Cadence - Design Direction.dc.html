@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Hanken+Grotesk:ital,wght@0,300..800;1,400..600&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;}
+  body{margin:0;}
+  ::selection{background:#DB5338;color:#fff;}
+</style>
+</helmet>
+
+<div style="background:#FBF6EE;color:#2A2320;font-family:'Hanken Grotesk',sans-serif;min-height:100vh;width:100%;-webkit-font-smoothing:antialiased;">
+
+  <!-- TOP BAR -->
+  <div style="max-width:1180px;margin:0 auto;padding:28px 40px 0;display:flex;align-items:center;justify-content:space-between;">
+    <div style="display:flex;align-items:center;gap:11px;">
+      <div style="width:34px;height:34px;border-radius:9px;background:#DB5338;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(219,83,56,.32);">
+        <div style="width:13px;height:13px;border:2.5px solid #FBF6EE;border-radius:50%;border-right-color:transparent;transform:rotate(-45deg);"></div>
+      </div>
+      <span style="font-size:19px;letter-spacing:-.01em;font-weight:600;">Cadence</span>
+    </div>
+    <div style="font-size:12.5px;color:#9A8E84;letter-spacing:.02em;">Design direction · working concept v1</div>
+  </div>
+
+  <!-- HERO -->
+  <div style="max-width:1180px;margin:0 auto;padding:64px 40px 40px;">
+    <div style="display:inline-flex;align-items:center;gap:8px;padding:6px 13px;border:1px solid #E7DECF;border-radius:99px;font-size:12.5px;color:#8A7E73;margin-bottom:30px;background:#fff;">
+      <span style="width:6px;height:6px;border-radius:50%;background:#2F8F83;"></span>
+      A language app built to make you <em style="font-style:italic;font-family:'Instrument Serif',serif;font-size:15px;">speak</em>
+    </div>
+    <h1 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:80px;line-height:0.98;letter-spacing:-.02em;margin:0 0 26px;max-width:14ch;">
+      Duolingo builds a habit.<br><span style="color:#DB5338;">Cadence builds a speaker.</span>
+    </h1>
+    <p style="font-size:19px;line-height:1.55;color:#5C5048;max-width:60ch;margin:0;">
+      Duolingo wins the first 100 days — the streak, the dopamine, the league. Then learners hit a wall: endless translation drills, no real conversation, no path to fluency. Cadence starts where Duo stalls — <strong style="font-weight:600;color:#2A2320;">free AI conversation from day one, real immersion, culture in every lesson, and motivation built on progress instead of guilt.</strong>
+    </p>
+  </div>
+
+  <!-- THE WEDGE: gaps -> edge -->
+  <div style="max-width:1180px;margin:0 auto;padding:36px 40px 20px;">
+    <div style="display:flex;align-items:baseline;gap:14px;margin-bottom:24px;">
+      <span style="font-family:'Instrument Serif',serif;font-style:italic;font-size:26px;color:#DB5338;">01</span>
+      <h2 style="font-size:14px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#8A7E73;margin:0;">Where Duolingo loses — and we win</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:14px;">
+      <sc-for list="{{ wedges }}" as="w" hint-placeholder-count="6">
+        <div style="background:#fff;border:1px solid #EDE4D6;border-radius:18px;padding:22px 24px;display:flex;gap:18px;">
+          <div style="flex-shrink:0;width:44px;height:44px;border-radius:12px;background:#FBF1E9;display:flex;align-items:center;justify-content:center;font-family:'Instrument Serif',serif;font-size:22px;color:#DB5338;">{{ w.n }}</div>
+          <div>
+            <div style="font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:#BFA38C;margin-bottom:5px;text-decoration:line-through;">{{ w.gap }}</div>
+            <div style="font-size:17px;font-weight:600;letter-spacing:-.01em;margin-bottom:5px;line-height:1.25;">{{ w.edge }}</div>
+            <div style="font-size:13.5px;line-height:1.5;color:#6B5F58;">{{ w.desc }}</div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <!-- BRAND SYSTEM -->
+  <div style="max-width:1180px;margin:0 auto;padding:56px 40px 20px;">
+    <div style="display:flex;align-items:baseline;gap:14px;margin-bottom:24px;">
+      <span style="font-family:'Instrument Serif',serif;font-style:italic;font-size:26px;color:#DB5338;">02</span>
+      <h2 style="font-size:14px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#8A7E73;margin:0;">The system</h2>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1.15fr 1fr;gap:18px;">
+      <!-- Type -->
+      <div style="background:#fff;border:1px solid #EDE4D6;border-radius:20px;padding:30px 32px;">
+        <div style="font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:#BFA38C;margin-bottom:18px;">Typography</div>
+        <div style="font-family:'Instrument Serif',serif;font-size:56px;line-height:1;margin-bottom:4px;">Aa Êé ñ あ</div>
+        <div style="font-size:13px;color:#8A7E73;margin-bottom:24px;">Instrument Serif — display & emotional moments</div>
+        <div style="font-size:30px;font-weight:600;letter-spacing:-.01em;margin-bottom:4px;">Hablar con confianza</div>
+        <div style="font-size:16px;font-weight:400;color:#5C5048;margin-bottom:4px;">Hanken Grotesk — every functional surface, all weights</div>
+        <div style="font-size:13px;color:#8A7E73;">Clean, multilingual, legible for target-language content.</div>
+      </div>
+      <!-- Color -->
+      <div style="background:#fff;border:1px solid #EDE4D6;border-radius:20px;padding:30px 32px;">
+        <div style="font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:#BFA38C;margin-bottom:18px;">Palette — warm, cultural, calm</div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;">
+          <sc-for list="{{ swatches }}" as="s" hint-placeholder-count="6">
+            <div>
+              <div style="height:62px;border-radius:12px;border:1px solid rgba(0,0,0,.06);background:{{ s.css }};margin-bottom:8px;"></div>
+              <div style="font-size:12.5px;font-weight:600;">{{ s.name }}</div>
+              <div style="font-size:11px;color:#9A8E84;">{{ s.hex }}</div>
+            </div>
+          </sc-for>
+        </div>
+        <div style="margin-top:18px;font-size:13px;line-height:1.5;color:#6B5F58;">Deliberately <em style="font-family:'Instrument Serif',serif;">not</em> neon-green. Warm paper and persimmon read human and editorial; teal signals progress without the gamey dopamine.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRODUCT MAP -->
+  <div style="max-width:1180px;margin:0 auto;padding:56px 40px 20px;">
+    <div style="display:flex;align-items:baseline;gap:14px;margin-bottom:24px;">
+      <span style="font-family:'Instrument Serif',serif;font-style:italic;font-size:26px;color:#DB5338;">03</span>
+      <h2 style="font-size:14px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#8A7E73;margin:0;">What I'll design — end to end</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;">
+      <sc-for list="{{ flows }}" as="f" hint-placeholder-count="8">
+        <div style="background:#fff;border:1px solid #EDE4D6;border-radius:16px;padding:20px;">
+          <div style="font-family:'Instrument Serif',serif;font-style:italic;font-size:20px;color:#C9AE97;margin-bottom:10px;">{{ f.n }}</div>
+          <div style="font-size:15.5px;font-weight:600;letter-spacing:-.01em;margin-bottom:5px;line-height:1.2;">{{ f.title }}</div>
+          <div style="font-size:12.5px;line-height:1.45;color:#6B5F58;">{{ f.desc }}</div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <!-- SCREEN TEASERS -->
+  <div style="max-width:1180px;margin:0 auto;padding:56px 40px 90px;">
+    <div style="display:flex;align-items:baseline;gap:14px;margin-bottom:8px;">
+      <span style="font-family:'Instrument Serif',serif;font-style:italic;font-size:26px;color:#DB5338;">04</span>
+      <h2 style="font-size:14px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#8A7E73;margin:0;">The look — two screens</h2>
+    </div>
+    <p style="font-size:14px;color:#8A7E73;margin:0 0 30px;max-width:52ch;">A taste of the system in product. The full flows come next — react to this first.</p>
+
+    <div style="display:flex;gap:40px;align-items:flex-start;flex-wrap:wrap;">
+
+      <!-- PHONE 1: Home / journey -->
+      <div style="flex:none;">
+        <div style="width:300px;height:620px;background:#1c1714;border-radius:42px;padding:11px;box-shadow:0 30px 60px -20px rgba(40,30,20,.45);">
+          <div style="width:100%;height:100%;background:#FBF6EE;border-radius:32px;overflow:hidden;position:relative;">
+            <!-- status -->
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 22px 6px;font-size:12px;font-weight:600;">
+              <span>9:41</span><span style="letter-spacing:1px;">●●●&nbsp;◔</span>
+            </div>
+            <!-- header -->
+            <div style="padding:8px 22px 4px;display:flex;justify-content:space-between;align-items:center;">
+              <div>
+                <div style="font-size:12px;color:#9A8E84;">Buenos días, Maya</div>
+                <div style="font-family:'Instrument Serif',serif;font-size:26px;line-height:1.05;">Chapter 3 · <span style="font-style:italic;">Café culture</span></div>
+              </div>
+              <div style="display:flex;align-items:center;gap:5px;background:#fff;border:1px solid #EDE4D6;border-radius:99px;padding:5px 10px;">
+                <span style="color:#2F8F83;font-size:13px;">◇</span><span style="font-size:13px;font-weight:600;">14</span>
+              </div>
+            </div>
+            <!-- milestone card -->
+            <div style="margin:14px 16px 0;background:linear-gradient(140deg,#DB5338,#B23E27);border-radius:20px;padding:18px;color:#FBF6EE;">
+              <div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;opacity:.85;margin-bottom:8px;">Today's real-world goal</div>
+              <div style="font-family:'Instrument Serif',serif;font-size:23px;line-height:1.1;margin-bottom:14px;">“Order a coffee and make small talk.”</div>
+              <div style="height:6px;background:rgba(255,255,255,.25);border-radius:99px;overflow:hidden;"><div style="width:62%;height:100%;background:#FBF6EE;border-radius:99px;"></div></div>
+              <div style="font-size:11.5px;opacity:.85;margin-top:8px;">3 of 5 skills ready</div>
+            </div>
+            <!-- journey steps -->
+            <div style="padding:18px 18px 0;">
+              <div style="display:flex;gap:13px;align-items:center;margin-bottom:14px;">
+                <div style="width:38px;height:38px;border-radius:12px;background:#2F8F83;display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px;flex-shrink:0;">✓</div>
+                <div style="flex:1;"><div style="font-size:14px;font-weight:600;">Greetings & warmth</div><div style="font-size:11.5px;color:#9A8E84;">Lesson · done</div></div>
+              </div>
+              <div style="display:flex;gap:13px;align-items:center;margin-bottom:14px;">
+                <div style="width:38px;height:38px;border-radius:12px;background:#fff;border:2px solid #DB5338;display:flex;align-items:center;justify-content:center;color:#DB5338;font-size:15px;flex-shrink:0;">▶</div>
+                <div style="flex:1;"><div style="font-size:14px;font-weight:600;">Talk to the barista</div><div style="font-size:11.5px;color:#DB5338;">Live AI conversation · free</div></div>
+              </div>
+              <div style="display:flex;gap:13px;align-items:center;opacity:.5;">
+                <div style="width:38px;height:38px;border-radius:12px;background:#F0E7D8;display:flex;align-items:center;justify-content:center;color:#A8927C;font-size:15px;flex-shrink:0;">☕</div>
+                <div style="flex:1;"><div style="font-size:14px;font-weight:600;">Café culture note</div><div style="font-size:11.5px;color:#9A8E84;">Why Spaniards linger</div></div>
+              </div>
+            </div>
+            <!-- tab bar -->
+            <div style="position:absolute;bottom:0;left:0;right:0;height:62px;background:#fff;border-top:1px solid #EDE4D6;display:flex;justify-content:space-around;align-items:center;font-size:11px;color:#B5A99E;">
+              <span style="color:#DB5338;font-weight:600;">◎ Learn</span><span>◇ Speak</span><span>❖ Immerse</span><span>◔ You</span>
+            </div>
+          </div>
+        </div>
+        <div style="font-size:13px;color:#8A7E73;margin-top:16px;text-align:center;">Home — a <em style="font-family:'Instrument Serif',serif;">journey</em>, not a streak grid</div>
+      </div>
+
+      <!-- PHONE 2: AI conversation -->
+      <div style="flex:none;">
+        <div style="width:300px;height:620px;background:#1c1714;border-radius:42px;padding:11px;box-shadow:0 30px 60px -20px rgba(40,30,20,.45);">
+          <div style="width:100%;height:100%;background:#241C2A;border-radius:32px;overflow:hidden;position:relative;color:#F3ECE2;">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 22px 6px;font-size:12px;font-weight:600;color:#F3ECE2;">
+              <span>9:41</span><span style="letter-spacing:1px;">●●●&nbsp;◔</span>
+            </div>
+            <!-- partner -->
+            <div style="text-align:center;padding:14px 0 6px;">
+              <div style="width:74px;height:74px;border-radius:50%;margin:0 auto 10px;background:linear-gradient(140deg,#E1A23A,#DB5338);display:flex;align-items:center;justify-content:center;font-size:30px;">👩🏻</div>
+              <div style="font-family:'Instrument Serif',serif;font-size:21px;">Lucía · barista</div>
+              <div style="font-size:11.5px;color:#A99FB0;">Madrid café · speaking slowly</div>
+            </div>
+            <!-- transcript -->
+            <div style="padding:10px 18px;">
+              <div style="background:#352B3D;border-radius:16px 16px 16px 4px;padding:12px 14px;margin-bottom:10px;max-width:80%;">
+                <div style="font-size:14px;line-height:1.4;">¿Qué te pongo, guapa?</div>
+                <div style="font-size:11.5px;color:#A99FB0;margin-top:4px;">What can I get you, dear?</div>
+              </div>
+              <div style="background:#DB5338;border-radius:16px 16px 4px 16px;padding:12px 14px;margin-bottom:10px;max-width:80%;margin-left:auto;">
+                <div style="font-size:14px;line-height:1.4;">Un café con leche, por favor.</div>
+              </div>
+              <div style="display:flex;gap:7px;align-items:center;background:#2F8F83;border-radius:99px;padding:7px 12px;width:max-content;">
+                <span style="font-size:12px;">✦</span><span style="font-size:12px;font-weight:600;">Nice — try adding “para llevar”</span>
+              </div>
+            </div>
+            <!-- mic dock -->
+            <div style="position:absolute;bottom:0;left:0;right:0;padding:20px 0 28px;background:linear-gradient(180deg,rgba(36,28,42,0),#241C2A 40%);display:flex;flex-direction:column;align-items:center;gap:10px;">
+              <div style="display:flex;gap:3px;align-items:flex-end;height:22px;">
+                <div style="width:3px;height:10px;background:#E1A23A;border-radius:2px;"></div><div style="width:3px;height:18px;background:#E1A23A;border-radius:2px;"></div><div style="width:3px;height:22px;background:#DB5338;border-radius:2px;"></div><div style="width:3px;height:14px;background:#E1A23A;border-radius:2px;"></div><div style="width:3px;height:20px;background:#DB5338;border-radius:2px;"></div><div style="width:3px;height:9px;background:#E1A23A;border-radius:2px;"></div>
+              </div>
+              <div style="width:64px;height:64px;border-radius:50%;background:#DB5338;display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:0 0 0 8px rgba(219,83,56,.18);">🎙</div>
+              <div style="font-size:11.5px;color:#A99FB0;">Hold to speak · or tap for a hint</div>
+            </div>
+          </div>
+        </div>
+        <div style="font-size:13px;color:#8A7E73;margin-top:16px;text-align:center;">Speak — <em style="font-family:'Instrument Serif',serif;">free</em>, from day one</div>
+      </div>
+
+      <!-- side note -->
+      <div style="flex:1;min-width:240px;padding-top:30px;">
+        <div style="font-family:'Instrument Serif',serif;font-size:30px;line-height:1.15;margin-bottom:16px;">Every screen answers one question:</div>
+        <div style="font-size:18px;color:#5C5048;line-height:1.5;margin-bottom:24px;">“Will this help me <em style="font-family:'Instrument Serif',serif;color:#DB5338;">actually speak</em>?”</div>
+        <div style="border-top:1px solid #E7DECF;padding-top:20px;">
+          <div style="font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:#BFA38C;margin-bottom:12px;">Next steps</div>
+          <div style="font-size:14px;line-height:1.7;color:#5C5048;">→ Confirm direction, name & language pair<br>→ Build onboarding + placement<br>→ Build the lesson loop & immersion<br>→ Wire the AI conversation flow live</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      wedges: [
+        { n: "01", gap: "No fluency pathway", edge: "A1 → C2, the whole climb", desc: "Structured CEFR levels feeding into real articles, film clips and podcasts as you rise — not an endless beginner loop." },
+        { n: "02", gap: "Conversation locked to top tier", edge: "Free AI conversation, day one", desc: "Adaptive spoken dialogue is the core feature, not a $30/mo upsell. The moat serious learners can't find elsewhere." },
+        { n: "03", gap: "No learner control", edge: "You steer, AI co-pilots", desc: "Pick a goal — travel, business, medical — and drive your own path. AI fills the gaps instead of dictating every step." },
+        { n: "04", gap: "Language in a vacuum", edge: "Culture in every lesson", desc: "Idioms in use, regional variation, social norms. You learn not just what to say, but when and why." },
+        { n: "05", gap: "Streak guilt & anxiety", edge: "Progress pride, not fear", desc: "Milestones like “held a 3-minute chat,” graceful streak recovery, calm nudges. Motivation that lasts past day 100." },
+        { n: "06", gap: "Grammar buried or absent", edge: "Clear, on-demand grammar", desc: "Implicit practice paired with transparent, visual explanations the moment you want to know why." }
+      ],
+      swatches: [
+        { name: "Paper", hex: "#FBF6EE", css: "#FBF6EE" },
+        { name: "Ink", hex: "#2A2320", css: "#2A2320" },
+        { name: "Persimmon", hex: "#DB5338", css: "#DB5338" },
+        { name: "Teal", hex: "#2F8F83", css: "#2F8F83" },
+        { name: "Gold", hex: "#E1A23A", css: "#E1A23A" },
+        { name: "Plum", hex: "#5B3A56", css: "#5B3A56" }
+      ],
+      flows: [
+        { n: "i", title: "Onboarding & placement", desc: "Goal-first intake, real placement chat — not 5 taps then a streak." },
+        { n: "ii", title: "Home journey", desc: "Chapters tied to real-world goals you can actually do." },
+        { n: "iii", title: "The lesson loop", desc: "Production over translation; culture & grammar woven in." },
+        { n: "iv", title: "AI conversation", desc: "Live speaking with adaptive partners, free." },
+        { n: "v", title: "Immerse", desc: "Graded articles, clips & audio that scale with your level." },
+        { n: "vi", title: "Grammar & culture", desc: "On-demand, visual, never patronizing." },
+        { n: "vii", title: "Calm progress", desc: "Real-fluency milestones, gentle streaks, your profile." },
+        { n: "viii", title: "Plans", desc: "An honest paywall — free core, premium depth." }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

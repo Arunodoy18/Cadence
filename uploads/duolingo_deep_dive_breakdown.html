@@ -1,0 +1,291 @@
+
+<style>
+  .section { margin-bottom: 2rem; }
+  .section-header { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: var(--border-radius-md); margin-bottom: 1rem; cursor: pointer; user-select: none; }
+  .section-header:hover { background: var(--color-background-secondary); }
+  .section-icon { font-size: 20px; width: 28px; text-align: center; }
+  .section-title { font-size: 15px; font-weight: 500; color: var(--color-text-primary); flex: 1; }
+  .section-count { font-size: 12px; color: var(--color-text-secondary); background: var(--color-background-secondary); padding: 2px 8px; border-radius: 99px; border: 0.5px solid var(--color-border-tertiary); }
+  .chevron { font-size: 14px; color: var(--color-text-tertiary); transition: transform 0.2s; }
+  .chevron.open { transform: rotate(90deg); }
+  .section-body { display: none; padding: 0 4px; }
+  .section-body.open { display: block; }
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-bottom: 10px; }
+  .card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 14px 16px; }
+  .card-label { font-size: 11px; font-weight: 500; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+  .card-value { font-size: 22px; font-weight: 500; color: var(--color-text-primary); }
+  .card-sub { font-size: 12px; color: var(--color-text-secondary); margin-top: 2px; }
+  .tag { display: inline-block; font-size: 12px; padding: 3px 10px; border-radius: 99px; margin: 3px 3px 3px 0; border: 0.5px solid; }
+  .tag-green { background: var(--color-background-success); color: var(--color-text-success); border-color: var(--color-border-success); }
+  .tag-red { background: var(--color-background-danger); color: var(--color-text-danger); border-color: var(--color-border-danger); }
+  .tag-blue { background: var(--color-background-info); color: var(--color-text-info); border-color: var(--color-border-info); }
+  .tag-amber { background: var(--color-background-warning); color: var(--color-text-warning); border-color: var(--color-border-warning); }
+  .row { display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
+  .insight { border-left: 2px solid var(--color-border-info); padding: 10px 14px; margin: 8px 0; background: var(--color-background-secondary); border-radius: 0 var(--border-radius-md) var(--border-radius-md) 0; }
+  .insight p { font-size: 13px; color: var(--color-text-primary); margin: 0; line-height: 1.6; }
+  .insight .beat { font-size: 11px; color: var(--color-text-info); font-weight: 500; margin-bottom: 4px; }
+  .weakness { border-left: 2px solid var(--color-border-danger); padding: 10px 14px; margin: 8px 0; background: var(--color-background-secondary); border-radius: 0 var(--border-radius-md) var(--border-radius-md) 0; }
+  .weakness p { font-size: 13px; color: var(--color-text-primary); margin: 0; line-height: 1.6; }
+  .weakness .beat { font-size: 11px; color: var(--color-text-danger); font-weight: 500; margin-bottom: 4px; }
+  .feature-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 8px; }
+  .feature-item { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 10px 12px; font-size: 13px; color: var(--color-text-primary); display: flex; gap: 8px; align-items: flex-start; }
+  .feature-item i { color: var(--color-text-info); margin-top: 1px; flex-shrink: 0; }
+  .tech-row { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 0.5px solid var(--color-border-tertiary); font-size: 13px; }
+  .tech-row:last-child { border-bottom: none; }
+  .tech-label { font-weight: 500; color: var(--color-text-primary); width: 170px; flex-shrink: 0; }
+  .tech-desc { color: var(--color-text-secondary); }
+  .nav { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 0.5px solid var(--color-border-tertiary); }
+  .nav-btn { font-size: 12px; padding: 5px 12px; border-radius: 99px; border: 0.5px solid var(--color-border-secondary); background: transparent; color: var(--color-text-secondary); cursor: pointer; }
+  .nav-btn:hover { background: var(--color-background-secondary); color: var(--color-text-primary); }
+  .opportunity { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 14px 16px; margin-bottom: 10px; }
+  .opportunity-title { font-size: 13px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 4px; }
+  .opportunity-desc { font-size: 12px; color: var(--color-text-secondary); line-height: 1.5; }
+  .opportunity-badge { font-size: 11px; padding: 2px 8px; border-radius: 99px; margin-bottom: 8px; display: inline-block; }
+  h2.sr-only { position: absolute; left: -9999px; }
+</style>
+
+<h2 class="sr-only">Duolingo competitive intelligence: complete breakdown of features, metrics, technology, weaknesses, and opportunities to build better.</h2>
+
+<div style="padding: 1rem 0 0.5rem;">
+  <div style="font-size: 20px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 4px;">Duolingo — complete intelligence brief</div>
+  <div style="font-size: 13px; color: var(--color-text-secondary);">Everything to understand, then surpass it. Click any section to expand.</div>
+</div>
+
+<div class="nav" id="navBar"></div>
+
+<div id="sections">
+
+  <!-- METRICS -->
+  <div class="section" id="sec-metrics">
+    <div class="section-header" onclick="toggle('metrics')">
+      <i class="ti ti-chart-bar section-icon" aria-hidden="true"></i>
+      <span class="section-title">Scale & metrics</span>
+      <span class="section-count">8 stats</span>
+      <span class="chevron" id="chev-metrics">›</span>
+    </div>
+    <div class="section-body" id="body-metrics">
+      <div class="card-grid">
+        <div class="card"><div class="card-label">Monthly active users</div><div class="card-value">128M+</div><div class="card-sub">as of Q2 2025 (+24% YoY)</div></div>
+        <div class="card"><div class="card-label">Daily active users</div><div class="card-value">52.7M</div><div class="card-sub">record high, end of 2025</div></div>
+        <div class="card"><div class="card-label">Paid subscribers</div><div class="card-value">10.9M</div><div class="card-sub">as of June 2025 (+35% YoY)</div></div>
+        <div class="card"><div class="card-label">Annual revenue</div><div class="card-value">~$750M</div><div class="card-sub">2024; guidance $987M–996M for 2025</div></div>
+        <div class="card"><div class="card-label">Languages offered</div><div class="card-value">42+</div><div class="card-sub">incl. Klingon, Esperanto, Hawaiian</div></div>
+        <div class="card"><div class="card-label">DAU growth YoY</div><div class="card-value">36%</div><div class="card-sub">as of 2025</div></div>
+        <div class="card"><div class="card-label">Churn rate (2024)</div><div class="card-value">28%</div><div class="card-sub">down from 47% in 2020</div></div>
+        <div class="card"><div class="card-label">Organic growth</div><div class="card-value">~80%</div><div class="card-sub">new users from word-of-mouth</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FEATURES -->
+  <div class="section" id="sec-features">
+    <div class="section-header" onclick="toggle('features')">
+      <i class="ti ti-list-check section-icon" aria-hidden="true"></i>
+      <span class="section-title">Core features</span>
+      <span class="section-count">20 features</span>
+      <span class="chevron" id="chev-features">›</span>
+    </div>
+    <div class="section-body" id="body-features">
+      <div style="font-size: 12px; font-weight: 500; color: var(--color-text-secondary); margin-bottom: 8px;">LEARNING ENGINE</div>
+      <div class="feature-list" style="margin-bottom: 14px;">
+        <div class="feature-item"><i class="ti ti-brain" aria-hidden="true"></i><div><strong>Spaced repetition</strong> — Half-Life Regression model tracks every word's decay rate per user</div></div>
+        <div class="feature-item"><i class="ti ti-arrows-shuffle" aria-hidden="true"></i><div><strong>BirdBrain AI</strong> — adaptive engine adjusts difficulty, pacing, lesson mix in real-time</div></div>
+        <div class="feature-item"><i class="ti ti-message-circle" aria-hidden="true"></i><div><strong>AI video calls</strong> — live conversation with character Lily (9 languages, Max tier)</div></div>
+        <div class="feature-item"><i class="ti ti-bulb" aria-hidden="true"></i><div><strong>Explain my answer</strong> — GPT-4 breaks down grammar rules on mistakes (Max tier)</div></div>
+        <div class="feature-item"><i class="ti ti-microphone" aria-hidden="true"></i><div><strong>Speaking exercises</strong> — pronunciation practice with character feedback</div></div>
+        <div class="feature-item"><i class="ti ti-book" aria-hidden="true"></i><div><strong>Stories</strong> — short dialogues for reading + listening immersion</div></div>
+        <div class="feature-item"><i class="ti ti-headphones" aria-hidden="true"></i><div><strong>Audio lessons</strong> — podcast-style listening practice</div></div>
+        <div class="feature-item"><i class="ti ti-certificate" aria-hidden="true"></i><div><strong>CEFR-aligned courses</strong> — 9 major languages tracked to official European framework</div></div>
+      </div>
+      <div style="font-size: 12px; font-weight: 500; color: var(--color-text-secondary); margin-bottom: 8px;">GAMIFICATION</div>
+      <div class="feature-list" style="margin-bottom: 14px;">
+        <div class="feature-item"><i class="ti ti-flame" aria-hidden="true"></i><div><strong>Streaks</strong> — daily habit loop; streak shields purchasable with gems</div></div>
+        <div class="feature-item"><i class="ti ti-trophy" aria-hidden="true"></i><div><strong>Leagues</strong> — weekly XP competitions (Bronze → Diamond)</div></div>
+        <div class="feature-item"><i class="ti ti-star" aria-hidden="true"></i><div><strong>XP + gems</strong> — earn points; spend gems on power-ups and streak shields</div></div>
+        <div class="feature-item"><i class="ti ti-award" aria-hidden="true"></i><div><strong>Achievements + badges</strong> — completion rate booster (+30% per studies)</div></div>
+        <div class="feature-item"><i class="ti ti-users" aria-hidden="true"></i><div><strong>Friends quests</strong> — co-op daily challenges with friends</div></div>
+        <div class="feature-item"><i class="ti ti-device-gamepad-2" aria-hidden="true"></i><div><strong>PvP mode (chess)</strong> — real-time matches vs other learners</div></div>
+      </div>
+      <div style="font-size: 12px; font-weight: 500; color: var(--color-text-secondary); margin-bottom: 8px;">PLATFORM & EXTRAS</div>
+      <div class="feature-list">
+        <div class="feature-item"><i class="ti ti-id-badge" aria-hidden="true"></i><div><strong>Duolingo Score</strong> — skill rating (reading/writing/listening/speaking) exportable to LinkedIn</div></div>
+        <div class="feature-item"><i class="ti ti-school" aria-hidden="true"></i><div><strong>Math & music courses</strong> — expanded beyond languages; chess added 2025</div></div>
+        <div class="feature-item"><i class="ti ti-test-pipe" aria-hidden="true"></i><div><strong>Duolingo English Test (DET)</strong> — low-cost accredited proficiency certificate</div></div>
+        <div class="feature-item"><i class="ti ti-abc" aria-hidden="true"></i><div><strong>Duolingo ABC</strong> — separate literacy app for kids under 5</div></div>
+        <div class="feature-item"><i class="ti ti-wifi-off" aria-hidden="true"></i><div><strong>Offline mode</strong> — available on paid tiers</div></div>
+        <div class="feature-item"><i class="ti ti-bell" aria-hidden="true"></i><div><strong>Push notifications</strong> — red dot tactic increased DAUs by 1.6%</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TECH & AI -->
+  <div class="section" id="sec-tech">
+    <div class="section-header" onclick="toggle('tech')">
+      <i class="ti ti-cpu section-icon" aria-hidden="true"></i>
+      <span class="section-title">Technology & AI architecture</span>
+      <span class="section-count">7 systems</span>
+      <span class="chevron" id="chev-tech">›</span>
+    </div>
+    <div class="section-body" id="body-tech">
+      <div class="tech-row"><div class="tech-label">Half-Life Regression (HLR)</div><div class="tech-desc">Spaced repetition model since 2016. Tracks every word's forgetting curve per user — timing, exposure frequency, recall accuracy. Trained on 13M+ learning traces.</div></div>
+      <div class="tech-row"><div class="tech-label">BirdBrain (2020–)</div><div class="tech-desc">Unified ML engine. Handles spaced-repetition predictions AND dynamic exercise curation simultaneously. Adjusts difficulty to keep users in "flow state" — not too hard, not too easy.</div></div>
+      <div class="tech-row"><div class="tech-label">Session Generator (Scala)</div><div class="tech-desc">Rewritten from Python to Scala, slashing lesson-generation latency from 750ms → 14ms. Enables genuine real-time personalization at 50M+ DAU scale.</div></div>
+      <div class="tech-row"><div class="tech-label">GPT-4 integration</div><div class="tech-desc">Powers Role Play (free-flow conversation) and Explain My Answer (contextual grammar feedback). Enabled niche conversations vs. old scripted chatbot system.</div></div>
+      <div class="tech-row"><div class="tech-label">A/B testing infrastructure</div><div class="tech-desc">16,000+ experiments run across millions of users simultaneously. Every push notification, exercise type, and UI element is data-validated before rollout.</div></div>
+      <div class="tech-row"><div class="tech-label">Student model</div><div class="tech-desc">Tracks statistics per word per user — exposure count, recall accuracy, time since last practice — fueling both HLR and BirdBrain predictions.</div></div>
+      <div class="tech-row"><div class="tech-label">AI content generation</div><div class="tech-desc">148 new courses created in 2025 powered by generative AI — largest expansion ever. Drastically reduces human content bottleneck for new language/subject launches.</div></div>
+    </div>
+  </div>
+
+  <!-- GAMIFICATION PSYCHOLOGY -->
+  <div class="section" id="sec-psych">
+    <div class="section-header" onclick="toggle('psych')">
+      <i class="ti ti-mood-happy section-icon" aria-hidden="true"></i>
+      <span class="section-title">Gamification & psychology</span>
+      <span class="section-count">10 tactics</span>
+      <span class="chevron" id="chev-psych">›</span>
+    </div>
+    <div class="section-body" id="body-psych">
+      <div class="row">
+        <span class="tag tag-green">Streak system</span>
+        <span class="tag tag-green">Leagues (Bronze→Diamond)</span>
+        <span class="tag tag-green">XP leaderboards (+40% engagement)</span>
+        <span class="tag tag-green">Gem economy</span>
+        <span class="tag tag-green">Streak shields</span>
+        <span class="tag tag-green">Red dot notification</span>
+        <span class="tag tag-green">Duo mascot guilt</span>
+        <span class="tag tag-green">Badges (+30% completion)</span>
+        <span class="tag tag-green">Friends quests</span>
+        <span class="tag tag-green">Viral sharing</span>
+      </div>
+      <div class="insight"><div class="beat">KEY MECHANIC</div><p>The streak is the single most powerful retention lever. Missing a streak "feels like breaking a promise to yourself." Duo's guilt-trip personality (even fake death stunts) amplifies this. Churn dropped from 47% → 28% largely via streak psychology.</p></div>
+      <div class="insight"><div class="beat">DESIGN PRINCIPLE</div><p>Duolingo deliberately adjusts progress bars to 80% rather than 100% — exploiting perfectionist tendencies and communicating spaced repetition without users noticing. Engagement over accuracy of progress display.</p></div>
+      <div class="insight"><div class="beat">SOCIAL ENGINE</div><p>~80% of new users come organically. Leagues create "just one more lesson" competitive loops. Friends Quests convert solo learning into a social activity. Universal matching system added so even users without friends can compete.</p></div>
+    </div>
+  </div>
+
+  <!-- MONETIZATION -->
+  <div class="section" id="sec-money">
+    <div class="section-header" onclick="toggle('money')">
+      <i class="ti ti-cash section-icon" aria-hidden="true"></i>
+      <span class="section-title">Business model & monetization</span>
+      <span class="section-count">4 revenue streams</span>
+      <span class="chevron" id="chev-money">›</span>
+    </div>
+    <div class="section-body" id="body-money">
+      <div class="card-grid">
+        <div class="card"><div class="card-label">Super Duolingo (paid)</div><div class="card-value">~80%</div><div class="card-sub">of revenue from subscriptions; removes ads, unlimited hearts, offline</div></div>
+        <div class="card"><div class="card-label">Duolingo Max (premium)</div><div class="card-value">Top tier</div><div class="card-sub">AI video calls, Explain My Answer, GPT-4 features; driving conversion</div></div>
+        <div class="card"><div class="card-label">In-app purchases</div><div class="card-value">Gems</div><div class="card-sub">virtual currency for streak shields, power-ups, cosmetics</div></div>
+        <div class="card"><div class="card-label">Duolingo English Test</div><div class="card-value">$49/test</div><div class="card-sub">accredited proficiency cert; accepted by 5,000+ institutions</div></div>
+      </div>
+      <div class="insight"><div class="beat">FREEMIUM FORMULA</div><p>Free tier is deliberately valuable (not crippled) to maximize top-of-funnel. The free tier hooks users, streaks build habit, then ads + limited hearts create friction that converts to paid. 10.9M paid out of 128M monthly active = ~8.5% conversion.</p></div>
+    </div>
+  </div>
+
+  <!-- WEAKNESSES -->
+  <div class="section" id="sec-weak">
+    <div class="section-header" onclick="toggle('weak')">
+      <i class="ti ti-alert-triangle section-icon" aria-hidden="true"></i>
+      <span class="section-title">Weaknesses & gaps (your opportunity)</span>
+      <span class="section-count">12 gaps</span>
+      <span class="chevron" id="chev-weak">›</span>
+    </div>
+    <div class="section-body" id="body-weak">
+      <div class="weakness"><div class="beat">GAP 1 — No fluency pathway</div><p>Duolingo plateaus at intermediate. Users hit a "hamster wheel" of translating isolated sentences. No real path from B1 → C2. Effective for beginners, useless for serious learners. Trustpilot score: 1.7/5 largely from this frustration.</p></div>
+      <div class="weakness"><div class="beat">GAP 2 — Shallow grammar instruction</div><p>Grammar rules are buried or absent. Users must infer patterns from repetition. No deep explanation of why something is wrong, only that it is. Advanced learners are explicitly underserved.</p></div>
+      <div class="weakness"><div class="beat">GAP 3 — Translation-centric, not immersion</div><p>Almost every exercise is translate A→B or B→A. This blocks learners from thinking in the target language. True fluency requires production, not translation. Duolingo hasn't solved this.</p></div>
+      <div class="weakness"><div class="beat">GAP 4 — No real conversation practice (free tier)</div><p>Video calls are locked behind Duolingo Max (expensive). Free users get scripted speaking exercises that don't reflect real dialogue. Most users never access actual conversation practice.</p></div>
+      <div class="weakness"><div class="beat">GAP 5 — Zero cultural context</div><p>Languages taught in a cultural vacuum. No idioms, social norms, regional accents, or real-world usage scenarios. "Carro" vs "coche" confusion (Latin American vs Spain Spanish) is a classic example. Learners arrive at real conversations lost.</p></div>
+      <div class="weakness"><div class="beat">GAP 6 — No learner control</div><p>Users can't choose what to learn or what order to learn it in. BirdBrain decides everything. Power learners find this patronizing — no ability to fast-track weak skills, skip basics, or focus on a domain (business, travel, medicine).</p></div>
+      <div class="weakness"><div class="beat">GAP 7 — Gamification can replace learning</div><p>Users can maintain high streaks and league positions while barely acquiring language. The XP system rewards volume, not comprehension. False sense of progress is a documented complaint — "I finished the tree and still can't hold a conversation."</p></div>
+      <div class="weakness"><div class="beat">GAP 8 — Uneven language quality</div><p>Spanish and French are polished. Japanese, Hindi, Turkish, Welsh, and most minority languages are thin, buggy, or discontinued. Non-English base speakers are structurally disadvantaged.</p></div>
+      <div class="weakness"><div class="beat">GAP 9 — No extended reading/listening</div><p>No immersive content — no articles, books, podcasts, or real media. Bite-sized lessons are a feature for habit-building but a bug for fluency. Deep immersion (LingQ-style) is completely absent.</p></div>
+      <div class="weakness"><div class="beat">GAP 10 — No human element</div><p>No tutors, no live sessions, no community forums for learner help. AI video calls don't replace the nuance of a native speaker correcting you in context.</p></div>
+      <div class="weakness"><div class="beat">GAP 11 — Data & privacy concerns</div><p>No published data flow diagram. Unclear consent for AI training on user inputs. Weak privacy disclosures especially for minors. No public AI ethics framework despite 128M users, many of them children.</p></div>
+      <div class="weakness"><div class="beat">GAP 12 — Streak pressure becomes stress</div><p>Notifications described as "aggressive" and "relentless." Streak loss feels punitive. Users report anxiety around maintaining streaks rather than enjoyment of learning. Motivation flips from intrinsic to fear-based.</p></div>
+    </div>
+  </div>
+
+  <!-- OPPORTUNITIES TO BEAT THEM -->
+  <div class="section" id="sec-beat">
+    <div class="section-header" onclick="toggle('beat')">
+      <i class="ti ti-rocket section-icon" aria-hidden="true"></i>
+      <span class="section-title">How to build better — your edge</span>
+      <span class="section-count">8 ideas</span>
+      <span class="chevron" id="chev-beat">›</span>
+    </div>
+    <div class="section-body" id="body-beat">
+      <div class="opportunity">
+        <span class="opportunity-badge tag-blue">Fluency gap</span>
+        <div class="opportunity-title">Full A1 → C2 progression with real immersive content</div>
+        <div class="opportunity-desc">Duolingo tops out at B1 effectively. Build structured paths through each CEFR level, integrating real articles, films, podcasts, and books as learners progress. Combine bite-sized habit lessons with deep immersion modules.</div>
+      </div>
+      <div class="opportunity">
+        <span class="opportunity-badge tag-blue">Conversation gap</span>
+        <div class="opportunity-title">Free AI conversation from day one</div>
+        <div class="opportunity-desc">Duolingo locks real conversation behind their most expensive tier. Make adaptive AI conversation a free core feature — the moat that attracts and retains serious learners who'd never pay Duolingo Max pricing.</div>
+      </div>
+      <div class="opportunity">
+        <span class="opportunity-badge tag-green">Control gap</span>
+        <div class="opportunity-title">Learner-directed paths with AI as co-pilot</div>
+        <div class="opportunity-desc">Let users set goals (business Spanish, travel Japanese, medical French) and drive their own curriculum. AI recommends and fills gaps, but the learner steers. This is what adult, motivated learners want and Duolingo refuses to offer.</div>
+      </div>
+      <div class="opportunity">
+        <span class="opportunity-badge tag-green">Culture gap</span>
+        <div class="opportunity-title">Language + culture bundled</div>
+        <div class="opportunity-desc">Every lesson ties language to cultural context — idioms in use, social norms, regional variation explained, media references. Learners understand not just what to say but when and why.</div>
+      </div>
+      <div class="opportunity">
+        <span class="opportunity-badge tag-amber">Psychology gap</span>
+        <div class="opportunity-title">Positive motivation, not guilt loops</div>
+        <div class="opportunity-desc">Replace streak anxiety with progress pride. Track real-world milestones ("you can now hold a 3-minute conversation") rather than daily session counts. Let streak breaks recover gracefully. Motivation built on intrinsic progress, not fear of loss.</div>
+      </div>
+      <div class="opportunity">
+        <span class="opportunity-badge tag-amber">Depth gap</span>
+        <div class="opportunity-title">Transparent, explicit grammar instruction</div>
+        <div class="opportunity-desc">Pair implicit learning (Duolingo's strength) with clear, accessible grammar breakdowns. Interactive grammar references, visual explanations of structure, and cultural footnotes for each rule.</div>
+      </div>
+      <div class="opportunity">
+        <span class="opportunity-badge tag-amber">Quality gap</span>
+        <div class="opportunity-title">Deep investment in underserved languages</div>
+        <div class="opportunity-desc">Duolingo drops minority languages for ROI. Build robust courses for Japanese, Korean, Arabic, Hindi, Swahili — languages with massive learning demand and Duolingo's weakest offerings. Become the destination for non-European languages.</div>
+      </div>
+      <div class="opportunity">
+        <span class="opportunity-badge tag-red">Trust gap</span>
+        <div class="opportunity-title">Radical data transparency & privacy</div>
+        <div class="opportunity-desc">Publish a clear data charter: what's collected, how it's used, what's never sold. Explicit consent for AI training. COPPA/GDPR compliance made visible. Especially powerful for the schools and parents segment Duolingo is alienating.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const sections = ['metrics','features','tech','psych','money','weak','beat'];
+  const labels = ['Metrics','Features','Tech & AI','Psychology','Business model','Weaknesses','Beat them'];
+
+  const nav = document.getElementById('navBar');
+  sections.forEach((id, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'nav-btn';
+    btn.textContent = labels[i];
+    btn.onclick = () => {
+      const body = document.getElementById('body-' + id);
+      const isOpen = body.classList.contains('open');
+      if (!isOpen) toggle(id);
+      document.getElementById('sec-' + id).scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
+    nav.appendChild(btn);
+  });
+
+  function toggle(id) {
+    const body = document.getElementById('body-' + id);
+    const chev = document.getElementById('chev-' + id);
+    const open = body.classList.toggle('open');
+    chev.classList.toggle('open', open);
+  }
+
+  toggle('metrics');
+  toggle('weak');
+</script>
