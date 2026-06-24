@@ -6,3 +6,6 @@ node_modules/
 /cadence-app/.env.local
 /cadence-app/node_modules/
 /cadence-app/.next/
+
+# Local Netlify folder
+.netlify
