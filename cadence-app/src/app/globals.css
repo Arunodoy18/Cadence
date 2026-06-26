@@ -186,6 +186,11 @@ body {
     padding-bottom: env(safe-area-inset-bottom) !important;
   }
   
+  
+  .cd-welcome-footer {
+    padding: 0 28px 16px !important;
+  }
+
   body {
     background: #FBF6EE !important;
     margin: 0 !important;

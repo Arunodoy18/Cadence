@@ -529,8 +529,8 @@ export default function App() {
 
           {/* ===== WELCOME SCREEN ===== */}
           {view === 'welcome' && (
-            <div className="cd-screen" style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '0 30px' }}>
+            <div className="cd-screen" style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
+              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '0 30px', minHeight: 0 }}>
                 <div style={{ fontSize: '13px', letterSpacing: '.04em', color: '#A8927C', marginBottom: '18px', height: '20px', overflow: 'hidden' }}>
                   <span className={rotateGreetings[greetIdx].c} style={{ fontWeight: 600, color: '#5C5048' }}>
                     {rotateGreetings[greetIdx].t}
@@ -543,7 +543,7 @@ export default function App() {
                   Real conversation from day one, culture in every lesson, and a path that doesn't stop at “tourist.” Pick a language and we'll shape everything around it.
                 </div>
               </div>
-              <div style={{ padding: '0 28px 38px' }}>
+              <div className="cd-welcome-footer" style={{ padding: '0 28px 38px', flex: 'none' }}>
                 <div onClick={() => setPicker(true)} style={{ background: '#DB5338', color: '#FBF6EE', borderRadius: '16px', padding: '16px', textAlign: 'center', fontSize: '16px', fontWeight: 600, boxShadow: '0 8px 20px -6px rgba(219,83,56,.5)', marginBottom: '11px', cursor: 'pointer' }}>
                   Choose your language
                 </div>
@@ -1543,54 +1543,101 @@ export default function App() {
           {/* ===== AUTHENTICATION SCREEN ===== */}
           {view === 'auth' && (
             <div className="cd-screen" style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
-              <div style={{ padding: '14px 22px 0', flex: 'none' }}>
-                <span onClick={() => setView('welcome')} style={{ fontSize: '18px', color: '#B5A99E', cursor: 'pointer' }}>✕</span>
+              {/* Back arrow */}
+              <div style={{ display: 'flex', alignItems: 'center', padding: '12px 22px 0', flex: 'none' }}>
+                <span onClick={() => setView('welcome')} style={{ fontSize: '18px', color: '#B5A99E', cursor: 'pointer' }}>‹</span>
               </div>
-              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '0 28px' }}>
-                <h1 style={{ fontFamily: "'Instrument Serif', serif", fontSize: '32px', marginBottom: '8px', fontWeight: 400 }}>
-                  {authMode === 'signup' ? 'Create your account' : 'Welcome back'}
-                </h1>
-                <p style={{ fontSize: '13.5px', color: '#8A7E73', marginBottom: '24px' }}>
-                  {authMode === 'signup' ? 'Save your progress across every device.' : 'Pick up right where you left off.'}
-                </p>
 
-                <form onSubmit={handleAuthSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              {/* Scrollable body */}
+              <div className="cd-scroll" style={{ flex: 1, overflowY: 'auto', padding: '8px 28px 0' }}>
+                {/* Cadence logo icon */}
+                <div style={{ width: '40px', height: '40px', borderRadius: '11px', background: '#DB5338', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '18px' }}>
+                  <div style={{ width: '15px', height: '15px', border: '2.6px solid #FBF6EE', borderRadius: '50%', borderRightColor: 'transparent', transform: 'rotate(-45deg)' }}></div>
+                </div>
+
+                {/* Title & subtitle */}
+                <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: '32px', lineHeight: 1.05, marginBottom: '6px' }}>
+                  {authMode === 'signup' ? 'Create your account' : 'Welcome back'}
+                </div>
+                <div style={{ fontSize: '13.5px', color: '#8A7E73', marginBottom: '22px' }}>
+                  {authMode === 'signup' ? 'Save your progress across every device.' : 'Pick up right where you left off.'}
+                </div>
+
+                {/* OAuth buttons */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '18px' }}>
+                  <div onClick={() => signIn('google')} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', background: '#fff', border: '1px solid #E1D6C4', borderRadius: '13px', padding: '13px', fontSize: '14px', fontWeight: 600, cursor: 'pointer' }}>
+                    <span style={{ fontSize: '16px' }}>🇬</span> Continue with Google
+                  </div>
+                  <div onClick={() => alert('Apple Sign-In coming soon!')} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', background: '#2A2320', color: '#FBF6EE', borderRadius: '13px', padding: '13px', fontSize: '14px', fontWeight: 600, cursor: 'pointer' }}>
+                    <span style={{ fontSize: '15px' }}></span> Continue with Apple
+                  </div>
+                </div>
+
+                {/* Divider */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '18px' }}>
+                  <div style={{ flex: 1, height: '1px', background: '#E7DECF' }}></div>
+                  <span style={{ fontSize: '11.5px', color: '#A8927C' }}>or with email</span>
+                  <div style={{ flex: 1, height: '1px', background: '#E7DECF' }}></div>
+                </div>
+
+                {/* Email form fields */}
+                <form onSubmit={handleAuthSubmit} id="auth-form" style={{ display: 'flex', flexDirection: 'column', gap: '11px' }}>
                   {authMode === 'signup' && (
-                    <input 
-                      type="text" 
-                      placeholder="Your Name" 
-                      value={authName} 
-                      onChange={(e) => setAuthName(e.target.value)}
-                      required
-                      style={{ background: '#fff', border: '1px solid #EDE4D6', borderRadius: '12px', padding: '14px', fontSize: '14px', outline: 'none' }}
-                    />
+                    <div style={{ background: '#fff', border: '1px solid #E1D6C4', borderRadius: '13px', padding: '13px 15px' }}>
+                      <div style={{ fontSize: '10.5px', color: '#A8927C', marginBottom: '2px' }}>Name</div>
+                      <input
+                        className="cd-input-l"
+                        type="text"
+                        placeholder="Maya"
+                        value={authName}
+                        onChange={(e) => setAuthName(e.target.value)}
+                        required
+                        style={{ fontSize: '14px', width: '100%' }}
+                      />
+                    </div>
                   )}
-                  <input 
-                    type="email" 
-                    placeholder="Email Address" 
-                    value={authEmail} 
-                    onChange={(e) => setAuthEmail(e.target.value)}
-                    required
-                    style={{ background: '#fff', border: '1px solid #EDE4D6', borderRadius: '12px', padding: '14px', fontSize: '14px', outline: 'none' }}
-                  />
-                  <input 
-                    type="password" 
-                    placeholder="Password" 
-                    value={authPassword} 
-                    onChange={(e) => setAuthPassword(e.target.value)}
-                    required
-                    style={{ background: '#fff', border: '1px solid #EDE4D6', borderRadius: '12px', padding: '14px', fontSize: '14px', outline: 'none' }}
-                  />
+                  <div style={{ background: '#fff', border: '1px solid #E1D6C4', borderRadius: '13px', padding: '13px 15px' }}>
+                    <div style={{ fontSize: '10.5px', color: '#A8927C', marginBottom: '2px' }}>Email</div>
+                    <input
+                      className="cd-input-l"
+                      type="email"
+                      placeholder="you@email.com"
+                      value={authEmail}
+                      onChange={(e) => setAuthEmail(e.target.value)}
+                      required
+                      style={{ fontSize: '14px', width: '100%' }}
+                    />
+                  </div>
+                  <div style={{ background: '#fff', border: '1px solid #E1D6C4', borderRadius: '13px', padding: '13px 15px' }}>
+                    <div style={{ fontSize: '10.5px', color: '#A8927C', marginBottom: '2px' }}>Password</div>
+                    <input
+                      className="cd-input-l"
+                      type="password"
+                      placeholder="••••••••"
+                      value={authPassword}
+                      onChange={(e) => setAuthPassword(e.target.value)}
+                      required
+                      style={{ fontSize: '14px', width: '100%' }}
+                    />
+                  </div>
 
                   {authError && <div style={{ color: '#B23E27', fontSize: '12.5px' }}>{authError}</div>}
-
-                  <button type="submit" style={{ background: '#DB5338', color: '#FBF6EE', border: 'none', borderRadius: '14px', padding: '15px', fontSize: '15px', fontWeight: 600, cursor: 'pointer', boxShadow: '0 8px 20px -6px rgba(219,83,56,.5)', marginTop: '8px' }}>
-                    {authMode === 'signup' ? 'Create account' : 'Log in'}
-                  </button>
                 </form>
+              </div>
 
-                <div onClick={() => setAuthMode(authMode === 'signup' ? 'login' : 'signup')} style={{ textAlign: 'center', fontSize: '13px', color: '#8A7E73', marginTop: '20px', cursor: 'pointer' }}>
-                  {authMode === 'signup' ? 'Already learning with us? Log in' : 'New to Cadence? Sign up'}
+              {/* Fixed bottom CTA area */}
+              <div style={{ padding: '16px 28px 22px', flex: 'none' }}>
+                <button type="submit" form="auth-form" style={{ width: '100%', background: '#DB5338', color: '#FBF6EE', border: 'none', borderRadius: '14px', padding: '15px', textAlign: 'center', fontSize: '15px', fontWeight: 600, cursor: 'pointer', marginBottom: '12px' }}>
+                  {authMode === 'signup' ? 'Create account' : 'Log in'}
+                </button>
+                <div style={{ textAlign: 'center', fontSize: '13px', color: '#8A7E73' }}>
+                  {authMode === 'signup' ? 'Already learning with us? ' : 'New to Cadence? '}
+                  <span onClick={() => setAuthMode(authMode === 'signup' ? 'login' : 'signup')} style={{ color: '#DB5338', fontWeight: 600, cursor: 'pointer' }}>
+                    {authMode === 'signup' ? 'Log in' : 'Sign up'}
+                  </span>
+                </div>
+                <div style={{ textAlign: 'center', fontSize: '10.5px', color: '#B5A99E', marginTop: '14px', lineHeight: 1.5 }}>
+                  By continuing you agree to our Terms & Privacy. We never sell your data — see the Data charter.
                 </div>
               </div>
             </div>
