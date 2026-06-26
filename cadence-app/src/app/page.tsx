@@ -2166,6 +2166,38 @@ export default function App() {
             </div>
           )}
 
+          {/* ===== REVIEW ===== */}
+          {view === 'review' && (
+            <div className="cd-screen" style={{ position: 'absolute', inset: 0, background: '#5B3A56', color: '#F3ECE2', display: 'flex', flexDirection: 'column' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 24px 0', fontSize: '12px', fontWeight: 600 }}>
+                <span onClick={() => setView('you')} style={{ cursor: 'pointer', fontSize: '18px', color: '#B5A99E' }}>✕</span>
+                <span style={{ letterSpacing: '1px' }}>●●● ◔</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '14px 24px 0' }}>
+                <div style={{ flex: 1, height: '6px', background: 'rgba(255,255,255,.18)', borderRadius: '99px', overflow: 'hidden' }}>
+                  <div style={{ width: '30%', height: '100%', background: '#E1A23A', borderRadius: '99px' }}></div>
+                </div>
+                <span style={{ fontSize: '12px', color: 'rgba(255,255,255,.7)' }}>3/10</span>
+              </div>
+              <div style={{ textAlign: 'center', padding: '16px 24px 0' }}>
+                <div style={{ fontSize: '11px', letterSpacing: '.12em', textTransform: 'uppercase', color: 'rgba(255,255,255,.6)' }}>Words about to fade — let's refresh</div>
+              </div>
+              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: '0 30px', textAlign: 'center' }}>
+                <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: '46px', lineHeight: 1, marginBottom: '14px' }}>el mercado</div>
+                <div style={{ fontSize: '13px', color: 'rgba(255,255,255,.7)', marginBottom: '20px' }}>From: At the market</div>
+                <div onClick={() => {}} style={{ border: '1px dashed rgba(255,255,255,.35)', borderRadius: '14px', padding: '14px 20px', fontSize: '14px', color: 'rgba(255,255,255,.85)', cursor: 'pointer' }}>Tap to reveal meaning</div>
+              </div>
+              <div style={{ padding: '0 24px 30px' }}>
+                <div style={{ fontSize: '11px', textAlign: 'center', color: 'rgba(255,255,255,.55)', marginBottom: '12px' }}>How well did you know it?</div>
+                <div style={{ display: 'flex', gap: '9px' }}>
+                  <div onClick={() => setView('you')} style={{ flex: 1, background: 'rgba(255,255,255,.12)', borderRadius: '12px', padding: '12px', textAlign: 'center', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>Forgot</div>
+                  <div onClick={() => setView('you')} style={{ flex: 1, background: 'rgba(255,255,255,.12)', borderRadius: '12px', padding: '12px', textAlign: 'center', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>Hard</div>
+                  <div onClick={() => setView('you')} style={{ flex: 1, background: '#E1A23A', color: '#3A2417', borderRadius: '12px', padding: '12px', textAlign: 'center', fontSize: '13px', fontWeight: 700, cursor: 'pointer' }}>Easy</div>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* ===== GRAMMAR / REFERENCE SHEET SCREEN ===== */}
           {view === 'grammar' && (
             <div className="cd-screen" style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
