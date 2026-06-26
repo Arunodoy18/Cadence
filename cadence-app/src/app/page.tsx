@@ -88,7 +88,7 @@ export default function App() {
 
   // Audio shadowing states
   const [audioPlaying, setAudioPlaying] = useState(false);
-
+  const [payMethod, setPayMethod] = useState<'card' | 'upi'>('card');
   // MediaRecorder for STT
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
@@ -208,6 +208,9 @@ export default function App() {
   };
 
   // Onboarding placement check
+  const handleLogout = () => {
+    setView('welcome');
+  };
   const startPlacement = () => {
     const L = LANGS[lang];
     setView('placement');
@@ -499,6 +502,82 @@ export default function App() {
     { t: 'नमस्ते', c: 'hi' },
     { t: 'こんにちは', c: 'jp' },
     { t: '안녕하세요', c: 'kr' },
+  ];
+
+  // Badges data
+  const badges = [
+    { icon: "☕", title: "Café regular", sub: "Ordered solo", state: "earned", bg: "#FBF6EE", border: "1px solid #EDE4D6", iconBg: "#DB5338", iconStyle: "color:#fff;", titleColor: "#2A2320" },
+    { icon: "💬", title: "First chat", sub: "2-min convo", state: "earned", bg: "#FBF6EE", border: "1px solid #EDE4D6", iconBg: "#E1A23A", iconStyle: "color:#3A2417;", titleColor: "#2A2320" },
+    { icon: "🗺", title: "Getting around", sub: "Asked directions", state: "earned", bg: "#FBF6EE", border: "1px solid #EDE4D6", iconBg: "#2F8F83", iconStyle: "color:#fff;", titleColor: "#2A2320" },
+    { icon: "❤", title: "Met the family", sub: "Warm intro", state: "earned", bg: "#FBF6EE", border: "1px solid #EDE4D6", iconBg: "#F0E7D8", iconStyle: "color:#B23E27;", titleColor: "#2A2320" },
+    { icon: "📖", title: "First article", sub: "Read in full", state: "earned", bg: "#FBF6EE", border: "1px solid #EDE4D6", iconBg: "#F0E7D8", iconStyle: "color:#2F8F83;", titleColor: "#2A2320" },
+    { icon: "🌱", title: "12-day rhythm", sub: "Kept it up", state: "earned", bg: "#FBF6EE", border: "1px solid #EDE4D6", iconBg: "#2A2320", iconStyle: "color:#46C46E;", titleColor: "#2A2320" },
+    { icon: "✦", title: "100 words", sub: "Vocabulary", state: "earned", bg: "#FBF6EE", border: "1px solid #EDE4D6", iconBg: "#F0E7D8", iconStyle: "color:#E1A23A;", titleColor: "#2A2320" },
+    { icon: "🎧", title: "Eavesdropper", sub: "Understood audio", state: "earned", bg: "#FBF6EE", border: "1px solid #EDE4D6", iconBg: "#5B3A56", iconStyle: "color:#FBF6EE;", titleColor: "#2A2320" },
+    { icon: "🕐", title: "Past tense", sub: "Tell a story", state: "progress", bg: "#fff", border: "1px dashed #D8CDBB", iconBg: "#F0E7D8", iconStyle: "opacity:0.6;filter:grayscale(1);", titleColor: "#8A7E73" },
+    { icon: "⚖", title: "First debate", sub: "B2 skill", state: "locked", bg: "transparent", border: "none", iconBg: "#EBE3D5", iconStyle: "opacity:0.3;filter:grayscale(1);", titleColor: "#B5A99E" },
+    { icon: "🎬", title: "No subtitles", sub: "Watch a film", state: "locked", bg: "transparent", border: "none", iconBg: "#EBE3D5", iconStyle: "opacity:0.3;filter:grayscale(1);", titleColor: "#B5A99E" },
+    { icon: "🏔", title: "Reached B1", sub: "Level up", state: "progress", bg: "#fff", border: "1px dashed #D8CDBB", iconBg: "#F0E7D8", iconStyle: "opacity:0.6;filter:grayscale(1);", titleColor: "#8A7E73" }
+  ];
+
+  // Score data
+  const scoreSkills = [
+    { label: "Vocabulary", val: "B1", pct: "75%" },
+    { label: "Grammar", val: "A2", pct: "40%" },
+    { label: "Pronunciation", val: "A2+", pct: "55%" },
+    { label: "Fluency", val: "B1", pct: "80%" }
+  ];
+  const qrCells = Array.from({ length: 16 }, (_, i) => ({ c: Math.random() > 0.5 ? '#2A2320' : 'transparent' }));
+  
+  // Share data
+  const shareTargets = [
+    { bg: "#25D366", icon: "💬", label: "WhatsApp" },
+    { bg: "#000000", icon: "𝕏", label: "X (Twitter)" },
+    { bg: "#E1306C", icon: "📷", label: "Instagram" },
+    { bg: "#0077B5", icon: "in", label: "LinkedIn" },
+    { bg: "#0A7CFF", icon: "✉", label: "Messages" }
+  ];
+
+  // Social data
+  const circle = [
+    { bg: "#2A2320", bd: "1px solid #433833", rank: 1, avatar: "#DB5338", initial: "M", name: "Maya (You)", mins: 142, move: "▲2" },
+    { bg: "transparent", bd: "1px solid #EDE4D6", rank: 2, avatar: "#5B3A56", initial: "S", name: "Sarah K.", mins: 128, move: "▼1" },
+    { bg: "transparent", bd: "1px solid #EDE4D6", rank: 3, avatar: "#2F8F83", initial: "D", name: "David L.", mins: 94, move: "—" },
+    { bg: "transparent", bd: "1px solid #EDE4D6", rank: 4, avatar: "#A99FB0", initial: "T", name: "Tommaso", mins: 62, move: "—" },
+    { bg: "transparent", bd: "1px dashed #D8CDBB", rank: 5, avatar: "#D8CDBB", initial: "A", name: "Alex B.", mins: 15, move: "—" }
+  ];
+
+  // Notifications data
+  const notifList = [
+    { label: "Daily study reminder", caption: "A gentle nudge at your preferred time", track: notif.daily ? "#46C46E" : "#E1D6C4", justify: notif.daily ? "flex-end" : "flex-start", toggle: () => setNotif({ ...notif, daily: !notif.daily }) },
+    { label: "Friend updates", caption: "When someone in your circle levels up", track: notif.friends ? "#46C46E" : "#E1D6C4", justify: notif.friends ? "flex-end" : "flex-start", toggle: () => setNotif({ ...notif, friends: !notif.friends }) },
+    { label: "AI feedback ready", caption: "When an assessment completes in background", track: notif.feedback ? "#46C46E" : "#E1D6C4", justify: notif.feedback ? "flex-end" : "flex-start", toggle: () => setNotif({ ...notif, feedback: !notif.feedback }) },
+    { label: "Native corrections", caption: "When a human tutor reviews your audio", track: notif.corrections ? "#46C46E" : "#E1D6C4", justify: notif.corrections ? "flex-end" : "flex-start", toggle: () => setNotif({ ...notif, corrections: !notif.corrections }) },
+    { label: "New content", caption: "New podcast episodes or stories added", track: notif.content ? "#46C46E" : "#E1D6C4", justify: notif.content ? "flex-end" : "flex-start", toggle: () => setNotif({ ...notif, content: !notif.content }) }
+  ];
+
+  // Charter data
+  const charterToggles = [
+    { label: "Share usage data", caption: "Help us improve Cadence anonymously", track: charter.usage ? "#2F8F83" : "#E1D6C4", justify: charter.usage ? "flex-end" : "flex-start", toggle: () => setCharter({ ...charter, usage: !charter.usage }) },
+    { label: "Personalize AI with my history", caption: "Let the AI reference past chats", track: charter.ai ? "#2F8F83" : "#E1D6C4", justify: charter.ai ? "flex-end" : "flex-start", toggle: () => setCharter({ ...charter, ai: !charter.ai }) },
+    { label: "Opt-in to voice model training", caption: "Use my clips to improve speech recognition", track: charter.voice ? "#2F8F83" : "#E1D6C4", justify: charter.voice ? "flex-end" : "flex-start", toggle: () => setCharter({ ...charter, voice: !charter.voice }) }
+  ];
+
+  // LevelDetail data
+  const levelChapters = [
+    { title: "Chapter 1", meta: "3 items", lessons: [
+      { title: "Ordering food", kind: "Scenario", icon: "☕", iconBg: "#F0E7D8", iconColor: "#2A2320", bg: "#fff", bd: "1px solid #EDE4D6", right: "›", chevron: "#C9AE97", go: () => setView('speakHub') },
+      { title: "Present tense verbs", kind: "Grammar sheet", icon: "Aa", iconBg: "#FBF1E9", iconColor: "#DB5338", bg: "#fff", bd: "1px solid #EDE4D6", right: "›", chevron: "#C9AE97", go: () => setView('grammar') },
+      { title: "At the market", kind: "Immersive audio", icon: "🎧", iconBg: "#EBE3D5", iconColor: "#2F8F83", bg: "#fff", bd: "1px solid #EDE4D6", right: "›", chevron: "#C9AE97", go: () => setView('audio') }
+    ]}
+  ];
+
+  // Audio lines data
+  const audioLines = [
+    { native: "¿Qué vas a pedir?", en: "What are you going to order?", isPartner: "#DB5338", say: () => {} },
+    { native: "Creo que quiero un café.", en: "I think I want a coffee.", isPartner: "rgba(255,255,255,.15)", say: () => {} },
+    { native: "¿Y para comer?", en: "And to eat?", isPartner: "#DB5338", say: () => {} },
+    { native: "Un cruasán, por favor.", en: "A croissant, please.", isPartner: "rgba(255,255,255,.15)", say: () => {} }
   ];
 
   return (
@@ -1643,6 +1722,450 @@ export default function App() {
             </div>
           )}
 
+          {/* ===== FLUENCY SCORE ===== */}
+          {view === 'score' && (
+            <div className="cd-screen" style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 22px 6px', flex: 'none' }}>
+                <span onClick={() => setView('you')} style={{ fontSize: '18px', color: '#B5A99E', cursor: 'pointer' }}>‹</span>
+                <span style={{ fontSize: '12.5px', fontWeight: 600, color: '#8A7E73' }}>Fluency proof</span>
+                <span style={{ width: '18px' }}></span>
+              </div>
+              <div className="cd-scroll" style={{ flex: 1, overflowY: 'auto', padding: '8px 20px 24px' }}>
+                <div style={{ fontSize: '12.5px', color: '#8A7E73', marginBottom: '14px', lineHeight: 1.45 }}>Real, verifiable proof of what you can do — earned by conversation, not a vanity badge. Share it with schools or employers.</div>
+                
+                <div style={{ background: '#2A2320', borderRadius: '20px', padding: '20px', color: '#F3ECE2', position: 'relative', overflow: 'hidden', marginBottom: '16px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <div style={{ width: '22px', height: '22px', borderRadius: '6px', background: '#DB5338', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <div style={{ width: '9px', height: '9px', border: '2px solid #FBF6EE', borderRadius: '50%', borderRightColor: 'transparent', transform: 'rotate(-45deg)' }}></div>
+                      </div>
+                      <span style={{ fontSize: '13px', fontWeight: 600 }}>Cadence</span>
+                    </div>
+                    <span style={{ fontSize: '10px', color: '#A99C90', letterSpacing: '.08em' }}>VERIFIED · {L.locale.toUpperCase()}</span>
+                  </div>
+                  <div style={{ fontSize: '11px', color: '#A99C90', letterSpacing: '.06em', textTransform: 'uppercase', marginBottom: '4px' }}>{L.name} fluency</div>
+                  <div style={{ display: 'flex', alignItems: 'flex-end', gap: '10px', marginBottom: '18px' }}>
+                    <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: '54px', lineHeight: 0.9 }}>B1</div>
+                    <div style={{ fontSize: '13px', color: '#C9BFB4', paddingBottom: '10px' }}>CEFR · intermediate</div>
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '9px', marginBottom: '18px' }}>
+                    {scoreSkills.map((sk, i) => (
+                      <div key={i}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', marginBottom: '4px' }}>
+                          <span>{sk.label}</span>
+                          <span style={{ color: '#E1A23A', fontWeight: 600 }}>{sk.val}</span>
+                        </div>
+                        <div style={{ height: '5px', background: 'rgba(255,255,255,.14)', borderRadius: '99px', overflow: 'hidden' }}>
+                          <div style={{ width: sk.pct, height: '100%', background: 'linear-gradient(90deg,#E1A23A,#DB5338)', borderRadius: '99px' }}></div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid rgba(255,255,255,.12)', paddingTop: '14px' }}>
+                    <div>
+                      <div style={{ fontSize: '11px', color: '#A99C90' }}>Verified by 14 live conversations</div>
+                      <div style={{ fontSize: '11px', color: '#A99C90' }}>cadence.app/v/MAYA-{L.locale.toUpperCase()}-2A9F</div>
+                    </div>
+                    <div style={{ width: '42px', height: '42px', borderRadius: '8px', background: '#FBF6EE', display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gridTemplateRows: 'repeat(4,1fr)', gap: '1px', padding: '4px' }}>
+                      {qrCells.map((q, i) => <div key={i} style={{ background: q.c }}></div>)}
+                    </div>
+                  </div>
+                </div>
+                
+                <div style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
+                  <div onClick={() => setView('share')} style={{ flex: 1, background: '#DB5338', color: '#FBF6EE', borderRadius: '13px', padding: '13px', textAlign: 'center', fontSize: '14px', fontWeight: 600, cursor: 'pointer' }}>Share proof</div>
+                  <div style={{ flex: 1, background: '#fff', border: '1px solid #EDE4D6', borderRadius: '13px', padding: '13px', textAlign: 'center', fontSize: '14px', fontWeight: 600, cursor: 'pointer' }}>Export PDF</div>
+                </div>
+                <div style={{ textAlign: 'center', fontSize: '11.5px', color: '#9A8E84', lineHeight: 1.5 }}>Backed by a public verification page — anyone can confirm it's real. No locked-tier paywall.</div>
+              </div>
+            </div>
+          )}
+
+          {/* ===== SHARE CARD ===== */}
+          {view === 'share' && (
+            <div className="cd-screen" style={{ position: 'absolute', inset: 0, background: '#1C1714', display: 'flex', flexDirection: 'column' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 22px 6px', flex: 'none' }}>
+                <span onClick={() => setView('score')} style={{ fontSize: '18px', color: '#9A8E84', cursor: 'pointer' }}>✕</span>
+                <span style={{ fontSize: '12.5px', fontWeight: 600, color: '#C9BFB4' }}>Share your win</span>
+                <span style={{ width: '18px' }}></span>
+              </div>
+              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '0 26px' }}>
+                <div style={{ background: 'linear-gradient(155deg,#DB5338,#B23E27)', borderRadius: '24px', padding: '26px 24px', color: '#FBF6EE', boxShadow: '0 20px 50px -16px rgba(0,0,0,.6)' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '24px' }}>
+                    <div style={{ width: '24px', height: '24px', borderRadius: '7px', background: 'rgba(255,255,255,.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <div style={{ width: '10px', height: '10px', border: '2px solid #FBF6EE', borderRadius: '50%', borderRightColor: 'transparent', transform: 'rotate(-45deg)' }}></div>
+                    </div>
+                    <span style={{ fontSize: '14px', fontWeight: 600 }}>Cadence</span>
+                  </div>
+                  <div style={{ fontSize: '11px', letterSpacing: '.1em', textTransform: 'uppercase', opacity: .8, marginBottom: '12px' }}>New milestone · {L.name}</div>
+                  <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: '32px', lineHeight: 1.08, marginBottom: '20px' }}>Reached B1 Fluency</div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', opacity: .9 }}><span style={{ fontSize: '16px' }}>☕</span><span>A real thing I can do now — not a streak number.</span></div>
+                  <div style={{ marginTop: '22px', display: 'flex', gap: '14px', fontSize: '12px', opacity: .85 }}><span>🌱 12-day rhythm</span><span>◇ 14 conversations</span></div>
+                </div>
+                <div style={{ textAlign: 'center', fontSize: '12px', color: '#9A8E84', marginTop: '14px' }}>Brag about a <em style={{ fontFamily: "'Instrument Serif', serif", color: '#E1A23A' }}>skill</em>, not a streak.</div>
+              </div>
+              <div style={{ padding: '8px 26px 30px', flex: 'none' }}>
+                <div style={{ display: 'flex', justifyContent: 'center', gap: '14px', marginBottom: '18px' }}>
+                  {shareTargets.map((t, i) => (
+                    <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px', cursor: 'pointer' }}>
+                      <div style={{ width: '50px', height: '50px', borderRadius: '50%', background: t.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px', color: '#fff' }}>{t.icon}</div>
+                      <span style={{ fontSize: '10.5px', color: '#9A8E84' }}>{t.label}</span>
+                    </div>
+                  ))}
+                </div>
+                <div onClick={() => setView('you')} style={{ background: '#FBF6EE', color: '#2A2320', borderRadius: '14px', padding: '14px', textAlign: 'center', fontSize: '15px', fontWeight: 600, cursor: 'pointer' }}>Save image to share later</div>
+              </div>
+            </div>
+          )}
+
+          {/* ===== ACHIEVEMENTS ===== */}
+          {view === 'achievements' && (
+            <div className="cd-screen" style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 22px 6px', flex: 'none' }}>
+                <span onClick={() => setView('you')} style={{ fontSize: '18px', color: '#B5A99E', cursor: 'pointer' }}>‹</span>
+                <span style={{ fontSize: '12.5px', fontWeight: 600, color: '#8A7E73' }}>Achievements</span>
+                <span style={{ width: '18px' }}></span>
+              </div>
+              <div className="cd-scroll" style={{ flex: 1, overflowY: 'auto', padding: '10px 20px 24px' }}>
+                <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: '26px', lineHeight: 1.08, marginBottom: '4px' }}>Things you can actually do</div>
+                <div style={{ fontSize: '12.5px', color: '#8A7E73', marginBottom: '18px' }}>Every badge is a real-world skill — not a points total. <strong style={{ color: '#2F8F83' }}>8 earned</strong> · 4 in progress</div>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '11px' }}>
+                  {badges.map((b, i) => (
+                    <div key={i} style={{ background: b.bg, border: b.border, borderRadius: '16px', padding: '13px 8px', textAlign: 'center' }}>
+                      <div style={{ width: '42px', height: '42px', borderRadius: '50%', margin: '0 auto 8px', background: b.iconBg, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '19px' }}>
+                        <span style={{ ...(b.state === 'progress' || b.state === 'locked' ? { opacity: 0.5, filter: 'grayscale(1)' } : { color: '#fff' }) }}>{b.icon}</span>
+                      </div>
+                      <div style={{ fontSize: '11.5px', fontWeight: 600, lineHeight: 1.2, color: b.titleColor, marginBottom: '3px' }}>{b.title}</div>
+                      <div style={{ fontSize: '9.5px', color: '#9A8E84', lineHeight: 1.2 }}>{b.sub}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ===== LEVEL DETAIL ===== */}
+          {view === 'levelDetail' && (
+            <div className="cd-screen" style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 22px 6px', flex: 'none' }}>
+                <span onClick={() => setView('journey')} style={{ fontSize: '18px', color: '#B5A99E', cursor: 'pointer' }}>‹</span>
+                <span style={{ fontSize: '12.5px', fontWeight: 600, color: '#8A7E73' }}>A1 · Everyday life</span>
+                <span style={{ width: '18px' }}></span>
+              </div>
+              <div className="cd-scroll" style={{ flex: 1, overflowY: 'auto', padding: '8px 20px 24px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '6px' }}>
+                  <div style={{ width: '48px', height: '48px', borderRadius: '14px', background: '#DB5338', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: "'Instrument Serif', serif", fontSize: '22px', color: '#fff', flex: 'none' }}>A1</div>
+                  <div>
+                    <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: '24px', lineHeight: 1.05 }}>Everyday life</div>
+                    <div style={{ fontSize: '12px', color: '#8A7E73' }}>Can introduce yourself and others</div>
+                  </div>
+                </div>
+                <div style={{ background: '#F4ECDF', borderRadius: '12px', padding: '11px 14px', margin: '12px 0 18px', fontSize: '12.5px', color: '#6B5F58', lineHeight: 1.45 }}>Can understand and use familiar everyday expressions and very basic phrases.</div>
+                {levelChapters.map((ch, i) => (
+                  <div key={i} style={{ marginBottom: '18px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px' }}>
+                      <span style={{ fontSize: '13.5px', fontWeight: 700 }}>{ch.title}</span>
+                      <span style={{ fontSize: '11px', color: '#9A8E84' }}>{ch.meta}</span>
+                    </div>
+                    {ch.lessons.map((ls, j) => (
+                      <div key={j} onClick={ls.go} style={{ display: 'flex', gap: '12px', alignItems: 'center', background: ls.bg, border: ls.bd, borderRadius: '13px', padding: '11px 13px', marginBottom: '8px', cursor: 'pointer' }}>
+                        <div style={{ width: '34px', height: '34px', borderRadius: '10px', background: ls.iconBg, color: ls.iconColor, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px', flex: 'none' }}>{ls.icon}</div>
+                        <div style={{ flex: 1 }}>
+                          <div style={{ fontSize: '14px', fontWeight: 600, color: '#2A2320' }}>{ls.title}</div>
+                          <div style={{ fontSize: '11.5px', color: '#9A8E84' }}>{ls.kind}</div>
+                        </div>
+                        <span style={{ fontSize: '13px', color: ls.chevron }}>{ls.right}</span>
+                      </div>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* ===== PLANS ===== */}
+          {view === 'plans' && (
+            <div className="cd-screen" style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 22px 0', flex: 'none' }}>
+                <span onClick={() => setView('you')} style={{ fontSize: '18px', color: '#B5A99E', cursor: 'pointer' }}>✕</span>
+              </div>
+              <div className="cd-scroll" style={{ flex: 1, overflowY: 'auto', padding: '8px 18px 0' }}>
+                <div style={{ textAlign: 'center', padding: '6px 6px 0' }}>
+                  <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: '28px', lineHeight: 1.05 }}>Conversation is free.<br /><span style={{ fontStyle: 'italic', color: '#DB5338' }}>Always.</span></div>
+                  <div style={{ fontSize: '13px', color: '#8A7E73', marginTop: '6px' }}>Plus adds depth — never the basics.</div>
+                </div>
+                <div style={{ padding: '18px 0 0' }}>
+                  <div style={{ background: '#fff', border: '1px solid #EDE4D6', borderRadius: '16px', padding: '15px 16px', marginBottom: '12px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+                      <div style={{ fontSize: '15px', fontWeight: 700 }}>Free</div>
+                      <div style={{ fontSize: '12px', color: '#2F8F83', fontWeight: 600 }}>Your plan</div>
+                    </div>
+                    <div style={{ fontSize: '13px', lineHeight: 1.9, color: '#5C5048' }}>✓ Daily lessons & culture<br />✓ AI conversation, any scenario<br />✓ Placement & milestones</div>
+                  </div>
+                  <div style={{ background: '#2A2320', borderRadius: '16px', padding: '15px 16px', color: '#F3ECE2', position: 'relative', overflow: 'hidden' }}>
+                    <div style={{ position: 'absolute', right: '-20px', top: '14px', background: '#E1A23A', color: '#3A2417', fontSize: '10px', fontWeight: 700, letterSpacing: '.05em', padding: '3px 26px', transform: 'rotate(38deg)' }}>DEPTH</div>
+                    <div style={{ fontSize: '15px', fontWeight: 700, marginBottom: '2px' }}>Cadence Plus</div>
+                    <div style={{ fontSize: '12px', color: '#A99C90', marginBottom: '10px' }}>$9 / mo · 7-day free trial</div>
+                    <div style={{ fontSize: '13px', lineHeight: 1.9, color: '#E8DFD4' }}>✦ Unlimited immersion library<br />✦ Offline & download<br />✦ Personalized exam prep<br />✦ Deep grammar deep-dives</div>
+                  </div>
+                </div>
+              </div>
+              <div style={{ padding: '14px 22px 26px', flex: 'none' }}>
+                <div onClick={() => setView('checkout')} style={{ background: '#DB5338', color: '#FBF6EE', borderRadius: '14px', padding: '15px', textAlign: 'center', fontSize: '15px', fontWeight: 600, cursor: 'pointer' }}>Try Plus free for 7 days</div>
+              </div>
+            </div>
+          )}
+
+          {/* ===== CHECKOUT ===== */}
+          {view === 'checkout' && (
+            <div className="cd-screen" style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 22px 6px', flex: 'none' }}>
+                <span onClick={() => setView('plans')} style={{ fontSize: '18px', color: '#B5A99E', cursor: 'pointer' }}>‹</span>
+                <span style={{ fontSize: '12.5px', fontWeight: 600, color: '#8A7E73' }}>Checkout</span>
+                <span style={{ fontSize: '11px', color: '#9A8E84' }}>🔒 Secure</span>
+              </div>
+              <div className="cd-scroll" style={{ flex: 1, overflowY: 'auto', padding: '8px 22px 0' }}>
+                <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: '27px', lineHeight: 1.05, marginBottom: '4px' }}>Start your free week</div>
+                <div style={{ fontSize: '13px', color: '#8A7E73', marginBottom: '16px' }}>Free for 7 days, then $9/mo. Cancel anytime — we'll remind you 2 days before.</div>
+                
+                <div style={{ background: '#2A2320', borderRadius: '16px', padding: '16px', color: '#F3ECE2', marginBottom: '16px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+                    <div style={{ fontSize: '15px', fontWeight: 700 }}>Cadence Plus</div>
+                    <div style={{ fontSize: '13px', color: '#A99C90' }}>$9 / mo</div>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12.5px', color: '#C9BFB4', padding: '6px 0', borderTop: '1px solid rgba(255,255,255,.12)' }}>
+                    <span>Today</span>
+                    <span style={{ color: '#46C46E', fontWeight: 600 }}>$0.00 — trial</span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12.5px', color: '#C9BFB4', padding: '6px 0' }}>
+                    <span>On {new Date(Date.now() + 7 * 86400000).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
+                    <span>$9.00</span>
+                  </div>
+                </div>
+
+                <div style={{ display: 'flex', gap: '8px', marginBottom: '14px' }}>
+                  <div onClick={() => setPayMethod('card')} style={{ flex: 1, textAlign: 'center', fontSize: '12.5px', fontWeight: 600, borderRadius: '11px', padding: '11px', background: payMethod === 'card' ? '#E6F0EE' : '#fff', color: payMethod === 'card' ? '#2F8F83' : '#8A7E73', border: payMethod === 'card' ? '1px solid #BFE0DA' : '1px solid #EDE4D6', cursor: 'pointer' }}>💳 Card</div>
+                  <div onClick={() => setPayMethod('upi')} style={{ flex: 1, textAlign: 'center', fontSize: '12.5px', fontWeight: 600, borderRadius: '11px', padding: '11px', background: payMethod === 'upi' ? '#E6F0EE' : '#fff', color: payMethod === 'upi' ? '#2F8F83' : '#8A7E73', border: payMethod === 'upi' ? '1px solid #BFE0DA' : '1px solid #EDE4D6', cursor: 'pointer' }}>UPI / Razorpay</div>
+                </div>
+
+                {payMethod === 'card' && (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '11px' }}>
+                    <div style={{ background: '#fff', border: '1px solid #E1D6C4', borderRadius: '13px', padding: '13px 15px' }}>
+                      <div style={{ fontSize: '10.5px', color: '#A8927C', marginBottom: '2px' }}>Card number</div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <input className="cd-input-l" style={{ fontSize: '14px', flex: 1, border: 'none', outline: 'none' }} placeholder="1234 5678 9012 3456" />
+                        <span style={{ fontSize: '13px' }}>💳</span>
+                      </div>
+                    </div>
+                    <div style={{ display: 'flex', gap: '11px' }}>
+                      <div style={{ flex: 1, background: '#fff', border: '1px solid #E1D6C4', borderRadius: '13px', padding: '13px 15px' }}>
+                        <div style={{ fontSize: '10.5px', color: '#A8927C', marginBottom: '2px' }}>Expiry</div>
+                        <input className="cd-input-l" style={{ fontSize: '14px', width: '100%', border: 'none', outline: 'none' }} placeholder="MM / YY" />
+                      </div>
+                      <div style={{ flex: 1, background: '#fff', border: '1px solid #E1D6C4', borderRadius: '13px', padding: '13px 15px' }}>
+                        <div style={{ fontSize: '10.5px', color: '#A8927C', marginBottom: '2px' }}>CVC</div>
+                        <input className="cd-input-l" style={{ fontSize: '14px', width: '100%', border: 'none', outline: 'none' }} placeholder="123" />
+                      </div>
+                    </div>
+                  </div>
+                )}
+                {payMethod === 'upi' && (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '11px' }}>
+                    <div style={{ background: '#fff', border: '1px solid #E1D6C4', borderRadius: '13px', padding: '13px 15px' }}>
+                      <div style={{ fontSize: '10.5px', color: '#A8927C', marginBottom: '2px' }}>UPI ID</div>
+                      <input className="cd-input-l" style={{ fontSize: '14px', width: '100%', border: 'none', outline: 'none' }} placeholder="name@bank" />
+                    </div>
+                    <div style={{ fontSize: '12px', color: '#8A7E73', marginTop: '10px', textAlign: 'center' }}>You'll approve the payment in your UPI app.</div>
+                  </div>
+                )}
+              </div>
+              <div style={{ padding: '14px 22px 22px', flex: 'none' }}>
+                <div onClick={handleGoCheckout} style={{ background: '#DB5338', color: '#FBF6EE', borderRadius: '14px', padding: '15px', textAlign: 'center', fontSize: '15px', fontWeight: 600, cursor: 'pointer' }}>Start free trial</div>
+                <div style={{ textAlign: 'center', fontSize: '10.5px', color: '#B5A99E', marginTop: '10px' }}>Powered by Stripe · 256-bit encrypted · no charge today</div>
+              </div>
+            </div>
+          )}
+
+          {/* ===== TOGETHER (SOCIAL) ===== */}
+          {view === 'social' && (
+            <div className="cd-screen" style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 22px 6px', flex: 'none' }}>
+                <span style={{ fontSize: '18px', color: 'transparent' }}>‹</span>
+                <span style={{ fontSize: '12.5px', fontWeight: 600, color: '#8A7E73' }}>Together</span>
+                <span onClick={() => setView('correct')} style={{ fontSize: '16px', color: '#DB5338', cursor: 'pointer' }}>＋</span>
+              </div>
+              <div className="cd-scroll" style={{ flex: 1, overflowY: 'auto', padding: '8px 20px 24px' }}>
+                <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: '26px', lineHeight: 1.05, marginBottom: '22px' }}>Your circle</div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  {circle.map((c, i) => (
+                    <div key={i} style={{ display: 'flex', alignItems: 'center', background: c.bg, border: c.bd, borderRadius: '14px', padding: '12px 14px' }}>
+                      <div style={{ width: '18px', fontSize: '11px', color: '#9A8E84', fontWeight: 600 }}>{c.rank}</div>
+                      <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: c.avatar, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: '16px', fontWeight: 600, margin: '0 12px 0 8px', flex: 'none' }}>{c.initial}</div>
+                      <div style={{ flex: 1 }}>
+                        <div style={{ fontSize: '14px', fontWeight: 600, color: c.rank === 1 ? '#F3ECE2' : '#2A2320' }}>{c.name}</div>
+                        <div style={{ fontSize: '12px', color: c.rank === 1 ? '#A99C90' : '#8A7E73', marginTop: '2px' }}>{c.mins} mins spoken</div>
+                      </div>
+                      <div style={{ fontSize: '11px', color: c.move.includes('▲') ? '#46C46E' : (c.move.includes('▼') ? '#DB5338' : '#B5A99E'), fontWeight: 600 }}>{c.move}</div>
+                    </div>
+                  ))}
+                </div>
+                <div style={{ marginTop: '22px', borderTop: '1px solid #EDE4D6', paddingTop: '22px' }}>
+                  <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: '22px', marginBottom: '14px' }}>Native corrections</div>
+                  <div style={{ background: '#fff', border: '1px solid #EDE4D6', borderRadius: '16px', padding: '16px' }}>
+                    <div style={{ display: 'flex', gap: '14px', marginBottom: '12px' }}>
+                      <div style={{ width: '38px', height: '38px', borderRadius: '50%', background: '#E1A23A', flex: 'none' }}></div>
+                      <div>
+                        <div style={{ fontSize: '13px', fontWeight: 600, color: '#2A2320' }}>Elena corrected you</div>
+                        <div style={{ fontSize: '11.5px', color: '#8A7E73', marginTop: '2px', lineHeight: 1.4 }}>"In Spain we usually say 'zumo' instead of 'jugo' for juice."</div>
+                      </div>
+                    </div>
+                    <div style={{ background: '#F4ECDF', borderRadius: '10px', padding: '10px', fontSize: '13px', color: '#6B5F58', fontStyle: 'italic' }}>Quiero un jugo de naranja.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ===== NATIVE CORRECT / FEEDBACK ===== */}
+          {view === 'correct' && (
+            <div className="cd-screen" style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 22px 6px', flex: 'none' }}>
+                <span onClick={() => setView('social')} style={{ fontSize: '18px', color: '#B5A99E', cursor: 'pointer' }}>‹</span>
+                <span style={{ fontSize: '12.5px', fontWeight: 600, color: '#8A7E73' }}>Help a learner</span>
+                <span style={{ width: '18px' }}></span>
+              </div>
+              <div className="cd-scroll" style={{ flex: 1, overflowY: 'auto', padding: '8px 20px 24px', display: 'flex', flexDirection: 'column' }}>
+                <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: '26px', lineHeight: 1.05, marginBottom: '6px' }}>Listen & correct</div>
+                <div style={{ fontSize: '13px', color: '#8A7E73', marginBottom: '20px' }}>Help someone learning your native language (English). They'll help you in return.</div>
+                
+                <div style={{ background: '#fff', border: '1px solid #EDE4D6', borderRadius: '20px', padding: '20px', marginBottom: '20px', flex: 1 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
+                    <div style={{ width: '42px', height: '42px', borderRadius: '50%', background: '#5B3A56', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: '18px', fontWeight: 600 }}>T</div>
+                    <div>
+                      <div style={{ fontSize: '14px', fontWeight: 600 }}>Tommaso</div>
+                      <div style={{ fontSize: '11.5px', color: '#8A7E73' }}>Learning English · A2</div>
+                    </div>
+                  </div>
+                  <div style={{ fontSize: '12px', color: '#A8927C', textTransform: 'uppercase', letterSpacing: '.05em', marginBottom: '8px' }}>They said:</div>
+                  <div style={{ background: '#F4ECDF', borderRadius: '12px', padding: '14px', display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
+                    <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: '#DB5338', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: '16px' }}>▶</div>
+                    <div style={{ flex: 1, height: '4px', background: '#D8CDBB', borderRadius: '2px' }}>
+                      <div style={{ width: '0%', height: '100%', background: '#DB5338', borderRadius: '2px' }}></div>
+                    </div>
+                    <div style={{ fontSize: '11px', color: '#8A7E73' }}>0:04</div>
+                  </div>
+                  <div style={{ fontSize: '12px', color: '#A8927C', textTransform: 'uppercase', letterSpacing: '.05em', marginBottom: '8px' }}>Transcription:</div>
+                  <div style={{ fontSize: '16px', lineHeight: 1.4, color: '#5C5048' }}>"I am go to the store for buy some milks."</div>
+                </div>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                  <div style={{ background: '#DB5338', color: '#FBF6EE', borderRadius: '14px', padding: '15px', textAlign: 'center', fontSize: '15px', fontWeight: 600, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', cursor: 'pointer' }}><span>🎙</span><span>Record correction</span></div>
+                  <div style={{ background: '#fff', border: '1px solid #EDE4D6', color: '#2A2320', borderRadius: '14px', padding: '15px', textAlign: 'center', fontSize: '15px', fontWeight: 600, cursor: 'pointer' }}>Type correction</div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ===== NOTIFICATIONS ===== */}
+          {view === 'notifications' && (
+            <div className="cd-screen" style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 22px 6px', flex: 'none' }}>
+                <span onClick={() => setView('you')} style={{ fontSize: '18px', color: '#B5A99E', cursor: 'pointer' }}>‹</span>
+                <span style={{ fontSize: '12.5px', fontWeight: 600, color: '#8A7E73' }}>Notifications</span>
+                <span style={{ width: '18px' }}></span>
+              </div>
+              <div className="cd-scroll" style={{ flex: 1, overflowY: 'auto', padding: '8px 20px 24px' }}>
+                <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: '27px', lineHeight: 1.05, marginBottom: '20px' }}>What alerts you</div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                  {notifList.map((n, i) => (
+                    <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                      <div style={{ paddingRight: '16px' }}>
+                        <div style={{ fontSize: '14px', fontWeight: 600, color: '#2A2320' }}>{n.label}</div>
+                        <div style={{ fontSize: '12px', color: '#8A7E73', marginTop: '2px', lineHeight: 1.4 }}>{n.caption}</div>
+                      </div>
+                      <div onClick={n.toggle} style={{ width: '46px', height: '26px', borderRadius: '13px', background: n.track, display: 'flex', alignItems: 'center', padding: '3px', flex: 'none', justifyContent: n.justify, transition: 'all .2s ease', cursor: 'pointer' }}>
+                        <div style={{ width: '20px', height: '20px', borderRadius: '50%', background: '#fff', boxShadow: '0 2px 4px rgba(0,0,0,.1)' }}></div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ===== DATA CHARTER ===== */}
+          {view === 'charter' && (
+            <div className="cd-screen" style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 22px 6px', flex: 'none' }}>
+                <span onClick={() => setView('you')} style={{ fontSize: '18px', color: '#B5A99E', cursor: 'pointer' }}>‹</span>
+                <span style={{ fontSize: '12.5px', fontWeight: 600, color: '#8A7E73' }}>Data charter</span>
+                <span style={{ width: '18px' }}></span>
+              </div>
+              <div className="cd-scroll" style={{ flex: 1, overflowY: 'auto', padding: '8px 20px 24px' }}>
+                <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: '27px', lineHeight: 1.05, marginBottom: '12px' }}>Your data is yours</div>
+                <div style={{ fontSize: '13px', color: '#5C5048', lineHeight: 1.5, marginBottom: '24px' }}>We don't sell your data to brokers, and we don't train underlying LLMs on your personal chats without explicit opt-in. You can delete your account and all associated data at any time.</div>
+                
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '30px' }}>
+                  {charterToggles.map((c, i) => (
+                    <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                      <div style={{ paddingRight: '16px' }}>
+                        <div style={{ fontSize: '14px', fontWeight: 600, color: '#2A2320' }}>{c.label}</div>
+                        <div style={{ fontSize: '12px', color: '#8A7E73', marginTop: '2px', lineHeight: 1.4 }}>{c.caption}</div>
+                      </div>
+                      <div onClick={c.toggle} style={{ width: '46px', height: '26px', borderRadius: '13px', background: c.track, display: 'flex', alignItems: 'center', padding: '3px', flex: 'none', justifyContent: c.justify, transition: 'all .2s ease', cursor: 'pointer' }}>
+                        <div style={{ width: '20px', height: '20px', borderRadius: '50%', background: '#fff', boxShadow: '0 2px 4px rgba(0,0,0,.1)' }}></div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div style={{ borderTop: '1px solid #EDE4D6', paddingTop: '20px' }}>
+                  <div style={{ color: '#DB5338', fontSize: '14px', fontWeight: 600, marginBottom: '8px', cursor: 'pointer' }}>Export my data (JSON)</div>
+                  <div style={{ color: '#B23E27', fontSize: '14px', fontWeight: 600, cursor: 'pointer' }}>Delete account & data</div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ===== AUDIO IMMERSION ===== */}
+          {view === 'audio' && (
+            <div className="cd-screen" style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0, background: '#1C1714', color: '#FBF6EE' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 22px 6px', flex: 'none' }}>
+                <span onClick={() => setView('levelDetail')} style={{ fontSize: '18px', color: '#9A8E84', cursor: 'pointer' }}>‹</span>
+                <span style={{ fontSize: '12.5px', fontWeight: 600, color: '#C9BFB4' }}>At the market</span>
+                <span style={{ width: '18px' }}></span>
+              </div>
+              
+              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', padding: '20px 24px' }}>
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '16px', overflowY: 'auto', marginBottom: '20px' }}>
+                  {audioLines.map((line, i) => (
+                    <div key={i} style={{ display: 'flex', gap: '12px', opacity: audioPlaying ? 1 : 0.6 }}>
+                      <div style={{ width: '4px', background: line.isPartner, borderRadius: '2px', flex: 'none' }}></div>
+                      <div>
+                        <div style={{ fontSize: '16px', fontWeight: 600, lineHeight: 1.3, marginBottom: '2px' }}>{line.native}</div>
+                        <div style={{ fontSize: '13px', color: '#A99C90' }}>{line.en}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                
+                <div style={{ background: '#2A2320', borderRadius: '20px', padding: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px', flex: 'none' }}>
+                  <div style={{ width: '100%', height: '4px', background: 'rgba(255,255,255,.1)', borderRadius: '2px' }}>
+                    <div style={{ width: '30%', height: '100%', background: '#DB5338', borderRadius: '2px' }}></div>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '30px' }}>
+                    <span style={{ fontSize: '20px', color: '#9A8E84' }}>⏮</span>
+                    <div onClick={() => setAudioPlaying(!audioPlaying)} style={{ width: '56px', height: '56px', borderRadius: '50%', background: '#FBF6EE', color: '#2A2320', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '22px', cursor: 'pointer' }}>
+                      {audioPlaying ? '⏸' : '▶'}
+                    </div>
+                    <span style={{ fontSize: '20px', color: '#9A8E84' }}>⏭</span>
+                  </div>
+                  <div style={{ fontSize: '12px', color: '#9A8E84', letterSpacing: '.05em', textTransform: 'uppercase' }}>Shadowing enabled</div>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* ===== GRAMMAR / REFERENCE SHEET SCREEN ===== */}
           {view === 'grammar' && (
             <div className="cd-screen" style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
@@ -1702,8 +2225,8 @@ export default function App() {
           )}
 
           {/* ===== BOTTOM NAVIGATION TABS ===== */}
-          {!picker && ['home', 'speakHub', 'immerse', 'you'].includes(view) && (
-            <div style={{ height: '62px', borderTop: '1px solid #EDE4D6', background: '#fff', display: 'flex', position: 'absolute', bottom: 0, left: 0, right: 0, zIndex: 10, padding: '0 10px' }}>
+          {!picker && ['home', 'speakHub', 'immerse', 'social', 'you'].includes(view) && (
+            <div style={{ height: '62px', borderTop: '1px solid #EDE4D6', background: '#fff', display: 'flex', position: 'absolute', bottom: 0, left: 0, right: 0, zIndex: 10, padding: '0 5px' }}>
               <div onClick={() => setView('home')} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: view === 'home' ? '#DB5338' : '#B5A99E' }}>
                 <span style={{ fontSize: '20px' }}>▶</span>
                 <span style={{ fontSize: '10px', marginTop: '2px', fontWeight: 600 }}>Learn</span>
@@ -1715,6 +2238,10 @@ export default function App() {
               <div onClick={() => setView('immerse')} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: view === 'immerse' ? '#DB5338' : '#B5A99E' }}>
                 <span style={{ fontSize: '20px' }}>❖</span>
                 <span style={{ fontSize: '10px', marginTop: '2px', fontWeight: 600 }}>Immerse</span>
+              </div>
+              <div onClick={() => setView('social')} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: view === 'social' ? '#DB5338' : '#B5A99E' }}>
+                <span style={{ fontSize: '20px' }}>⚇</span>
+                <span style={{ fontSize: '10px', marginTop: '2px', fontWeight: 600 }}>Together</span>
               </div>
               <div onClick={() => setView('you')} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: view === 'you' ? '#DB5338' : '#B5A99E' }}>
                 <span style={{ fontSize: '20px' }}>☺</span>
