@@ -108,6 +108,13 @@ export default function App() {
     }
   }, [lang, view, authStatus]);
 
+  // Auto-redirect authenticated users
+  useEffect(() => {
+    if (authStatus === 'authenticated' && (view === 'welcome' || view === 'auth')) {
+      setView('home');
+    }
+  }, [authStatus, view]);
+
   const fetchPlan = async () => {
     try {
       const res = await fetch('/api/plan', {
@@ -623,7 +630,7 @@ export default function App() {
                 </div>
               </div>
               <div className="cd-welcome-footer" style={{ padding: '0 28px 38px', flex: 'none' }}>
-                <div onClick={() => setPicker(true)} style={{ background: '#DB5338', color: '#FBF6EE', borderRadius: '16px', padding: '16px', textAlign: 'center', fontSize: '16px', fontWeight: 600, boxShadow: '0 8px 20px -6px rgba(219,83,56,.5)', marginBottom: '11px', cursor: 'pointer' }}>
+                <div onClick={() => { setPickerNext('auth'); setAuthMode('signup'); setPicker(true); }} style={{ background: '#DB5338', color: '#FBF6EE', borderRadius: '16px', padding: '16px', textAlign: 'center', fontSize: '16px', fontWeight: 600, boxShadow: '0 8px 20px -6px rgba(219,83,56,.5)', marginBottom: '11px', cursor: 'pointer' }}>
                   Choose your language
                 </div>
                 <div onClick={() => { setView('auth'); setAuthMode('login'); }} style={{ textAlign: 'center', fontSize: '14px', color: '#8A7E73', cursor: 'pointer' }}>

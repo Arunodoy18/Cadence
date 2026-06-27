@@ -161,7 +161,7 @@ body {
   display: none;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 800px) {
   .cd-status-bar { display: none !important; }
   .cd-phone-shell { display: none !important; }
   .cd-quicknav { display: none !important; }
