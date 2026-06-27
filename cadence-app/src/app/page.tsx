@@ -14,6 +14,7 @@ export default function App() {
   // Core navigation state
   const [view, setView] = useState('welcome');
   const [lang, setLang] = useState('es');
+  const [earnedMilestones, setEarnedMilestones] = useState<string[]>([]);
   const [scenario, setScenario] = useState('cafe');
   const [picker, setPicker] = useState(false);
   const [pickerNext, setPickerNext] = useState<string | null>(null);
@@ -129,6 +130,38 @@ export default function App() {
       setView('welcome');
     }
   }, [authStatus, view]);
+
+  // Premium Gating Interception
+  useEffect(() => {
+    const premiumViews = ['convo', 'pronounce', 'immerse', 'reader'];
+    const isPro = (session?.user as any)?.plan === 'plus';
+    if (premiumViews.includes(view) && !isPro) {
+      setView('plans'); // Redirect free users to the upsell screen
+    }
+  }, [view, session]);
+
+  // Fetch milestones when visiting gamification screens
+  useEffect(() => {
+    if (authStatus === 'authenticated' && (view === 'you' || view === 'achievements')) {
+      fetchMilestones();
+    }
+  }, [authStatus, view, lang]);
+
+  const fetchMilestones = async () => {
+    try {
+      const res = await fetch('/api/milestones', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ lang }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setEarnedMilestones(data.milestones.map((m: any) => m.key));
+      }
+    } catch (e) {
+      console.error('Milestones fetch error:', e);
+    }
+  };
 
   const fetchPlan = async () => {
     try {
@@ -527,20 +560,32 @@ export default function App() {
   ];
 
   // Badges data
-  const badges = [
-    { icon: "☕", title: "Café regular", sub: "Ordered solo", state: "earned", bg: "#FBF6EE", border: "1px solid #EDE4D6", iconBg: "#DB5338", iconStyle: "color:#fff;", titleColor: "#2A2320" },
-    { icon: "💬", title: "First chat", sub: "2-min convo", state: "earned", bg: "#FBF6EE", border: "1px solid #EDE4D6", iconBg: "#E1A23A", iconStyle: "color:#3A2417;", titleColor: "#2A2320" },
-    { icon: "🗺", title: "Getting around", sub: "Asked directions", state: "earned", bg: "#FBF6EE", border: "1px solid #EDE4D6", iconBg: "#2F8F83", iconStyle: "color:#fff;", titleColor: "#2A2320" },
-    { icon: "❤", title: "Met the family", sub: "Warm intro", state: "earned", bg: "#FBF6EE", border: "1px solid #EDE4D6", iconBg: "#F0E7D8", iconStyle: "color:#B23E27;", titleColor: "#2A2320" },
-    { icon: "📖", title: "First article", sub: "Read in full", state: "earned", bg: "#FBF6EE", border: "1px solid #EDE4D6", iconBg: "#F0E7D8", iconStyle: "color:#2F8F83;", titleColor: "#2A2320" },
-    { icon: "🌱", title: "12-day rhythm", sub: "Kept it up", state: "earned", bg: "#FBF6EE", border: "1px solid #EDE4D6", iconBg: "#2A2320", iconStyle: "color:#46C46E;", titleColor: "#2A2320" },
-    { icon: "✦", title: "100 words", sub: "Vocabulary", state: "earned", bg: "#FBF6EE", border: "1px solid #EDE4D6", iconBg: "#F0E7D8", iconStyle: "color:#E1A23A;", titleColor: "#2A2320" },
-    { icon: "🎧", title: "Eavesdropper", sub: "Understood audio", state: "earned", bg: "#FBF6EE", border: "1px solid #EDE4D6", iconBg: "#5B3A56", iconStyle: "color:#FBF6EE;", titleColor: "#2A2320" },
-    { icon: "🕐", title: "Past tense", sub: "Tell a story", state: "progress", bg: "#fff", border: "1px dashed #D8CDBB", iconBg: "#F0E7D8", iconStyle: "opacity:0.6;filter:grayscale(1);", titleColor: "#8A7E73" },
-    { icon: "⚖", title: "First debate", sub: "B2 skill", state: "locked", bg: "transparent", border: "none", iconBg: "#EBE3D5", iconStyle: "opacity:0.3;filter:grayscale(1);", titleColor: "#B5A99E" },
-    { icon: "🎬", title: "No subtitles", sub: "Watch a film", state: "locked", bg: "transparent", border: "none", iconBg: "#EBE3D5", iconStyle: "opacity:0.3;filter:grayscale(1);", titleColor: "#B5A99E" },
-    { icon: "🏔", title: "Reached B1", sub: "Level up", state: "progress", bg: "#fff", border: "1px dashed #D8CDBB", iconBg: "#F0E7D8", iconStyle: "opacity:0.6;filter:grayscale(1);", titleColor: "#8A7E73" }
+  const baseBadges = [
+    { key: "cafe_regular", icon: "☕", title: "Café regular", sub: "Ordered solo", iconBg: "#DB5338", iconStyle: "color:#fff;" },
+    { key: "first_chat", icon: "💬", title: "First chat", sub: "2-min convo", iconBg: "#E1A23A", iconStyle: "color:#3A2417;" },
+    { key: "getting_around", icon: "🗺", title: "Getting around", sub: "Asked directions", iconBg: "#2F8F83", iconStyle: "color:#fff;" },
+    { key: "met_family", icon: "❤", title: "Met the family", sub: "Warm intro", iconBg: "#F0E7D8", iconStyle: "color:#B23E27;" },
+    { key: "first_article", icon: "📖", title: "First article", sub: "Read in full", iconBg: "#F0E7D8", iconStyle: "color:#2F8F83;" },
+    { key: "12_day_rhythm", icon: "🌱", title: "12-day rhythm", sub: "Kept it up", iconBg: "#2A2320", iconStyle: "color:#46C46E;" },
+    { key: "100_words", icon: "✦", title: "100 words", sub: "Vocabulary", iconBg: "#F0E7D8", iconStyle: "color:#E1A23A;" },
+    { key: "eavesdropper", icon: "🎧", title: "Eavesdropper", sub: "Understood audio", iconBg: "#5B3A56", iconStyle: "color:#FBF6EE;" },
+    { key: "past_tense", icon: "🕐", title: "Past tense", sub: "Tell a story", iconBg: "#F0E7D8", iconStyle: "opacity:0.6;filter:grayscale(1);" },
+    { key: "first_debate", icon: "⚖", title: "First debate", sub: "B2 skill", iconBg: "#EBE3D5", iconStyle: "opacity:0.3;filter:grayscale(1);" },
+    { key: "no_subtitles", icon: "🎬", title: "No subtitles", sub: "Watch a film", iconBg: "#EBE3D5", iconStyle: "opacity:0.3;filter:grayscale(1);" },
+    { key: "reached_b1", icon: "🏔", title: "Reached B1", sub: "Level up", iconBg: "#F0E7D8", iconStyle: "opacity:0.6;filter:grayscale(1);" }
   ];
+
+  const badges = baseBadges.map((b, idx) => {
+    const isEarned = earnedMilestones.includes(b.key);
+    const isNext = idx === earnedMilestones.length;
+    if (isEarned) {
+      return { ...b, state: "earned", bg: "#FBF6EE", border: "1px solid #EDE4D6", titleColor: "#2A2320" };
+    } else if (isNext) {
+      return { ...b, state: "progress", bg: "#fff", border: "1px dashed #D8CDBB", iconBg: "#F0E7D8", iconStyle: "opacity:0.6;filter:grayscale(1);", titleColor: "#8A7E73" };
+    } else {
+      return { ...b, state: "locked", bg: "transparent", border: "none", iconBg: "#EBE3D5", iconStyle: "opacity:0.3;filter:grayscale(1);", titleColor: "#B5A99E" };
+    }
+  });
 
   // Score data
   const scoreSkills = [
