@@ -101,6 +101,19 @@ export default function App() {
     return () => clearInterval(timer);
   }, []);
 
+  // Persist state across refreshes
+  useEffect(() => {
+    const savedView = localStorage.getItem('cadence_view');
+    const savedLang = localStorage.getItem('cadence_lang');
+    if (savedView && savedView !== 'auth' && savedView !== 'welcome') setView(savedView);
+    if (savedLang) setLang(savedLang);
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('cadence_view', view);
+    localStorage.setItem('cadence_lang', lang);
+  }, [view, lang]);
+
   // Fetch smart plan when language changes or home loads
   useEffect(() => {
     if (authStatus === 'authenticated' && (view === 'home' || view === 'smartplan')) {
@@ -108,10 +121,12 @@ export default function App() {
     }
   }, [lang, view, authStatus]);
 
-  // Auto-redirect authenticated users
+  // Auto-redirect authenticated users & bounce unauthenticated
   useEffect(() => {
     if (authStatus === 'authenticated' && (view === 'welcome' || view === 'auth')) {
       setView('home');
+    } else if (authStatus === 'unauthenticated' && view !== 'welcome' && view !== 'auth') {
+      setView('welcome');
     }
   }, [authStatus, view]);
 
