@@ -842,7 +842,7 @@ export default function App() {
                 <div>
                   <div style={{ fontSize: '12px', color: '#9A8E84' }} className={L.font}>{L.greeting}</div>
                   <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: '26px', lineHeight: 1.05 }}>
-                    Chapter 1 · <span style={{ fontStyle: 'italic' }} className={L.font}>{L.chapter}</span>
+                    Your Curriculum
                   </div>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '7px' }}>
@@ -861,47 +861,88 @@ export default function App() {
                 </div>
                 <span style={{ color: '#C9AE97' }}>›</span>
               </div>
-              <div onClick={() => { handleReset(); setView('lesson'); }} style={{ margin: '12px 18px 0', background: 'linear-gradient(140deg,#DB5338,#B23E27)', borderRadius: '20px', padding: '18px', color: '#FBF6EE', cursor: 'pointer' }}>
-                <div style={{ fontSize: '10.5px', letterSpacing: '.08em', textTransform: 'uppercase', opacity: .85, marginBottom: '7px' }}>Today's real-world goal</div>
-                <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: '23px', lineHeight: 1.1, marginBottom: '14px' }}>“{L.goalLine}”</div>
-                <div style={{ height: '6px', background: 'rgba(255,255,255,.25)', borderRadius: '99px', overflow: 'hidden' }}>
-                  <div style={{ width: '62%', height: '100%', background: '#FBF6EE', borderRadius: '99px' }}></div>
-                </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '8px' }}>
-                  <span style={{ fontSize: '11px', opacity: .85 }}>3 of 5 skills ready</span>
-                  <span style={{ fontSize: '12px', fontWeight: 600 }}>Continue →</span>
-                </div>
-              </div>
-              <div style={{ padding: '18px 20px 0' }}>
-                <div style={{ display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '13px' }}>
-                  <div style={{ width: '38px', height: '38px', borderRadius: '12px', background: '#2F8F83', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: '16px', flexShrink: 0 }}>✓</div>
-                  <div style={{ flex: 1 }}>
-                    <div style={{ fontSize: '14px', fontWeight: 600 }}>Greetings & warmth</div>
-                    <div style={{ fontSize: '11.5px', color: '#9A8E84' }}>Lesson · done</div>
+
+              {[
+                {
+                  title: `Chapter 1 · ${L.chapter || 'The Basics'}`,
+                  lessonTitle: "Greetings & warmth",
+                  goalTitle: `Build it: ${L.goalShort}`,
+                  goalLine: L.goalLine,
+                  scenario: 'cafe',
+                  partnerLabel: `Talk to the ${L.partnerRole}`,
+                  firstMsg: { who: 'p', n: L.convo[0].n, en: L.convo[0].en }
+                },
+                {
+                  title: `Chapter 2 · Getting Around`,
+                  lessonTitle: "Direction words",
+                  goalTitle: "Build it: ask for directions",
+                  goalLine: "Ask a local for directions to the station.",
+                  scenario: 'directions',
+                  partnerLabel: "Talk to a passer-by",
+                  firstMsg: null
+                },
+                {
+                  title: `Chapter 3 · Meeting the Family`,
+                  lessonTitle: "Introductions & politeness",
+                  goalTitle: "Build it: introduce yourself",
+                  goalLine: "Introduce yourself to the host family.",
+                  scenario: 'family',
+                  partnerLabel: "Talk to the host parent",
+                  firstMsg: null
+                }
+              ].map((ch, i) => (
+                <div key={i} style={{ marginTop: i === 0 ? '0' : '8px' }}>
+                  <div style={{ padding: '24px 24px 12px', fontSize: '20px', fontWeight: 600, fontFamily: "'Instrument Serif', serif" }}>
+                    {ch.title}
+                  </div>
+                  <div onClick={() => { handleReset(); setView('lesson'); }} style={{ margin: '0 18px', background: i === 0 ? 'linear-gradient(140deg,#DB5338,#B23E27)' : '#E8E1D5', borderRadius: '20px', padding: '18px', color: i === 0 ? '#FBF6EE' : '#9A8E84', cursor: 'pointer' }}>
+                    <div style={{ fontSize: '10.5px', letterSpacing: '.08em', textTransform: 'uppercase', opacity: .85, marginBottom: '7px' }}>Real-world goal</div>
+                    <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: '23px', lineHeight: 1.1, marginBottom: '14px' }}>“{ch.goalLine}”</div>
+                    {i === 0 && (
+                      <div style={{ height: '6px', background: 'rgba(255,255,255,.25)', borderRadius: '99px', overflow: 'hidden' }}>
+                        <div style={{ width: '62%', height: '100%', background: '#FBF6EE', borderRadius: '99px' }}></div>
+                      </div>
+                    )}
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '8px' }}>
+                      <span style={{ fontSize: '11px', opacity: .85 }}>{i === 0 ? '3 of 5 skills ready' : 'Locked'}</span>
+                      <span style={{ fontSize: '12px', fontWeight: 600 }}>{i === 0 ? 'Continue →' : 'Locked'}</span>
+                    </div>
+                  </div>
+                  <div style={{ padding: '18px 20px 0' }}>
+                    <div style={{ display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '13px', opacity: i === 0 ? 1 : 0.4 }}>
+                      <div style={{ width: '38px', height: '38px', borderRadius: '12px', background: i === 0 ? '#2F8F83' : '#D1C8BB', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: '16px', flexShrink: 0 }}>✓</div>
+                      <div style={{ flex: 1 }}>
+                        <div style={{ fontSize: '14px', fontWeight: 600 }}>{ch.lessonTitle}</div>
+                        <div style={{ fontSize: '11.5px', color: '#9A8E84' }}>Lesson · done</div>
+                      </div>
+                    </div>
+                    <div onClick={() => { handleReset(); setView('lesson'); }} style={{ display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '13px', cursor: 'pointer', opacity: i === 0 ? 1 : 0.4 }}>
+                      <div style={{ width: '38px', height: '38px', borderRadius: '12px', background: '#fff', border: i === 0 ? '2px solid #DB5338' : '2px solid #D1C8BB', display: 'flex', alignItems: 'center', justifyContent: 'center', color: i === 0 ? '#DB5338' : '#D1C8BB', fontSize: '14px', flexShrink: 0 }}>▶</div>
+                      <div style={{ flex: 1 }}>
+                        <div style={{ fontSize: '14px', fontWeight: 600 }}>{ch.goalTitle}</div>
+                        <div style={{ fontSize: '11.5px', color: i === 0 ? '#DB5338' : '#9A8E84' }}>Lesson · 4 min</div>
+                      </div>
+                    </div>
+                    <div onClick={() => { 
+                      handleReset(); 
+                      setView('convo'); 
+                      setScenario(ch.scenario); 
+                      if (ch.firstMsg) {
+                        setConvo({ msgs: [ch.firstMsg], draft: '', thinking: false, listening: false, live: false }); 
+                        speak(ch.firstMsg.n, L.locale); 
+                      } else {
+                        setConvo({ msgs: [], draft: '', thinking: false, listening: false, live: false });
+                      }
+                    }} style={{ display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '13px', cursor: 'pointer' }}>
+                      <div style={{ width: '38px', height: '38px', borderRadius: '12px', background: '#fff', border: '2px solid #2F8F83', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#2F8F83', fontSize: '14px', flexShrink: 0 }}>◇</div>
+                      <div style={{ flex: 1 }}>
+                        <div style={{ fontSize: '14px', fontWeight: 600 }}>{ch.partnerLabel}</div>
+                        <div style={{ fontSize: '11.5px', color: '#2F8F83' }}>Live conversation · premium</div>
+                      </div>
+                    </div>
                   </div>
                 </div>
-                <div onClick={() => { handleReset(); setView('lesson'); }} style={{ display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '13px', cursor: 'pointer' }}>
-                  <div style={{ width: '38px', height: '38px', borderRadius: '12px', background: '#fff', border: '2px solid #DB5338', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#DB5338', fontSize: '14px', flexShrink: 0 }}>▶</div>
-                  <div style={{ flex: 1 }}>
-                    <div style={{ fontSize: '14px', fontWeight: 600 }}>Build it: {L.goalShort}</div>
-                    <div style={{ fontSize: '11.5px', color: '#DB5338' }}>Lesson · 4 min</div>
-                  </div>
-                </div>
-                <div onClick={() => { handleReset(); setView('convo'); setScenario('cafe'); setConvo({ msgs: [{ who: 'p', n: L.convo[0].n, en: L.convo[0].en }], draft: '', thinking: false, listening: false, live: false }); speak(L.convo[0].n, L.locale); }} style={{ display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '13px', cursor: 'pointer' }}>
-                  <div style={{ width: '38px', height: '38px', borderRadius: '12px', background: '#fff', border: '2px solid #2F8F83', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#2F8F83', fontSize: '14px', flexShrink: 0 }}>◇</div>
-                  <div style={{ flex: 1 }}>
-                    <div style={{ fontSize: '14px', fontWeight: 600 }}>Talk to the {L.partnerRole}</div>
-                    <div style={{ fontSize: '11.5px', color: '#2F8F83' }}>Live conversation · free</div>
-                  </div>
-                </div>
-                <div onClick={() => setView('culture')} style={{ display: 'flex', gap: '12px', alignItems: 'center', cursor: 'pointer' }}>
-                  <div style={{ width: '38px', height: '38px', borderRadius: '12px', background: '#F0E7D8', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#A8927C', fontSize: '14px', flexShrink: 0 }}>❖</div>
-                  <div style={{ flex: 1 }}>
-                    <div style={{ fontSize: '14px', fontWeight: 600 }} className={L.font}>{L.chapter} note</div>
-                    <div style={{ fontSize: '11.5px', color: '#9A8E84' }}>{L.cultureTeaser}</div>
-                  </div>
-                </div>
-              </div>
+              ))}
             </div>
           )}
 
