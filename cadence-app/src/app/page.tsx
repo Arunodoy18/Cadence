@@ -675,8 +675,8 @@ export default function App() {
 
           {/* ===== WELCOME SCREEN ===== */}
           {view === 'welcome' && (
-            <div className="cd-screen" style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
-              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '0 30px', minHeight: 0 }}>
+            <div className="cd-screen" style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0, overflowY: 'auto' }}>
+              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '20px 30px', minHeight: 0 }}>
                 <div style={{ fontSize: '13px', letterSpacing: '.04em', color: '#A8927C', marginBottom: '18px', height: '20px', overflow: 'hidden' }}>
                   <span className={rotateGreetings[greetIdx].c} style={{ fontWeight: 600, color: '#5C5048' }}>
                     {rotateGreetings[greetIdx].t}
