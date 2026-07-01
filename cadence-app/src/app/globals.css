@@ -170,7 +170,7 @@ body {
   .cd-outer {
     background: #FBF6EE !important;
     padding: 0 !important;
-    min-height: 100vh !important;
+    min-height: 100dvh !important;
     align-items: stretch !important;
   }
   
@@ -178,7 +178,7 @@ body {
     position: fixed !important;
     inset: 0 !important;
     width: 100vw !important;
-    height: 100vh !important;
+    height: 100dvh !important;
     border-radius: 0 !important;
     border: none !important;
     box-shadow: none !important;
@@ -188,7 +188,7 @@ body {
   
   
   .cd-welcome-footer {
-    padding: 0 28px 16px !important;
+    padding: 0 28px 48px !important;
   }
 
   body {
