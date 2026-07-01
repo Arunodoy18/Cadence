@@ -32,43 +32,32 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    // ElevenLabs API call
-    // Map languages to some default voices or use Rachel (21m00Tcm4TlvDq8ikWAM)
-    const voiceMap: { [key: string]: string } = {
-      es: 'EXAVITQu4vr4xnSDxMaL', // Bella (Spanish)
-      fr: 'AZnzlk1XvdvUeBnXmlld', // Domi (French)
-      ja: '21m00Tcm4TlvDq8ikWAM', // Rachel (supports Japanese well via multilingual model)
-      ko: '21m00Tcm4TlvDq8ikWAM',
-      zh: '21m00Tcm4TlvDq8ikWAM',
-      hi: '21m00Tcm4TlvDq8ikWAM',
-    };
+    // OpenAI TTS API call
+    const openaiApiKey = process.env.OPENAI_API_KEY || '';
+    if (!openaiApiKey) {
+      throw new Error('OPENAI_API_KEY is missing');
+    }
 
-    const voiceId = voiceMap[lang] || '21m00Tcm4TlvDq8ikWAM';
-    const xiApiKey = process.env.ELEVEN_LABS_API || '';
-
-    const elResponse = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
+    const response = await fetch('https://api.openai.com/v1/audio/speech', {
       method: 'POST',
       headers: {
-        'xi-api-key': xiApiKey,
+        'Authorization': `Bearer ${openaiApiKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        text: text,
-        model_id: 'eleven_multilingual_v2',
-        voice_settings: {
-          stability: 0.5,
-          similarity_boost: 0.75,
-        },
+        model: 'tts-1',
+        input: text,
+        voice: 'nova', // 'alloy', 'echo', 'fable', 'onyx', 'nova', 'shimmer'
       }),
     });
 
-    if (!elResponse.ok) {
-      const errText = await elResponse.text();
-      console.error('ElevenLabs response error:', errText);
-      throw new Error(`ElevenLabs API returned ${elResponse.status}: ${errText}`);
+    if (!response.ok) {
+      const errText = await response.text();
+      console.error('OpenAI TTS response error:', errText);
+      throw new Error(`OpenAI TTS API returned ${response.status}: ${errText}`);
     }
 
-    const arrayBuffer = await elResponse.arrayBuffer();
+    const arrayBuffer = await response.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
 
     // Save to cache
