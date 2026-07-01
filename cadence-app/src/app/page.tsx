@@ -842,7 +842,7 @@ export default function App() {
                 <div>
                   <div style={{ fontSize: '12px', color: '#9A8E84' }} className={L.font}>{L.greeting}</div>
                   <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: '26px', lineHeight: 1.05 }}>
-                    Chapter 3 · <span style={{ fontStyle: 'italic' }} className={L.font}>{L.chapter}</span>
+                    Chapter 1 · <span style={{ fontStyle: 'italic' }} className={L.font}>{L.chapter}</span>
                   </div>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '7px' }}>
