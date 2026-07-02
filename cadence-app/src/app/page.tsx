@@ -935,7 +935,7 @@ export default function App() {
 
           {/* ===== HOME SCREEN ===== */}
           {view === 'home' && (
-            <div className="cd-screen cd-scroll" style={{ flex: 1, overflowY: 'auto', paddingBottom: '74px' }}>
+            <div className="cd-screen cd-scroll" style={{ flex: 1, minHeight: 0, overflowY: 'auto', paddingBottom: '74px' }}>
               <div style={{ padding: '6px 24px 4px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                 <div>
                   <div style={{ fontSize: '12px', color: '#9A8E84' }} className={L.font}>{L.greeting}</div>
@@ -998,7 +998,7 @@ export default function App() {
               {activeChapter !== null && (
                 <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', zIndex: 100, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
                   <div onClick={() => setActiveChapter(null)} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(42,35,32,0.4)', backdropFilter: 'blur(3px)' }}></div>
-                  <div style={{ background: '#FBF6EE', borderTopLeftRadius: '28px', borderTopRightRadius: '28px', padding: '12px 0 24px', position: 'relative', zIndex: 1, boxShadow: '0 -4px 20px rgba(0,0,0,0.1)' }}>
+                  <div className="cd-scroll" style={{ background: '#FBF6EE', borderTopLeftRadius: '28px', borderTopRightRadius: '28px', padding: '12px 0 24px', position: 'relative', zIndex: 1, boxShadow: '0 -4px 20px rgba(0,0,0,0.1)', maxHeight: '85vh', overflowY: 'auto' }}>
                     <div style={{ width: '40px', height: '5px', background: '#D1C8BB', borderRadius: '99px', margin: '0 auto 12px' }}></div>
                     {(() => {
                       const i = activeChapter;
