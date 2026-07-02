@@ -582,6 +582,23 @@ export default function App() {
     setConvo({ msgs: [], draft: '', thinking: false, listening: false, live: false });
   };
 
+  const completeMilestone = async (milestoneKey: string) => {
+    try {
+      await fetch('/api/milestone', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ lang, milestone: milestoneKey }),
+      });
+      await fetchMilestones();
+      handleReset();
+      setView('home');
+    } catch (e) {
+      console.error('Failed to save milestone', e);
+      handleReset();
+      setView('home');
+    }
+  };
+
   const L = LANGS[lang];
   const sMeta = scenarioMeta(L, scenario);
 
@@ -951,61 +968,89 @@ export default function App() {
                   partnerLabel: "Talk to the host parent",
                   firstMsg: null
                 }
-              ].map((ch, i) => (
-                <div key={i} style={{ marginTop: i === 0 ? '0' : '8px' }}>
-                  <div style={{ padding: '24px 24px 12px', fontSize: '20px', fontWeight: 600, fontFamily: "'Instrument Serif', serif" }}>
-                    {ch.title}
-                  </div>
-                  <div onClick={() => { handleReset(); setView('lesson'); }} style={{ margin: '0 18px', background: i === 0 ? 'linear-gradient(140deg,#DB5338,#B23E27)' : '#E8E1D5', borderRadius: '20px', padding: '18px', color: i === 0 ? '#FBF6EE' : '#9A8E84', cursor: 'pointer' }}>
-                    <div style={{ fontSize: '10.5px', letterSpacing: '.08em', textTransform: 'uppercase', opacity: .85, marginBottom: '7px' }}>Real-world goal</div>
-                    <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: '23px', lineHeight: 1.1, marginBottom: '14px' }}>“{ch.goalLine}”</div>
-                    {i === 0 && (
-                      <div style={{ height: '6px', background: 'rgba(255,255,255,.25)', borderRadius: '99px', overflow: 'hidden', marginTop: '8px' }}>
-                        <div style={{ width: '0%', height: '100%', background: '#FBF6EE', borderRadius: '99px' }}></div>
+              ].map((ch, i) => {
+                const isCh1 = i === 0;
+                const ch1BuildDone = isCh1 ? earnedMilestones.includes('cafe_build') : false;
+                const ch1PronDone = isCh1 ? earnedMilestones.includes('cafe_pronounce') : false;
+                const ch1LiveDone = isCh1 ? earnedMilestones.includes('cafe_regular') : false;
+                const ch1SkillsDone = (ch1BuildDone ? 1 : 0) + (ch1PronDone ? 1 : 0) + (ch1LiveDone ? 1 : 0);
+                const ch1Width = ch1SkillsDone === 0 ? '0%' : ch1SkillsDone === 1 ? '33%' : ch1SkillsDone === 2 ? '66%' : '100%';
+
+                return (
+                  <div key={i} style={{ marginTop: i === 0 ? '0' : '8px' }}>
+                    <div style={{ padding: '24px 24px 12px', fontSize: '20px', fontWeight: 600, fontFamily: "'Instrument Serif', serif" }}>
+                      {ch.title}
+                    </div>
+                    <div onClick={() => { if (isCh1 && !ch1BuildDone) { handleReset(); setView('lesson'); } }} style={{ margin: '0 18px', background: isCh1 ? 'linear-gradient(140deg,#DB5338,#B23E27)' : '#E8E1D5', borderRadius: '20px', padding: '18px', color: isCh1 ? '#FBF6EE' : '#9A8E84', cursor: isCh1 ? 'pointer' : 'default' }}>
+                      <div style={{ fontSize: '10.5px', letterSpacing: '.08em', textTransform: 'uppercase', opacity: .85, marginBottom: '7px' }}>Real-world goal</div>
+                      <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: '23px', lineHeight: 1.1, marginBottom: '14px' }}>“{ch.goalLine}”</div>
+                      {isCh1 && (
+                        <div style={{ height: '6px', background: 'rgba(255,255,255,.25)', borderRadius: '99px', overflow: 'hidden', marginTop: '8px' }}>
+                          <div style={{ width: ch1Width, height: '100%', background: '#FBF6EE', borderRadius: '99px', transition: 'width 0.4s ease' }}></div>
+                        </div>
+                      )}
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '8px' }}>
+                        <span style={{ fontSize: '11px', opacity: .85 }}>{isCh1 ? `${ch1SkillsDone} of 3 skills done` : 'Locked'}</span>
+                        <span style={{ fontSize: '12px', fontWeight: 600 }}>{isCh1 ? (ch1LiveDone ? 'Chapter Complete ✓' : 'Continue →') : 'Locked'}</span>
                       </div>
-                    )}
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '8px' }}>
-                      <span style={{ fontSize: '11px', opacity: .85 }}>{i === 0 ? '0 of 3 skills done' : 'Locked'}</span>
-                      <span style={{ fontSize: '12px', fontWeight: 600 }}>{i === 0 ? 'Start Chapter →' : 'Locked'}</span>
+                    </div>
+                    <div style={{ padding: '18px 20px 0' }}>
+                      
+                      {/* Step 1: Build it */}
+                      <div onClick={() => { if (isCh1) { handleReset(); setView('lesson'); } }} style={{ display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '13px', cursor: isCh1 ? 'pointer' : 'default', opacity: isCh1 ? 1 : 0.4 }}>
+                        <div style={{ width: '38px', height: '38px', borderRadius: '12px', background: isCh1 ? (ch1BuildDone ? '#2F8F83' : '#fff') : '#E8E1D5', border: isCh1 ? (ch1BuildDone ? 'none' : '2px solid #DB5338') : 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', color: isCh1 ? (ch1BuildDone ? '#fff' : '#DB5338') : '#B5A99E', fontSize: '14px', flexShrink: 0 }}>
+                          {isCh1 ? (ch1BuildDone ? '✓' : '▶') : '—'}
+                        </div>
+                        <div style={{ flex: 1 }}>
+                          <div style={{ fontSize: '14px', fontWeight: 600 }}>{ch.goalTitle}</div>
+                          <div style={{ fontSize: '11.5px', color: isCh1 ? (ch1BuildDone ? '#9A8E84' : '#DB5338') : '#9A8E84' }}>
+                            {isCh1 ? (ch1BuildDone ? 'Lesson · done' : 'Lesson · 3 min') : 'Lesson · 3 min'}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Step 2: Pronunciation */}
+                      <div onClick={() => { if (isCh1 && ch1BuildDone) { handleReset(); setView('pronounce'); } }} style={{ display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '13px', cursor: (isCh1 && ch1BuildDone) ? 'pointer' : 'default', opacity: (isCh1 && ch1BuildDone) ? 1 : 0.4 }}>
+                        <div style={{ width: '38px', height: '38px', borderRadius: '12px', background: (isCh1 && ch1PronDone) ? '#2F8F83' : '#fff', border: (isCh1 && !ch1PronDone && ch1BuildDone) ? '2px solid #DB5338' : (isCh1 && ch1PronDone) ? 'none' : '2px solid #D1C8BB', display: 'flex', alignItems: 'center', justifyContent: 'center', color: (isCh1 && ch1PronDone) ? '#fff' : (isCh1 && ch1BuildDone) ? '#DB5338' : '#D1C8BB', fontSize: '14px', flexShrink: 0 }}>
+                          {(isCh1 && ch1PronDone) ? '✓' : (isCh1 && ch1BuildDone) ? '▶' : '🔒'}
+                        </div>
+                        <div style={{ flex: 1 }}>
+                          <div style={{ fontSize: '14px', fontWeight: 600 }}>Pronunciation Lab</div>
+                          <div style={{ fontSize: '11.5px', color: (isCh1 && ch1PronDone) ? '#9A8E84' : (isCh1 && ch1BuildDone) ? '#DB5338' : '#9A8E84' }}>
+                            {(isCh1 && ch1PronDone) ? 'Practice · done' : 'Practice · 2 min'}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Step 3: Live Conversation */}
+                      <div onClick={() => { 
+                        if (isCh1 && ch1PronDone) {
+                          handleReset(); 
+                          setView('convo'); 
+                          setScenario(ch.scenario); 
+                          if (ch.firstMsg) {
+                            setConvo({ msgs: [ch.firstMsg], draft: '', thinking: false, listening: false, live: false }); 
+                            speak(ch.firstMsg.n, L.locale); 
+                          } else {
+                            setConvo({ msgs: [], draft: '', thinking: false, listening: false, live: false });
+                          }
+                        }
+                      }} style={{ display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '13px', cursor: (isCh1 && ch1PronDone) ? 'pointer' : 'default', opacity: (isCh1 && ch1PronDone) ? 1 : 0.4 }}>
+                        <div style={{ width: '38px', height: '38px', borderRadius: '12px', background: (isCh1 && ch1LiveDone) ? '#2F8F83' : '#fff', border: (isCh1 && !ch1LiveDone && ch1PronDone) ? '2px solid #2F8F83' : (isCh1 && ch1LiveDone) ? 'none' : '2px solid #D1C8BB', display: 'flex', alignItems: 'center', justifyContent: 'center', color: (isCh1 && ch1LiveDone) ? '#fff' : (isCh1 && ch1PronDone) ? '#2F8F83' : '#D1C8BB', fontSize: '14px', flexShrink: 0 }}>
+                          {(isCh1 && ch1LiveDone) ? '✓' : (isCh1 && ch1PronDone) ? '◇' : '🔒'}
+                        </div>
+                        <div style={{ flex: 1 }}>
+                          <div style={{ fontSize: '14px', fontWeight: 600 }}>{ch.partnerLabel}</div>
+                          <div style={{ fontSize: '11.5px', color: (isCh1 && ch1PronDone && !ch1LiveDone) ? '#2F8F83' : '#9A8E84' }}>
+                            {(isCh1 && ch1LiveDone) ? 'Live conversation · done' : 'Live conversation · premium'}
+                          </div>
+                        </div>
+                      </div>
+
                     </div>
                   </div>
-                  <div style={{ padding: '18px 20px 0' }}>
-                    <div onClick={() => { handleReset(); setView('lesson'); }} style={{ display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '13px', cursor: 'pointer', opacity: i === 0 ? 1 : 0.4 }}>
-                      <div style={{ width: '38px', height: '38px', borderRadius: '12px', background: '#fff', border: i === 0 ? '2px solid #DB5338' : '2px solid #D1C8BB', display: 'flex', alignItems: 'center', justifyContent: 'center', color: i === 0 ? '#DB5338' : '#D1C8BB', fontSize: '14px', flexShrink: 0 }}>
-                        {i === 0 ? '▶' : '—'}
-                      </div>
-                      <div style={{ flex: 1 }}>
-                        <div style={{ fontSize: '14px', fontWeight: 600 }}>{ch.lessonTitle}</div>
-                        <div style={{ fontSize: '11.5px', color: i === 0 ? '#DB5338' : '#9A8E84' }}>Lesson · 3 min</div>
-                      </div>
-                    </div>
-                    <div onClick={() => { handleReset(); setView('lesson'); }} style={{ display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '13px', cursor: 'pointer', opacity: i === 0 ? 1 : 0.4 }}>
-                      <div style={{ width: '38px', height: '38px', borderRadius: '12px', background: '#fff', border: i === 0 ? '2px solid #DB5338' : '2px solid #D1C8BB', display: 'flex', alignItems: 'center', justifyContent: 'center', color: i === 0 ? '#DB5338' : '#D1C8BB', fontSize: '14px', flexShrink: 0 }}>▶</div>
-                      <div style={{ flex: 1 }}>
-                        <div style={{ fontSize: '14px', fontWeight: 600 }}>{ch.goalTitle}</div>
-                        <div style={{ fontSize: '11.5px', color: i === 0 ? '#DB5338' : '#9A8E84' }}>Lesson · 4 min</div>
-                      </div>
-                    </div>
-                    <div onClick={() => { 
-                      handleReset(); 
-                      setView('convo'); 
-                      setScenario(ch.scenario); 
-                      if (ch.firstMsg) {
-                        setConvo({ msgs: [ch.firstMsg], draft: '', thinking: false, listening: false, live: false }); 
-                        speak(ch.firstMsg.n, L.locale); 
-                      } else {
-                        setConvo({ msgs: [], draft: '', thinking: false, listening: false, live: false });
-                      }
-                    }} style={{ display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '13px', cursor: 'pointer' }}>
-                      <div style={{ width: '38px', height: '38px', borderRadius: '12px', background: '#fff', border: '2px solid #2F8F83', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#2F8F83', fontSize: '14px', flexShrink: 0 }}>◇</div>
-                      <div style={{ flex: 1 }}>
-                        <div style={{ fontSize: '14px', fontWeight: 600 }}>{ch.partnerLabel}</div>
-                        <div style={{ fontSize: '11.5px', color: '#2F8F83' }}>Live conversation · premium</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
 
@@ -1085,7 +1130,7 @@ export default function App() {
                     Check
                   </div>
                 ) : (
-                  <div onClick={() => setView('culture')} style={{ flex: 1, background: '#2F8F83', color: '#FBF6EE', borderRadius: '14px', padding: '14px', textAlign: 'center', fontSize: '15px', fontWeight: 600, cursor: 'pointer' }}>
+                  <div onClick={() => completeMilestone('cafe_build')} style={{ flex: 1, background: '#2F8F83', color: '#FBF6EE', borderRadius: '14px', padding: '14px', textAlign: 'center', fontSize: '15px', fontWeight: 600, cursor: 'pointer' }}>
                     Continue →
                   </div>
                 )}
@@ -1145,6 +1190,12 @@ export default function App() {
                 <div onClick={() => speak(L.bank.filter((_: any, i: number) => L.correct.includes(i)).join(' '), L.locale)} style={{ fontSize: '13px', color: '#DB5338', cursor: 'pointer', marginBottom: '24px' }}>
                   🔊 Hear correct native speed
                 </div>
+                
+                {pronResult && pronScore !== null && pronScore >= 60 && (
+                  <div onClick={() => completeMilestone('cafe_pronounce')} style={{ width: '100%', background: '#2F8F83', color: '#FBF6EE', borderRadius: '16px', padding: '16px', textAlign: 'center', fontSize: '16px', fontWeight: 600, cursor: 'pointer' }}>
+                    Continue to Dashboard →
+                  </div>
+                )}
               </div>
 
               <div style={{ padding: '16px 24px 26px', flex: 'none' }}>
@@ -1401,7 +1452,7 @@ export default function App() {
                 ))}
               </div>
               <div style={{ padding: '14px 20px 26px', flex: 'none' }}>
-                <div onClick={() => setView('home')} style={{ background: '#DB5338', color: '#FBF6EE', borderRadius: '14px', padding: '14px', textAlign: 'center', fontSize: '15px', fontWeight: 600, cursor: 'pointer' }}>Save words & finish</div>
+                <div onClick={() => completeMilestone('cafe_regular')} style={{ background: '#DB5338', color: '#FBF6EE', borderRadius: '14px', padding: '14px', textAlign: 'center', fontSize: '15px', fontWeight: 600, cursor: 'pointer' }}>Save words & finish</div>
               </div>
             </div>
           )}
