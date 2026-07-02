@@ -960,32 +960,73 @@ export default function App() {
                 <span style={{ color: '#C9AE97' }}>›</span>
               </div>
 
-              <div style={{ position: 'relative', marginTop: '30px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '50px', paddingBottom: '90px' }}>
-                <svg width="40px" height="100%" style={{ position: 'absolute', top: '40px', left: '50%', transform: 'translateX(-50%)', zIndex: 0, pointerEvents: 'none' }}>
-                  <line x1="20" y1="0" x2="20" y2="100%" stroke="#E5DDD1" strokeWidth="8" strokeDasharray="1 16" strokeLinecap="round" />
+              <div style={{ position: 'relative', marginTop: '30px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '50px', paddingBottom: '120px' }}>
+                
+                {/* Dynamic Winding Path */}
+                <svg width="100px" height="100%" style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', zIndex: 0, pointerEvents: 'none' }}>
+                  {(() => {
+                    const currentLevel = 0; // For prototype
+                    let fullPath = "";
+                    let completedPath = "";
+                    chapters.forEach((ch, i) => {
+                      const isLeft = i % 2 === 0;
+                      const x = isLeft ? 15 : 85;
+                      const y = 42 + i * 134; // 84px height / 2 = 42. Gap is 50, so step is 134
+                      if (i === 0) {
+                        fullPath += `M ${x} ${y} `;
+                        if (i <= currentLevel) completedPath += `M ${x} ${y} `;
+                      } else {
+                        const pX = (i - 1) % 2 === 0 ? 15 : 85;
+                        const pY = 42 + (i - 1) * 134;
+                        const cpY = pY + 67;
+                        const curve = `C ${pX} ${cpY}, ${x} ${cpY}, ${x} ${y} `;
+                        fullPath += curve;
+                        if (i <= currentLevel) completedPath += curve;
+                      }
+                    });
+                    return (
+                      <>
+                        <path d={fullPath} fill="none" stroke="#E5DDD1" strokeWidth="12" strokeLinecap="round" strokeLinejoin="round" />
+                        {completedPath && <path d={completedPath} fill="none" stroke="#DB5338" strokeWidth="12" strokeLinecap="round" strokeLinejoin="round" />}
+                      </>
+                    );
+                  })()}
                 </svg>
+
+                {/* Nodes */}
                 {chapters.map((ch, i) => {
-                  const isCh1 = true;
-                  const isUnlocked = true; // Unlock all chapters for the prototype
+                  const currentLevel = 0; // For prototype
+                  const isUnlocked = true; 
+                  const isCurrent = i === currentLevel;
+                  const isPast = i < currentLevel;
                   const offset = i % 2 === 0 ? '-35px' : '35px';
+
                   return (
                     <div key={i} style={{ position: 'relative', zIndex: 1, transform: `translateX(${offset})` }}>
+                      {/* Pulsing Aura for Current Level */}
+                      {isCurrent && (
+                        <div style={{ position: 'absolute', top: '50%', left: '50%', width: '84px', height: '84px', background: '#DB5338', borderRadius: '50%', marginTop: '-42px', marginLeft: '-42px', animation: 'pulseRing 2.5s infinite cubic-bezier(0.215, 0.61, 0.355, 1)', zIndex: 0 }}></div>
+                      )}
+
                       <div 
+                        className="saga-node"
                         onClick={() => isUnlocked && setActiveChapter(i)}
                         style={{ 
                           width: '84px', height: '84px', borderRadius: '50%', 
-                          background: isUnlocked ? 'linear-gradient(140deg,#DB5338,#B23E27)' : '#E8E1D5',
-                          border: isUnlocked ? '3px solid #fff' : '3px solid #FBF6EE',
-                          boxShadow: isUnlocked ? '0 5px 0 #9F311C, 0 8px 15px rgba(219,83,56,0.3)' : '0 5px 0 #D1C8BB',
+                          background: isUnlocked ? 'linear-gradient(160deg, #F06A4F, #CB4024)' : '#E8E1D5',
+                          border: isUnlocked ? '4px solid #fff' : '4px solid #FBF6EE',
+                          boxShadow: isUnlocked ? '0 6px 0 #9F311C, 0 12px 20px rgba(219,83,56,0.3)' : '0 6px 0 #D1C8BB',
                           display: 'flex', alignItems: 'center', justifyContent: 'center',
-                          fontSize: '36px', cursor: isUnlocked ? 'pointer' : 'default',
+                          fontSize: '38px', cursor: isUnlocked ? 'pointer' : 'default',
+                          position: 'relative', zIndex: 1
                         }}
                       >
-                        <span style={{ filter: isUnlocked ? 'none' : 'grayscale(1) opacity(0.4)' }}>{ch.icon}</span>
+                        <span style={{ filter: isUnlocked ? 'drop-shadow(0 2px 2px rgba(0,0,0,0.15))' : 'grayscale(1) opacity(0.4)', transform: 'translateY(-2px)' }}>{ch.icon}</span>
                       </div>
+
                       {/* Current level indicator */}
-                      {isUnlocked && i === 0 && (
-                        <div style={{ position: 'absolute', top: '-14px', left: '50%', transform: 'translateX(-50%)', background: '#2F8F83', color: '#fff', fontSize: '10px', fontWeight: 700, padding: '3px 8px', borderRadius: '99px', letterSpacing: '.05em', border: '2px solid #fff', whiteSpace: 'nowrap', zIndex: 2 }}>
+                      {isCurrent && (
+                        <div style={{ position: 'absolute', top: '-14px', left: '50%', transform: 'translateX(-50%)', background: '#2F8F83', color: '#fff', fontSize: '11px', fontWeight: 800, padding: '4px 10px', borderRadius: '99px', letterSpacing: '.06em', border: '2px solid #fff', whiteSpace: 'nowrap', zIndex: 2, boxShadow: '0 4px 10px rgba(47,143,131,0.3)', animation: 'floatUp 3s ease-in-out infinite' }}>
                           START
                         </div>
                       )}
