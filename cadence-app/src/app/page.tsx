@@ -1090,7 +1090,7 @@ export default function App() {
                 {L.bank.map((word: string, id: number) => {
                   const used = answer.includes(id);
                   return (
-                    <span 
+                    <div 
                       key={id}
                       onClick={() => !used && setAnswer(prev => [...prev, id])}
                       className={L.font} 
@@ -1099,15 +1099,21 @@ export default function App() {
                         color: used ? '#C2B6A6' : '#2A2320', 
                         border: '1px solid #E1D6C4', 
                         borderRadius: '11px', 
-                        padding: '9px 13px', 
-                        fontSize: '15px', 
-                        fontWeight: 600, 
+                        padding: showHints ? '7px 11px' : '9px 13px', 
                         cursor: used ? 'default' : 'pointer',
-                        opacity: used ? 0.55 : 1
+                        opacity: used ? 0.55 : 1,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '2px'
                       }}
                     >
-                      {word}
-                    </span>
+                      <span style={{ fontSize: '15px', fontWeight: 600 }}>{word}</span>
+                      {showHints && L.bankEn?.[id] && (
+                        <span style={{ fontSize: '10px', color: '#9A8E84', fontWeight: 500, letterSpacing: '0.02em', textTransform: 'uppercase' }}>{L.bankEn[id]}</span>
+                      )}
+                    </div>
                   );
                 })}
               </div>
