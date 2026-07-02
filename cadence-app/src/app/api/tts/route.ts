@@ -1,35 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
-import crypto from 'crypto';
 
 export async function POST(req: NextRequest) {
   try {
     const { text, lang } = await req.json();
     if (!text || !lang) {
       return NextResponse.json({ error: 'Text and language are required' }, { status: 400 });
-    }
-
-    // Generate MD5 hash for caching
-    const hash = crypto.createHash('md5').update(`${text}_${lang}`).digest('hex');
-    const cacheDir = path.join(process.cwd(), 'public', 'tts-cache');
-    
-    // Ensure cache directory exists
-    if (!fs.existsSync(cacheDir)) {
-      fs.mkdirSync(cacheDir, { recursive: true });
-    }
-    
-    const cachePath = path.join(cacheDir, `${hash}.mp3`);
-
-    // Check cache
-    if (fs.existsSync(cachePath)) {
-      const audioBuffer = fs.readFileSync(cachePath);
-      return new NextResponse(audioBuffer, {
-        headers: {
-          'Content-Type': 'audio/mpeg',
-          'Content-Length': audioBuffer.length.toString(),
-        },
-      });
     }
 
     // OpenAI TTS API call
@@ -60,13 +35,11 @@ export async function POST(req: NextRequest) {
     const arrayBuffer = await response.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
 
-    // Save to cache
-    fs.writeFileSync(cachePath, buffer);
-
     return new NextResponse(buffer, {
       headers: {
         'Content-Type': 'audio/mpeg',
         'Content-Length': buffer.length.toString(),
+        'Cache-Control': 'public, max-age=3600',
       },
     });
   } catch (error: any) {
