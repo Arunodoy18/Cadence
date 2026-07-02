@@ -960,23 +960,23 @@ export default function App() {
                     <div style={{ fontSize: '10.5px', letterSpacing: '.08em', textTransform: 'uppercase', opacity: .85, marginBottom: '7px' }}>Real-world goal</div>
                     <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: '23px', lineHeight: 1.1, marginBottom: '14px' }}>“{ch.goalLine}”</div>
                     {i === 0 && (
-                      <div style={{ height: '6px', background: 'rgba(255,255,255,.25)', borderRadius: '99px', overflow: 'hidden' }}>
-                        <div style={{ width: '62%', height: '100%', background: '#FBF6EE', borderRadius: '99px' }}></div>
+                      <div style={{ height: '6px', background: 'rgba(255,255,255,.25)', borderRadius: '99px', overflow: 'hidden', marginTop: '8px' }}>
+                        <div style={{ width: '0%', height: '100%', background: '#FBF6EE', borderRadius: '99px' }}></div>
                       </div>
                     )}
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '8px' }}>
-                      <span style={{ fontSize: '11px', opacity: .85 }}>{i === 0 ? '3 of 5 skills ready' : 'Locked'}</span>
-                      <span style={{ fontSize: '12px', fontWeight: 600 }}>{i === 0 ? 'Continue →' : 'Locked'}</span>
+                      <span style={{ fontSize: '11px', opacity: .85 }}>{i === 0 ? '0 of 3 skills done' : 'Locked'}</span>
+                      <span style={{ fontSize: '12px', fontWeight: 600 }}>{i === 0 ? 'Start Chapter →' : 'Locked'}</span>
                     </div>
                   </div>
                   <div style={{ padding: '18px 20px 0' }}>
-                    <div style={{ display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '13px', opacity: i === 0 ? 1 : 0.4 }}>
-                      <div style={{ width: '38px', height: '38px', borderRadius: '12px', background: i === 0 ? '#2F8F83' : '#E8E1D5', display: 'flex', alignItems: 'center', justifyContent: 'center', color: i === 0 ? '#fff' : '#B5A99E', fontSize: '16px', flexShrink: 0 }}>
-                        {i === 0 ? '✓' : '—'}
+                    <div onClick={() => { handleReset(); setView('lesson'); }} style={{ display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '13px', cursor: 'pointer', opacity: i === 0 ? 1 : 0.4 }}>
+                      <div style={{ width: '38px', height: '38px', borderRadius: '12px', background: '#fff', border: i === 0 ? '2px solid #DB5338' : '2px solid #D1C8BB', display: 'flex', alignItems: 'center', justifyContent: 'center', color: i === 0 ? '#DB5338' : '#D1C8BB', fontSize: '14px', flexShrink: 0 }}>
+                        {i === 0 ? '▶' : '—'}
                       </div>
                       <div style={{ flex: 1 }}>
                         <div style={{ fontSize: '14px', fontWeight: 600 }}>{ch.lessonTitle}</div>
-                        <div style={{ fontSize: '11.5px', color: '#9A8E84' }}>{i === 0 ? 'Lesson · done' : 'Lesson · 4 min'}</div>
+                        <div style={{ fontSize: '11.5px', color: i === 0 ? '#DB5338' : '#9A8E84' }}>Lesson · 3 min</div>
                       </div>
                     </div>
                     <div onClick={() => { handleReset(); setView('lesson'); }} style={{ display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '13px', cursor: 'pointer', opacity: i === 0 ? 1 : 0.4 }}>
