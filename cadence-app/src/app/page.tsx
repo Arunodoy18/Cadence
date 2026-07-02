@@ -94,6 +94,38 @@ export default function App() {
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
 
+  // PWA Install Prompt state
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [showInstallPrompt, setShowInstallPrompt] = useState(false);
+  const [isIosStandalone, setIsIosStandalone] = useState(true);
+
+  useEffect(() => {
+    const hasDismissed = localStorage.getItem('cadence_install_dismissed');
+    
+    // Check iOS standalone status
+    const isIos = /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
+    const isStandalone = ('standalone' in window.navigator) && (window.navigator as any).standalone;
+    
+    if (isIos && !isStandalone) {
+      setIsIosStandalone(false);
+      if (!hasDismissed) setShowInstallPrompt(true);
+    }
+
+    const handleBeforeInstallPrompt = (e: any) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+      if (!hasDismissed) {
+        setShowInstallPrompt(true);
+      }
+    };
+
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    };
+  }, []);
+
   // Greet timer
   useEffect(() => {
     const timer = setInterval(() => {
@@ -665,7 +697,34 @@ export default function App() {
         <div className="cd-phone-shell" style={{ position: 'absolute', inset: 0, background: '#1c1714', borderRadius: '46px', padding: '12px', boxShadow: '0 36px 70px -24px rgba(40,30,20,.55)' }}></div>
         <div className="cd-phone-inner" style={{ position: 'absolute', top: '12px', left: '12px', right: '12px', bottom: '12px', background: view === 'complete' ? '#2F8F83' : (view === 'convo' || view === 'review' ? '#241C2A' : '#FBF6EE'), borderRadius: '34px', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
 
-
+          {/* PWA Install Prompt */}
+          {showInstallPrompt && (
+            <div style={{ position: 'absolute', bottom: (view === 'welcome' || view === 'auth' || view === 'plans' || view === 'lesson' || view === 'convo') ? '24px' : '90px', left: '12px', right: '12px', zIndex: 9999, background: '#fff', borderRadius: '20px', padding: '16px', boxShadow: '0 12px 40px rgba(42,35,32,0.18)', display: 'flex', alignItems: 'center', gap: '12px', border: '1px solid #EDE4D6' }}>
+              <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: 'linear-gradient(140deg,#DB5338,#B23E27)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: '24px', flexShrink: 0, fontFamily: "'Instrument Serif', serif", fontStyle: 'italic', paddingRight: '2px' }}>C</div>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontSize: '14.5px', fontWeight: 600, color: '#2A2320' }}>Install Cadence</div>
+                <div style={{ fontSize: '11px', color: '#8A7E73', marginTop: '2px', lineHeight: 1.25 }}>Get the full, fast native experience on your home screen.</div>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                <div onClick={async () => {
+                  if (deferredPrompt) {
+                    deferredPrompt.prompt();
+                    const { outcome } = await deferredPrompt.userChoice;
+                    if (outcome === 'accepted') {
+                      setDeferredPrompt(null);
+                      setShowInstallPrompt(false);
+                    }
+                  } else if (!isIosStandalone) {
+                    alert('To install on iOS: Tap the Share button below, then select "Add to Home Screen".');
+                  }
+                }} style={{ background: '#2F8F83', color: '#fff', padding: '6px 14px', borderRadius: '99px', fontSize: '12px', fontWeight: 600, cursor: 'pointer', textAlign: 'center' }}>Install</div>
+                <div onClick={() => {
+                  localStorage.setItem('cadence_install_dismissed', 'true');
+                  setShowInstallPrompt(false);
+                }} style={{ color: '#9A8E84', padding: '4px 14px', fontSize: '11px', cursor: 'pointer', textAlign: 'center' }}>Not now</div>
+              </div>
+            </div>
+          )}
 
           {/* STATUS BAR */}
           <div className="cd-status-bar" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 24px 0', fontSize: '12px', fontWeight: 600, flex: 'none', zIndex: 5, color: (view === 'complete' || view === 'convo' || view === 'review') ? '#F3ECE2' : '#2A2320' }}>
