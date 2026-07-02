@@ -8,7 +8,7 @@ export async function POST(req: NextRequest) {
     }
 
     // OpenAI TTS API call
-    const openaiApiKey = process.env.OPENAI_API_KEY || '';
+    const openaiApiKey = process.env.OPEN_AI_API || '';
     if (!openaiApiKey) {
       throw new Error('OPENAI_API_KEY is missing');
     }

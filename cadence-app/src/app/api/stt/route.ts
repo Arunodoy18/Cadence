@@ -3,7 +3,7 @@ import OpenAI, { toFile } from 'openai';
 
 export async function POST(req: NextRequest) {
   try {
-    const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || 'dummy-key' });
+    const openai = new OpenAI({ apiKey: process.env.OPEN_AI_API || 'dummy-key' });
 
     const formData = await req.formData();
     const audioFile = formData.get('file') as File;
