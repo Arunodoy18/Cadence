@@ -35,7 +35,7 @@ export default function App() {
   // Placement state
   const [placeMsgs, setPlaceMsgs] = useState<any[]>([]);
   const [placeDone, setPlaceDone] = useState(false);
-  const [placeLevel, setPlaceLevel] = useState('A2');
+  const [placeLevel, setPlaceLevel] = useState('A1');
   const [placeDraft, setPlaceDraft] = useState('');
   const [placeThinking, setPlaceThinking] = useState(false);
 
@@ -78,7 +78,7 @@ export default function App() {
     aiTrain: false,
     share: true,
   });
-  const [level, setLevel] = useState('A2');
+  const [level, setLevel] = useState('A1');
   const [backTo, setBackTo] = useState('you');
 
   // Auth states
@@ -341,7 +341,7 @@ export default function App() {
       if (finish) {
         setPlaceMsgs([...updatedMsgs, { who: 'p', n: data.reply, en: data.english || '' }]);
         setPlaceDone(true);
-        setPlaceLevel(data.level || 'A2');
+        setPlaceLevel(data.level || 'A1');
       } else {
         setPlaceMsgs([...updatedMsgs, { who: 'p', n: data.reply, en: data.english || '' }]);
       }
@@ -351,7 +351,7 @@ export default function App() {
       setPlaceThinking(false);
       if (finish) {
         setPlaceDone(true);
-        setPlaceLevel('A2');
+        setPlaceLevel('A1');
       }
     }
   };
@@ -640,9 +640,9 @@ export default function App() {
 
   // Score data
   const scoreSkills = [
-    { label: "Vocabulary", val: "B1", pct: "75%" },
-    { label: "Grammar", val: "A2", pct: "40%" },
-    { label: "Pronunciation", val: "A2+", pct: "55%" },
+    { label: "Vocabulary", val: "A1", pct: "15%" },
+    { label: "Grammar", val: "A1", pct: "10%" },
+    { label: "Pronunciation", val: "A1+", pct: "20%" },
     { label: "Fluency", val: "B1", pct: "80%" }
   ];
   const qrCells = Array.from({ length: 16 }, (_, i) => ({ c: Math.random() > 0.5 ? '#2A2320' : 'transparent' }));
@@ -1629,15 +1629,15 @@ export default function App() {
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '12px' }}>
                   <div>
                     <div style={{ fontSize: '11px', color: '#A99C90', letterSpacing: '.06em', textTransform: 'uppercase' }}>Now</div>
-                    <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: '34px', lineHeight: 1 }}>{placeLevel}<span style={{ fontSize: '16px', color: '#A99C90' }}> → B1</span></div>
+                    <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: '34px', lineHeight: 1 }}>{placeLevel}<span style={{ fontSize: '16px', color: '#A99C90' }}> → {placeLevel === 'A1' ? 'A2' : 'B1'}</span></div>
                   </div>
                   <div style={{ textAlign: 'right' }}>
                     <div style={{ fontSize: '11px', color: '#A99C90' }}>verified proof ›</div>
-                    <div style={{ fontSize: '18px', fontWeight: 700, color: '#E1A23A' }}>71%</div>
+                    <div style={{ fontSize: '18px', fontWeight: 700, color: '#E1A23A' }}>12%</div>
                   </div>
                 </div>
                 <div style={{ height: '7px', background: 'rgba(255,255,255,.14)', borderRadius: '99px', overflow: 'hidden' }}>
-                  <div style={{ width: '71%', height: '100%', background: 'linear-gradient(90deg,#E1A23A,#DB5338)', borderRadius: '99px' }}></div>
+                  <div style={{ width: '12%', height: '100%', background: 'linear-gradient(90deg,#E1A23A,#DB5338)', borderRadius: '99px' }}></div>
                 </div>
               </div>
 
