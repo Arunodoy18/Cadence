@@ -43,6 +43,7 @@ export default function App() {
   const [answer, setAnswer] = useState<number[]>([]);
   const [lessonResult, setLessonResult] = useState<string>(''); // 'correct', 'wrong', or ''
   const [showHints, setShowHints] = useState<boolean>(false);
+  const [activeChapter, setActiveChapter] = useState<number | null>(null);
 
   // Pronunciation Lab state
   const [pronResult, setPronResult] = useState<any | null>(null);
@@ -698,6 +699,40 @@ export default function App() {
     { native: "Un cruasán, por favor.", en: "A croissant, please.", isPartner: "rgba(255,255,255,.15)", say: () => {} }
   ];
 
+  // Curriculum Chapters Array
+  const chapters = [
+    {
+      title: `Chapter 1 · ${L.chapter || 'The Basics'}`,
+      lessonTitle: "Greetings & warmth",
+      goalTitle: `Build it: ${L.goalShort}`,
+      goalLine: L.goalLine,
+      scenario: 'cafe',
+      partnerLabel: `Talk to the ${L.partnerRole}`,
+      firstMsg: { who: 'p', n: L.convo[0].n, en: L.convo[0].en },
+      icon: '☕'
+    },
+    {
+      title: `Chapter 2 · Getting Around`,
+      lessonTitle: "Direction words",
+      goalTitle: "Build it: ask for directions",
+      goalLine: "Ask a local for directions to the station.",
+      scenario: 'directions',
+      partnerLabel: "Talk to a passer-by",
+      firstMsg: null,
+      icon: '🗺'
+    },
+    {
+      title: `Chapter 3 · Meeting the Family`,
+      lessonTitle: "Introductions & politeness",
+      goalTitle: "Build it: introduce yourself",
+      goalLine: "Introduce yourself to the host family.",
+      scenario: 'family',
+      partnerLabel: "Talk to the host parent",
+      firstMsg: null,
+      icon: '❤'
+    }
+  ];
+
   return (
     <div className="cd-outer" style={{ background: '#E7E1D5', minHeight: '100vh', width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '18px', padding: '36px 20px', boxSizing: 'border-box' }}>
       
@@ -940,117 +975,135 @@ export default function App() {
                 <span style={{ color: '#C9AE97' }}>›</span>
               </div>
 
-              {[
-                {
-                  title: `Chapter 1 · ${L.chapter || 'The Basics'}`,
-                  lessonTitle: "Greetings & warmth",
-                  goalTitle: `Build it: ${L.goalShort}`,
-                  goalLine: L.goalLine,
-                  scenario: 'cafe',
-                  partnerLabel: `Talk to the ${L.partnerRole}`,
-                  firstMsg: { who: 'p', n: L.convo[0].n, en: L.convo[0].en }
-                },
-                {
-                  title: `Chapter 2 · Getting Around`,
-                  lessonTitle: "Direction words",
-                  goalTitle: "Build it: ask for directions",
-                  goalLine: "Ask a local for directions to the station.",
-                  scenario: 'directions',
-                  partnerLabel: "Talk to a passer-by",
-                  firstMsg: null
-                },
-                {
-                  title: `Chapter 3 · Meeting the Family`,
-                  lessonTitle: "Introductions & politeness",
-                  goalTitle: "Build it: introduce yourself",
-                  goalLine: "Introduce yourself to the host family.",
-                  scenario: 'family',
-                  partnerLabel: "Talk to the host parent",
-                  firstMsg: null
-                }
-              ].map((ch, i) => {
-                const isCh1 = i === 0;
-                const ch1BuildDone = isCh1 ? earnedMilestones.includes('cafe_build') : false;
-                const ch1PronDone = isCh1 ? earnedMilestones.includes('cafe_pronounce') : false;
-                const ch1LiveDone = isCh1 ? earnedMilestones.includes('cafe_regular') : false;
-                const ch1SkillsDone = (ch1BuildDone ? 1 : 0) + (ch1PronDone ? 1 : 0) + (ch1LiveDone ? 1 : 0);
-                const ch1Width = ch1SkillsDone === 0 ? '0%' : ch1SkillsDone === 1 ? '33%' : ch1SkillsDone === 2 ? '66%' : '100%';
-
-                return (
-                  <div key={i} style={{ marginTop: i === 0 ? '0' : '8px' }}>
-                    <div style={{ padding: '24px 24px 12px', fontSize: '20px', fontWeight: 600, fontFamily: "'Instrument Serif', serif" }}>
-                      {ch.title}
-                    </div>
-                    <div onClick={() => { if (isCh1 && !ch1BuildDone) { handleReset(); setView('lesson'); } }} style={{ margin: '0 18px', background: isCh1 ? 'linear-gradient(140deg,#DB5338,#B23E27)' : '#E8E1D5', borderRadius: '20px', padding: '18px', color: isCh1 ? '#FBF6EE' : '#9A8E84', cursor: isCh1 ? 'pointer' : 'default' }}>
-                      <div style={{ fontSize: '10.5px', letterSpacing: '.08em', textTransform: 'uppercase', opacity: .85, marginBottom: '7px' }}>Real-world goal</div>
-                      <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: '23px', lineHeight: 1.1, marginBottom: '14px' }}>“{ch.goalLine}”</div>
-                      {isCh1 && (
-                        <div style={{ height: '6px', background: 'rgba(255,255,255,.25)', borderRadius: '99px', overflow: 'hidden', marginTop: '8px' }}>
-                          <div style={{ width: ch1Width, height: '100%', background: '#FBF6EE', borderRadius: '99px', transition: 'width 0.4s ease' }}></div>
+              <div style={{ position: 'relative', marginTop: '30px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '50px', paddingBottom: '90px' }}>
+                <svg width="40px" height="100%" style={{ position: 'absolute', top: '40px', left: '50%', transform: 'translateX(-50%)', zIndex: 0, pointerEvents: 'none' }}>
+                  <line x1="20" y1="0" x2="20" y2="100%" stroke="#E5DDD1" strokeWidth="8" strokeDasharray="1 16" strokeLinecap="round" />
+                </svg>
+                {chapters.map((ch, i) => {
+                  const isCh1 = i === 0;
+                  const isUnlocked = isCh1; // Currently only Chapter 1 is fully functional
+                  const offset = i % 2 === 0 ? '-35px' : '35px';
+                  return (
+                    <div key={i} style={{ position: 'relative', zIndex: 1, transform: `translateX(${offset})` }}>
+                      <div 
+                        onClick={() => isUnlocked && setActiveChapter(i)}
+                        style={{ 
+                          width: '84px', height: '84px', borderRadius: '50%', 
+                          background: isUnlocked ? 'linear-gradient(140deg,#DB5338,#B23E27)' : '#E8E1D5',
+                          border: isUnlocked ? '3px solid #fff' : '3px solid #FBF6EE',
+                          boxShadow: isUnlocked ? '0 5px 0 #9F311C, 0 8px 15px rgba(219,83,56,0.3)' : '0 5px 0 #D1C8BB',
+                          display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          fontSize: '36px', cursor: isUnlocked ? 'pointer' : 'default',
+                        }}
+                      >
+                        <span style={{ filter: isUnlocked ? 'none' : 'grayscale(1) opacity(0.4)' }}>{ch.icon}</span>
+                      </div>
+                      {/* Current level indicator */}
+                      {isUnlocked && i === 0 && (
+                        <div style={{ position: 'absolute', top: '-14px', left: '50%', transform: 'translateX(-50%)', background: '#2F8F83', color: '#fff', fontSize: '10px', fontWeight: 700, padding: '3px 8px', borderRadius: '99px', letterSpacing: '.05em', border: '2px solid #fff', whiteSpace: 'nowrap', zIndex: 2 }}>
+                          START
                         </div>
                       )}
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '8px' }}>
-                        <span style={{ fontSize: '11px', opacity: .85 }}>{isCh1 ? `${ch1SkillsDone} of 3 skills done` : 'Locked'}</span>
-                        <span style={{ fontSize: '12px', fontWeight: 600 }}>{isCh1 ? (ch1LiveDone ? 'Chapter Complete ✓' : 'Continue →') : 'Locked'}</span>
-                      </div>
                     </div>
-                    <div style={{ padding: '18px 20px 0' }}>
-                      
-                      {/* Step 1: Build it */}
-                      <div onClick={() => { if (isCh1) { handleReset(); setView('lesson'); } }} style={{ display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '13px', cursor: isCh1 ? 'pointer' : 'default', opacity: isCh1 ? 1 : 0.4 }}>
-                        <div style={{ width: '38px', height: '38px', borderRadius: '12px', background: isCh1 ? (ch1BuildDone ? '#2F8F83' : '#fff') : '#E8E1D5', border: isCh1 ? (ch1BuildDone ? 'none' : '2px solid #DB5338') : 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', color: isCh1 ? (ch1BuildDone ? '#fff' : '#DB5338') : '#B5A99E', fontSize: '14px', flexShrink: 0 }}>
-                          {isCh1 ? (ch1BuildDone ? '✓' : '▶') : '—'}
-                        </div>
-                        <div style={{ flex: 1 }}>
-                          <div style={{ fontSize: '14px', fontWeight: 600 }}>{ch.goalTitle}</div>
-                          <div style={{ fontSize: '11.5px', color: isCh1 ? (ch1BuildDone ? '#9A8E84' : '#DB5338') : '#9A8E84' }}>
-                            {isCh1 ? (ch1BuildDone ? 'Lesson · done' : 'Lesson · 3 min') : 'Lesson · 3 min'}
+                  )
+                })}
+              </div>
+
+              {/* Bottom Sheet Drawer */}
+              {activeChapter !== null && (
+                <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', zIndex: 100, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
+                  <div onClick={() => setActiveChapter(null)} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(42,35,32,0.4)', backdropFilter: 'blur(3px)' }}></div>
+                  <div style={{ background: '#FBF6EE', borderTopLeftRadius: '28px', borderTopRightRadius: '28px', padding: '12px 0 24px', position: 'relative', zIndex: 1, boxShadow: '0 -4px 20px rgba(0,0,0,0.1)' }}>
+                    <div style={{ width: '40px', height: '5px', background: '#D1C8BB', borderRadius: '99px', margin: '0 auto 12px' }}></div>
+                    {(() => {
+                      const i = activeChapter;
+                      const ch = chapters[i];
+                      const isCh1 = i === 0;
+                      const ch1BuildDone = isCh1 ? earnedMilestones.includes('cafe_build') : false;
+                      const ch1PronDone = isCh1 ? earnedMilestones.includes('cafe_pronounce') : false;
+                      const ch1LiveDone = isCh1 ? earnedMilestones.includes('cafe_regular') : false;
+                      const ch1SkillsDone = (ch1BuildDone ? 1 : 0) + (ch1PronDone ? 1 : 0) + (ch1LiveDone ? 1 : 0);
+                      const ch1Width = ch1SkillsDone === 0 ? '0%' : ch1SkillsDone === 1 ? '33%' : ch1SkillsDone === 2 ? '66%' : '100%';
+
+                      return (
+                        <div>
+                          <div style={{ padding: '0 24px 12px', fontSize: '20px', fontWeight: 600, fontFamily: "'Instrument Serif', serif" }}>
+                            {ch.title}
+                          </div>
+                          <div onClick={() => { if (isCh1 && !ch1BuildDone) { setActiveChapter(null); handleReset(); setView('lesson'); } }} style={{ margin: '0 18px', background: isCh1 ? 'linear-gradient(140deg,#DB5338,#B23E27)' : '#E8E1D5', borderRadius: '20px', padding: '18px', color: isCh1 ? '#FBF6EE' : '#9A8E84', cursor: isCh1 ? 'pointer' : 'default' }}>
+                            <div style={{ fontSize: '10.5px', letterSpacing: '.08em', textTransform: 'uppercase', opacity: .85, marginBottom: '7px' }}>Real-world goal</div>
+                            <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: '23px', lineHeight: 1.1, marginBottom: '14px' }}>“{ch.goalLine}”</div>
+                            {isCh1 && (
+                              <div style={{ height: '6px', background: 'rgba(255,255,255,.25)', borderRadius: '99px', overflow: 'hidden', marginTop: '8px' }}>
+                                <div style={{ width: ch1Width, height: '100%', background: '#FBF6EE', borderRadius: '99px', transition: 'width 0.4s ease' }}></div>
+                              </div>
+                            )}
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '8px' }}>
+                              <span style={{ fontSize: '11px', opacity: .85 }}>{isCh1 ? `${ch1SkillsDone} of 3 skills done` : 'Locked'}</span>
+                              <span style={{ fontSize: '12px', fontWeight: 600 }}>{isCh1 ? (ch1LiveDone ? 'Chapter Complete ✓' : 'Continue →') : 'Locked'}</span>
+                            </div>
+                          </div>
+                          <div style={{ padding: '18px 20px 0' }}>
+                            
+                            {/* Step 1: Build it */}
+                            <div onClick={() => { if (isCh1) { setActiveChapter(null); handleReset(); setView('lesson'); } }} style={{ display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '13px', cursor: isCh1 ? 'pointer' : 'default', opacity: isCh1 ? 1 : 0.4 }}>
+                              <div style={{ width: '38px', height: '38px', borderRadius: '12px', background: isCh1 ? (ch1BuildDone ? '#2F8F83' : '#fff') : '#E8E1D5', border: isCh1 ? (ch1BuildDone ? 'none' : '2px solid #DB5338') : 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', color: isCh1 ? (ch1BuildDone ? '#fff' : '#DB5338') : '#B5A99E', fontSize: '14px', flexShrink: 0 }}>
+                                {isCh1 ? (ch1BuildDone ? '✓' : '▶') : '—'}
+                              </div>
+                              <div style={{ flex: 1 }}>
+                                <div style={{ fontSize: '14px', fontWeight: 600 }}>{ch.goalTitle}</div>
+                                <div style={{ fontSize: '11.5px', color: isCh1 ? (ch1BuildDone ? '#9A8E84' : '#DB5338') : '#9A8E84' }}>
+                                  {isCh1 ? (ch1BuildDone ? 'Lesson · done' : 'Lesson · 3 min') : 'Lesson · 3 min'}
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Step 2: Pronunciation */}
+                            <div onClick={() => { if (isCh1 && ch1BuildDone) { setActiveChapter(null); handleReset(); setView('pronounce'); } }} style={{ display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '13px', cursor: (isCh1 && ch1BuildDone) ? 'pointer' : 'default', opacity: (isCh1 && ch1BuildDone) ? 1 : 0.4 }}>
+                              <div style={{ width: '38px', height: '38px', borderRadius: '12px', background: (isCh1 && ch1PronDone) ? '#2F8F83' : '#fff', border: (isCh1 && !ch1PronDone && ch1BuildDone) ? '2px solid #DB5338' : (isCh1 && ch1PronDone) ? 'none' : '2px solid #D1C8BB', display: 'flex', alignItems: 'center', justifyContent: 'center', color: (isCh1 && ch1PronDone) ? '#fff' : (isCh1 && ch1BuildDone) ? '#DB5338' : '#D1C8BB', fontSize: '14px', flexShrink: 0 }}>
+                                {(isCh1 && ch1PronDone) ? '✓' : (isCh1 && ch1BuildDone) ? '▶' : '🔒'}
+                              </div>
+                              <div style={{ flex: 1 }}>
+                                <div style={{ fontSize: '14px', fontWeight: 600 }}>Pronunciation Lab</div>
+                                <div style={{ fontSize: '11.5px', color: (isCh1 && ch1PronDone) ? '#9A8E84' : (isCh1 && ch1BuildDone) ? '#DB5338' : '#9A8E84' }}>
+                                  {(isCh1 && ch1PronDone) ? 'Practice · done' : 'Practice · 2 min'}
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Step 3: Live Conversation */}
+                            <div onClick={() => { 
+                              if (isCh1 && ch1PronDone) {
+                                setActiveChapter(null);
+                                handleReset(); 
+                                setView('convo'); 
+                                setScenario(ch.scenario); 
+                                if (ch.firstMsg) {
+                                  setConvo({ msgs: [ch.firstMsg], draft: '', thinking: false, listening: false, live: false }); 
+                                  speak(ch.firstMsg.n, L.locale); 
+                                } else {
+                                  setConvo({ msgs: [], draft: '', thinking: false, listening: false, live: false });
+                                }
+                              }
+                            }} style={{ display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '13px', cursor: (isCh1 && ch1PronDone) ? 'pointer' : 'default', opacity: (isCh1 && ch1PronDone) ? 1 : 0.4 }}>
+                              <div style={{ width: '38px', height: '38px', borderRadius: '12px', background: (isCh1 && ch1LiveDone) ? '#2F8F83' : '#fff', border: (isCh1 && !ch1LiveDone && ch1PronDone) ? '2px solid #2F8F83' : (isCh1 && ch1LiveDone) ? 'none' : '2px solid #D1C8BB', display: 'flex', alignItems: 'center', justifyContent: 'center', color: (isCh1 && ch1LiveDone) ? '#fff' : (isCh1 && ch1PronDone) ? '#2F8F83' : '#D1C8BB', fontSize: '14px', flexShrink: 0 }}>
+                                {(isCh1 && ch1LiveDone) ? '✓' : (isCh1 && ch1PronDone) ? '◇' : '🔒'}
+                              </div>
+                              <div style={{ flex: 1 }}>
+                                <div style={{ fontSize: '14px', fontWeight: 600 }}>{ch.partnerLabel}</div>
+                                <div style={{ fontSize: '11.5px', color: (isCh1 && ch1PronDone && !ch1LiveDone) ? '#2F8F83' : '#9A8E84' }}>
+                                  {(isCh1 && ch1LiveDone) ? 'Live conversation · done' : 'Live conversation · premium'}
+                                </div>
+                              </div>
+                            </div>
+
                           </div>
                         </div>
-                      </div>
-
-                      {/* Step 2: Pronunciation */}
-                      <div onClick={() => { if (isCh1 && ch1BuildDone) { handleReset(); setView('pronounce'); } }} style={{ display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '13px', cursor: (isCh1 && ch1BuildDone) ? 'pointer' : 'default', opacity: (isCh1 && ch1BuildDone) ? 1 : 0.4 }}>
-                        <div style={{ width: '38px', height: '38px', borderRadius: '12px', background: (isCh1 && ch1PronDone) ? '#2F8F83' : '#fff', border: (isCh1 && !ch1PronDone && ch1BuildDone) ? '2px solid #DB5338' : (isCh1 && ch1PronDone) ? 'none' : '2px solid #D1C8BB', display: 'flex', alignItems: 'center', justifyContent: 'center', color: (isCh1 && ch1PronDone) ? '#fff' : (isCh1 && ch1BuildDone) ? '#DB5338' : '#D1C8BB', fontSize: '14px', flexShrink: 0 }}>
-                          {(isCh1 && ch1PronDone) ? '✓' : (isCh1 && ch1BuildDone) ? '▶' : '🔒'}
-                        </div>
-                        <div style={{ flex: 1 }}>
-                          <div style={{ fontSize: '14px', fontWeight: 600 }}>Pronunciation Lab</div>
-                          <div style={{ fontSize: '11.5px', color: (isCh1 && ch1PronDone) ? '#9A8E84' : (isCh1 && ch1BuildDone) ? '#DB5338' : '#9A8E84' }}>
-                            {(isCh1 && ch1PronDone) ? 'Practice · done' : 'Practice · 2 min'}
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Step 3: Live Conversation */}
-                      <div onClick={() => { 
-                        if (isCh1 && ch1PronDone) {
-                          handleReset(); 
-                          setView('convo'); 
-                          setScenario(ch.scenario); 
-                          if (ch.firstMsg) {
-                            setConvo({ msgs: [ch.firstMsg], draft: '', thinking: false, listening: false, live: false }); 
-                            speak(ch.firstMsg.n, L.locale); 
-                          } else {
-                            setConvo({ msgs: [], draft: '', thinking: false, listening: false, live: false });
-                          }
-                        }
-                      }} style={{ display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '13px', cursor: (isCh1 && ch1PronDone) ? 'pointer' : 'default', opacity: (isCh1 && ch1PronDone) ? 1 : 0.4 }}>
-                        <div style={{ width: '38px', height: '38px', borderRadius: '12px', background: (isCh1 && ch1LiveDone) ? '#2F8F83' : '#fff', border: (isCh1 && !ch1LiveDone && ch1PronDone) ? '2px solid #2F8F83' : (isCh1 && ch1LiveDone) ? 'none' : '2px solid #D1C8BB', display: 'flex', alignItems: 'center', justifyContent: 'center', color: (isCh1 && ch1LiveDone) ? '#fff' : (isCh1 && ch1PronDone) ? '#2F8F83' : '#D1C8BB', fontSize: '14px', flexShrink: 0 }}>
-                          {(isCh1 && ch1LiveDone) ? '✓' : (isCh1 && ch1PronDone) ? '◇' : '🔒'}
-                        </div>
-                        <div style={{ flex: 1 }}>
-                          <div style={{ fontSize: '14px', fontWeight: 600 }}>{ch.partnerLabel}</div>
-                          <div style={{ fontSize: '11.5px', color: (isCh1 && ch1PronDone && !ch1LiveDone) ? '#2F8F83' : '#9A8E84' }}>
-                            {(isCh1 && ch1LiveDone) ? 'Live conversation · done' : 'Live conversation · premium'}
-                          </div>
-                        </div>
-                      </div>
-
-                    </div>
+                      );
+                    })()}
                   </div>
-                );
-              })}
+                </div>
+              )}
             </div>
           )}
 
