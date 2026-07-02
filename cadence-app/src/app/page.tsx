@@ -301,7 +301,8 @@ export default function App() {
     setView('welcome');
   };
   const startPlacement = () => {
-    const L = LANGS[lang];
+    const _L = LANGS[lang] || LANGS.es;
+    const L = { ..._L, ...(_L.chapters?.[activeChapter || 0] || {}) };
     setView('placement');
     setPlaceDone(false);
     setPlaceLevel('A1');
@@ -314,7 +315,8 @@ export default function App() {
     const trimmed = text.trim();
     if (!trimmed) return;
 
-    const L = LANGS[lang];
+    const _L = LANGS[lang] || LANGS.es;
+    const L = { ..._L, ...(_L.chapters?.[activeChapter || 0] || {}) };
     const userMsg = { who: 'u', n: trimmed };
     const updatedMsgs = [...placeMsgs, userMsg];
     
@@ -359,7 +361,8 @@ export default function App() {
 
   // Lesson actions
   const handleCheckLesson = async () => {
-    const L = LANGS[lang];
+    const _L = LANGS[lang] || LANGS.es;
+    const L = { ..._L, ...(_L.chapters?.[activeChapter || 0] || {}) };
     const ok = answer.length === L.correct.length && answer.every((id, i) => id === L.correct[i]);
     setLessonResult(ok ? 'correct' : 'wrong');
 
@@ -383,7 +386,8 @@ export default function App() {
 
   // Pronunciation Lab recording
   const handleTogglePronounceMic = async () => {
-    const L = LANGS[lang];
+    const _L = LANGS[lang] || LANGS.es;
+    const L = { ..._L, ...(_L.chapters?.[activeChapter || 0] || {}) };
     const refText = L.bank.filter((_: any, i: number) => L.correct.includes(i)).join(' ');
 
     if (recordingPron) {
@@ -460,7 +464,8 @@ export default function App() {
     const trimmed = text.trim();
     if (!trimmed) return;
 
-    const L = LANGS[lang];
+    const _L = LANGS[lang] || LANGS.es;
+    const L = { ..._L, ...(_L.chapters?.[activeChapter || 0] || {}) };
     const meta = scenarioMeta(L, scenario);
 
     const userMsg = { who: 'u', n: trimmed };
@@ -600,7 +605,8 @@ export default function App() {
     }
   };
 
-  const L = LANGS[lang];
+  const _L = LANGS[lang] || LANGS.es;
+  const L = { ..._L, ...(_L.chapters?.[activeChapter || 0] || {}) };
   const sMeta = scenarioMeta(L, scenario);
 
   const rotateGreetings = [
@@ -700,38 +706,17 @@ export default function App() {
   ];
 
   // Curriculum Chapters Array
-  const chapters = [
-    {
-      title: `Chapter 1 · ${L.chapter || 'The Basics'}`,
-      lessonTitle: "Greetings & warmth",
-      goalTitle: `Build it: ${L.goalShort}`,
-      goalLine: L.goalLine,
-      scenario: 'cafe',
-      partnerLabel: `Talk to the ${L.partnerRole}`,
-      firstMsg: { who: 'p', n: L.convo[0].n, en: L.convo[0].en },
-      icon: '☕'
-    },
-    {
-      title: `Chapter 2 · Getting Around`,
-      lessonTitle: "Direction words",
-      goalTitle: "Build it: ask for directions",
-      goalLine: "Ask a local for directions to the station.",
-      scenario: 'directions',
-      partnerLabel: "Talk to a passer-by",
-      firstMsg: null,
-      icon: '🗺'
-    },
-    {
-      title: `Chapter 3 · Meeting the Family`,
-      lessonTitle: "Introductions & politeness",
-      goalTitle: "Build it: introduce yourself",
-      goalLine: "Introduce yourself to the host family.",
-      scenario: 'family',
-      partnerLabel: "Talk to the host parent",
-      firstMsg: null,
-      icon: '❤'
-    }
-  ];
+  const defaultIcons = ['☕', '🗺', '❤', '🏨', '🛒', '🚨'];
+  const chapters = (_L.chapters || []).map((ch: any, i: number) => ({
+    title: ch.chapterTitle,
+    lessonTitle: ch.lessonTitle,
+    goalTitle: ch.goalTitle,
+    goalLine: ch.goalLine,
+    scenario: ch.scenario,
+    partnerLabel: `Talk to ${ch.partnerName || ch.partnerRole}`,
+    firstMsg: ch.convo?.[0] ? { who: 'p', n: ch.convo[0].n, en: ch.convo[0].en } : null,
+    icon: defaultIcons[i] || '✨'
+  }));
 
   return (
     <div className="cd-outer" style={{ background: '#E7E1D5', minHeight: '100vh', width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '18px', padding: '36px 20px', boxSizing: 'border-box' }}>
@@ -980,8 +965,8 @@ export default function App() {
                   <line x1="20" y1="0" x2="20" y2="100%" stroke="#E5DDD1" strokeWidth="8" strokeDasharray="1 16" strokeLinecap="round" />
                 </svg>
                 {chapters.map((ch, i) => {
-                  const isCh1 = i === 0;
-                  const isUnlocked = isCh1; // Currently only Chapter 1 is fully functional
+                  const isCh1 = true;
+                  const isUnlocked = true; // Unlock all chapters for the prototype
                   const offset = i % 2 === 0 ? '-35px' : '35px';
                   return (
                     <div key={i} style={{ position: 'relative', zIndex: 1, transform: `translateX(${offset})` }}>
@@ -1018,7 +1003,7 @@ export default function App() {
                     {(() => {
                       const i = activeChapter;
                       const ch = chapters[i];
-                      const isCh1 = i === 0;
+                      const isCh1 = true; // Treat all chapters as fully playable for the prototype
                       const ch1BuildDone = isCh1 ? earnedMilestones.includes('cafe_build') : false;
                       const ch1PronDone = isCh1 ? earnedMilestones.includes('cafe_pronounce') : false;
                       const ch1LiveDone = isCh1 ? earnedMilestones.includes('cafe_regular') : false;
