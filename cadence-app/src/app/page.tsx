@@ -971,10 +971,12 @@ export default function App() {
                   </div>
                   <div style={{ padding: '18px 20px 0' }}>
                     <div style={{ display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '13px', opacity: i === 0 ? 1 : 0.4 }}>
-                      <div style={{ width: '38px', height: '38px', borderRadius: '12px', background: i === 0 ? '#2F8F83' : '#D1C8BB', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: '16px', flexShrink: 0 }}>✓</div>
+                      <div style={{ width: '38px', height: '38px', borderRadius: '12px', background: i === 0 ? '#2F8F83' : '#E8E1D5', display: 'flex', alignItems: 'center', justifyContent: 'center', color: i === 0 ? '#fff' : '#B5A99E', fontSize: '16px', flexShrink: 0 }}>
+                        {i === 0 ? '✓' : '—'}
+                      </div>
                       <div style={{ flex: 1 }}>
                         <div style={{ fontSize: '14px', fontWeight: 600 }}>{ch.lessonTitle}</div>
-                        <div style={{ fontSize: '11.5px', color: '#9A8E84' }}>Lesson · done</div>
+                        <div style={{ fontSize: '11.5px', color: '#9A8E84' }}>{i === 0 ? 'Lesson · done' : 'Lesson · 4 min'}</div>
                       </div>
                     </div>
                     <div onClick={() => { handleReset(); setView('lesson'); }} style={{ display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '13px', cursor: 'pointer', opacity: i === 0 ? 1 : 0.4 }}>
