@@ -42,6 +42,7 @@ export default function App() {
   // Lesson state
   const [answer, setAnswer] = useState<number[]>([]);
   const [lessonResult, setLessonResult] = useState<string>(''); // 'correct', 'wrong', or ''
+  const [showHints, setShowHints] = useState<boolean>(false);
 
   // Pronunciation Lab state
   const [pronResult, setPronResult] = useState<any | null>(null);
@@ -577,6 +578,7 @@ export default function App() {
     setAnswer([]);
     setLessonResult('');
     setPop(null);
+    setShowHints(false);
     setConvo({ msgs: [], draft: '', thinking: false, listening: false, live: false });
   };
 
@@ -1015,7 +1017,10 @@ export default function App() {
                 </div>
               </div>
               <div style={{ padding: '22px 24px 0', flex: 'none' }}>
-                <div style={{ fontSize: '11px', letterSpacing: '.1em', textTransform: 'uppercase', color: '#BFA38C', marginBottom: '8px' }}>Build the sentence — tap the words</div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                  <div style={{ fontSize: '11px', letterSpacing: '.1em', textTransform: 'uppercase', color: '#BFA38C' }}>Build the sentence — tap the words</div>
+                  <div onClick={() => setShowHints(!showHints)} style={{ fontSize: '11px', color: showHints ? '#DB5338' : '#8A7E73', cursor: 'pointer', background: showHints ? '#FBF1E9' : '#EDE4D6', padding: '3px 8px', borderRadius: '6px', fontWeight: 600 }}>{showHints ? 'Hide hints' : 'Need a hint?'}</div>
+                </div>
                 <div style={{ fontSize: '19px', fontWeight: 600, lineHeight: 1.3, marginBottom: '8px' }}>“{L.lessonPromptEn}”</div>
                 <div onClick={() => { setBackTo('lesson'); setView('grammar'); }} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '12.5px', color: '#DB5338', border: '1px solid #F2D9CF', background: '#FBF1E9', borderRadius: '99px', padding: '4px 11px', cursor: 'pointer' }}>
                   <span className={L.font}>{L.lessonHint}</span> <span style={{ opacity: .6 }}>tap for grammar</span>
