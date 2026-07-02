@@ -665,7 +665,7 @@ export default function App() {
 
   // Social data
   const circle = [
-    { bg: "#2A2320", bd: "1px solid #433833", rank: 1, avatar: "#DB5338", initial: "M", name: "Maya (You)", mins: 142, move: "▲2" },
+    { bg: "#2A2320", bd: "1px solid #433833", rank: 1, avatar: "#DB5338", initial: (session?.user?.name || "Y")[0].toUpperCase(), name: `${session?.user?.name || "You"} (You)`, mins: 142, move: "▲2" },
     { bg: "transparent", bd: "1px solid #EDE4D6", rank: 2, avatar: "#5B3A56", initial: "S", name: "Sarah K.", mins: 128, move: "▼1" },
     { bg: "transparent", bd: "1px solid #EDE4D6", rank: 3, avatar: "#2F8F83", initial: "D", name: "David L.", mins: 94, move: "—" },
     { bg: "transparent", bd: "1px solid #EDE4D6", rank: 4, avatar: "#A99FB0", initial: "T", name: "Tommaso", mins: 62, move: "—" },
@@ -938,7 +938,7 @@ export default function App() {
             <div className="cd-screen cd-scroll" style={{ flex: 1, minHeight: 0, overflowY: 'auto', paddingBottom: '74px' }}>
               <div style={{ padding: '6px 24px 4px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                 <div>
-                  <div style={{ fontSize: '12px', color: '#9A8E84' }} className={L.font}>{L.greeting}</div>
+                  <div style={{ fontSize: '12px', color: '#9A8E84' }} className={L.font}>{L.greeting?.replace('Maya', session?.user?.name?.split(' ')[0] || 'User')}</div>
                   <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: '26px', lineHeight: 1.05 }}>
                     Your Curriculum
                   </div>
