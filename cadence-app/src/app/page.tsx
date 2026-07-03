@@ -44,6 +44,7 @@ export default function App() {
   const [lessonResult, setLessonResult] = useState<string>(''); // 'correct', 'wrong', or ''
   const [showHints, setShowHints] = useState<boolean>(false);
   const [activeChapter, setActiveChapter] = useState<number | null>(null);
+  const [playingChapter, setPlayingChapter] = useState<number>(0);
 
   // Pronunciation Lab state
   const [pronResult, setPronResult] = useState<any | null>(null);
@@ -302,7 +303,7 @@ export default function App() {
   };
   const startPlacement = () => {
     const _L = LANGS[lang] || LANGS.es;
-    const L = { ..._L, ...(_L.chapters?.[activeChapter || 0] || {}) };
+    const L = { ..._L, ...(_L.chapters?.[playingChapter || 0] || {}) };
     setView('placement');
     setPlaceDone(false);
     setPlaceLevel('A1');
@@ -316,7 +317,7 @@ export default function App() {
     if (!trimmed) return;
 
     const _L = LANGS[lang] || LANGS.es;
-    const L = { ..._L, ...(_L.chapters?.[activeChapter || 0] || {}) };
+    const L = { ..._L, ...(_L.chapters?.[playingChapter || 0] || {}) };
     const userMsg = { who: 'u', n: trimmed };
     const updatedMsgs = [...placeMsgs, userMsg];
     
@@ -362,7 +363,7 @@ export default function App() {
   // Lesson actions
   const handleCheckLesson = async () => {
     const _L = LANGS[lang] || LANGS.es;
-    const L = { ..._L, ...(_L.chapters?.[activeChapter || 0] || {}) };
+    const L = { ..._L, ...(_L.chapters?.[playingChapter || 0] || {}) };
     const ok = answer.length === L.correct.length && answer.every((id, i) => id === L.correct[i]);
     setLessonResult(ok ? 'correct' : 'wrong');
 
@@ -387,7 +388,7 @@ export default function App() {
   // Pronunciation Lab recording
   const handleTogglePronounceMic = async () => {
     const _L = LANGS[lang] || LANGS.es;
-    const L = { ..._L, ...(_L.chapters?.[activeChapter || 0] || {}) };
+    const L = { ..._L, ...(_L.chapters?.[playingChapter || 0] || {}) };
     const refText = L.bank.filter((_: any, i: number) => L.correct.includes(i)).join(' ');
 
     if (recordingPron) {
@@ -465,7 +466,7 @@ export default function App() {
     if (!trimmed) return;
 
     const _L = LANGS[lang] || LANGS.es;
-    const L = { ..._L, ...(_L.chapters?.[activeChapter || 0] || {}) };
+    const L = { ..._L, ...(_L.chapters?.[playingChapter || 0] || {}) };
     const meta = scenarioMeta(L, scenario);
 
     const userMsg = { who: 'u', n: trimmed };
@@ -606,7 +607,7 @@ export default function App() {
   };
 
   const _L = LANGS[lang] || LANGS.es;
-  const L = { ..._L, ...(_L.chapters?.[activeChapter || 0] || {}) };
+  const L = { ..._L, ...(_L.chapters?.[playingChapter || 0] || {}) };
   const sMeta = scenarioMeta(L, scenario);
 
   const rotateGreetings = [
@@ -617,13 +618,17 @@ export default function App() {
     { t: '안녕하세요', c: 'kr' },
   ];
 
-  // Badges data
+  const dynamicBadges = (L.chapters || []).map((ch: any, i: number) => ({
+    key: `ch${i}_regular`,
+    icon: ch.icon || "✨",
+    title: ch.chapterTitle ? ch.chapterTitle.split('·')[1]?.trim() || ch.chapterTitle : `Chapter ${i + 1}`,
+    sub: "Chapter complete",
+    iconBg: i === 0 ? "#DB5338" : i % 2 === 0 ? "#2F8F83" : "#E1A23A",
+    iconStyle: "color:#fff;"
+  }));
+
   const baseBadges = [
-    { key: "cafe_regular", icon: "☕", title: "Café regular", sub: "Ordered solo", iconBg: "#DB5338", iconStyle: "color:#fff;" },
-    { key: "first_chat", icon: "💬", title: "First chat", sub: "2-min convo", iconBg: "#E1A23A", iconStyle: "color:#3A2417;" },
-    { key: "getting_around", icon: "🗺", title: "Getting around", sub: "Asked directions", iconBg: "#2F8F83", iconStyle: "color:#fff;" },
-    { key: "met_family", icon: "❤", title: "Met the family", sub: "Warm intro", iconBg: "#F0E7D8", iconStyle: "color:#B23E27;" },
-    { key: "first_article", icon: "📖", title: "First article", sub: "Read in full", iconBg: "#F0E7D8", iconStyle: "color:#2F8F83;" },
+    ...dynamicBadges,
     { key: "12_day_rhythm", icon: "🌱", title: "12-day rhythm", sub: "Kept it up", iconBg: "#2A2320", iconStyle: "color:#46C46E;" },
     { key: "100_words", icon: "✦", title: "100 words", sub: "Vocabulary", iconBg: "#F0E7D8", iconStyle: "color:#E1A23A;" },
     { key: "eavesdropper", icon: "🎧", title: "Eavesdropper", sub: "Understood audio", iconBg: "#5B3A56", iconStyle: "color:#FBF6EE;" },
@@ -965,7 +970,8 @@ export default function App() {
                 {/* Dynamic Winding Path */}
                 <svg width="100px" height="100%" style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', zIndex: 0, pointerEvents: 'none' }}>
                   {(() => {
-                    const currentLevel = 0; // For prototype
+                    const activeLevelIndex = chapters.findIndex((_: any, idx: number) => !earnedMilestones.includes(`ch${idx}_regular`));
+                    const currentLevel = activeLevelIndex === -1 ? chapters.length - 1 : activeLevelIndex;
                     let fullPath = "";
                     let completedPath = "";
                     chapters.forEach((ch, i) => {
@@ -994,9 +1000,10 @@ export default function App() {
                 </svg>
 
                 {/* Nodes */}
-                {chapters.map((ch, i) => {
-                  const currentLevel = 0; // For prototype
-                  const isUnlocked = true; 
+                {chapters.map((ch: any, i: number) => {
+                  const activeLevelIndex = chapters.findIndex((_: any, idx: number) => !earnedMilestones.includes(`ch${idx}_regular`));
+                  const currentLevel = activeLevelIndex === -1 ? chapters.length - 1 : activeLevelIndex;
+                  const isUnlocked = i <= currentLevel; 
                   const isCurrent = i === currentLevel;
                   const isPast = i < currentLevel;
                   const offset = i % 2 === 0 ? '-35px' : '35px';
@@ -1044,62 +1051,60 @@ export default function App() {
                     {(() => {
                       const i = activeChapter;
                       const ch = chapters[i];
-                      const isCh1 = true; // Treat all chapters as fully playable for the prototype
-                      const ch1BuildDone = isCh1 ? earnedMilestones.includes('cafe_build') : false;
-                      const ch1PronDone = isCh1 ? earnedMilestones.includes('cafe_pronounce') : false;
-                      const ch1LiveDone = isCh1 ? earnedMilestones.includes('cafe_regular') : false;
+                      const ch1BuildDone = earnedMilestones.includes(`ch${i}_build`);
+                      const ch1PronDone = earnedMilestones.includes(`ch${i}_pronounce`);
+                      const ch1LiveDone = earnedMilestones.includes(`ch${i}_regular`);
                       const ch1SkillsDone = (ch1BuildDone ? 1 : 0) + (ch1PronDone ? 1 : 0) + (ch1LiveDone ? 1 : 0);
                       const ch1Width = ch1SkillsDone === 0 ? '0%' : ch1SkillsDone === 1 ? '33%' : ch1SkillsDone === 2 ? '66%' : '100%';
 
                       return (
                         <div>
                           <div style={{ padding: '0 24px 12px', fontSize: '20px', fontWeight: 600, fontFamily: "'Instrument Serif', serif" }}>
-                            {ch.title}
+                            {ch.chapterTitle}
                           </div>
-                          <div onClick={() => { if (isCh1 && !ch1BuildDone) { setActiveChapter(null); handleReset(); setView('lesson'); } }} style={{ margin: '0 18px', background: isCh1 ? 'linear-gradient(140deg,#DB5338,#B23E27)' : '#E8E1D5', borderRadius: '20px', padding: '18px', color: isCh1 ? '#FBF6EE' : '#9A8E84', cursor: isCh1 ? 'pointer' : 'default' }}>
+                          <div onClick={() => { if (!ch1BuildDone) { setPlayingChapter(i); setActiveChapter(null); handleReset(); setView('lesson'); } }} style={{ margin: '0 18px', background: 'linear-gradient(140deg,#DB5338,#B23E27)', borderRadius: '20px', padding: '18px', color: '#FBF6EE', cursor: 'pointer' }}>
                             <div style={{ fontSize: '10.5px', letterSpacing: '.08em', textTransform: 'uppercase', opacity: .85, marginBottom: '7px' }}>Real-world goal</div>
                             <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: '23px', lineHeight: 1.1, marginBottom: '14px' }}>“{ch.goalLine}”</div>
-                            {isCh1 && (
-                              <div style={{ height: '6px', background: 'rgba(255,255,255,.25)', borderRadius: '99px', overflow: 'hidden', marginTop: '8px' }}>
-                                <div style={{ width: ch1Width, height: '100%', background: '#FBF6EE', borderRadius: '99px', transition: 'width 0.4s ease' }}></div>
-                              </div>
-                            )}
+                            <div style={{ height: '6px', background: 'rgba(255,255,255,.25)', borderRadius: '99px', overflow: 'hidden', marginTop: '8px' }}>
+                              <div style={{ width: ch1Width, height: '100%', background: '#FBF6EE', borderRadius: '99px', transition: 'width 0.4s ease' }}></div>
+                            </div>
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '8px' }}>
-                              <span style={{ fontSize: '11px', opacity: .85 }}>{isCh1 ? `${ch1SkillsDone} of 3 skills done` : 'Locked'}</span>
-                              <span style={{ fontSize: '12px', fontWeight: 600 }}>{isCh1 ? (ch1LiveDone ? 'Chapter Complete ✓' : 'Continue →') : 'Locked'}</span>
+                              <span style={{ fontSize: '11px', opacity: .85 }}>{ch1SkillsDone} of 3 skills done</span>
+                              <span style={{ fontSize: '12px', fontWeight: 600 }}>{ch1LiveDone ? 'Chapter Complete ✓' : 'Continue →'}</span>
                             </div>
                           </div>
                           <div style={{ padding: '18px 20px 0' }}>
                             
                             {/* Step 1: Build it */}
-                            <div onClick={() => { if (isCh1) { setActiveChapter(null); handleReset(); setView('lesson'); } }} style={{ display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '13px', cursor: isCh1 ? 'pointer' : 'default', opacity: isCh1 ? 1 : 0.4 }}>
-                              <div style={{ width: '38px', height: '38px', borderRadius: '12px', background: isCh1 ? (ch1BuildDone ? '#2F8F83' : '#fff') : '#E8E1D5', border: isCh1 ? (ch1BuildDone ? 'none' : '2px solid #DB5338') : 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', color: isCh1 ? (ch1BuildDone ? '#fff' : '#DB5338') : '#B5A99E', fontSize: '14px', flexShrink: 0 }}>
-                                {isCh1 ? (ch1BuildDone ? '✓' : '▶') : '—'}
+                            <div onClick={() => { setPlayingChapter(i); setActiveChapter(null); handleReset(); setView('lesson'); }} style={{ display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '13px', cursor: 'pointer', opacity: 1 }}>
+                              <div style={{ width: '38px', height: '38px', borderRadius: '12px', background: ch1BuildDone ? '#2F8F83' : '#fff', border: ch1BuildDone ? 'none' : '2px solid #DB5338', display: 'flex', alignItems: 'center', justifyContent: 'center', color: ch1BuildDone ? '#fff' : '#DB5338', fontSize: '14px', flexShrink: 0 }}>
+                                {ch1BuildDone ? '✓' : '▶'}
                               </div>
                               <div style={{ flex: 1 }}>
                                 <div style={{ fontSize: '14px', fontWeight: 600 }}>{ch.goalTitle}</div>
-                                <div style={{ fontSize: '11.5px', color: isCh1 ? (ch1BuildDone ? '#9A8E84' : '#DB5338') : '#9A8E84' }}>
-                                  {isCh1 ? (ch1BuildDone ? 'Lesson · done' : 'Lesson · 3 min') : 'Lesson · 3 min'}
+                                <div style={{ fontSize: '11.5px', color: ch1BuildDone ? '#9A8E84' : '#DB5338' }}>
+                                  {ch1BuildDone ? 'Lesson · done' : 'Lesson · 3 min'}
                                 </div>
                               </div>
                             </div>
 
                             {/* Step 2: Pronunciation */}
-                            <div onClick={() => { if (isCh1 && ch1BuildDone) { setActiveChapter(null); handleReset(); setView('pronounce'); } }} style={{ display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '13px', cursor: (isCh1 && ch1BuildDone) ? 'pointer' : 'default', opacity: (isCh1 && ch1BuildDone) ? 1 : 0.4 }}>
-                              <div style={{ width: '38px', height: '38px', borderRadius: '12px', background: (isCh1 && ch1PronDone) ? '#2F8F83' : '#fff', border: (isCh1 && !ch1PronDone && ch1BuildDone) ? '2px solid #DB5338' : (isCh1 && ch1PronDone) ? 'none' : '2px solid #D1C8BB', display: 'flex', alignItems: 'center', justifyContent: 'center', color: (isCh1 && ch1PronDone) ? '#fff' : (isCh1 && ch1BuildDone) ? '#DB5338' : '#D1C8BB', fontSize: '14px', flexShrink: 0 }}>
-                                {(isCh1 && ch1PronDone) ? '✓' : (isCh1 && ch1BuildDone) ? '▶' : '🔒'}
+                            <div onClick={() => { if (ch1BuildDone) { setPlayingChapter(i); setActiveChapter(null); handleReset(); setView('pronounce'); } }} style={{ display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '13px', cursor: ch1BuildDone ? 'pointer' : 'default', opacity: ch1BuildDone ? 1 : 0.4 }}>
+                              <div style={{ width: '38px', height: '38px', borderRadius: '12px', background: ch1PronDone ? '#2F8F83' : '#fff', border: (!ch1PronDone && ch1BuildDone) ? '2px solid #DB5338' : ch1PronDone ? 'none' : '2px solid #D1C8BB', display: 'flex', alignItems: 'center', justifyContent: 'center', color: ch1PronDone ? '#fff' : ch1BuildDone ? '#DB5338' : '#D1C8BB', fontSize: '14px', flexShrink: 0 }}>
+                                {ch1PronDone ? '✓' : ch1BuildDone ? '▶' : '🔒'}
                               </div>
                               <div style={{ flex: 1 }}>
                                 <div style={{ fontSize: '14px', fontWeight: 600 }}>Pronunciation Lab</div>
-                                <div style={{ fontSize: '11.5px', color: (isCh1 && ch1PronDone) ? '#9A8E84' : (isCh1 && ch1BuildDone) ? '#DB5338' : '#9A8E84' }}>
-                                  {(isCh1 && ch1PronDone) ? 'Practice · done' : 'Practice · 2 min'}
+                                <div style={{ fontSize: '11.5px', color: ch1PronDone ? '#9A8E84' : ch1BuildDone ? '#DB5338' : '#9A8E84' }}>
+                                  {ch1PronDone ? 'Practice · done' : 'Practice · 2 min'}
                                 </div>
                               </div>
                             </div>
 
                             {/* Step 3: Live Conversation */}
                             <div onClick={() => { 
-                              if (isCh1 && ch1PronDone) {
+                              if (ch1PronDone) {
+                                setPlayingChapter(i);
                                 setActiveChapter(null);
                                 handleReset(); 
                                 setView('convo'); 
@@ -1111,14 +1116,14 @@ export default function App() {
                                   setConvo({ msgs: [], draft: '', thinking: false, listening: false, live: false });
                                 }
                               }
-                            }} style={{ display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '13px', cursor: (isCh1 && ch1PronDone) ? 'pointer' : 'default', opacity: (isCh1 && ch1PronDone) ? 1 : 0.4 }}>
-                              <div style={{ width: '38px', height: '38px', borderRadius: '12px', background: (isCh1 && ch1LiveDone) ? '#2F8F83' : '#fff', border: (isCh1 && !ch1LiveDone && ch1PronDone) ? '2px solid #2F8F83' : (isCh1 && ch1LiveDone) ? 'none' : '2px solid #D1C8BB', display: 'flex', alignItems: 'center', justifyContent: 'center', color: (isCh1 && ch1LiveDone) ? '#fff' : (isCh1 && ch1PronDone) ? '#2F8F83' : '#D1C8BB', fontSize: '14px', flexShrink: 0 }}>
-                                {(isCh1 && ch1LiveDone) ? '✓' : (isCh1 && ch1PronDone) ? '◇' : '🔒'}
+                            }} style={{ display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '13px', cursor: ch1PronDone ? 'pointer' : 'default', opacity: ch1PronDone ? 1 : 0.4 }}>
+                              <div style={{ width: '38px', height: '38px', borderRadius: '12px', background: ch1LiveDone ? '#2F8F83' : '#fff', border: (!ch1LiveDone && ch1PronDone) ? '2px solid #2F8F83' : ch1LiveDone ? 'none' : '2px solid #D1C8BB', display: 'flex', alignItems: 'center', justifyContent: 'center', color: ch1LiveDone ? '#fff' : ch1PronDone ? '#2F8F83' : '#D1C8BB', fontSize: '14px', flexShrink: 0 }}>
+                                {ch1LiveDone ? '✓' : ch1PronDone ? '◇' : '🔒'}
                               </div>
                               <div style={{ flex: 1 }}>
                                 <div style={{ fontSize: '14px', fontWeight: 600 }}>{ch.partnerLabel}</div>
-                                <div style={{ fontSize: '11.5px', color: (isCh1 && ch1PronDone && !ch1LiveDone) ? '#2F8F83' : '#9A8E84' }}>
-                                  {(isCh1 && ch1LiveDone) ? 'Live conversation · done' : 'Live conversation · premium'}
+                                <div style={{ fontSize: '11.5px', color: (ch1PronDone && !ch1LiveDone) ? '#2F8F83' : '#9A8E84' }}>
+                                  {ch1LiveDone ? 'Live conversation · done' : 'Live conversation · premium'}
                                 </div>
                               </div>
                             </div>
@@ -1215,7 +1220,7 @@ export default function App() {
                     Check
                   </div>
                 ) : (
-                  <div onClick={() => completeMilestone('cafe_build')} style={{ flex: 1, background: '#2F8F83', color: '#FBF6EE', borderRadius: '14px', padding: '14px', textAlign: 'center', fontSize: '15px', fontWeight: 600, cursor: 'pointer' }}>
+                  <div onClick={() => completeMilestone(`ch${playingChapter}_build`)} style={{ flex: 1, background: '#2F8F83', color: '#FBF6EE', borderRadius: '14px', padding: '14px', textAlign: 'center', fontSize: '15px', fontWeight: 600, cursor: 'pointer' }}>
                     Continue →
                   </div>
                 )}
@@ -1277,7 +1282,7 @@ export default function App() {
                 </div>
                 
                 {pronResult && pronScore !== null && pronScore >= 60 && (
-                  <div onClick={() => completeMilestone('cafe_pronounce')} style={{ width: '100%', background: '#2F8F83', color: '#FBF6EE', borderRadius: '16px', padding: '16px', textAlign: 'center', fontSize: '16px', fontWeight: 600, cursor: 'pointer' }}>
+                  <div onClick={() => completeMilestone(`ch${playingChapter}_pronounce`)} style={{ width: '100%', background: '#2F8F83', color: '#FBF6EE', borderRadius: '16px', padding: '16px', textAlign: 'center', fontSize: '16px', fontWeight: 600, cursor: 'pointer' }}>
                     Continue to Dashboard →
                   </div>
                 )}
@@ -1537,7 +1542,7 @@ export default function App() {
                 ))}
               </div>
               <div style={{ padding: '14px 20px 26px', flex: 'none' }}>
-                <div onClick={() => completeMilestone('cafe_regular')} style={{ background: '#DB5338', color: '#FBF6EE', borderRadius: '14px', padding: '14px', textAlign: 'center', fontSize: '15px', fontWeight: 600, cursor: 'pointer' }}>Save words & finish</div>
+                <div onClick={() => completeMilestone(`ch${playingChapter}_regular`)} style={{ background: '#DB5338', color: '#FBF6EE', borderRadius: '14px', padding: '14px', textAlign: 'center', fontSize: '15px', fontWeight: 600, cursor: 'pointer' }}>Save words & finish</div>
               </div>
             </div>
           )}
