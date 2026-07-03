@@ -169,11 +169,14 @@ export default function App() {
 
   // Premium Gating Interception
   useEffect(() => {
+    // TEMPORARILY DISABLED: Allow testing all features until Stripe is implemented
+    /*
     const premiumViews = ['convo', 'pronounce', 'immerse', 'reader'];
     const isPro = (session?.user as any)?.plan === 'plus';
     if (premiumViews.includes(view) && !isPro) {
       setView('plans'); // Redirect free users to the upsell screen
     }
+    */
   }, [view, session]);
 
   // Fetch milestones when visiting gamification screens
