@@ -944,19 +944,19 @@ export default function App() {
 
           {/* ===== HOME SCREEN ===== */}
           {view === 'home' && (
-            <div className="cd-screen cd-scroll" style={{ flex: 1, minHeight: 0, overflowY: 'auto', paddingBottom: '74px', background: 'linear-gradient(to bottom, #8AD4E8 0%, #A2E5B5 25%, #4FA368 100%)' }}>
-              <div style={{ padding: '6px 24px 4px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', background: 'rgba(255,255,255,0.4)', backdropFilter: 'blur(10px)', borderBottom: '1px solid rgba(255,255,255,0.5)', paddingBottom: '12px', marginBottom: '16px' }}>
+            <div className="cd-screen cd-scroll" style={{ flex: 1, minHeight: 0, overflowY: 'auto', paddingBottom: '74px' }}>
+              <div style={{ padding: '6px 24px 4px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                 <div>
-                  <div style={{ fontSize: '13px', color: '#4A6B56', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '.05em' }} className={L.font}>{L.greeting?.replace('Maya', session?.user?.name?.split(' ')[0] || 'User')}</div>
-                  <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: '28px', lineHeight: 1.05, color: '#1B3B28', textShadow: '0 2px 4px rgba(255,255,255,0.5)' }}>
+                  <div style={{ fontSize: '12px', color: '#9A8E84' }} className={L.font}>{L.greeting?.replace('Maya', session?.user?.name?.split(' ')[0] || 'User')}</div>
+                  <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: '26px', lineHeight: 1.05 }}>
                     Your Saga
                   </div>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '7px' }}>
-                  <div onClick={() => setPicker(true)} style={{ width: '32px', height: '32px', borderRadius: '50%', background: '#fff', border: '2px solid #FFF', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '16px', cursor: 'pointer', boxShadow: '0 4px 8px rgba(0,0,0,0.1)' }}>{L.flag}</div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '5px', background: 'linear-gradient(to bottom, #FFD700, #F39C12)', border: '2px solid #FFF', borderRadius: '99px', padding: '5px 12px', boxShadow: '0 4px 8px rgba(0,0,0,0.15)' }}>
-                    <span style={{ color: '#FFF', fontSize: '14px', filter: 'drop-shadow(0 1px 1px rgba(0,0,0,0.3))' }}>⭐</span>
-                    <span style={{ fontSize: '14px', fontWeight: 800, color: '#FFF', textShadow: '0 1px 2px rgba(0,0,0,0.3)' }}>14</span>
+                  <div onClick={() => setPicker(true)} style={{ width: '30px', height: '30px', borderRadius: '50%', background: '#fff', border: '1px solid #EDE4D6', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px', cursor: 'pointer' }}>{L.flag}</div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '5px', background: '#fff', border: '1px solid #EDE4D6', borderRadius: '99px', padding: '5px 10px' }}>
+                    <span style={{ color: '#2F8F83', fontSize: '13px' }}>◇</span>
+                    <span style={{ fontSize: '13px', fontWeight: 600 }}>14</span>
                   </div>
                 </div>
               </div>
@@ -978,12 +978,12 @@ export default function App() {
                   const rand2 = (idx * 27) % 100 / 100;
                   const y = 40 + rand1 * 60 + (idx * 67); // vertical distribution
                   const xOffset = isLeft ? `calc(50% - ${110 + rand2 * 50}px)` : `calc(50% + ${110 + rand2 * 50}px)`;
-                  const emojis = ['🌲', '☁️', '🎪', '🍄', '🎈', '🏡', '🏕️', '🌸', '✨', '🍎', '🌈', '🍦'];
+                  const emojis = ['☕', '🥐', '🏛️', '🎨', '🕊️', '🚲', '🥖', '🍷', '🖼️', '🎭'];
                   const emoji = emojis[(idx * 7) % emojis.length];
                   const scale = 0.8 + rand1 * 0.6;
                   
                   return (
-                    <div key={`prop-${idx}`} style={{ position: 'absolute', top: `${y}px`, left: xOffset, fontSize: '36px', filter: 'drop-shadow(0 6px 8px rgba(0,0,0,0.25))', zIndex: 0, transform: `scale(${scale})` }}>
+                    <div key={`prop-${idx}`} style={{ position: 'absolute', top: `${y}px`, left: xOffset, fontSize: '30px', filter: 'drop-shadow(0 4px 6px rgba(0,0,0,0.15))', zIndex: 0, transform: `scale(${scale})`, opacity: 0.8 }}>
                       {emoji}
                     </div>
                   );
@@ -1015,16 +1015,14 @@ export default function App() {
                     return (
                       <>
                         {/* Unlocked / Future Path */}
-                        <path d={fullPath} fill="none" stroke="#6884BD" strokeWidth="48" strokeLinecap="round" strokeLinejoin="round" />
-                        <path d={fullPath} fill="none" stroke="#7BA0DF" strokeWidth="40" strokeLinecap="round" strokeLinejoin="round" />
-                        <path d={fullPath} fill="none" stroke="#FFFFFF" strokeWidth="6" strokeDasharray="14 14" strokeLinecap="round" strokeLinejoin="round" opacity={0.4} />
+                        <path d={fullPath} fill="none" stroke="#EAE2D5" strokeWidth="36" strokeLinecap="round" strokeLinejoin="round" />
+                        <path d={fullPath} fill="none" stroke="#D1C8BB" strokeWidth="6" strokeDasharray="14 14" strokeLinecap="round" strokeLinejoin="round" opacity={0.5} />
 
                         {/* Completed Path */}
                         {completedPath && (
                           <>
-                            <path d={completedPath} fill="none" stroke="#9A3CB3" strokeWidth="48" strokeLinecap="round" strokeLinejoin="round" />
-                            <path d={completedPath} fill="none" stroke="#D15CEB" strokeWidth="40" strokeLinecap="round" strokeLinejoin="round" />
-                            <path d={completedPath} fill="none" stroke="#FFFFFF" strokeWidth="6" strokeDasharray="16 16" strokeLinecap="round" strokeLinejoin="round" />
+                            <path d={completedPath} fill="none" stroke="#DB5338" strokeWidth="36" strokeLinecap="round" strokeLinejoin="round" />
+                            <path d={completedPath} fill="none" stroke="#F5A291" strokeWidth="6" strokeDasharray="16 16" strokeLinecap="round" strokeLinejoin="round" opacity={0.6} />
                           </>
                         )}
                       </>
@@ -1045,7 +1043,7 @@ export default function App() {
                     <div key={i} style={{ position: 'relative', zIndex: 1, transform: `translateX(${offset})` }}>
                       {/* Pulsing Aura for Current Level */}
                       {isCurrent && (
-                        <div style={{ position: 'absolute', top: '50%', left: '50%', width: '94px', height: '94px', background: '#FF3385', borderRadius: '50%', marginTop: '-47px', marginLeft: '-47px', animation: 'pulseRing 2.5s infinite cubic-bezier(0.215, 0.61, 0.355, 1)', zIndex: 0 }}></div>
+                        <div style={{ position: 'absolute', top: '50%', left: '50%', width: '94px', height: '94px', background: '#DB5338', borderRadius: '50%', marginTop: '-47px', marginLeft: '-47px', animation: 'pulseRing 2.5s infinite cubic-bezier(0.215, 0.61, 0.355, 1)', zIndex: 0 }}></div>
                       )}
 
                       <div 
@@ -1061,12 +1059,12 @@ export default function App() {
                         style={{ 
                           width: '84px', height: '84px', borderRadius: '50%', 
                           background: isUnlocked 
-                            ? (isCurrent ? 'radial-gradient(circle at 30% 30%, #FF66A3, #E6005C)' : 'radial-gradient(circle at 30% 30%, #FF99C2, #D1005C)') 
-                            : 'radial-gradient(circle at 30% 30%, #D9D9D9, #999999)',
-                          border: isUnlocked ? '6px solid #FFF' : '6px solid #E6E6E6',
+                            ? (isCurrent ? 'radial-gradient(circle at 30% 30%, #F57A60, #C23E24)' : 'radial-gradient(circle at 30% 30%, #F08E7A, #B0341B)') 
+                            : 'radial-gradient(circle at 30% 30%, #E8E1D5, #C7BBA5)',
+                          border: isUnlocked ? '6px solid #FFF' : '6px solid #FBF6EE',
                           boxShadow: isUnlocked 
-                            ? '0 8px 0 #99003D, 0 16px 20px rgba(230,0,92,0.4), inset 0 -4px 10px rgba(0,0,0,0.2), inset 0 6px 10px rgba(255,255,255,0.7)' 
-                            : '0 8px 0 #808080, inset 0 -4px 10px rgba(0,0,0,0.1), inset 0 6px 10px rgba(255,255,255,0.5)',
+                            ? '0 8px 0 #9F311C, 0 16px 20px rgba(219,83,56,0.4), inset 0 -4px 10px rgba(0,0,0,0.2), inset 0 6px 10px rgba(255,255,255,0.7)' 
+                            : '0 8px 0 #B5A893, inset 0 -4px 10px rgba(0,0,0,0.1), inset 0 6px 10px rgba(255,255,255,0.5)',
                           display: 'flex', alignItems: 'center', justifyContent: 'center',
                           fontSize: '38px', cursor: isUnlocked ? 'pointer' : 'default',
                           position: 'relative', zIndex: 1
@@ -1079,12 +1077,12 @@ export default function App() {
 
                       {/* Character Avatars */}
                       {isCurrent && (
-                        <div style={{ position: 'absolute', top: '-45px', left: '-35px', fontSize: '64px', zIndex: 3, filter: 'drop-shadow(0 6px 12px rgba(0,0,0,0.4))', animation: 'floatUp 2.5s ease-in-out infinite' }}>
+                        <div style={{ position: 'absolute', top: '-45px', left: '-35px', fontSize: '50px', zIndex: 3, filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.25))', animation: 'floatUp 2.5s ease-in-out infinite' }}>
                           🙋‍♀️
                         </div>
                       )}
                       {(isPast && i % 3 === 0) && (
-                        <div style={{ position: 'absolute', top: '-25px', right: '-25px', fontSize: '42px', zIndex: 3, filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.3))' }}>
+                        <div style={{ position: 'absolute', top: '-20px', right: '-20px', fontSize: '32px', zIndex: 3, filter: 'drop-shadow(0 4px 6px rgba(0,0,0,0.2))' }}>
                           🦉
                         </div>
                       )}
