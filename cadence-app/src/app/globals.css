@@ -218,3 +218,7 @@ body {
   transform: scale(0.92) !important;
 }
 
+@keyframes slideUpDrawer {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}

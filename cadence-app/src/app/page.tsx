@@ -1058,10 +1058,10 @@ export default function App() {
 
               {/* Bottom Sheet Drawer */}
               {activeChapter !== null && (
-                <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', zIndex: 100, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
-                  <div onClick={() => setActiveChapter(null)} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(42,35,32,0.4)', backdropFilter: 'blur(3px)' }}></div>
-                  <div className="cd-scroll" style={{ background: '#FBF6EE', borderTopLeftRadius: '28px', borderTopRightRadius: '28px', padding: '12px 0 24px', position: 'relative', zIndex: 1, boxShadow: '0 -4px 20px rgba(0,0,0,0.1)', maxHeight: '85vh', overflowY: 'auto' }}>
-                    <div style={{ width: '40px', height: '5px', background: '#D1C8BB', borderRadius: '99px', margin: '0 auto 12px' }}></div>
+                <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 100, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
+                  <div onClick={() => setActiveChapter(null)} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(42,35,32,0.6)', backdropFilter: 'blur(4px)', animation: 'cdIn 0.3s ease-out' }}></div>
+                  <div className="cd-scroll" style={{ background: '#FBF6EE', borderTopLeftRadius: '32px', borderTopRightRadius: '32px', padding: '16px 0 32px', position: 'relative', zIndex: 1, boxShadow: '0 -10px 40px rgba(0,0,0,0.15)', maxHeight: '85vh', overflowY: 'auto', animation: 'slideUpDrawer 0.4s cubic-bezier(0.2, 0.8, 0.2, 1)' }}>
+                    <div style={{ width: '48px', height: '6px', background: '#E0D5C1', borderRadius: '99px', margin: '0 auto 16px' }}></div>
                     {(() => {
                       const i = activeChapter;
                       const ch = chapters[i];
@@ -1072,44 +1072,55 @@ export default function App() {
                       const ch1Width = ch1SkillsDone === 0 ? '0%' : ch1SkillsDone === 1 ? '33%' : ch1SkillsDone === 2 ? '66%' : '100%';
 
                       return (
-                        <div>
-                          <div style={{ padding: '0 24px 12px', fontSize: '20px', fontWeight: 600, fontFamily: "'Instrument Serif', serif" }}>
-                            {ch.chapterTitle}
-                          </div>
-                          <div onClick={() => { if (!ch1BuildDone) { setPlayingChapter(i); setActiveChapter(null); handleReset(); setView('lesson'); } }} style={{ margin: '0 18px', background: 'linear-gradient(140deg,#DB5338,#B23E27)', borderRadius: '20px', padding: '18px', color: '#FBF6EE', cursor: 'pointer' }}>
-                            <div style={{ fontSize: '10.5px', letterSpacing: '.08em', textTransform: 'uppercase', opacity: .85, marginBottom: '7px' }}>Real-world goal</div>
-                            <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: '23px', lineHeight: 1.1, marginBottom: '14px' }}>“{ch.goalLine}”</div>
-                            <div style={{ height: '6px', background: 'rgba(255,255,255,.25)', borderRadius: '99px', overflow: 'hidden', marginTop: '8px' }}>
-                              <div style={{ width: ch1Width, height: '100%', background: '#FBF6EE', borderRadius: '99px', transition: 'width 0.4s ease' }}></div>
-                            </div>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '8px' }}>
-                              <span style={{ fontSize: '11px', opacity: .85 }}>{ch1SkillsDone} of 3 skills done</span>
-                              <span style={{ fontSize: '12px', fontWeight: 600 }}>{ch1LiveDone ? 'Chapter Complete ✓' : 'Continue →'}</span>
+                        <div style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
+                          <div style={{ padding: '0 24px 16px', textAlign: 'center' }}>
+                            <div style={{ fontSize: '12px', fontWeight: 700, color: '#A8927C', textTransform: 'uppercase', letterSpacing: '.1em', marginBottom: '4px' }}>Chapter {i + 1}</div>
+                            <div style={{ fontSize: '26px', fontWeight: 600, fontFamily: "'Instrument Serif', serif", color: '#2A2320', lineHeight: 1.1 }}>
+                              {ch.chapterTitle ? ch.chapterTitle.split('·')[1]?.trim() || ch.chapterTitle : `Chapter ${i + 1}`}
                             </div>
                           </div>
-                          <div style={{ padding: '18px 20px 0' }}>
-                            
+                          
+                          <div onClick={() => { if (!ch1BuildDone) { setPlayingChapter(i); setActiveChapter(null); handleReset(); setView('lesson'); } }} style={{ margin: '0 20px 24px', background: 'linear-gradient(135deg, #E85D41, #B23E27)', borderRadius: '24px', padding: '24px', color: '#FBF6EE', cursor: 'pointer', boxShadow: '0 12px 24px rgba(219,83,56,0.25), inset 0 2px 0 rgba(255,255,255,0.15)', position: 'relative', overflow: 'hidden' }}>
+                            <div style={{ position: 'absolute', top: '-20px', right: '-20px', fontSize: '100px', opacity: 0.05, pointerEvents: 'none' }}>✨</div>
+                            <div style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '.12em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.7)', marginBottom: '10px' }}>Real-world goal</div>
+                            <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: '28px', lineHeight: 1.15, marginBottom: '20px', textShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>“{ch.goalLine}”</div>
+                            <div style={{ height: '8px', background: 'rgba(255,255,255,.2)', borderRadius: '99px', overflow: 'hidden', marginTop: '12px' }}>
+                              <div style={{ width: ch1Width, height: '100%', background: '#fff', borderRadius: '99px', transition: 'width 0.5s cubic-bezier(0.2, 0.8, 0.2, 1)', boxShadow: '0 0 10px rgba(255,255,255,0.5)' }}></div>
+                            </div>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '10px' }}>
+                              <span style={{ fontSize: '12.5px', color: 'rgba(255,255,255,0.8)', fontWeight: 500 }}>{ch1SkillsDone} of 3 skills done</span>
+                              <span style={{ fontSize: '13.5px', fontWeight: 700, background: 'rgba(0,0,0,0.15)', padding: '6px 12px', borderRadius: '99px' }}>{ch1LiveDone ? 'Complete ✓' : 'Continue →'}</span>
+                            </div>
+                          </div>
+
+                          <div style={{ padding: '0 24px' }}>
                             {/* Step 1: Build it */}
-                            <div onClick={() => { setPlayingChapter(i); setActiveChapter(null); handleReset(); setView('lesson'); }} style={{ display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '13px', cursor: 'pointer', opacity: 1 }}>
-                              <div style={{ width: '38px', height: '38px', borderRadius: '12px', background: ch1BuildDone ? '#2F8F83' : '#fff', border: ch1BuildDone ? 'none' : '2px solid #DB5338', display: 'flex', alignItems: 'center', justifyContent: 'center', color: ch1BuildDone ? '#fff' : '#DB5338', fontSize: '14px', flexShrink: 0 }}>
-                                {ch1BuildDone ? '✓' : '▶'}
+                            <div onClick={() => { setPlayingChapter(i); setActiveChapter(null); handleReset(); setView('lesson'); }} style={{ display: 'flex', gap: '16px', alignItems: 'flex-start', cursor: 'pointer', opacity: 1 }}>
+                              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                <div style={{ width: '44px', height: '44px', borderRadius: '16px', background: ch1BuildDone ? '#2F8F83' : '#fff', border: ch1BuildDone ? 'none' : '2px solid #DB5338', display: 'flex', alignItems: 'center', justifyContent: 'center', color: ch1BuildDone ? '#fff' : '#DB5338', fontSize: '16px', flexShrink: 0, zIndex: 2, boxShadow: ch1BuildDone ? '0 4px 12px rgba(47,143,131,0.2)' : '0 4px 12px rgba(219,83,56,0.1)' }}>
+                                  {ch1BuildDone ? '✓' : '▶'}
+                                </div>
+                                <div style={{ width: '2px', height: '36px', background: ch1BuildDone ? '#2F8F83' : '#E0D5C1', margin: '4px 0' }}></div>
                               </div>
-                              <div style={{ flex: 1 }}>
-                                <div style={{ fontSize: '14px', fontWeight: 600 }}>{ch.goalTitle}</div>
-                                <div style={{ fontSize: '11.5px', color: ch1BuildDone ? '#9A8E84' : '#DB5338' }}>
+                              <div style={{ flex: 1, padding: '4px 0 20px' }}>
+                                <div style={{ fontSize: '16px', fontWeight: 700, color: '#2A2320', marginBottom: '2px' }}>{ch.goalTitle}</div>
+                                <div style={{ fontSize: '13px', color: ch1BuildDone ? '#A8927C' : '#DB5338', fontWeight: 500 }}>
                                   {ch1BuildDone ? 'Lesson · done' : 'Lesson · 3 min'}
                                 </div>
                               </div>
                             </div>
 
                             {/* Step 2: Pronunciation */}
-                            <div onClick={() => { if (ch1BuildDone) { setPlayingChapter(i); setActiveChapter(null); handleReset(); setView('pronounce'); } }} style={{ display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '13px', cursor: ch1BuildDone ? 'pointer' : 'default', opacity: ch1BuildDone ? 1 : 0.4 }}>
-                              <div style={{ width: '38px', height: '38px', borderRadius: '12px', background: ch1PronDone ? '#2F8F83' : '#fff', border: (!ch1PronDone && ch1BuildDone) ? '2px solid #DB5338' : ch1PronDone ? 'none' : '2px solid #D1C8BB', display: 'flex', alignItems: 'center', justifyContent: 'center', color: ch1PronDone ? '#fff' : ch1BuildDone ? '#DB5338' : '#D1C8BB', fontSize: '14px', flexShrink: 0 }}>
-                                {ch1PronDone ? '✓' : ch1BuildDone ? '▶' : '🔒'}
+                            <div onClick={() => { if (ch1BuildDone) { setPlayingChapter(i); setActiveChapter(null); handleReset(); setView('pronounce'); } }} style={{ display: 'flex', gap: '16px', alignItems: 'flex-start', cursor: ch1BuildDone ? 'pointer' : 'default', opacity: ch1BuildDone ? 1 : 0.5 }}>
+                              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                <div style={{ width: '44px', height: '44px', borderRadius: '16px', background: ch1PronDone ? '#2F8F83' : '#fff', border: (!ch1PronDone && ch1BuildDone) ? '2px solid #DB5338' : ch1PronDone ? 'none' : '2px solid #D1C8BB', display: 'flex', alignItems: 'center', justifyContent: 'center', color: ch1PronDone ? '#fff' : ch1BuildDone ? '#DB5338' : '#D1C8BB', fontSize: '16px', flexShrink: 0, zIndex: 2, boxShadow: ch1PronDone ? '0 4px 12px rgba(47,143,131,0.2)' : (!ch1PronDone && ch1BuildDone) ? '0 4px 12px rgba(219,83,56,0.1)' : 'none' }}>
+                                  {ch1PronDone ? '✓' : ch1BuildDone ? '🎙' : '🔒'}
+                                </div>
+                                <div style={{ width: '2px', height: '36px', background: ch1PronDone ? '#2F8F83' : '#E0D5C1', margin: '4px 0' }}></div>
                               </div>
-                              <div style={{ flex: 1 }}>
-                                <div style={{ fontSize: '14px', fontWeight: 600 }}>Pronunciation Lab</div>
-                                <div style={{ fontSize: '11.5px', color: ch1PronDone ? '#9A8E84' : ch1BuildDone ? '#DB5338' : '#9A8E84' }}>
+                              <div style={{ flex: 1, padding: '4px 0 20px' }}>
+                                <div style={{ fontSize: '16px', fontWeight: 700, color: '#2A2320', marginBottom: '2px' }}>Pronunciation Lab</div>
+                                <div style={{ fontSize: '13px', color: ch1PronDone ? '#A8927C' : ch1BuildDone ? '#DB5338' : '#A8927C', fontWeight: 500 }}>
                                   {ch1PronDone ? 'Practice · done' : 'Practice · 2 min'}
                                 </div>
                               </div>
@@ -1130,18 +1141,17 @@ export default function App() {
                                   setConvo({ msgs: [], draft: '', thinking: false, listening: false, live: false });
                                 }
                               }
-                            }} style={{ display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '13px', cursor: ch1PronDone ? 'pointer' : 'default', opacity: ch1PronDone ? 1 : 0.4 }}>
-                              <div style={{ width: '38px', height: '38px', borderRadius: '12px', background: ch1LiveDone ? '#2F8F83' : '#fff', border: (!ch1LiveDone && ch1PronDone) ? '2px solid #2F8F83' : ch1LiveDone ? 'none' : '2px solid #D1C8BB', display: 'flex', alignItems: 'center', justifyContent: 'center', color: ch1LiveDone ? '#fff' : ch1PronDone ? '#2F8F83' : '#D1C8BB', fontSize: '14px', flexShrink: 0 }}>
-                                {ch1LiveDone ? '✓' : ch1PronDone ? '◇' : '🔒'}
+                            }} style={{ display: 'flex', gap: '16px', alignItems: 'center', cursor: ch1PronDone ? 'pointer' : 'default', opacity: ch1PronDone ? 1 : 0.5 }}>
+                              <div style={{ width: '44px', height: '44px', borderRadius: '16px', background: ch1LiveDone ? '#2F8F83' : '#fff', border: (!ch1LiveDone && ch1PronDone) ? '2px solid #2F8F83' : ch1LiveDone ? 'none' : '2px solid #D1C8BB', display: 'flex', alignItems: 'center', justifyContent: 'center', color: ch1LiveDone ? '#fff' : ch1PronDone ? '#2F8F83' : '#D1C8BB', fontSize: '16px', flexShrink: 0, zIndex: 2, boxShadow: ch1LiveDone ? '0 4px 12px rgba(47,143,131,0.2)' : (!ch1LiveDone && ch1PronDone) ? '0 4px 12px rgba(47,143,131,0.1)' : 'none' }}>
+                                {ch1LiveDone ? '✓' : ch1PronDone ? '💬' : '🔒'}
                               </div>
                               <div style={{ flex: 1 }}>
-                                <div style={{ fontSize: '14px', fontWeight: 600 }}>{ch.partnerLabel}</div>
-                                <div style={{ fontSize: '11.5px', color: (ch1PronDone && !ch1LiveDone) ? '#2F8F83' : '#9A8E84' }}>
+                                <div style={{ fontSize: '16px', fontWeight: 700, color: '#2A2320', marginBottom: '2px' }}>{ch.partnerLabel}</div>
+                                <div style={{ fontSize: '13px', color: (ch1PronDone && !ch1LiveDone) ? '#2F8F83' : '#A8927C', fontWeight: 500 }}>
                                   {ch1LiveDone ? 'Live conversation · done' : 'Live conversation · premium'}
                                 </div>
                               </div>
                             </div>
-
                           </div>
                         </div>
                       );
