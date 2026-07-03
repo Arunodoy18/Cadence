@@ -45,6 +45,7 @@ export default function App() {
   const [showHints, setShowHints] = useState<boolean>(false);
   const [activeChapter, setActiveChapter] = useState<number | null>(null);
   const [playingChapter, setPlayingChapter] = useState<number>(0);
+  const [lockedToast, setLockedToast] = useState<string>('');
 
   // Pronunciation Lab state
   const [pronResult, setPronResult] = useState<any | null>(null);
@@ -1017,7 +1018,14 @@ export default function App() {
 
                       <div 
                         className="saga-node"
-                        onClick={() => isUnlocked && setActiveChapter(i)}
+                        onClick={() => {
+                          if (isUnlocked) {
+                            setActiveChapter(i);
+                          } else {
+                            setLockedToast('Complete the previous chapter first!');
+                            setTimeout(() => setLockedToast(''), 3000);
+                          }
+                        }}
                         style={{ 
                           width: '84px', height: '84px', borderRadius: '50%', 
                           background: isUnlocked ? 'linear-gradient(160deg, #F06A4F, #CB4024)' : '#E8E1D5',
@@ -1041,6 +1049,12 @@ export default function App() {
                   )
                 })}
               </div>
+
+              {lockedToast && (
+                <div style={{ position: 'fixed', bottom: '100px', left: '50%', transform: 'translateX(-50%)', background: '#2A2320', color: '#FBF6EE', padding: '12px 24px', borderRadius: '99px', fontSize: '14px', fontWeight: 600, zIndex: 200, boxShadow: '0 4px 14px rgba(0,0,0,0.2)', whiteSpace: 'nowrap', animation: 'floatUp 0.3s ease-out' }}>
+                  🔒 {lockedToast}
+                </div>
+              )}
 
               {/* Bottom Sheet Drawer */}
               {activeChapter !== null && (
