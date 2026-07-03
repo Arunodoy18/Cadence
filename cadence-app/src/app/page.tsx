@@ -944,19 +944,19 @@ export default function App() {
 
           {/* ===== HOME SCREEN ===== */}
           {view === 'home' && (
-            <div className="cd-screen cd-scroll" style={{ flex: 1, minHeight: 0, overflowY: 'auto', paddingBottom: '74px' }}>
-              <div style={{ padding: '6px 24px 4px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+            <div className="cd-screen cd-scroll" style={{ flex: 1, minHeight: 0, overflowY: 'auto', paddingBottom: '74px', background: 'linear-gradient(to bottom, #8AD4E8 0%, #A2E5B5 25%, #4FA368 100%)' }}>
+              <div style={{ padding: '6px 24px 4px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', background: 'rgba(255,255,255,0.4)', backdropFilter: 'blur(10px)', borderBottom: '1px solid rgba(255,255,255,0.5)', paddingBottom: '12px', marginBottom: '16px' }}>
                 <div>
-                  <div style={{ fontSize: '12px', color: '#9A8E84' }} className={L.font}>{L.greeting?.replace('Maya', session?.user?.name?.split(' ')[0] || 'User')}</div>
-                  <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: '26px', lineHeight: 1.05 }}>
-                    Your Curriculum
+                  <div style={{ fontSize: '13px', color: '#4A6B56', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '.05em' }} className={L.font}>{L.greeting?.replace('Maya', session?.user?.name?.split(' ')[0] || 'User')}</div>
+                  <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: '28px', lineHeight: 1.05, color: '#1B3B28', textShadow: '0 2px 4px rgba(255,255,255,0.5)' }}>
+                    Your Saga
                   </div>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '7px' }}>
-                  <div onClick={() => setPicker(true)} style={{ width: '30px', height: '30px', borderRadius: '50%', background: '#fff', border: '1px solid #EDE4D6', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px', cursor: 'pointer' }}>{L.flag}</div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '5px', background: '#fff', border: '1px solid #EDE4D6', borderRadius: '99px', padding: '5px 10px' }}>
-                    <span style={{ color: '#2F8F83', fontSize: '13px' }}>◇</span>
-                    <span style={{ fontSize: '13px', fontWeight: 600 }}>14</span>
+                  <div onClick={() => setPicker(true)} style={{ width: '32px', height: '32px', borderRadius: '50%', background: '#fff', border: '2px solid #FFF', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '16px', cursor: 'pointer', boxShadow: '0 4px 8px rgba(0,0,0,0.1)' }}>{L.flag}</div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '5px', background: 'linear-gradient(to bottom, #FFD700, #F39C12)', border: '2px solid #FFF', borderRadius: '99px', padding: '5px 12px', boxShadow: '0 4px 8px rgba(0,0,0,0.15)' }}>
+                    <span style={{ color: '#FFF', fontSize: '14px', filter: 'drop-shadow(0 1px 1px rgba(0,0,0,0.3))' }}>⭐</span>
+                    <span style={{ fontSize: '14px', fontWeight: 800, color: '#FFF', textShadow: '0 1px 2px rgba(0,0,0,0.3)' }}>14</span>
                   </div>
                 </div>
               </div>
@@ -969,10 +969,28 @@ export default function App() {
                 <span style={{ color: '#C9AE97' }}>›</span>
               </div>
 
-              <div style={{ position: 'relative', marginTop: '30px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '50px', paddingBottom: '120px' }}>
+              <div style={{ position: 'relative', marginTop: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '50px', paddingBottom: '120px' }}>
                 
+                {/* Scenery Props (Pseudo-randomly placed emojis) */}
+                {[...Array(chapters.length * 2)].map((_, idx) => {
+                  const isLeft = idx % 2 === 0;
+                  const rand1 = (idx * 13) % 100 / 100; // deterministic pseudo-random 0-0.99
+                  const rand2 = (idx * 27) % 100 / 100;
+                  const y = 40 + rand1 * 60 + (idx * 67); // vertical distribution
+                  const xOffset = isLeft ? `calc(50% - ${110 + rand2 * 50}px)` : `calc(50% + ${110 + rand2 * 50}px)`;
+                  const emojis = ['🌲', '☁️', '🎪', '🍄', '🎈', '🏡', '🏕️', '🌸', '✨', '🍎', '🌈', '🍦'];
+                  const emoji = emojis[(idx * 7) % emojis.length];
+                  const scale = 0.8 + rand1 * 0.6;
+                  
+                  return (
+                    <div key={`prop-${idx}`} style={{ position: 'absolute', top: `${y}px`, left: xOffset, fontSize: '36px', filter: 'drop-shadow(0 6px 8px rgba(0,0,0,0.25))', zIndex: 0, transform: `scale(${scale})` }}>
+                      {emoji}
+                    </div>
+                  );
+                })}
+
                 {/* Dynamic Winding Path */}
-                <svg width="100px" height="100%" style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', zIndex: 0, pointerEvents: 'none' }}>
+                <svg width="200px" height="100%" style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', zIndex: 0, pointerEvents: 'none' }}>
                   {(() => {
                     const activeLevelIndex = chapters.findIndex((_: any, idx: number) => !earnedMilestones.includes(`ch${idx}_regular`));
                     const currentLevel = activeLevelIndex === -1 ? chapters.length - 1 : activeLevelIndex;
@@ -980,13 +998,13 @@ export default function App() {
                     let completedPath = "";
                     chapters.forEach((ch, i) => {
                       const isLeft = i % 2 === 0;
-                      const x = isLeft ? 15 : 85;
-                      const y = 42 + i * 134; // 84px height / 2 = 42. Gap is 50, so step is 134
+                      const x = isLeft ? 50 : 150; // SVG center is 100
+                      const y = 42 + i * 134; // Node center Y
                       if (i === 0) {
                         fullPath += `M ${x} ${y} `;
                         if (i <= currentLevel) completedPath += `M ${x} ${y} `;
                       } else {
-                        const pX = (i - 1) % 2 === 0 ? 15 : 85;
+                        const pX = (i - 1) % 2 === 0 ? 50 : 150;
                         const pY = 42 + (i - 1) * 134;
                         const cpY = pY + 67;
                         const curve = `C ${pX} ${cpY}, ${x} ${cpY}, ${x} ${y} `;
@@ -996,8 +1014,19 @@ export default function App() {
                     });
                     return (
                       <>
-                        <path d={fullPath} fill="none" stroke="#E5DDD1" strokeWidth="12" strokeLinecap="round" strokeLinejoin="round" />
-                        {completedPath && <path d={completedPath} fill="none" stroke="#DB5338" strokeWidth="12" strokeLinecap="round" strokeLinejoin="round" />}
+                        {/* Unlocked / Future Path */}
+                        <path d={fullPath} fill="none" stroke="#6884BD" strokeWidth="48" strokeLinecap="round" strokeLinejoin="round" />
+                        <path d={fullPath} fill="none" stroke="#7BA0DF" strokeWidth="40" strokeLinecap="round" strokeLinejoin="round" />
+                        <path d={fullPath} fill="none" stroke="#FFFFFF" strokeWidth="6" strokeDasharray="14 14" strokeLinecap="round" strokeLinejoin="round" opacity={0.4} />
+
+                        {/* Completed Path */}
+                        {completedPath && (
+                          <>
+                            <path d={completedPath} fill="none" stroke="#9A3CB3" strokeWidth="48" strokeLinecap="round" strokeLinejoin="round" />
+                            <path d={completedPath} fill="none" stroke="#D15CEB" strokeWidth="40" strokeLinecap="round" strokeLinejoin="round" />
+                            <path d={completedPath} fill="none" stroke="#FFFFFF" strokeWidth="6" strokeDasharray="16 16" strokeLinecap="round" strokeLinejoin="round" />
+                          </>
+                        )}
                       </>
                     );
                   })()}
@@ -1010,13 +1039,13 @@ export default function App() {
                   const isUnlocked = i <= currentLevel; 
                   const isCurrent = i === currentLevel;
                   const isPast = i < currentLevel;
-                  const offset = i % 2 === 0 ? '-35px' : '35px';
+                  const offset = i % 2 === 0 ? '-50px' : '50px'; // 50px offset to align with x=50/150 in SVG
 
                   return (
                     <div key={i} style={{ position: 'relative', zIndex: 1, transform: `translateX(${offset})` }}>
                       {/* Pulsing Aura for Current Level */}
                       {isCurrent && (
-                        <div style={{ position: 'absolute', top: '50%', left: '50%', width: '84px', height: '84px', background: '#DB5338', borderRadius: '50%', marginTop: '-42px', marginLeft: '-42px', animation: 'pulseRing 2.5s infinite cubic-bezier(0.215, 0.61, 0.355, 1)', zIndex: 0 }}></div>
+                        <div style={{ position: 'absolute', top: '50%', left: '50%', width: '94px', height: '94px', background: '#FF3385', borderRadius: '50%', marginTop: '-47px', marginLeft: '-47px', animation: 'pulseRing 2.5s infinite cubic-bezier(0.215, 0.61, 0.355, 1)', zIndex: 0 }}></div>
                       )}
 
                       <div 
@@ -1031,21 +1060,32 @@ export default function App() {
                         }}
                         style={{ 
                           width: '84px', height: '84px', borderRadius: '50%', 
-                          background: isUnlocked ? 'linear-gradient(160deg, #F06A4F, #CB4024)' : '#E8E1D5',
-                          border: isUnlocked ? '4px solid #fff' : '4px solid #FBF6EE',
-                          boxShadow: isUnlocked ? '0 6px 0 #9F311C, 0 12px 20px rgba(219,83,56,0.3)' : '0 6px 0 #D1C8BB',
+                          background: isUnlocked 
+                            ? (isCurrent ? 'radial-gradient(circle at 30% 30%, #FF66A3, #E6005C)' : 'radial-gradient(circle at 30% 30%, #FF99C2, #D1005C)') 
+                            : 'radial-gradient(circle at 30% 30%, #D9D9D9, #999999)',
+                          border: isUnlocked ? '6px solid #FFF' : '6px solid #E6E6E6',
+                          boxShadow: isUnlocked 
+                            ? '0 8px 0 #99003D, 0 16px 20px rgba(230,0,92,0.4), inset 0 -4px 10px rgba(0,0,0,0.2), inset 0 6px 10px rgba(255,255,255,0.7)' 
+                            : '0 8px 0 #808080, inset 0 -4px 10px rgba(0,0,0,0.1), inset 0 6px 10px rgba(255,255,255,0.5)',
                           display: 'flex', alignItems: 'center', justifyContent: 'center',
                           fontSize: '38px', cursor: isUnlocked ? 'pointer' : 'default',
                           position: 'relative', zIndex: 1
                         }}
                       >
-                        <span style={{ filter: isUnlocked ? 'drop-shadow(0 2px 2px rgba(0,0,0,0.15))' : 'grayscale(1) opacity(0.4)', transform: 'translateY(-2px)' }}>{ch.icon}</span>
+                        <span style={{ filter: isUnlocked ? 'drop-shadow(0 2px 4px rgba(0,0,0,0.25))' : 'grayscale(1) opacity(0.5)', transform: 'translateY(-2px)' }}>
+                          {isPast ? '⭐' : (isCurrent ? (ch.icon || '1') : '🔒')}
+                        </span>
                       </div>
 
-                      {/* Current level indicator */}
+                      {/* Character Avatars */}
                       {isCurrent && (
-                        <div style={{ position: 'absolute', top: '-14px', left: '50%', transform: 'translateX(-50%)', background: '#2F8F83', color: '#fff', fontSize: '11px', fontWeight: 800, padding: '4px 10px', borderRadius: '99px', letterSpacing: '.06em', border: '2px solid #fff', whiteSpace: 'nowrap', zIndex: 2, boxShadow: '0 4px 10px rgba(47,143,131,0.3)', animation: 'floatUp 3s ease-in-out infinite' }}>
-                          START
+                        <div style={{ position: 'absolute', top: '-45px', left: '-35px', fontSize: '64px', zIndex: 3, filter: 'drop-shadow(0 6px 12px rgba(0,0,0,0.4))', animation: 'floatUp 2.5s ease-in-out infinite' }}>
+                          🙋‍♀️
+                        </div>
+                      )}
+                      {(isPast && i % 3 === 0) && (
+                        <div style={{ position: 'absolute', top: '-25px', right: '-25px', fontSize: '42px', zIndex: 3, filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.3))' }}>
+                          🦉
                         </div>
                       )}
                     </div>
