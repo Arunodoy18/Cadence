@@ -10,14 +10,17 @@
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.1.0",
+    "@serwist/next": "^9.5.11",
     "bcryptjs": "^3.0.3",
     "crypto-js": "^4.2.0",
+    "dotenv": "^17.4.2",
     "next": "16.2.9",
     "next-auth": "^4.24.14",
     "openai": "^6.45.0",
     "razorpay": "^2.9.6",
     "react": "19.2.4",
     "react-dom": "19.2.4",
+    "serwist": "^9.5.11",
     "stripe": "^22.2.3",
     "ts-fsrs": "^5.4.1",
     "uuid": "^14.0.1"

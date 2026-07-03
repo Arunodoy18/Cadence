@@ -1,0 +1,219 @@
+{
+  "es": {
+    "name": "Spanish",
+    "flag": "🇪🇸",
+    "code": "ES",
+    "font": "",
+    "locale": "es-ES",
+    "greeting": "Buenos días, Maya",
+    "accent": "Spain (Castilian)",
+    "chapters": [
+      {
+        "chapterTitle": "Chapter 1 · The Basics",
+        "lessonTitle": "Greetings & warmth",
+        "goalTitle": "Build it: order a coffee",
+        "scenario": "cafe"
+      },
+      {
+        "chapterTitle": "Chapter 2 · Cómo moverse",
+        "lessonTitle": "Orientarse & preguntar",
+        "goalTitle": "Construir: pedir indicaciones",
+        "scenario": "directions",
+        "bank": [
+          "izquierda",
+          "derecha",
+          "recto",
+          "cerca",
+          "lejos",
+          "esquina"
+        ],
+        "bankEn": [
+          "left",
+          "right",
+          "straight",
+          "near",
+          "far",
+          "corner"
+        ],
+        "correct": [
+          1,
+          0,
+          5,
+          2
+        ],
+        "gTermA": "girar",
+        "gTermB": "seguir",
+        "convo": [
+          {
+            "speaker": "Traveler",
+            "message": "Hola, ¿puedes decirme cómo llegar al museo?"
+          },
+          {
+            "speaker": "Local",
+            "message": "¡Claro! Ve recto y gira a la derecha en la segunda esquina."
+          }
+        ]
+      },
+      {
+        "chapterTitle": "Chapter 3 · Mi Familia",
+        "lessonTitle": "Presentaciones & descripciones",
+        "goalTitle": "Construir: hablar sobre la familia",
+        "scenario": "family",
+        "bank": [
+          "padre",
+          "madre",
+          "hermana",
+          "hermano",
+          "abuelo",
+          "abuela"
+        ],
+        "bankEn": [
+          "father",
+          "mother",
+          "sister",
+          "brother",
+          "grandfather",
+          "grandmother"
+        ],
+        "correct": [
+          0,
+          1,
+          3,
+          2
+        ],
+        "gTermA": "tener",
+        "gTermB": "ser",
+        "convo": [
+          {
+            "speaker": "Friend",
+            "message": "¿Tienes una familia grande?"
+          },
+          {
+            "speaker": "You",
+            "message": "Sí, tengo un hermano y una hermana, y vivimos con nuestros padres."
+          }
+        ]
+      },
+      {
+        "chapterTitle": "Chapter 4 · En el Hotel",
+        "lessonTitle": "Reservaciones & el alojamiento",
+        "goalTitle": "Construir: hacer una reserva de hotel",
+        "scenario": "hotel",
+        "bank": [
+          "habitación",
+          "reserva",
+          "llave",
+          "desayuno",
+          "entrada",
+          "salida"
+        ],
+        "bankEn": [
+          "room",
+          "reservation",
+          "key",
+          "breakfast",
+          "check-in",
+          "check-out"
+        ],
+        "correct": [
+          1,
+          0,
+          2,
+          4
+        ],
+        "gTermA": "reservar",
+        "gTermB": "quedarse",
+        "convo": [
+          {
+            "speaker": "Receptionist",
+            "message": "Bienvenido, ¿tiene una reserva con nosotros?"
+          },
+          {
+            "speaker": "Guest",
+            "message": "Sí, reservé una habitación con vista al mar y desayuno incluido."
+          }
+        ]
+      },
+      {
+        "chapterTitle": "Chapter 5 · El Mercado",
+        "lessonTitle": "Compras & regateo",
+        "goalTitle": "Construir: comprar en el mercado",
+        "scenario": "market",
+        "bank": [
+          "fruta",
+          "verdura",
+          "precio",
+          "oferta",
+          "kilo",
+          "pagarse"
+        ],
+        "bankEn": [
+          "fruit",
+          "vegetable",
+          "price",
+          "offer",
+          "kilo",
+          "pay"
+        ],
+        "correct": [
+          3,
+          1,
+          0,
+          2
+        ],
+        "gTermA": "comprar",
+        "gTermB": "pagar",
+        "convo": [
+          {
+            "speaker": "Vendor",
+            "message": "La fruta está fresca hoy, ¿qué quieres comprar?"
+          },
+          {
+            "speaker": "Customer",
+            "message": "Quiero un kilo de manzanas, por favor. ¿Cuánto cuesta?"
+          }
+        ]
+      },
+      {
+        "chapterTitle": "Chapter 6 · Emergencias",
+        "lessonTitle": "Ayuda & seguridad",
+        "goalTitle": "Construir: reaccionar en emergencias",
+        "scenario": "emergency",
+        "bank": [
+          "ayuda",
+          "ambulancia",
+          "policía",
+          "fuego",
+          "emergencia",
+          "hospital"
+        ],
+        "bankEn": [
+          "help",
+          "ambulance",
+          "police",
+          "fire",
+          "emergency",
+          "hospital"
+        ],
+        "correct": [
+          0,
+          4,
+          5,
+          2
+        ],
+        "gTermA": "llamar",
+        "gTermB": "necesitar",
+        "convo": [
+          {
+            "speaker": "You",
+            "message": "¡Ayuda, por favor! Necesito una ambulancia."
+          },
+          {
+            "speaker": "Bystander",
+            "message": "Llamaré a la policía y a los servicios de emergencia ahora mismo."
+          }
+        ]
+      }
+    ]
+  }
+}
