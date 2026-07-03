@@ -28,8 +28,7 @@ const withSerwist = withSerwistInit({
   swSrc: "src/app/sw.ts",
   swDest: "public/sw.js",
   disable: process.env.NODE_ENV === "development",
-  // Crucial: we don't skip waiting so we can show the "Update Available" prompt
-  skipWaiting: false,
+  skipWaiting: true,
 });
 
 export default withSerwist(nextConfig);
