@@ -1077,7 +1077,7 @@ export default function App() {
 
                       {/* Character Avatars */}
                       {isCurrent && (
-                        <div style={{ position: 'absolute', top: '-45px', left: '-35px', fontSize: '50px', zIndex: 3, filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.25))', animation: 'floatUp 2.5s ease-in-out infinite' }}>
+                        <div style={{ position: 'absolute', top: '-35px', left: '-25px', fontSize: '38px', zIndex: 3, filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.25))', animation: 'floatUp 2.5s ease-in-out infinite' }}>
                           🙋‍♀️
                         </div>
                       )}
