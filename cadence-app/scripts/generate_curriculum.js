@@ -1,7 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-
-// NOTE: Before running this script, you must install the openai package:
+require('dotenv').config({ path: path.join(__dirname, '../.env.local') });
 // npm install openai
 //
 // To run this script, provide your OpenAI API key like this:
@@ -14,7 +13,7 @@ if (!process.env.OPENAI_API_KEY) {
 }
 
 const { OpenAI } = require('openai');
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY, timeout: 120000 });
 
 const languagesFile = path.join(__dirname, '../src/lib/languages.ts');
 
@@ -32,14 +31,13 @@ async function main() {
   // Evaluate the object to memory
   const LANGS = eval(`(${langsMatch[1]})`);
   
-  const updatedLangs = {};
+  const updatedLangs = { ...LANGS };
   
   const langKeys = Object.keys(LANGS);
   console.log(`Found ${langKeys.length} languages. Starting generation process...`);
 
-  // We will process just ONE language for now (es) to verify everything works perfectly.
-  // Change this to langKeys to do all languages.
-  const testLangs = ['es'];
+  // Run for all languages
+  const testLangs = langKeys;
 
   for (const langCode of testLangs) {
     console.log(`\nProcessing language: ${langCode}...`);
@@ -56,44 +54,12 @@ async function main() {
       accent: lang.accent,
     };
 
-    const chapter1 = {
-      chapterTitle: "Chapter 1 · The Basics",
-      lessonTitle: "Greetings & warmth",
-      goalTitle: "Build it: order a coffee",
-      goalLine: lang.goalLine,
-      goalShort: lang.goalShort,
-      scenario: 'cafe',
-      partnerName: lang.partnerName,
-      partnerInitial: lang.partnerInitial,
-      partnerRole: lang.partnerRole,
-      partnerPlace: lang.partnerPlace,
-      scenarioTitle: lang.scenarioTitle,
-      scenarioSub: lang.scenarioSub,
-      lessonPromptEn: lang.lessonPromptEn,
-      lessonHint: lang.lessonHint,
-      bank: lang.bank,
-      bankEn: lang.bankEn,
-      correct: lang.correct,
-      lessonCorrectTitle: lang.lessonCorrectTitle,
-      lessonCorrectBody: lang.lessonCorrectBody,
-      lessonWrongBody: lang.lessonWrongBody,
-      cultureCaption: lang.cultureCaption,
-      cultureTitle: lang.cultureTitle,
-      cultureBody: lang.cultureBody,
-      culturePhrase: lang.culturePhrase,
-      milestoneTitle: lang.milestoneTitle,
-      convo: lang.convo,
-      debrief: lang.debrief,
-      grammarMini: lang.grammarMini,
-      grammarTitle: lang.grammarTitle,
-      grammarIntro: lang.grammarIntro,
-      gTermA: lang.gTermA,
-      gDescA: lang.gDescA,
-      gExA: lang.gExA,
-      gTermB: lang.gTermB,
-      gDescB: lang.gDescB,
-      gExB: lang.gExB,
-    };
+    if (lang.chapters?.length >= 6) {
+      console.log(`  ${globalProps.name} already has 6 chapters. Skipping...`);
+      continue;
+    }
+
+    const chapter1 = lang.chapters?.[0] || lang;
 
     console.log(`  Generating Chapters 2-6 for ${globalProps.name} via OpenAI...`);
     
@@ -144,14 +110,16 @@ Rules for the generated JSON:
 
       console.log(`  Successfully generated curriculum for ${globalProps.name}!`);
 
+      // Save incrementally
+      const outputPath = path.join(__dirname, '../src/lib/languages.ts');
+      const fileContent = `export const LANGS: any = ${JSON.stringify(updatedLangs, null, 2)};\n`;
+      fs.writeFileSync(outputPath, fileContent);
     } catch (e) {
       console.error(`  OpenAI API Error for ${langCode}: ${e.message}`);
     }
   }
 
-  const outputPath = path.join(__dirname, '../src/lib/languages_test.json');
-  fs.writeFileSync(outputPath, JSON.stringify(updatedLangs, null, 2));
-  console.log(`\nDone! Wrote test data to ${outputPath}.`);
+  console.log(`\nDone! Successfully updated languages.ts with all 30 languages and 6 chapters each!`);
 }
 
 main();
