@@ -766,6 +766,19 @@ export default function App() {
     icon: defaultIcons[i] || '✨'
   }));
 
+  // Derived Gamification State
+  const activeLevelIndex = chapters.findIndex((_: any, idx: number) => !earnedMilestones.includes(`ch${idx}_regular`));
+  const currentLevel = activeLevelIndex === -1 ? Math.max(0, chapters.length - 1) : activeLevelIndex;
+  
+  const userLevel = currentLevel + 1;
+  const userStreak = earnedMilestones.length > 0 ? 1 : 0;
+  const userDiamonds = earnedMilestones.length * 20;
+
+  const currentChapter = chapters[currentLevel] || { title: '' };
+  const chapterMilestones = [`ch${currentLevel}_regular`, `ch${currentLevel}_pronounce`, `ch${currentLevel}_convo`];
+  const completedInCurrentChapter = chapterMilestones.filter(m => earnedMilestones.includes(m)).length;
+  const chapterProgressPct = Math.max(0, Math.min(100, (completedInCurrentChapter / 3) * 100));
+
   return (
     <div className="cd-outer" style={{ background: '#E7E1D5', minHeight: '100vh', width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '18px', padding: '36px 20px', boxSizing: 'border-box' }}>
       
@@ -991,7 +1004,7 @@ export default function App() {
                   
                   {/* Left: Hearts */}
                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <div style={{ background: '#C44738', borderRadius: '50%', width: '28px', height: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: '14px', fontWeight: 'bold' }}>5</div>
+                    <div style={{ background: '#C44738', borderRadius: '50%', width: '28px', height: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: '14px', fontWeight: 'bold' }}>{userLevel}</div>
                     <span style={{ color: '#C44738', fontSize: '18px', fontWeight: 'bold', fontFamily: "'Instrument Serif', serif" }}>Full</span>
                   </div>
 
@@ -1004,11 +1017,11 @@ export default function App() {
                   <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                       <span style={{ fontSize: '18px' }}>🔥</span>
-                      <span style={{ color: '#A06E50', fontWeight: 'bold', fontSize: '14px' }}>7</span>
+                      <span style={{ color: '#A06E50', fontWeight: 'bold', fontSize: '14px' }}>{userStreak}</span>
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                       <span style={{ fontSize: '18px' }}>💎</span>
-                      <span style={{ color: '#A06E50', fontWeight: 'bold', fontSize: '14px' }}>120</span>
+                      <span style={{ color: '#A06E50', fontWeight: 'bold', fontSize: '14px' }}>{userDiamonds}</span>
                     </div>
                   </div>
 
@@ -1018,16 +1031,16 @@ export default function App() {
               {/* ===== FLOATING CHAPTER CARD ===== */}
               <div style={{ position: 'sticky', top: '90px', zIndex: 90, margin: '16px', background: '#FAF1E4', borderRadius: '16px', padding: '16px', boxShadow: '0 6px 16px rgba(0,0,0,0.15)', border: '2px solid #F3E5D0', width: '220px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
-                  <span style={{ fontSize: '12px', color: '#8A7A66', fontWeight: 600 }}>Chapter 4</span>
+                  <span style={{ fontSize: '12px', color: '#8A7A66', fontWeight: 600 }}>Chapter {userLevel}</span>
                   <span style={{ color: '#8A7A66' }}>›</span>
                 </div>
                 <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: '24px', color: '#3A3229', lineHeight: 1.1, marginBottom: '12px' }}>
-                  Confident Conversations
+                  {currentChapter.title}
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <div style={{ fontSize: '10px', color: '#8A7A66', fontWeight: 'bold' }}>3/8</div>
+                  <div style={{ fontSize: '10px', color: '#8A7A66', fontWeight: 'bold' }}>{completedInCurrentChapter}/3</div>
                   <div style={{ flex: 1, height: '6px', background: '#E8DEC9', borderRadius: '3px', overflow: 'hidden' }}>
-                    <div style={{ width: '37.5%', height: '100%', background: '#C44738', borderRadius: '3px' }}></div>
+                    <div style={{ width: `${chapterProgressPct}%`, height: '100%', background: '#C44738', borderRadius: '3px', transition: 'width 0.3s ease' }}></div>
                   </div>
                 </div>
               </div>
@@ -1129,12 +1142,12 @@ export default function App() {
                         </span>
                       </div>
 
-                      {/* 3 Golden Stars */}
+                      {/* Dynamic Golden Stars */}
                       {isUnlocked && (
                         <div style={{ position: 'absolute', bottom: '-15px', left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: '2px', zIndex: 2 }}>
-                          <span style={{ fontSize: '18px', filter: 'drop-shadow(0 2px 2px rgba(0,0,0,0.3))', transform: 'rotate(-15deg)' }}>⭐</span>
-                          <span style={{ fontSize: '22px', filter: 'drop-shadow(0 2px 2px rgba(0,0,0,0.3))', transform: 'translateY(-4px)' }}>⭐</span>
-                          <span style={{ fontSize: '18px', filter: 'drop-shadow(0 2px 2px rgba(0,0,0,0.3))', transform: 'rotate(15deg)' }}>⭐</span>
+                          {earnedMilestones.includes(`ch${i}_regular`) && <span style={{ fontSize: '18px', filter: 'drop-shadow(0 2px 2px rgba(0,0,0,0.3))', transform: 'rotate(-15deg)' }}>⭐</span>}
+                          {earnedMilestones.includes(`ch${i}_pronounce`) && <span style={{ fontSize: '22px', filter: 'drop-shadow(0 2px 2px rgba(0,0,0,0.3))', transform: 'translateY(-4px)' }}>⭐</span>}
+                          {earnedMilestones.includes(`ch${i}_convo`) && <span style={{ fontSize: '18px', filter: 'drop-shadow(0 2px 2px rgba(0,0,0,0.3))', transform: 'rotate(15deg)' }}>⭐</span>}
                         </div>
                       )}
 
