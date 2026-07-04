@@ -1080,6 +1080,7 @@ export default function App() {
                         {/* The Path */}
                         <path d={fullPath} fill="none" stroke="#F6EED4" strokeWidth="46" strokeLinecap="round" strokeLinejoin="round" />
                         <path d={fullPath} fill="none" stroke="#A58D76" strokeWidth="4" strokeDasharray="12 12" strokeLinecap="round" strokeLinejoin="round" opacity={0.6} />
+                      </>
                     );
                   })()}
                 </svg>
