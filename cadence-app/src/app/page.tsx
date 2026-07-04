@@ -944,29 +944,53 @@ export default function App() {
 
           {/* ===== HOME SCREEN ===== */}
           {view === 'home' && (
-            <div className="cd-screen cd-scroll" style={{ flex: 1, minHeight: 0, overflowY: 'auto', paddingBottom: '74px' }}>
-              <div style={{ padding: '6px 24px 4px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                <div>
-                  <div style={{ fontSize: '12px', color: '#9A8E84' }} className={L.font}>{L.greeting?.replace('Maya', session?.user?.name?.split(' ')[0] || 'User')}</div>
-                  <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: '26px', lineHeight: 1.05 }}>
-                    Your Saga
+            <div className="cd-screen cd-scroll" style={{ flex: 1, minHeight: 0, overflowY: 'auto', paddingBottom: '74px', backgroundImage: "url('/bg-watercolor.png')", backgroundSize: 'cover', backgroundPosition: 'center', backgroundAttachment: 'fixed' }}>
+              
+              {/* ===== NEW HUD BAR ===== */}
+              <div style={{ position: 'sticky', top: '16px', zIndex: 100, margin: '0 16px', display: 'flex', justifyContent: 'center', pointerEvents: 'none' }}>
+                <div style={{ background: '#FAF1E4', borderRadius: '30px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '6px 16px', width: '100%', maxWidth: '380px', boxShadow: '0 4px 10px rgba(0,0,0,0.15)', pointerEvents: 'auto', border: '2px solid #F3E5D0' }}>
+                  
+                  {/* Left: Hearts */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <div style={{ background: '#C44738', borderRadius: '50%', width: '28px', height: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: '14px', fontWeight: 'bold' }}>5</div>
+                    <span style={{ color: '#C44738', fontSize: '18px', fontWeight: 'bold', fontFamily: "'Instrument Serif', serif" }}>Full</span>
                   </div>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '7px' }}>
-                  <div onClick={() => setPicker(true)} style={{ width: '30px', height: '30px', borderRadius: '50%', background: '#fff', border: '1px solid #EDE4D6', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px', cursor: 'pointer' }}>{L.flag}</div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '5px', background: '#fff', border: '1px solid #EDE4D6', borderRadius: '99px', padding: '5px 10px' }}>
-                    <span style={{ color: '#2F8F83', fontSize: '13px' }}>◇</span>
-                    <span style={{ fontSize: '13px', fontWeight: 600 }}>14</span>
+
+                  {/* Center: Avatar */}
+                  <div style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', top: '-10px', background: '#F5B899', borderRadius: '50%', width: '60px', height: '60px', border: '4px solid #FAF1E4', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '32px', boxShadow: '0 4px 8px rgba(0,0,0,0.1)' }}>
+                    🙋‍♀️
                   </div>
+
+                  {/* Right: Streak & Gems */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                      <span style={{ fontSize: '18px' }}>🔥</span>
+                      <span style={{ color: '#A06E50', fontWeight: 'bold', fontSize: '14px' }}>7</span>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                      <span style={{ fontSize: '18px' }}>💎</span>
+                      <span style={{ color: '#A06E50', fontWeight: 'bold', fontSize: '14px' }}>120</span>
+                    </div>
+                  </div>
+
                 </div>
               </div>
-              <div onClick={() => setView('smartplan')} style={{ margin: '12px 18px 0', background: '#fff', border: '1px solid #EDE4D6', borderRadius: '14px', padding: '12px 15px', display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer' }}>
-                <span style={{ fontSize: '18px' }}>✦</span>
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: '13.5px', fontWeight: 600 }}>Today's plan — built for you</div>
-                  <div style={{ fontSize: '11.5px', color: '#9A8E84' }}>4 steps · ~12 min · adapts to what you know</div>
+
+              {/* ===== FLOATING CHAPTER CARD ===== */}
+              <div style={{ position: 'sticky', top: '90px', zIndex: 90, margin: '16px', background: '#FAF1E4', borderRadius: '16px', padding: '16px', boxShadow: '0 6px 16px rgba(0,0,0,0.15)', border: '2px solid #F3E5D0', width: '220px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+                  <span style={{ fontSize: '12px', color: '#8A7A66', fontWeight: 600 }}>Chapter 4</span>
+                  <span style={{ color: '#8A7A66' }}>›</span>
                 </div>
-                <span style={{ color: '#C9AE97' }}>›</span>
+                <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: '24px', color: '#3A3229', lineHeight: 1.1, marginBottom: '12px' }}>
+                  Confident Conversations
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <div style={{ fontSize: '10px', color: '#8A7A66', fontWeight: 'bold' }}>3/8</div>
+                  <div style={{ flex: 1, height: '6px', background: '#E8DEC9', borderRadius: '3px', overflow: 'hidden' }}>
+                    <div style={{ width: '37.5%', height: '100%', background: '#C44738', borderRadius: '3px' }}></div>
+                  </div>
+                </div>
               </div>
 
               <div style={{ position: 'relative', marginTop: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '50px', paddingBottom: '120px' }}>
@@ -1061,7 +1085,7 @@ export default function App() {
                         }}
                       >
                         <span style={{ transform: 'translateY(-2px)' }}>
-                          {isUnlocked ? (ch.icon || '1') : '🔒'}
+                          {isUnlocked ? (i + 1) : '🔒'}
                         </span>
                       </div>
 
@@ -2635,10 +2659,11 @@ export default function App() {
 
           {/* ===== BOTTOM NAVIGATION TABS ===== */}
           {!picker && ['home', 'speakHub', 'immerse', 'social', 'you'].includes(view) && (
-            <div style={{ height: '62px', borderTop: '1px solid #EDE4D6', background: '#fff', display: 'flex', position: 'absolute', bottom: 0, left: 0, right: 0, zIndex: 10, padding: '0 5px' }}>
-              <div onClick={() => setView('home')} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: view === 'home' ? '#DB5338' : '#B5A99E' }}>
-                <span style={{ fontSize: '20px' }}>▶</span>
-                <span style={{ fontSize: '10px', marginTop: '2px', fontWeight: 600 }}>Learn</span>
+            <div style={{ height: '70px', background: '#FAF1E4', display: 'flex', position: 'absolute', bottom: '16px', left: '16px', right: '16px', zIndex: 10, padding: '0 10px', borderRadius: '35px', boxShadow: '0 8px 24px rgba(0,0,0,0.15)', border: '2px solid #F3E5D0' }}>
+              <div onClick={() => setView('home')} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: view === 'home' ? '#C44738' : '#B5A99E', position: 'relative' }}>
+                {view === 'home' && <div style={{ position: 'absolute', top: '10px', width: '40px', height: '3px', background: '#C44738', borderRadius: '2px' }}></div>}
+                <span style={{ fontSize: '24px', marginTop: '6px' }}>🗺️</span>
+                <span style={{ fontSize: '11px', marginTop: '4px', fontWeight: 600 }}>Story</span>
               </div>
               <div onClick={() => setView('speakHub')} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: view === 'speakHub' ? '#DB5338' : '#B5A99E' }}>
                 <span style={{ fontSize: '20px' }}>◇</span>
