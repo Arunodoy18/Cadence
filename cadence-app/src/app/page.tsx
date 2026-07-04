@@ -5,6 +5,8 @@ import { useSession, signIn, signOut } from 'next-auth/react';
 import { LANGS } from '@/lib/languages';
 import { scenarioMeta } from '@/lib/scenarios';
 import { useRouter } from 'next/navigation';
+import { WavRecorder } from '@/lib/WavRecorder';
+import { AudioVisualizer } from '@/components/AudioVisualizer';
 
 export default function App() {
   const { data: session, status: authStatus } = useSession();
@@ -48,8 +50,9 @@ export default function App() {
   const [lockedToast, setLockedToast] = useState<string>('');
 
   // Pronunciation Lab state
-  const [pronResult, setPronResult] = useState<any | null>(null);
+  const [pronResult, setPronResult] = useState<any>(null);
   const [recordingPron, setRecordingPron] = useState(false);
+  const [pronAnalyser, setPronAnalyser] = useState<AnalyserNode | null>(null);
   const [pronScore, setPronScore] = useState<number | null>(null);
 
   // Smart Plan state
@@ -96,6 +99,7 @@ export default function App() {
   const [payMethod, setPayMethod] = useState<'card' | 'upi'>('card');
   // MediaRecorder for STT
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const wavRecorderRef = useRef<WavRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
 
   // PWA Install Prompt state
@@ -390,61 +394,63 @@ export default function App() {
   };
 
   // Pronunciation Lab recording
-  const handleTogglePronounceMic = async () => {
+  const handleStartPronounceMic = async () => {
+    if (recordingPron) return;
+    try {
+      const recorder = new WavRecorder();
+      wavRecorderRef.current = recorder;
+      await recorder.start();
+      setPronAnalyser(recorder.analyser);
+      setRecordingPron(true);
+    } catch (e) {
+      console.error('Failed to start WavRecorder', e);
+    }
+  };
+
+  const handleStopPronounceMic = async () => {
+    if (!recordingPron || !wavRecorderRef.current) return;
+    setRecordingPron(false);
+    
     const _L = LANGS[lang] || LANGS.es;
     const L = { ..._L, ...(_L.chapters?.[playingChapter || 0] || {}) };
     const refText = L.bank.filter((_: any, i: number) => L.correct.includes(i)).join(' ');
 
-    if (recordingPron) {
-      setRecordingPron(false);
-      // Stop and assess
-      const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
-      const recorder = mediaRecorderRef.current;
-      if (recorder) {
-        recorder.onstop = async () => {
-          const formData = new FormData();
-          formData.append('file', audioBlob);
-          formData.append('refText', refText);
-          formData.append('lang', lang);
+    try {
+      const audioBlob = await wavRecorderRef.current.stop();
+      wavRecorderRef.current = null;
+      setPronAnalyser(null);
 
-          try {
-            const res = await fetch('/api/pronounce', {
-              method: 'POST',
-              body: formData,
-            });
-            const data = await res.json();
-            if (data.score !== undefined) {
-              setPronScore(Math.round(data.score));
-              setPronResult(data);
+      const formData = new FormData();
+      formData.append('file', audioBlob);
+      formData.append('refText', refText);
+      formData.append('lang', lang);
 
-              // Log to database
-              if (authStatus === 'authenticated') {
-                await fetch('/api/attempt', {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({
-                    lang,
-                    term: refText,
-                    activity: 'pronounce',
-                    correct: data.score >= 80,
-                    score: data.score,
-                  }),
-                });
-              }
-            }
-          } catch (e) {
-            console.error('Pronunciation API error', e);
-          }
-        };
-        recorder.stop();
-        recorder.stream.getTracks().forEach((track) => track.stop());
+      const res = await fetch('/api/pronounce', {
+        method: 'POST',
+        body: formData,
+      });
+      const data = await res.json();
+      if (data.score !== undefined) {
+        setPronScore(Math.round(data.score));
+        setPronResult(data);
+
+        // Log to database
+        if (authStatus === 'authenticated') {
+          await fetch('/api/attempt', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              lang,
+              term: refText,
+              activity: 'pronounce',
+              correct: data.score >= 80,
+              score: data.score,
+            }),
+          });
+        }
       }
-    } else {
-      // Start recording
-      const ok = await startRecording();
-      if (ok) {
-        setRecordingPron(true);
-      }
+    } catch (e) {
+      console.error('Pronunciation API error', e);
     }
   };
 
@@ -1380,13 +1386,17 @@ export default function App() {
                 )}
               </div>
 
-              <div style={{ padding: '16px 24px 26px', flex: 'none' }}>
+              <div style={{ padding: '16px 24px 26px', flex: 'none', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                <AudioVisualizer analyser={pronAnalyser} isRecording={recordingPron} />
                 <button 
-                  onClick={handleTogglePronounceMic}
+                  onMouseDown={handleStartPronounceMic}
+                  onMouseUp={handleStopPronounceMic}
+                  onTouchStart={(e) => { e.preventDefault(); handleStartPronounceMic(); }}
+                  onTouchEnd={(e) => { e.preventDefault(); handleStopPronounceMic(); }}
                   className={recordingPron ? 'cd-listening' : ''}
                   style={{ 
                     width: '100%', 
-                    background: recordingPron ? '#2F8F83' : '#DB5338', 
+                    background: recordingPron ? '#DB5338' : '#2F8F83', 
                     color: '#FBF6EE', 
                     border: 'none', 
                     borderRadius: '16px', 
@@ -1394,10 +1404,12 @@ export default function App() {
                     fontSize: '16px', 
                     fontWeight: 600, 
                     cursor: 'pointer', 
-                    boxShadow: '0 8px 20px -6px rgba(219,83,56,.5)' 
+                    boxShadow: recordingPron ? '0 8px 20px -6px rgba(219,83,56,.5)' : 'none',
+                    userSelect: 'none',
+                    WebkitUserSelect: 'none'
                   }}
                 >
-                  {recordingPron ? '⏹ Stop recording...' : '🎙 Hold to Record & Assess'}
+                  {recordingPron ? '🎙 Recording... (Release to Stop)' : '🎙 Hold to Record & Assess'}
                 </button>
               </div>
             </div>
