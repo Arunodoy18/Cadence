@@ -1310,7 +1310,13 @@ export default function App() {
                     Continue →
                   </div>
                 )}
-                <div onClick={() => setView('pronounce')} style={{ width: '50px', height: '50px', borderRadius: '14px', background: '#2F8F83', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: '18px', flex: 'none', cursor: 'pointer' }}>🎙</div>
+                <div onClick={() => setView('pronounce')} className="mic-btn" style={{ width: '50px', height: '50px', borderRadius: '14px', background: '#2F8F83', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', flex: 'none', cursor: 'pointer', zIndex: 10 }}>
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path>
+                    <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                    <line x1="12" y1="19" x2="12" y2="22"></line>
+                  </svg>
+                </div>
               </div>
             </div>
           )}
