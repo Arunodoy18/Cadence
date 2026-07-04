@@ -64,8 +64,10 @@ export default function App() {
     draft: '',
     thinking: false,
     listening: false,
-    live: false,
+    live: false
   });
+  const [convoAnalyser, setConvoAnalyser] = useState<AnalyserNode | null>(null);
+  const [isAiSpeaking, setIsAiSpeaking] = useState(false);
 
   // Reader state
   const [pop, setPop] = useState<{ term: string; def: string } | null>(null);
@@ -234,6 +236,8 @@ export default function App() {
       const audioBlob = await res.blob();
       const audioUrl = URL.createObjectURL(audioBlob);
       const audio = new Audio(audioUrl);
+      audio.onplay = () => setIsAiSpeaking(true);
+      audio.onended = () => setIsAiSpeaking(false);
       audio.play();
     } catch (e) {
       // Fallback to local browser SpeechSynthesis
@@ -242,6 +246,9 @@ export default function App() {
         const u = new SpeechSynthesisUtterance(text);
         u.lang = locale;
         u.rate = 0.92;
+        u.onstart = () => setIsAiSpeaking(true);
+        u.onend = () => setIsAiSpeaking(false);
+        u.onerror = () => setIsAiSpeaking(false);
         window.speechSynthesis.cancel();
         window.speechSynthesis.speak(u);
       } catch (err) {}
@@ -455,19 +462,45 @@ export default function App() {
   };
 
   // Conversation live chat
-  const handleToggleConvoMic = async () => {
-    if (convo.listening) {
-      setConvo((prev) => ({ ...prev, listening: false }));
-      const transcript = await stopRecording();
+  const handleStartConvoMic = async () => {
+    if (convo.listening) return;
+    try {
+      const recorder = new WavRecorder();
+      wavRecorderRef.current = recorder;
+      await recorder.start();
+      setConvoAnalyser(recorder.analyser);
+      setConvo((prev) => ({ ...prev, listening: true }));
+    } catch (e) {
+      console.error('Failed to start WavRecorder for Convo', e);
+    }
+  };
+
+  const handleStopConvoMic = async () => {
+    if (!convo.listening || !wavRecorderRef.current) return;
+    setConvo((prev) => ({ ...prev, listening: false }));
+
+    try {
+      const audioBlob = await wavRecorderRef.current.stop();
+      wavRecorderRef.current = null;
+      setConvoAnalyser(null);
+
+      // Call /api/stt
+      const formData = new FormData();
+      formData.append('file', audioBlob);
+
+      const res = await fetch('/api/stt', {
+        method: 'POST',
+        body: formData,
+      });
+      const data = await res.json();
+      const transcript = data.transcript || '';
+      
       if (transcript) {
         setConvo((prev) => ({ ...prev, draft: transcript }));
         submitConvo(transcript);
       }
-    } else {
-      const ok = await startRecording();
-      if (ok) {
-        setConvo((prev) => ({ ...prev, listening: true }));
-      }
+    } catch (e) {
+      console.error('Convo STT API error', e);
     }
   };
 
@@ -1551,7 +1584,16 @@ export default function App() {
                 <span onClick={() => setView('debrief')} style={{ cursor: 'pointer', color: '#E1A23A' }}>End ›</span>
               </div>
               <div style={{ textAlign: 'center', padding: '6px 0 6px', flex: 'none' }}>
-                <div style={{ width: '58px', height: '58px', borderRadius: '50%', margin: '0 auto 7px', background: 'linear-gradient(140deg,#E1A23A,#DB5338)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '22px', fontWeight: 600, color: '#fff' }}>
+                <div 
+                  className={convo.thinking ? 'ai-thinking' : isAiSpeaking ? 'ai-speaking' : ''}
+                  style={{ 
+                    width: '58px', height: '58px', borderRadius: '50%', margin: '0 auto 7px', 
+                    background: 'linear-gradient(140deg,#E1A23A,#DB5338)', 
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', 
+                    fontSize: '22px', fontWeight: 600, color: '#fff',
+                    transition: 'box-shadow 0.3s ease, transform 0.3s ease'
+                  }}
+                >
                   {sMeta.partnerInitial}
                 </div>
                 <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: '18px' }} className={L.font}>
@@ -1594,22 +1636,32 @@ export default function App() {
                   </div>
                 )}
               </div>
-              <div style={{ padding: '12px 16px 22px', flex: 'none', background: 'linear-gradient(180deg,rgba(36,28,42,0),#241C2A 30%)' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '9px', background: '#352B3D', borderRadius: '99px', padding: '7px 7px 7px 16px' }}>
-                  <input 
-                    className="cd-input" 
-                    style={{ flex: 1, fontSize: '14px', minWidth: 0 }} 
-                    value={convo.draft} 
-                    onChange={(e) => setConvo(prev => ({ ...prev, draft: e.target.value }))}
-                    onKeyDown={(e) => e.key === 'Enter' && submitConvo(convo.draft)}
-                    placeholder={convo.thinking ? '…' : 'Your reply'} 
-                  />
-                  <div onClick={handleToggleConvoMic} className={convo.listening ? 'cd-listening' : ''} style={{ width: '40px', height: '40px', borderRadius: '50%', background: convo.listening ? '#2F8F83' : '#4A3E54', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '16px', cursor: 'pointer', flex: 'none' }}>🎙</div>
-                  <div onClick={() => submitConvo(convo.draft)} style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#DB5338', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '17px', cursor: 'pointer', flex: 'none', color: '#fff' }}>↑</div>
-                </div>
-                <div style={{ textAlign: 'center', fontSize: '11px', color: '#7E7488', marginTop: '8px' }}>
-                  {convo.listening ? 'Listening… speak now' : 'Type, or tap 🎙 to speak'}
-                </div>
+              <div style={{ padding: '12px 16px 26px', flex: 'none', background: 'linear-gradient(180deg,rgba(36,28,42,0),#241C2A 30%)', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                <AudioVisualizer analyser={convoAnalyser} isRecording={convo.listening} color="#DB5338" />
+                <button 
+                  onMouseDown={handleStartConvoMic}
+                  onMouseUp={handleStopConvoMic}
+                  onTouchStart={(e) => { e.preventDefault(); handleStartConvoMic(); }}
+                  onTouchEnd={(e) => { e.preventDefault(); handleStopConvoMic(); }}
+                  className={convo.listening ? 'cd-listening' : ''}
+                  style={{ 
+                    width: '100%', 
+                    background: convo.listening ? '#DB5338' : '#2F8F83', 
+                    color: '#FBF6EE', 
+                    border: 'none', 
+                    borderRadius: '24px', 
+                    padding: '20px', 
+                    fontSize: '18px', 
+                    fontWeight: 600, 
+                    cursor: 'pointer', 
+                    boxShadow: convo.listening ? '0 8px 24px -6px rgba(219,83,56,.6)' : 'none',
+                    userSelect: 'none',
+                    WebkitUserSelect: 'none',
+                    transition: 'all 0.2s ease'
+                  }}
+                >
+                  {convo.listening ? '🎙 Recording... (Release to Stop)' : '🎙 Hold to Speak'}
+                </button>
               </div>
             </div>
           )}
