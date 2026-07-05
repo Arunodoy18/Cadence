@@ -2479,7 +2479,7 @@ export default function App() {
                 <span style={{ fontSize: '12.5px', fontWeight: 600, color: '#8A7E73' }}>Together</span>
                 <span onClick={() => setView('correct')} style={{ fontSize: '16px', color: '#DB5338', cursor: 'pointer' }}>＋</span>
               </div>
-              <div className="cd-scroll" style={{ flex: 1, overflowY: 'auto', padding: '8px 20px 24px' }}>
+              <div className="cd-scroll" style={{ flex: 1, overflowY: 'auto', padding: '8px 20px 120px' }}>
                 <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: '26px', lineHeight: 1.05, marginBottom: '22px' }}>Your circle</div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                   {circle.map((c, i) => (
