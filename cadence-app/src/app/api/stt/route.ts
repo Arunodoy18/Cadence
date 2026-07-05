@@ -20,8 +20,9 @@ export async function POST(req: NextRequest) {
     });
 
     return NextResponse.json({ transcript: response.text });
-  } catch (error: any) {
-    console.error('STT API error:', error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error) {
+    const e = error as Error;
+    console.error('STT API error:', e);
+    return NextResponse.json({ error: e.message }, { status: 500 });
   }
 }

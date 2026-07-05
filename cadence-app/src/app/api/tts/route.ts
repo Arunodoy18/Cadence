@@ -50,8 +50,9 @@ export async function POST(req: NextRequest) {
         'Cache-Control': 'public, max-age=3600',
       },
     });
-  } catch (error: any) {
-    console.error('TTS API error:', error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error) {
+    const e = error as Error;
+    console.error('TTS API error:', e);
+    return NextResponse.json({ error: e.message }, { status: 500 });
   }
 }

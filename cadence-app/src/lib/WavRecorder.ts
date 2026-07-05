@@ -9,7 +9,7 @@ export class WavRecorder {
 
   async start() {
     this.mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
-    this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)({
+    this.audioContext = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)({
       sampleRate: 16000 // Force 16kHz for Azure
     });
 

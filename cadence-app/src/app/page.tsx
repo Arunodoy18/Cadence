@@ -1072,7 +1072,7 @@ export default function App() {
                     const currentLevel = activeLevelIndex === -1 ? chapters.length - 1 : activeLevelIndex;
                     let fullPath = "";
                     let completedPath = "";
-                    chapters.forEach((ch, i) => {
+                    chapters.forEach((ch: any, i: number) => {
                       const isLeft = i % 2 === 0;
                       const x = isLeft ? 50 : 150; // SVG center is 100
                       const y = 42 + i * 134; // Node center Y
@@ -2540,7 +2540,7 @@ export default function App() {
                     <div style={{ fontSize: '11px', color: '#8A7E73' }}>0:04</div>
                   </div>
                   <div style={{ fontSize: '12px', color: '#A8927C', textTransform: 'uppercase', letterSpacing: '.05em', marginBottom: '8px' }}>Transcription:</div>
-                  <div style={{ fontSize: '16px', lineHeight: 1.4, color: '#5C5048' }}>"I am go to the store for buy some milks."</div>
+                  <div style={{ fontSize: '16px', lineHeight: 1.4, color: '#5C5048' }}>&quot;I am go to the store for buy some milks.&quot;</div>
                 </div>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -2588,7 +2588,7 @@ export default function App() {
               </div>
               <div className="cd-scroll" style={{ flex: 1, overflowY: 'auto', padding: '8px 20px 24px' }}>
                 <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: '27px', lineHeight: 1.05, marginBottom: '12px' }}>Your data is yours</div>
-                <div style={{ fontSize: '13px', color: '#5C5048', lineHeight: 1.5, marginBottom: '24px' }}>We don't sell your data to brokers, and we don't train underlying LLMs on your personal chats without explicit opt-in. You can delete your account and all associated data at any time.</div>
+                <div style={{ fontSize: '13px', color: '#5C5048', lineHeight: 1.5, marginBottom: '24px' }}>We don&apos;t sell your data to brokers, and we don&apos;t train underlying LLMs on your personal chats without explicit opt-in. You can delete your account and all associated data at any time.</div>
                 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '30px' }}>
                   {charterToggles.map((c, i) => (
@@ -2665,7 +2665,7 @@ export default function App() {
                 <span style={{ fontSize: '12px', color: 'rgba(255,255,255,.7)' }}>3/10</span>
               </div>
               <div style={{ textAlign: 'center', padding: '16px 24px 0' }}>
-                <div style={{ fontSize: '11px', letterSpacing: '.12em', textTransform: 'uppercase', color: 'rgba(255,255,255,.6)' }}>Words about to fade — let's refresh</div>
+                <div style={{ fontSize: '11px', letterSpacing: '.12em', textTransform: 'uppercase', color: 'rgba(255,255,255,.6)' }}>Words about to fade — let&apos;s refresh</div>
               </div>
               <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: '0 30px', textAlign: 'center' }}>
                 <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: '46px', lineHeight: 1, marginBottom: '14px' }}>el mercado</div>

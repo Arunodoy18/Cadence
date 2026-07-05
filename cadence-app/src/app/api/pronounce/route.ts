@@ -106,11 +106,11 @@ export async function POST(req: NextRequest) {
       accuracyScore: pronAssessment.AccuracyScore || 0,
       fluencyScore: pronAssessment.FluencyScore || 0,
       completenessScore: pronAssessment.CompletenessScore || 0,
-      words: (nBest.Words || []).map((w: any) => ({
+      words: (nBest.Words || []).map((w: { Word: string; PronunciationAssessment: any; Phonemes: any[] }) => ({
         word: w.Word,
         accuracyScore: w.PronunciationAssessment?.AccuracyScore || 0,
         errorType: w.PronunciationAssessment?.ErrorType || 'None',
-        phonemes: (w.Phonemes || []).map((p: any) => ({
+        phonemes: (w.Phonemes || []).map((p: { Phoneme: string; PronunciationAssessment: any }) => ({
           phoneme: p.Phoneme,
           accuracyScore: p.PronunciationAssessment?.AccuracyScore || 0,
         })),
@@ -118,8 +118,9 @@ export async function POST(req: NextRequest) {
     };
 
     return NextResponse.json(result);
-  } catch (error: any) {
-    console.error('Pronounce API error:', error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error) {
+    const e = error as Error;
+    console.error('Pronounce API error:', e);
+    return NextResponse.json({ error: e.message }, { status: 500 });
   }
 }

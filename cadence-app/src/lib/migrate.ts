@@ -15,7 +15,7 @@ async function migrate() {
   try {
     await sql`CREATE EXTENSION IF NOT EXISTS "pgcrypto"`;
     console.log('  ✓ pgcrypto extension');
-  } catch (e: any) { console.log('  ~ pgcrypto already exists'); }
+  } catch (error) { console.log('  ~ pgcrypto already exists'); }
 
   try {
     await sql`
@@ -31,7 +31,7 @@ async function migrate() {
       )
     `;
     console.log('  ✓ users table');
-  } catch (e: any) { console.error('  ✗ users:', e.message); }
+  } catch (error) { const e = error as Error; console.error('  ✗ users:', e.message); }
 
   try {
     await sql`
@@ -45,7 +45,7 @@ async function migrate() {
       )
     `;
     console.log('  ✓ enrollments table');
-  } catch (e: any) { console.error('  ✗ enrollments:', e.message); }
+  } catch (error) { const e = error as Error; console.error('  ✗ enrollments:', e.message); }
 
   try {
     await sql`
@@ -61,7 +61,7 @@ async function migrate() {
       )
     `;
     console.log('  ✓ review_items table');
-  } catch (e: any) { console.error('  ✗ review_items:', e.message); }
+  } catch (error) { const e = error as Error; console.error('  ✗ review_items:', e.message); }
 
   try {
     await sql`
@@ -79,7 +79,7 @@ async function migrate() {
       )
     `;
     console.log('  ✓ attempts table');
-  } catch (e: any) { console.error('  ✗ attempts:', e.message); }
+  } catch (error) { const e = error as Error; console.error('  ✗ attempts:', e.message); }
 
   try {
     await sql`
@@ -91,7 +91,7 @@ async function migrate() {
       )
     `;
     console.log('  ✓ milestones table');
-  } catch (e: any) { console.error('  ✗ milestones:', e.message); }
+  } catch (error) { const e = error as Error; console.error('  ✗ milestones:', e.message); }
 
   try {
     await sql`
@@ -105,7 +105,7 @@ async function migrate() {
       )
     `;
     console.log('  ✓ subscriptions table');
-  } catch (e: any) { console.error('  ✗ subscriptions:', e.message); }
+  } catch (error) { const e = error as Error; console.error('  ✗ subscriptions:', e.message); }
 
   // Indexes
   const indexes = [
@@ -122,13 +122,13 @@ async function migrate() {
     try {
       await sql.query(idx);
       console.log(`  ✓ ${idx.substring(36, 80)}`);
-    } catch (e: any) { console.error(`  ✗ index: ${e.message}`); }
+    } catch (error) { const e = error as Error; console.error(`  ✗ index: ${e.message}`); }
   }
 
   // Verify tables
   const tables = await sql`SELECT table_name FROM information_schema.tables WHERE table_schema = 'public' ORDER BY table_name`;
   console.log('\nTables in database:');
-  tables.forEach((t: any) => console.log(`  • ${t.table_name}`));
+  tables.forEach((t: { table_name: string }) => console.log(`  • ${t.table_name}`));
 }
 
 migrate().catch(console.error);

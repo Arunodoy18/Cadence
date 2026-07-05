@@ -1,4 +1,15 @@
-export const LANGS: any = {
+export interface LanguageData {
+  name: string;
+  flag: string;
+  code: string;
+  font: string;
+  locale: string;
+  greeting: string;
+  accent: string;
+  chapters: Record<string, unknown>[];
+}
+
+export const LANGS: Record<string, LanguageData> = {
   "es": {
     "name": "Spanish",
     "flag": "🇪🇸",

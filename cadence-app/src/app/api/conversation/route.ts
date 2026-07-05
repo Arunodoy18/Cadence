@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
 
     const chatMessages = [
       { role: 'system' as const, content: systemPrompt },
-      ...messages.map((m: any) => ({
+      ...messages.map((m: { who: string; n: string }) => ({
         role: m.who === 'p' ? 'assistant' as const : 'user' as const,
         content: m.n,
       })),
@@ -45,8 +45,9 @@ export async function POST(req: NextRequest) {
       english: data.english || '',
       tip: data.tip || '',
     });
-  } catch (error: any) {
-    console.error('Conversation API error:', error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error) {
+    const e = error as Error;
+    console.error('Conversation API error:', e);
+    return NextResponse.json({ error: e.message }, { status: 500 });
   }
 }
