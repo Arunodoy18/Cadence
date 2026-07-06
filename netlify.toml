@@ -1,5 +1,9 @@
 [build]
   base = "cadence-app"
-  command = "npm run build"
+  command = "CI=false npm run build"
+
+[build.environment]
+  CI = "false"
+
 [[plugins]]
   package = "@netlify/plugin-nextjs"
