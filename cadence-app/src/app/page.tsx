@@ -52,6 +52,7 @@ export default function App() {
   // Pronunciation Lab state
   const [pronResult, setPronResult] = useState<any>(null);
   const [recordingPron, setRecordingPron] = useState(false);
+  const [chatInput, setChatInput] = useState('');
   const [pronAnalyser, setPronAnalyser] = useState<AnalyserNode | null>(null);
   const [pronScore, setPronScore] = useState<number | null>(null);
 
@@ -1652,30 +1653,62 @@ export default function App() {
               </div>
               <div style={{ padding: '12px 16px 26px', flex: 'none', background: 'linear-gradient(180deg,rgba(36,28,42,0),#241C2A 30%)', display: 'flex', flexDirection: 'column', gap: '16px' }}>
                 <AudioVisualizer analyser={convoAnalyser} isRecording={convo.listening} color="#DB5338" />
-                <button 
-                  onMouseDown={handleStartConvoMic}
-                  onMouseUp={handleStopConvoMic}
-                  onTouchStart={(e) => { e.preventDefault(); handleStartConvoMic(); }}
-                  onTouchEnd={(e) => { e.preventDefault(); handleStopConvoMic(); }}
-                  className={convo.listening ? 'cd-listening' : ''}
-                  style={{ 
-                    width: '100%', 
-                    background: convo.listening ? '#DB5338' : '#2F8F83', 
-                    color: '#FBF6EE', 
-                    border: 'none', 
-                    borderRadius: '24px', 
-                    padding: '20px', 
-                    fontSize: '18px', 
-                    fontWeight: 600, 
-                    cursor: 'pointer', 
-                    boxShadow: convo.listening ? '0 8px 24px -6px rgba(219,83,56,.6)' : 'none',
-                    userSelect: 'none',
-                    WebkitUserSelect: 'none',
-                    transition: 'all 0.2s ease'
+                <form 
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    if (!chatInput.trim() || convo.thinking) return;
+                    submitConvo(chatInput);
+                    setChatInput('');
                   }}
+                  style={{ display: 'flex', gap: '8px', alignItems: 'center' }}
                 >
-                  {convo.listening ? '🎙 Recording... (Release to Stop)' : '🎙 Hold to Speak'}
-                </button>
+                  <input 
+                    type="text"
+                    value={chatInput}
+                    onChange={e => setChatInput(e.target.value)}
+                    placeholder="Type a message..."
+                    disabled={convo.thinking || convo.listening}
+                    style={{
+                      flex: 1,
+                      background: '#352B3D',
+                      color: '#FBF6EE',
+                      border: '1px solid #4D4155',
+                      borderRadius: '24px',
+                      padding: '16px 20px',
+                      fontSize: '16px',
+                      outline: 'none',
+                      boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.1)'
+                    }}
+                  />
+                  <button 
+                    type="button"
+                    onMouseDown={handleStartConvoMic}
+                    onMouseUp={handleStopConvoMic}
+                    onTouchStart={(e) => { e.preventDefault(); handleStartConvoMic(); }}
+                    onTouchEnd={(e) => { e.preventDefault(); handleStopConvoMic(); }}
+                    className={convo.listening ? 'cd-listening' : ''}
+                    style={{ 
+                      width: '56px', 
+                      height: '56px',
+                      flex: 'none',
+                      background: convo.listening ? '#DB5338' : '#2F8F83', 
+                      color: '#FBF6EE', 
+                      border: 'none', 
+                      borderRadius: '50%', 
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '24px', 
+                      cursor: 'pointer', 
+                      boxShadow: convo.listening ? '0 8px 24px -6px rgba(219,83,56,.6)' : 'none',
+                      userSelect: 'none',
+                      WebkitUserSelect: 'none',
+                      transition: 'all 0.2s ease'
+                    }}
+                  >
+                    🎙
+                  </button>
+                </form>
               </div>
             </div>
           )}

@@ -1,6 +1,6 @@
 // Auto-extracted from prototype
 export function scenarioMeta(L: Record<string, string>, key: string) {
-  const m: Record<string, unknown> = {
+  const m: Record<string, any> = {
     cafe: { partnerName: L.partnerName, partnerInitial: L.partnerInitial, partnerRole: L.partnerRole, partnerPlace: L.partnerPlace, persona: "a friendly " + L.partnerRole + " at " + L.partnerPlace, level: "A2", scripted: true },
     freetalk: { partnerName: "A new friend", partnerInitial: "☺", partnerRole: "free talk", partnerPlace: "a relaxed chat", persona: "a warm, curious local friend making relaxed small talk about everyday life", level: "A2", scripted: false },
     doctor: { partnerName: "The doctor", partnerInitial: "✚", partnerRole: "clinic visit", partnerPlace: "a clinic", persona: "a kind, patient doctor gently asking a patient about simple symptoms", level: "A2", scripted: false },
