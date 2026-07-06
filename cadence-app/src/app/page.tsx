@@ -2606,7 +2606,11 @@ export default function App() {
 
                 <div style={{ borderTop: '1px solid #EDE4D6', paddingTop: '20px' }}>
                   <div style={{ color: '#DB5338', fontSize: '14px', fontWeight: 600, marginBottom: '8px', cursor: 'pointer' }}>Export my data (JSON)</div>
-                  <div style={{ color: '#B23E27', fontSize: '14px', fontWeight: 600, cursor: 'pointer' }}>Delete account & data</div>
+                  <div style={{ color: '#B23E27', fontSize: '14px', fontWeight: 600, cursor: 'pointer', marginBottom: '20px' }}>Delete account & data</div>
+                  <div style={{ borderTop: '1px solid #EDE4D6', paddingTop: '20px', display: 'flex', gap: '15px' }}>
+                    <a href="/privacy" style={{ color: '#8A7E73', fontSize: '12px', textDecoration: 'none' }}>Privacy Policy</a>
+                    <a href="/terms" style={{ color: '#8A7E73', fontSize: '12px', textDecoration: 'none' }}>Terms of Service</a>
+                  </div>
                 </div>
               </div>
             </div>
