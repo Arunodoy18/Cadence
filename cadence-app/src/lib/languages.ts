@@ -1,4 +1,16 @@
-export const LANGS: any = {
+export interface LanguageData {
+  name: string;
+  flag: string;
+  code: string;
+  font: string;
+  locale: string;
+  greeting: string;
+  accent: string;
+  chapters: any[];
+  [key: string]: any;
+}
+
+export const LANGS: Record<string, LanguageData> = {
   "es": {
     "name": "Spanish",
     "flag": "🇪🇸",
@@ -751,6 +763,828 @@ export const LANGS: any = {
         "reviewWord": "ambulancia",
         "reviewSource": "from your emergency practice, today",
         "reviewMeaning": "ambulance"
+      },
+      {
+        "chapterTitle": "Chapter 7 · Preparativos de vuelo",
+        "lessonTitle": "Interacciones básicas en el aeropuerto",
+        "goalTitle": "Build it: facturación de equipaje",
+        "goalLine": "Facturar equipaje y encontrar tu puerta de embarque.",
+        "goalShort": "facturar equipaje",
+        "scenario": "airport",
+        "partnerName": "Carlos",
+        "partnerInitial": "C",
+        "partnerRole": "agente de check-in",
+        "partnerPlace": "aeropuerto de Barajas",
+        "scenarioTitle": "En el aeropuerto · Madrid",
+        "scenarioSub": "Roleplay · facturación de equipaje & información de vuelo",
+        "lessonPromptEn": "I need to check in my baggage, please.",
+        "lessonHint": "Note the polite phrasing.",
+        "bank": [
+          "Necesito",
+          "facturar",
+          "mi equipaje",
+          "por favor",
+          "la puerta",
+          "pasaje"
+        ],
+        "bankEn": [
+          "I need",
+          "to check in",
+          "my baggage",
+          "please",
+          "the gate",
+          "ticket"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "lessonCorrectTitle": "¡Perfecto! ✈️",
+        "lessonCorrectBody": "“Necesito” is a direct yet polite verb to express needs.",
+        "lessonWrongBody": "Start with your need, then specify the action.",
+        "cultureCaption": "Aeropuerto de Barajas · 3pm",
+        "cultureTitle": "El ritmo del aeropuerto",
+        "cultureBody": "Aprovecha el tiempo en el aeropuerto para relajarte. Los españoles no suelen apresurarse.",
+        "culturePhrase": "“¿Dónde está la puerta de embarque?” — para pedir direcciones sin apuros.",
+        "milestoneTitle": "Puedes facturar equipaje y encontrar tu puerta sin problemas.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "¿En qué puedo ayudarte hoy?",
+            "en": "How can I help you today?"
+          },
+          {
+            "who": "u",
+            "n": "Necesito facturar mi equipaje, por favor.",
+            "fb": "That’s the right way to use ‘Necesito’"
+          },
+          {
+            "who": "p",
+            "n": "Claro, ¿tienes tu pasaporte a mano?",
+            "en": "Sure, do you have your passport ready?"
+          },
+          {
+            "who": "u",
+            "n": "Sí, aquí está. ¿Dónde está la puerta de embarque?",
+            "fb": "Nicely added question while being courteous"
+          },
+          {
+            "who": "p",
+            "n": "Es la puerta 25, sigue las señales.",
+            "en": "It’s gate 25, just follow the signs."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "“facturar” vs “comprobar”",
+            "body": "In Spain, ‘facturar’ refers to checking in bags, while ‘comprobar’ is more about verifying details."
+          },
+          {
+            "title": "More local: “puerta de embarque”",
+            "body": "Instead of ‘gate’, use ‘puerta de embarque’ in airports."
+          }
+        ],
+        "grammarMini": "por vs para",
+        "grammarTitle": "“por” vs “para” — uso en contextos de viajes",
+        "grammarIntro": "Ambos significan ‘for’, pero su aplicación varía.",
+        "gTermA": "por",
+        "gDescA": "razón — “because of”",
+        "gExA": "Gracias por tu ayuda.",
+        "gTermB": "para",
+        "gDescB": "objetivo — “in order to”",
+        "gExB": "Voy al aeropuerto para viajar."
+      },
+      {
+        "chapterTitle": "Chapter 8 · Cena en el restaurante",
+        "lessonTitle": "Pedido de cena",
+        "goalTitle": "Build it: pedir una cena completa",
+        "goalLine": "Hacer un pedido completo en un restaurante.",
+        "goalShort": "pedir la cena",
+        "scenario": "dinner",
+        "partnerName": "María",
+        "partnerInitial": "M",
+        "partnerRole": "camarera",
+        "partnerPlace": "restaurante en Barcelona",
+        "scenarioTitle": "En el restaurante · Barcelona",
+        "scenarioSub": "Roleplay · pedir una cena completa",
+        "lessonPromptEn": "I would like to have the paella, please.",
+        "lessonHint": "Courteous requests start with “Quisiera”.",
+        "bank": [
+          "Quisiera",
+          "pedir",
+          "la paella",
+          "por favor",
+          "calamares",
+          "mesa"
+        ],
+        "bankEn": [
+          "I would like",
+          "to order",
+          "the paella",
+          "please",
+          "squid",
+          "table"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "lessonCorrectTitle": "¡Buen apetito! 🍽️",
+        "lessonCorrectBody": "‘Quisiera’ se usa para ordenar de forma cortés.",
+        "lessonWrongBody": "Begin with what you desire to have.",
+        "cultureCaption": "Restaurante en Barcelona · 8pm",
+        "cultureTitle": "Las horas de la cena",
+        "cultureBody": "En España, las cenas no comienzan antes de las 9pm, y se disfrutan relajadamente.",
+        "culturePhrase": "“¿Nos trae otro?” — para pedir otra jarra de sangría.",
+        "milestoneTitle": "Ahora puedes ordenar una cena completa.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "¿Qué te gustaría pedir hoy?",
+            "en": "What would you like to order today?"
+          },
+          {
+            "who": "u",
+            "n": "Quisiera la paella, por favor.",
+            "fb": "Great choice using ‘Quisiera’"
+          },
+          {
+            "who": "p",
+            "n": "Por supuesto, ¿algo para beber?",
+            "en": "Of course, would you like something to drink?"
+          },
+          {
+            "who": "u",
+            "n": "Sí, una copa de vino, por favor.",
+            "fb": "Nice addition of a drink request"
+          },
+          {
+            "who": "p",
+            "n": "Marchando, disfruta de tu cena.",
+            "en": "Coming right up, enjoy your meal."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "“probar” vs “pedir”",
+            "body": "‘Probar’ es to taste, mientras ‘pedir’ es to order."
+          }
+        ],
+        "grammarMini": "tú vs usted",
+        "grammarTitle": "“tú” vs “usted” — Interacciones en restaurantes",
+        "grammarIntro": "Distingue entre informal y formal.",
+        "gTermA": "tú",
+        "gDescA": "informal — amigos cercanos",
+        "gExA": "¿Tú qué comes?",
+        "gTermB": "usted",
+        "gDescB": "formal — respeto",
+        "gExB": "¿Qué desea usted comer?"
+      },
+      {
+        "chapterTitle": "Chapter 9 · Entrevista de trabajo",
+        "lessonTitle": "Obtener el empleo",
+        "goalTitle": "Build it: presentarse en una entrevista",
+        "goalLine": "Presentarse con confianza en una entrevista.",
+        "goalShort": "obtener el empleo",
+        "scenario": "interview",
+        "partnerName": "Raúl",
+        "partnerInitial": "R",
+        "partnerRole": "entrevistador",
+        "partnerPlace": "oficina en Valencia",
+        "scenarioTitle": "En la entrevista · Valencia",
+        "scenarioSub": "Roleplay · entrevista laboral",
+        "lessonPromptEn": "I am a team player and very proactive.",
+        "lessonHint": "Start with ‘Soy’ to assert your skills.",
+        "bank": [
+          "Soy",
+          "un jugador de equipo",
+          "y muy proactivo",
+          "me gustaría",
+          "el puesto",
+          "experiencia"
+        ],
+        "bankEn": [
+          "I am",
+          "a team player",
+          "and very proactive",
+          "I would like",
+          "the position",
+          "experience"
+        ],
+        "correct": [
+          0,
+          1,
+          2
+        ],
+        "lessonCorrectTitle": "¡Bien hecho! 🏆",
+        "lessonCorrectBody": "Presentaciones efectivas comienzan con tus fortalezas.",
+        "lessonWrongBody": "Start by highlighting your strengths.",
+        "cultureCaption": "Oficina en Valencia · 10am",
+        "cultureTitle": "Preparativos para una entrevista eficiente",
+        "cultureBody": "Las entrevistas en España suelen ser formales, pero con un toque personal.",
+        "culturePhrase": "“¿Cuáles son tus puntos fuertes?” — pregunta común en entrevistas.",
+        "milestoneTitle": "Puedes presentarte en entrevistas laborales.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Cuéntame sobre ti.",
+            "en": "Tell me about yourself."
+          },
+          {
+            "who": "u",
+            "n": "Soy un jugador de equipo y muy proactivo.",
+            "fb": "Solid opening statement!"
+          },
+          {
+            "who": "p",
+            "n": "Interesante, ¿qué experiencia tienes en el sector?",
+            "en": "Interesting, what experience do you have in the field?"
+          },
+          {
+            "who": "u",
+            "n": "He trabajado cuatro años en marketing.",
+            "fb": "Good articulation of experience"
+          },
+          {
+            "who": "p",
+            "n": "Perfecto, hablaremos pronto.",
+            "en": "Perfect, we will talk soon."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "“fuerte” no es siempre fuerte",
+            "body": "En entrevistas, se refiere más a habilidades que a fuerza física."
+          },
+          {
+            "title": "Presente vs pasado",
+            "body": "‘He trabajado’ indica experiencia continua."
+          }
+        ],
+        "grammarMini": "ser vs estar",
+        "grammarTitle": "“ser” vs “estar” — Diferencias en descripciones",
+        "grammarIntro": "Ambos significan ‘to be’, pero en diferentes contextos.",
+        "gTermA": "ser",
+        "gDescA": "permanente — características",
+        "gExA": "Soy proactivo.",
+        "gTermB": "estar",
+        "gDescB": "temporal — condiciones",
+        "gExB": "Estoy preparado."
+      },
+      {
+        "chapterTitle": "Chapter 10 · En la farmacia",
+        "lessonTitle": "Medicinas básicas",
+        "goalTitle": "Build it: solicitar medicamentos",
+        "goalLine": "Saber solicitar medicamentos en una farmacia.",
+        "goalShort": "solicitar medicamentos",
+        "scenario": "pharmacy",
+        "partnerName": "Elena",
+        "partnerInitial": "E",
+        "partnerRole": "farmacéutica",
+        "partnerPlace": "farmacia local",
+        "scenarioTitle": "En la farmacia · Bilbao",
+        "scenarioSub": "Roleplay · solicitud de medicamentos",
+        "lessonPromptEn": "I need medicine for a headache, please.",
+        "lessonHint": "Politeness is key.",
+        "bank": [
+          "Necesito",
+          "medicina",
+          "para el dolor de cabeza",
+          "por favor",
+          "receta",
+          "pastilla"
+        ],
+        "bankEn": [
+          "I need",
+          "medicine",
+          "for a headache",
+          "please",
+          "prescription",
+          "tablet"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "lessonCorrectTitle": "¡Bien! 💊",
+        "lessonCorrectBody": "‘Necesito’ es una forma clara de expresar lo que buscas.",
+        "lessonWrongBody": "Start with what you need.",
+        "cultureCaption": "Farmacia en Bilbao · 1pm",
+        "cultureTitle": "Farmacias en España",
+        "cultureBody": "Las farmacias son fácilmente accesibles y los farmacéuticos están bien capacitados.",
+        "culturePhrase": "“¿Tiene algo eficaz?” — para pedir recomendaciones.",
+        "milestoneTitle": "Puedes solicitar medicinas en una farmacia.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "¿Qué necesitas?",
+            "en": "What do you need?"
+          },
+          {
+            "who": "u",
+            "n": "Necesito medicina para el dolor de cabeza, por favor.",
+            "fb": "You’ve got the phrasing spot on!"
+          },
+          {
+            "who": "p",
+            "n": "Lo tengo, ¿algo más?",
+            "en": "Got it, anything else?"
+          },
+          {
+            "who": "u",
+            "n": "No, eso es todo, gracias.",
+            "fb": "Polite conclusion, well done"
+          },
+          {
+            "who": "p",
+            "n": "Aquí tienes, son cinco euros.",
+            "en": "Here you are, that’s five euros."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "“dolor” en plural",
+            "body": "‘Dolor’ rara vez es plural a menos que menciones doles específicos."
+          },
+          {
+            "title": "Recetas y más",
+            "body": "No todas las medicinas requieren receta en España."
+          }
+        ],
+        "grammarMini": "def articles",
+        "grammarTitle": "Artículos definidos en descripciones",
+        "grammarIntro": "Los artículos definidos como ‘el’ son comunes.",
+        "gTermA": "el",
+        "gDescA": "masculino singular",
+        "gExA": "El dolor de cabeza.",
+        "gTermB": "la",
+        "gDescB": "femenino singular",
+        "gExB": "La medicina perfecta."
+      },
+      {
+        "chapterTitle": "Chapter 11 · Debate sobre el clima",
+        "lessonTitle": "Discusión y opiniones",
+        "goalTitle": "Build it: compartir una opinión",
+        "goalLine": "Compartir, discutir y respetar opiniones variadas.",
+        "goalShort": "compartir una opinión",
+        "scenario": "debate",
+        "partnerName": "Sergio",
+        "partnerInitial": "S",
+        "partnerRole": "moderador",
+        "partnerPlace": "sala de conferencias",
+        "scenarioTitle": "En el debate · Sevilla",
+        "scenarioSub": "Roleplay · debate sobre cambio climático",
+        "lessonPromptEn": "In my opinion, we need stricter laws to protect the environment.",
+        "lessonHint": "Emphasize with ‘En mi opinión’.",
+        "bank": [
+          "En mi opinión",
+          "necesitamos",
+          "leyes más estrictas",
+          "para proteger",
+          "el medio ambiente",
+          "discutir"
+        ],
+        "bankEn": [
+          "In my opinion",
+          "we need",
+          "stricter laws",
+          "to protect",
+          "the environment",
+          "discuss"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "lessonCorrectTitle": "¡Excelente! 🌍",
+        "lessonCorrectBody": "Se claro y firme al expresar tu opinión.",
+        "lessonWrongBody": "Lead with your main point of view.",
+        "cultureCaption": "Auditorio en Sevilla · 10am",
+        "cultureTitle": "Debatir es más que disputar",
+        "cultureBody": "Un buen debate se enfoca en el respeto y la comprensión de puntos de vista opuestos.",
+        "culturePhrase": "“Estoy de acuerdo hasta cierto punto” — frase común para mediar.",
+        "milestoneTitle": "Puedes compartir y defender tus opiniones.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "¿Cuál es tu postura sobre el medio ambiente?",
+            "en": "What’s your stance on the environment?"
+          },
+          {
+            "who": "u",
+            "n": "En mi opinión, necesitamos leyes más estrictas para proteger el medio ambiente.",
+            "fb": "Strong use of opinion introduction"
+          },
+          {
+            "who": "p",
+            "n": "Eso es interesante, ¿por qué piensas así?",
+            "en": "That’s interesting, why do you think that?"
+          },
+          {
+            "who": "u",
+            "n": "Porque el daño es irreversible sin cambios.",
+            "fb": "Nice emphasis on urgency and change"
+          },
+          {
+            "who": "p",
+            "n": "Gracias por compartir tu perspectiva.",
+            "en": "Thank you for sharing your perspective."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Expresiones de acuerdo",
+            "body": "Phrase opinions with terms like ‘Yo creo que…’ to vary expressions."
+          },
+          {
+            "title": "Enfrentamiento vs intercambio",
+            "body": "Emphasize dialogue over confrontation."
+          }
+        ],
+        "grammarMini": "opinions",
+        "grammarTitle": "Formulación de opiniones personales",
+        "grammarIntro": "Usa frases claras para comunicar tu punto.",
+        "gTermA": "en mi opinión",
+        "gDescA": "cuando expresas una perspectiva personal",
+        "gExA": "En mi opinión, es crucial.",
+        "gTermB": "a mi parecer",
+        "gDescB": "otra forma de introducir opiniones",
+        "gExB": "A mi parecer, necesitamos cambios."
+      },
+      {
+        "chapterTitle": "Chapter 12 · Diálogo libre",
+        "lessonTitle": "Interacciones casuales",
+        "goalTitle": "Build it: otros contextos",
+        "goalLine": "Desarrollar fluidez en diálogos improvisados.",
+        "goalShort": "diálogo libre",
+        "scenario": "freetalk",
+        "partnerName": "Ana",
+        "partnerInitial": "A",
+        "partnerRole": "amiga",
+        "partnerPlace": "parque en Granada",
+        "scenarioTitle": "En el parque · Granada",
+        "scenarioSub": "Roleplay · conversaciones casuales",
+        "lessonPromptEn": "How have you been lately?",
+        "lessonHint": "Use ‘¿Cómo has estado?’ for a warm opening.",
+        "bank": [
+          "¿Cómo",
+          "has estado",
+          "últimamente?",
+          "mucho trabajo",
+          "tranquilo",
+          "bien"
+        ],
+        "bankEn": [
+          "How",
+          "have you been",
+          "lately?",
+          "lots of work",
+          "quiet",
+          "well"
+        ],
+        "correct": [
+          0,
+          1,
+          2
+        ],
+        "lessonCorrectTitle": "¡Genial! 🤝",
+        "lessonCorrectBody": "‘¿Cómo has estado?’ es cortés y familiar.",
+        "lessonWrongBody": "Start with the question to engage.",
+        "cultureCaption": "Parque en Granada · 4pm",
+        "cultureTitle": "La charla en los parques",
+        "cultureBody": "Pasar la tarde charlando en un parque es típico. Las conversaciones son relajadas y sin prisa.",
+        "culturePhrase": "“Dime” — una forma amistosa de decir ‘cuéntame’.",
+        "milestoneTitle": "Puedes mantener una conversación casual.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "¡Hola! ¿Cómo has estado últimamente?",
+            "en": "Hi! How have you been lately?"
+          },
+          {
+            "who": "u",
+            "n": "He estado bien, gracias. ¿Y tú?",
+            "fb": "Good reciprocal inquiry"
+          },
+          {
+            "who": "p",
+            "n": "Un poco ocupado, pero bien.",
+            "en": "A bit busy, but good."
+          },
+          {
+            "who": "u",
+            "n": "Espero que puedas descansar pronto.",
+            "fb": "Nice expression of empathy"
+          },
+          {
+            "who": "p",
+            "n": "Sí, planeo hacerlo este fin de semana.",
+            "en": "Yes, I plan to do so this weekend."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Infinitivos en diálogo",
+            "body": "Verbs in infinitive can transform discussions."
+          },
+          {
+            "title": "Tiempos verbales",
+            "body": "Use mixed tenses to describe multi-tiered contexts."
+          }
+        ],
+        "grammarMini": "present perfect",
+        "grammarTitle": "Presente perfecto en conversaciones",
+        "grammarIntro": "Describe experiencias pasadas recientemente concluidas.",
+        "gTermA": "he estado",
+        "gDescA": "acción completada en el pasado reciente",
+        "gExA": "He estado ocupado.",
+        "gTermB": "has estado",
+        "gDescB": "pregunta sobre estado reciente",
+        "gExB": "¿Cómo has estado?"
+      },
+      {
+        "chapterTitle": "Chapter 13 · Verificación de posición",
+        "lessonTitle": "Confirmación de colocación",
+        "goalTitle": "Build it: confirmar reservas",
+        "goalLine": "Verificar el número de asiento y ubicaciones similares.",
+        "goalShort": "confirmar reservas",
+        "scenario": "placement",
+        "partnerName": "Laura",
+        "partnerInitial": "L",
+        "partnerRole": "colaboradora",
+        "partnerPlace": "evento en Málaga",
+        "scenarioTitle": "En el evento · Málaga",
+        "scenarioSub": "Roleplay · verificación de asiento",
+        "lessonPromptEn": "Is this seat still available?",
+        "lessonHint": "‘¿Está disponible este asiento?’ es directo.",
+        "bank": [
+          "¿Está",
+          "disponible",
+          "este asiento",
+          "todavía?",
+          "reservado",
+          "confusión"
+        ],
+        "bankEn": [
+          "Is",
+          "available",
+          "this seat",
+          "still?",
+          "reserved",
+          "confusion"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "lessonCorrectTitle": "¡Correcto! 🪑",
+        "lessonCorrectBody": "Preguntar directamente con cortesía es eficaz.",
+        "lessonWrongBody": "Start questioning politely.",
+        "cultureCaption": "Centro de eventos en Málaga · 6pm",
+        "cultureTitle": "Reservas y confirmaciones",
+        "cultureBody": "Los eventos formales en España requieren confirmaciones previas.",
+        "culturePhrase": "“¿Hay algún problema?” — para abordar confusiones con calma.",
+        "milestoneTitle": "Puedes verificar y confirmar ubicaciones asignadas.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "¿Está disponible este asiento todavía?",
+            "en": "Is this seat still available?"
+          },
+          {
+            "who": "u",
+            "n": "Creo que sí, pero puedo verificarlo para ti.",
+            "fb": "Polite offer to assist"
+          },
+          {
+            "who": "p",
+            "n": "Gracias, eso sería genial.",
+            "en": "Thanks, that would be great."
+          },
+          {
+            "who": "u",
+            "n": "No hay problema, permíteme revisar.",
+            "fb": "Reassurance in response"
+          },
+          {
+            "who": "p",
+            "n": "Perfecto, esperaré aquí.",
+            "en": "Perfect, I’ll wait here."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Confusión vs certeza",
+            "body": "Use ‘creo que’ when uncertain."
+          },
+          {
+            "title": "‘Disponible’ en contexto",
+            "body": "Use availability queries both formally and casually."
+          }
+        ],
+        "grammarMini": "question words",
+        "grammarTitle": "Preguntas directas",
+        "grammarIntro": "Formulación efectiva de preguntas con cortesía.",
+        "gTermA": "disponible",
+        "gDescA": "uso en confirmaciones",
+        "gExA": "¿Está disponible?",
+        "gTermB": "reservado",
+        "gDescB": "para situaciones con asientos",
+        "gExB": "Esto está reservado."
+      },
+      {
+        "chapterTitle": "Chapter 14 · En el banco",
+        "lessonTitle": "Trámites financieros",
+        "goalTitle": "Build it: realizar gestiones bancarias",
+        "goalLine": "Entender y realizar operaciones en un banco.",
+        "goalShort": "gestiones bancarias",
+        "scenario": "bank",
+        "partnerName": "Javier",
+        "partnerInitial": "J",
+        "partnerRole": "cajero",
+        "partnerPlace": "banco local",
+        "scenarioTitle": "En el banco · Córdoba",
+        "scenarioSub": "Roleplay · tareas bancarias habituales",
+        "lessonPromptEn": "I need to withdraw 100 euros, please.",
+        "lessonHint": "Simple and polite is best.",
+        "bank": [
+          "Necesito",
+          "retirar",
+          "100 euros",
+          "por favor",
+          "saldo",
+          "cheque"
+        ],
+        "bankEn": [
+          "I need",
+          "to withdraw",
+          "100 euros",
+          "please",
+          "balance",
+          "check"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "lessonCorrectTitle": "¡Listo! 💶",
+        "lessonCorrectBody": "Mantén siempre la cortesía al pedir operaciones.",
+        "lessonWrongBody": "Begin with the need before requesting.",
+        "cultureCaption": "Banco en Córdoba · 11am",
+        "cultureTitle": "Seguridad y tranquilidad",
+        "cultureBody": "Las leyes bancarias en España son estrictas pero no apresuradas.",
+        "culturePhrase": "“¿Podría ayudarme?” — para abrir un diálogo en bancos.",
+        "milestoneTitle": "Puedes realizar operaciones bancarias simples.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "¡Hola! ¿Cómo puedo asistirte hoy?",
+            "en": "Hello! How can I help you today?"
+          },
+          {
+            "who": "u",
+            "n": "Necesito retirar 100 euros, por favor.",
+            "fb": "Polite and direct, well done!"
+          },
+          {
+            "who": "p",
+            "n": "Por supuesto, ¿tienes tu tarjeta?",
+            "en": "Of course, do you have your card?"
+          },
+          {
+            "who": "u",
+            "n": "Sí, aquí está.",
+            "fb": "Quick and affirmative response"
+          },
+          {
+            "who": "p",
+            "n": "Listo, aquí tienes el efectivo.",
+            "en": "All set, here’s your cash."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Alternativas a ‘necesito’",
+            "body": "‘Me gustaría’ is less urgent but also polite."
+          },
+          {
+            "title": "Efectivo vs tarjeta",
+            "body": "Differentiate when discussing forms of transaction."
+          }
+        ],
+        "grammarMini": "verbs for requests",
+        "grammarTitle": "Verbos claves para solicitudes",
+        "grammarIntro": "Distingue entre necesidad y deseo en solicitudes bancarias.",
+        "gTermA": "retirar",
+        "gDescA": "acción de sacar dinero",
+        "gExA": "Necesito retirar efectivo.",
+        "gTermB": "consultar",
+        "gDescB": "informarse sobre una cuenta",
+        "gExB": "Quisiera consultar mi saldo."
+      },
+      {
+        "chapterTitle": "Chapter 15 · Tome el tren",
+        "lessonTitle": "Viaje en tren",
+        "goalTitle": "Build it: tomar el tren correctamente",
+        "goalLine": "Entender los horarios y subir al tren correcto.",
+        "goalShort": "tomar el tren",
+        "scenario": "train",
+        "partnerName": "Roberto",
+        "partnerInitial": "R",
+        "partnerRole": "personal de tren",
+        "partnerPlace": "estación de Atocha",
+        "scenarioTitle": "En el tren · Madrid",
+        "scenarioSub": "Roleplay · subir al tren",
+        "lessonPromptEn": "What time does train to Barcelona leave?",
+        "lessonHint": "‘¿A qué hora sale?’ es directo y útil.",
+        "bank": [
+          "¿A qué",
+          "hora",
+          "sale el tren",
+          "a Barcelona?",
+          "llega",
+          "vía"
+        ],
+        "bankEn": [
+          "What time",
+          "does",
+          "the train leave",
+          "to Barcelona?",
+          "arrives",
+          "track"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "lessonCorrectTitle": "¡Exacto! 🚆",
+        "lessonCorrectBody": "Precision matters when inquiring about train times.",
+        "lessonWrongBody": "Lead with the ‘what time’ question for clarity.",
+        "cultureCaption": "Estación de Atocha · 2pm",
+        "cultureTitle": "Moverse en tren",
+        "cultureBody": "España tiene una red de trenes de alta velocidad. Puntualidad es clave.",
+        "culturePhrase": "“¿La vía del tren?” — para confirmar el andén correcto.",
+        "milestoneTitle": "Puedes navegar por la red ferroviaria española.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "¡Buenas! ¿En qué puedo ayudarte?",
+            "en": "Hello! How may I assist you?"
+          },
+          {
+            "who": "u",
+            "n": "¿A qué hora sale el tren a Barcelona?",
+            "fb": "Direct and effective questioning"
+          },
+          {
+            "who": "p",
+            "n": "Sale a las tres en punto.",
+            "en": "It leaves at three o'clock sharp."
+          },
+          {
+            "who": "u",
+            "n": "Gracias, ¿cuál es la vía?",
+            "fb": "Smart follow-up question"
+          },
+          {
+            "who": "p",
+            "n": "Vía número 10, que tengas buen viaje.",
+            "en": "Track number 10, have a good journey."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "‘Trenes’ en plural",
+            "body": "‘Tren’ stays singular when referring to schedules."
+          },
+          {
+            "title": "‘Vía’ versus ‘andén’",
+            "body": "Use ‘vía’ for tracks and ‘andén’ for platforms."
+          }
+        ],
+        "grammarMini": "questions",
+        "grammarTitle": "Articulación de preguntas claras",
+        "grammarIntro": "Fórmate preguntas exactas al buscar información de viajes.",
+        "gTermA": "hora",
+        "gDescA": "preguntas sobre tiempo de salida",
+        "gExA": "¿A qué hora sale?",
+        "gTermB": "sale",
+        "gDescB": "referencia al tren",
+        "gExB": "El tren sale pronto."
       }
     ]
   },
@@ -1503,6 +2337,1059 @@ export const LANGS: any = {
         "reviewWord": "urgence",
         "reviewSource": "from your emergency article, 6 days ago",
         "reviewMeaning": "emergency"
+      },
+      {
+        "chapterTitle": "Chapter 7 · À l'aéroport",
+        "lessonTitle": "Travel Essentials",
+        "goalTitle": "Manage it: check in & clear security",
+        "goalLine": "Check in your luggage and pass through security with ease.",
+        "goalShort": "check in at airport",
+        "scenario": "airport",
+        "partnerName": "Luc",
+        "partnerInitial": "L",
+        "partnerRole": "agent de comptoir",
+        "partnerPlace": "Aéroport Charles de Gaulle",
+        "scenarioTitle": "À l'aéroport · Paris",
+        "scenarioSub": "Roleplay · checking in luggage & security",
+        "lessonPromptEn": "I have a bag to check in, please.",
+        "lessonHint": "Why “enregistré”?",
+        "bank": [
+          "J'ai",
+          "un bagage",
+          "à enregistrer",
+          "s'il vous plaît",
+          "la porte",
+          "vol"
+        ],
+        "bankEn": [
+          "I have",
+          "a bag",
+          "to check in",
+          "please",
+          "the gate",
+          "flight"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "lessonCorrectTitle": "Excellent ! 🎉",
+        "lessonCorrectBody": "“J'ai” (I have) is a necessary start — clear and polite.",
+        "lessonWrongBody": "Begin with “J'ai” and mention what you have.",
+        "cultureCaption": "Aérogare de Paris · 9am",
+        "cultureTitle": "Politeness at security",
+        "cultureBody": "Always maintain politeness and patience at airport security points. A simple “Bonjour” can make the experience smoother.",
+        "culturePhrase": "“La porte d'embarquement, s'il vous plaît” — helpful to know your gate.",
+        "milestoneTitle": "You can now check in at the airport politely.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Bonjour ! Puis-je voir votre passeport, s'il vous plaît ?",
+            "en": "Hello! May I see your passport, please?"
+          },
+          {
+            "who": "u",
+            "n": "J'ai un bagage à enregistrer, s'il vous plaît.",
+            "fb": "Great — you started politely with what you have"
+          },
+          {
+            "who": "p",
+            "n": "Bien sûr. Avez-vous d'autres bagages ?",
+            "en": "Of course. Do you have any other bags?"
+          },
+          {
+            "who": "u",
+            "n": "Non, c'est tout. Merci.",
+            "fb": "Perfect — straightforward and polite"
+          },
+          {
+            "who": "p",
+            "n": "D'accord, voici votre carte d'embarquement.",
+            "en": "Alright, here is your boarding pass."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Politeness is key",
+            "body": "Always start with a “Bonjour” and smile."
+          },
+          {
+            "title": "Use simple sentences",
+            "body": "At the airport, clear and polite language helps speed things up."
+          }
+        ],
+        "grammarMini": "à vs de",
+        "grammarTitle": "“à” vs “de” — expressing direction or origin",
+        "grammarIntro": "Choosing between “à” and “de” depends on if you're moving towards something (à) or from something (de):",
+        "gTermA": "à",
+        "gDescA": "to / at — direction or location",
+        "gExA": "Je vais à Paris.",
+        "gTermB": "de",
+        "gDescB": "from / of — origin or possession",
+        "gExB": "Je viens de France.",
+        "clip": "L'aéroport en mouvement",
+        "podcast": "Voyager avec facilité — ép. 7",
+        "article": "Le guide ultime des aéroports français",
+        "reader": [
+          {
+            "t": "Les voyageurs passent souvent des heures à "
+          },
+          {
+            "w": "attendre",
+            "d": "wait (from attendre — to wait)"
+          },
+          {
+            "t": " leur vol. Un bon livre ou de la musique sont des "
+          },
+          {
+            "w": "compagnons",
+            "d": "companions (from compagnon — companion)"
+          },
+          {
+            "t": " idéals. La patience est essentielle en aéroport."
+          }
+        ],
+        "reviewWord": "attendre",
+        "reviewSource": "from your airport article, 3 days ago",
+        "reviewMeaning": "to wait"
+      },
+      {
+        "chapterTitle": "Chapter 8 · Dîner au restaurant",
+        "lessonTitle": "Dining Etiquette",
+        "goalTitle": "Enjoy it: order & savor a meal",
+        "goalLine": "Order dinner and enjoy a fine dining experience.",
+        "goalShort": "order dinner",
+        "scenario": "dinner",
+        "partnerName": "Sophie",
+        "partnerInitial": "S",
+        "partnerRole": "serveuse",
+        "partnerPlace": "Restaurant Étoilé à Lyon",
+        "scenarioTitle": "Dîner au restaurant · Lyon",
+        "scenarioSub": "Roleplay · ordering & enjoying meals",
+        "lessonPromptEn": "I'll have the steak, medium rare, please.",
+        "lessonHint": "Why “à point”?",
+        "bank": [
+          "Je prendrai",
+          "le steak",
+          "à point",
+          "s'il vous plaît",
+          "entrée",
+          "plat principal"
+        ],
+        "bankEn": [
+          "I’ll take",
+          "the steak",
+          "medium rare",
+          "please",
+          "starter",
+          "main course"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "lessonCorrectTitle": "Super ! 🎉",
+        "lessonCorrectBody": "“Je prendrai” (I’ll take) is a polite way to express your choice.",
+        "lessonWrongBody": "Start with “Je prendrai” and state your choice.",
+        "cultureCaption": "Restaurant étoilé · 8pm",
+        "cultureTitle": "Dining the French Way",
+        "cultureBody": "Dining in France is an art — leisurely and social. Engage in small talk and savor each course.",
+        "culturePhrase": "“L'addition, s'il vous plaît” — signal the end of a delightful meal.",
+        "milestoneTitle": "You can now enjoy dining at a restaurant properly.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Bonsoir ! Puis-je vous proposer le plat du jour ?",
+            "en": "Good evening! May I offer you the dish of the day?"
+          },
+          {
+            "who": "u",
+            "n": "Je prendrai le steak à point, s'il vous plaît.",
+            "fb": "Excellent — clear and with preferred cooking style"
+          },
+          {
+            "who": "p",
+            "n": "Excellente choix ! Voulez-vous un dessert après ?",
+            "en": "Excellent choice! Would you like a dessert afterward?"
+          },
+          {
+            "who": "u",
+            "n": "Oui, le fondant au chocolat, s'il vous plaît.",
+            "fb": "Perfect — dessert ordered politely"
+          },
+          {
+            "who": "p",
+            "n": "Très bien, je vous apporte ça tout de suite.",
+            "en": "Very well, I’ll bring that to you right away."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "The pace of a meal",
+            "body": "French meals are not rushed; they are social occasions to enjoy."
+          },
+          {
+            "title": "Formality in conversation",
+            "body": "Maintain politeness with “s'il vous plaît” and engage in light conversations."
+          }
+        ],
+        "grammarMini": "article usage",
+        "grammarTitle": "Articles: Definite vs Indefinite",
+        "grammarIntro": "Need to specify something? Here’s when to use “le” or “un”:",
+        "gTermA": "le",
+        "gDescA": "definite — specific item or known context",
+        "gExA": "Je veux le fromage.",
+        "gTermB": "un",
+        "gDescB": "indefinite — any item, not specified",
+        "gExB": "Je veux un fromage.",
+        "clip": "Dîner au bord de la rivière",
+        "podcast": "Un repas étoilé — ép. 12",
+        "article": "Les rituels du dîner français",
+        "reader": [
+          {
+            "t": "En France, le dîner est souvent un "
+          },
+          {
+            "w": "moment",
+            "d": "moment / time for (from moment — moment)"
+          },
+          {
+            "t": " de partage. On discute, on rit et on "
+          },
+          {
+            "w": "apprécie",
+            "d": "enjoys (from apprécier — to appreciate)"
+          },
+          {
+            "t": " chaque plat. Le service se fait en plusieurs étapes."
+          }
+        ],
+        "reviewWord": "moment",
+        "reviewSource": "from your dinner time article, 4 days ago",
+        "reviewMeaning": "moment / time for"
+      },
+      {
+        "chapterTitle": "Chapter 9 · Entretien d'embauche",
+        "lessonTitle": "Nail the Interview",
+        "goalTitle": "Ace it: present yourself professionally",
+        "goalLine": "Introduce yourself confidently in a job interview setting.",
+        "goalShort": "job interview presentation",
+        "scenario": "interview",
+        "partnerName": "Henri",
+        "partnerInitial": "H",
+        "partnerRole": "recruteur",
+        "partnerPlace": "Bureau de Paris",
+        "scenarioTitle": "Entretien d'embauche · Paris",
+        "scenarioSub": "Roleplay · introduce & impress",
+        "lessonPromptEn": "I have five years of experience in marketing.",
+        "lessonHint": "Why “d'expérience”?",
+        "bank": [
+          "J'ai",
+          "cinq ans",
+          "d'expérience",
+          "en marketing",
+          "poste",
+          "qualifié"
+        ],
+        "bankEn": [
+          "I have",
+          "five years",
+          "of experience",
+          "in marketing",
+          "position",
+          "qualified"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "lessonCorrectTitle": "C'est très bien ! 🎉",
+        "lessonCorrectBody": "Starting with “J'ai” is direct and sets a confident tone.",
+        "lessonWrongBody": "Begin with “J'ai” and then state your experience clearly.",
+        "cultureCaption": "Entretien d'embauche · 11am",
+        "cultureTitle": "Professional Impressions Matter",
+        "cultureBody": "Professional decorum is vital. Dress formally and show confidence by maintaining eye contact and speaking clearly.",
+        "culturePhrase": "“Je suis qualifié pour ce poste” — express your fit for the job confidently.",
+        "milestoneTitle": "You can now confidently present yourself at an interview.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Bonjour. Pouvez-vous me parler de votre expérience ?",
+            "en": "Hello. Can you tell me about your experience?"
+          },
+          {
+            "who": "u",
+            "n": "J'ai cinq ans d'expérience en marketing.",
+            "fb": "Great — you stated your experience clearly"
+          },
+          {
+            "who": "p",
+            "n": "Quelles sont vos compétences particulières ?",
+            "en": "What are your special skills?"
+          },
+          {
+            "who": "u",
+            "n": "Je suis très compétent en communication.",
+            "fb": "Perfect — highlighted a valuable skill"
+          },
+          {
+            "who": "p",
+            "n": "Merci. Nous vous contacterons bientôt.",
+            "en": "Thank you. We will contact you soon."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "First impressions",
+            "body": "Dress appropriately and greet everyone respectfully."
+          },
+          {
+            "title": "Highlight your strengths",
+            "body": "Clearly articulate why you are an asset to the team."
+          }
+        ],
+        "grammarMini": "noun gender",
+        "grammarTitle": "Noun Gender: Masculine vs Feminine",
+        "grammarIntro": "French nouns have gender. Here's how to determine them:",
+        "gTermA": "masculine",
+        "gDescA": "most often ends in -eau, -ment",
+        "gExA": "un bâtiment",
+        "gTermB": "feminine",
+        "gDescB": "often ends in -tion, -ité",
+        "gExB": "une décision",
+        "clip": "Présentation efficace en forme",
+        "podcast": "Réussir son entretien — ép. 3",
+        "article": "Les clés du succès en entretien",
+        "reader": [
+          {
+            "t": "Lors d'un entretien, il est important d'être "
+          },
+          {
+            "w": "confiant",
+            "d": "confident (from confiant — confident)"
+          },
+          {
+            "t": " et bien préparé. Mettez en avant vos "
+          },
+          {
+            "w": "points forts",
+            "d": "strengths (from point fort — strong point)"
+          },
+          {
+            "t": ". Soyez sûr de vous et clair dans vos explications."
+          }
+        ],
+        "reviewWord": "confiant",
+        "reviewSource": "from your interview strategy article, 2 days ago",
+        "reviewMeaning": "confident"
+      },
+      {
+        "chapterTitle": "Chapter 10 · À la pharmacie",
+        "lessonTitle": "Essential Health Phrases",
+        "goalTitle": "Manage it: describe symptoms & get help",
+        "goalLine": "Describe your symptoms clearly to receive the correct medication.",
+        "goalShort": "describe symptoms",
+        "scenario": "pharmacy",
+        "partnerName": "Claire",
+        "partnerInitial": "C",
+        "partnerRole": "pharmacienne",
+        "partnerPlace": "Pharmacie de la République",
+        "scenarioTitle": "À la pharmacie · Marseille",
+        "scenarioSub": "Roleplay · explaining symptoms & receiving medicine",
+        "lessonPromptEn": "I need something for a headache, please.",
+        "lessonHint": "Why “mal de tête”?",
+        "bank": [
+          "J'ai",
+          "besoin de",
+          "quelque chose",
+          "pour le mal de tête",
+          "ordonnance",
+          "consulter"
+        ],
+        "bankEn": [
+          "I need",
+          "something",
+          "for",
+          "the headache",
+          "prescription",
+          "consult"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "lessonCorrectTitle": "Bien dit ! 🎉",
+        "lessonCorrectBody": "“J'ai besoin de” (I need) starts a clear request.",
+        "lessonWrongBody": "Use “J'ai besoin de” followed by what you need.",
+        "cultureCaption": "Pharmacie · 1pm",
+        "cultureTitle": "Accessing Medications",
+        "cultureBody": "French pharmacies often offer consultations. Don't hesitate to ask for advice on what's best for your ailment.",
+        "culturePhrase": "“Avez-vous quelque chose pour le mal de gorge ?” — common request for relief.",
+        "milestoneTitle": "You can now effectively ask for medications at a pharmacy.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Bonjour, que puis-je faire pour vous ?",
+            "en": "Hello, how can I help you?"
+          },
+          {
+            "who": "u",
+            "n": "J'ai besoin de quelque chose pour le mal de tête.",
+            "fb": "Great — you specified your need clearly"
+          },
+          {
+            "who": "p",
+            "n": "Je vous recommande ceci. Avez-vous besoin d'autre chose ?",
+            "en": "I recommend this. Do you need anything else?"
+          },
+          {
+            "who": "u",
+            "n": "Non, merci. C'est tout pour aujourd'hui.",
+            "fb": "Perfect — concluded politely"
+          },
+          {
+            "who": "p",
+            "n": "D'accord, n'hésitez pas si vous avez d'autres questions.",
+            "en": "Alright, feel free to ask if you have more questions."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Being precise is key",
+            "body": "Describe your symptoms accurately for the best advice."
+          },
+          {
+            "title": "Seek consultative advice",
+            "body": "Pharmacists in France can provide valuable recommendations based on your symptoms."
+          }
+        ],
+        "grammarMini": "negation",
+        "grammarTitle": "Negation: Ne... pas",
+        "grammarIntro": "Express negation by wrapping a verb with “ne... pas”:",
+        "gTermA": "ne",
+        "gDescA": "starts the negation",
+        "gExA": "Je ne fais pas ça.",
+        "gTermB": "pas",
+        "gDescB": "ends the negation",
+        "gExB": "Il ne parle pas.",
+        "clip": "La pharmacie moderne",
+        "podcast": "Santé et bien-être — ép. 10",
+        "article": "Les médicaments en France: ce qu'il faut savoir",
+        "reader": [
+          {
+            "t": "En France, la "
+          },
+          {
+            "w": "pharmacienne",
+            "d": "female pharmacist (from pharmacien — pharmacist)"
+          },
+          {
+            "t": " joue un rôle important dans la "
+          },
+          {
+            "w": "communauté",
+            "d": "community (from communauté — community)"
+          },
+          {
+            "t": ". Elle conseille, recommande et rassure les clients."
+          }
+        ],
+        "reviewWord": "pharmacienne",
+        "reviewSource": "from your pharmacy article, 3 days ago",
+        "reviewMeaning": "female pharmacist"
+      },
+      {
+        "chapterTitle": "Chapter 11 · Débat",
+        "lessonTitle": "Express Your Opinion",
+        "goalTitle": "Defend it: argue a point of view",
+        "goalLine": "Engage in a debate by defending your opinion with clarity.",
+        "goalShort": "express opinion in debate",
+        "scenario": "debate",
+        "partnerName": "Antoine",
+        "partnerInitial": "A",
+        "partnerRole": "modérateur",
+        "partnerPlace": "Salle de conférence de Lyon",
+        "scenarioTitle": "Débat · Lyon",
+        "scenarioSub": "Roleplay · expressing views & countering arguments",
+        "lessonPromptEn": "I believe that education is the key to the future.",
+        "lessonHint": "Why “crois” vs “pense”?",
+        "bank": [
+          "Je crois",
+          "que l'éducation",
+          "est la clé",
+          "de l'avenir",
+          "opinion",
+          "convaincre"
+        ],
+        "bankEn": [
+          "I believe",
+          "that education",
+          "is the key",
+          "to the future",
+          "opinion",
+          "convince"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "lessonCorrectTitle": "Très bien exprimé ! 🎉",
+        "lessonCorrectBody": "“Je crois” (I believe) shows conviction and opens respectful dialogue.",
+        "lessonWrongBody": "Start with “Je crois” to establish your belief.",
+        "cultureCaption": "Débat public · 3pm",
+        "cultureTitle": "The Art of Argument",
+        "cultureBody": "In a French debate, respect and structure are crucial. Allow others to finish before you counter.",
+        "culturePhrase": "“Permettez-moi de préciser” — gently reframe or clarify your point.",
+        "milestoneTitle": "You can now engage thoughtfully in debates.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Bienvenue au débat ! Quelle est votre position?",
+            "en": "Welcome to the debate! What is your position?"
+          },
+          {
+            "who": "u",
+            "n": "Je crois que l'éducation est la clé de l'avenir.",
+            "fb": "Great — you presented your belief clearly"
+          },
+          {
+            "who": "p",
+            "n": "Intéressant ! Pouvez-vous élaborer sur ce point ?",
+            "en": "Interesting! Can you elaborate on this point?"
+          },
+          {
+            "who": "u",
+            "n": "Bien sûr, parce que cela ouvre de nombreuses opportunités.",
+            "fb": "Perfect — expanded your point respectfully"
+          },
+          {
+            "who": "p",
+            "n": "Merci pour votre contribution éclairée.",
+            "en": "Thank you for your insightful contribution."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Respectful engagement",
+            "body": "Allow room for all views and respond without anger."
+          },
+          {
+            "title": "State and support",
+            "body": "Clearly state your position and provide solid examples."
+          }
+        ],
+        "grammarMini": "expressing opinions",
+        "grammarTitle": "Expressing Opinions: Je pense vs Je crois",
+        "grammarIntro": "Choose your words wisely to express belief vs thought:",
+        "gTermA": "Je pense",
+        "gDescA": "for consideration or thought, often less definite",
+        "gExA": "Je pense que c'est vrai.",
+        "gTermB": "Je crois",
+        "gDescB": "for strong belief or faith, more definite conviction",
+        "gExB": "Je crois en elle.",
+        "clip": "Le débat à cœur ouvert",
+        "podcast": "Débattre avec élégance — ép. 5",
+        "article": "L'art du débat en France",
+        "reader": [
+          {
+            "t": "Dans un débat, exprimer son "
+          },
+          {
+            "w": "point de vue",
+            "d": "point of view (from point de vue — viewpoint)"
+          },
+          {
+            "t": " de manière claire aide à "
+          },
+          {
+            "w": "convaincre",
+            "d": "to convince (from convaincre — to convince)"
+          },
+          {
+            "t": " des interlocuteurs. Il est important d'écouter aussi."
+          }
+        ],
+        "reviewWord": "convaincre",
+        "reviewSource": "from your debate skills article, 5 days ago",
+        "reviewMeaning": "to convince"
+      },
+      {
+        "chapterTitle": "Chapter 12 · Discussion libre",
+        "lessonTitle": "Casual Conversations",
+        "goalTitle": "Smoothly: engage in small talk",
+        "goalLine": "Have a spontaneous conversation in various social situations.",
+        "goalShort": "casual small talk",
+        "scenario": "freetalk",
+        "partnerName": "Elena",
+        "partnerInitial": "E",
+        "partnerRole": "amie",
+        "partnerPlace": "Parc Montsouris",
+        "scenarioTitle": "Discussion libre · Paris",
+        "scenarioSub": "Roleplay · spontaneous social interactions",
+        "lessonPromptEn": "What have you been up to lately?",
+        "lessonHint": "Why “faire” in casual past?",
+        "bank": [
+          "Qu'as-tu",
+          "fait",
+          "récemment",
+          "disons",
+          "rencontrer",
+          "amusant"
+        ],
+        "bankEn": [
+          "What have you",
+          "done",
+          "recently",
+          "let’s say",
+          "to meet",
+          "fun"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "lessonCorrectTitle": "Parfaitement amical ! 🎉",
+        "lessonCorrectBody": "Using “Qu'as-tu fait” smoothly leads into catching up.",
+        "lessonWrongBody": "Start off with “Qu'as-tu fait” to begin casual catching up.",
+        "cultureCaption": "Parc Montsouris · 5pm",
+        "cultureTitle": "Mastering Casual Conversations",
+        "cultureBody": "French enjoy spontaneous chats with acquaintances. It's more about connection than content.",
+        "culturePhrase": "“Ça fait longtemps !” — perfect to reconnect with old contacts.",
+        "milestoneTitle": "You can now casually converse across various situations.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Salut ! Ça va ? Qu'as-tu fait récemment ?",
+            "en": "Hi! How are you? What have you done lately?"
+          },
+          {
+            "who": "u",
+            "n": "J'ai visité des amis et découvert de nouveaux endroits.",
+            "fb": "Nice — you shared activities easily"
+          },
+          {
+            "who": "p",
+            "n": "Ça a dû être amusant !",
+            "en": "That must have been fun!"
+          },
+          {
+            "who": "u",
+            "n": "Oui, et toi ? Qu'as-tu fait de beau ?",
+            "fb": "Perfect — reciprocated and kept it open"
+          },
+          {
+            "who": "p",
+            "n": "Pas grand-chose, mais je suis content de te voir.",
+            "en": "Not much, but I'm glad to see you."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Friendly rapport",
+            "body": "Keep it light, positive, and focused on connection."
+          },
+          {
+            "title": "Reciprocity in conversation",
+            "body": "Encouraging others to share fosters a two-way exchange."
+          }
+        ],
+        "grammarMini": "informal phrases",
+        "grammarTitle": "Casual Speech: Familiar Phrases",
+        "grammarIntro": "Using friendly phrases can ease a conversation:",
+        "gTermA": "Salut",
+        "gDescA": "hello / hi — informal, friendly",
+        "gExA": "Salut, comment ça va ?",
+        "gTermB": "Disons",
+        "gDescB": "let’s say — introduces a suggestion",
+        "gExB": "Disons à demain.",
+        "clip": "La vie quotidienne en conversation",
+        "podcast": "Conversations légères — ép. 11",
+        "article": "Interagir facilement : Guide des conversations",
+        "reader": [
+          {
+            "t": "Les discussions informelles sont souvent détendues, on "
+          },
+          {
+            "w": "parle",
+            "d": "talks (from parler — to talk)"
+          },
+          {
+            "t": " de tout et de rien, et on "
+          },
+          {
+            "w": "apprend",
+            "d": "learns (from apprendre — to learn)"
+          },
+          {
+            "t": " à mieux se connaître. L'important est de renforcer les liens."
+          }
+        ],
+        "reviewWord": "parle",
+        "reviewSource": "from your casual talk guide, 1 day ago",
+        "reviewMeaning": "talks"
+      },
+      {
+        "chapterTitle": "Chapter 13 · Test de compétence",
+        "lessonTitle": "Show Your Skills",
+        "goalTitle": "Prove it: pass your language placement test",
+        "goalLine": "Confidently tackle language understanding in a test setting.",
+        "goalShort": "language test navigation",
+        "scenario": "placement",
+        "partnerName": "Lucas",
+        "partnerInitial": "L",
+        "partnerRole": "professeur",
+        "partnerPlace": "Centre de Langues",
+        "scenarioTitle": "Test de compétence · Paris",
+        "scenarioSub": "Roleplay · navigating and understanding test instructions",
+        "lessonPromptEn": "Please, could you explain the instructions again?",
+        "lessonHint": "Why use “pourriez-vous”?",
+        "bank": [
+          "Pourriez-vous",
+          "expliquer",
+          "les instructions",
+          "de nouveau",
+          "répondre",
+          "compréhension"
+        ],
+        "bankEn": [
+          "Could you",
+          "explain",
+          "the instructions",
+          "again",
+          "to answer",
+          "understanding"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "lessonCorrectTitle": "Bien joué ! 🎉",
+        "lessonCorrectBody": "“Pourriez-vous” (Could you) politely asks for help.",
+        "lessonWrongBody": "Use “Pourriez-vous” to politely ask for repetition.",
+        "cultureCaption": "Centre de Langues · 10am",
+        "cultureTitle": "Test Culture",
+        "cultureBody": "French locals value education and clear understanding on tests. It's polite to ask questions rather than assume.",
+        "culturePhrase": "“Je n'ai pas compris cette partie” — helpful when you miss something.",
+        "milestoneTitle": "You can now approach language tests confidently.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Bienvenue au test de compétence. Avez-vous des questions ?",
+            "en": "Welcome to the placement test. Do you have any questions?"
+          },
+          {
+            "who": "u",
+            "n": "Pourriez-vous expliquer les instructions de nouveau ?",
+            "fb": "Excellent choice — you've asked for clarity"
+          },
+          {
+            "who": "p",
+            "n": "Bien sûr, voici une brève explication...",
+            "en": "Of course, here’s a brief explanation..."
+          },
+          {
+            "who": "u",
+            "n": "Merci, c'est beaucoup plus clair.",
+            "fb": "Perfect — acknowledged clarity graciously"
+          },
+          {
+            "who": "p",
+            "n": "Pas de problème, bonne chance pour votre test !",
+            "en": "No problem, good luck with your test!"
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Ask when unsure",
+            "body": "Don’t hesitate to ask for clarification in any setting."
+          },
+          {
+            "title": "Test behavior",
+            "body": "Maintain concentration and respect the quiet of test environments."
+          }
+        ],
+        "grammarMini": "politeness in requests",
+        "grammarTitle": "Politeness via Modal Verbs",
+        "grammarIntro": "Using “could” vs “can” in French involves modal verbs politely:",
+        "gTermA": "Pourriez-vous",
+        "gDescA": "could you — polite, indirect request",
+        "gExA": "Pourriez-vous m'aider ?",
+        "gTermB": "Peux-tu",
+        "gDescB": "can you — direct, less formal",
+        "gExB": "Peux-tu l'expliquer ?",
+        "clip": "Approches des tests officiels",
+        "podcast": "Préparation aux tests — ép. 14",
+        "article": "Réussir les tests de langue",
+        "reader": [
+          {
+            "t": "Lors du test, concentrez-vous sur chaque "
+          },
+          {
+            "w": "question",
+            "d": "question (from question — question)"
+          },
+          {
+            "t": " et essayez de "
+          },
+          {
+            "w": "répondre",
+            "d": "answer (from répondre — to answer)"
+          },
+          {
+            "t": " avec précision. Ne stressez pas, et gardez un esprit clair."
+          }
+        ],
+        "reviewWord": "répondre",
+        "reviewSource": "from your language test strategies article, 2 days ago",
+        "reviewMeaning": "to answer"
+      },
+      {
+        "chapterTitle": "Chapter 14 · À la banque",
+        "lessonTitle": "Banking Basics",
+        "goalTitle": "Handle it: manage a banking transaction",
+        "goalLine": "Open an account and manage simple transactions smoothly.",
+        "goalShort": "bank account management",
+        "scenario": "bank",
+        "partnerName": "Jean",
+        "partnerInitial": "J",
+        "partnerRole": "conseiller bancaire",
+        "partnerPlace": "Banque Nationale de Paris",
+        "scenarioTitle": "À la banque · Paris",
+        "scenarioSub": "Roleplay · opening accounts & handling transactions",
+        "lessonPromptEn": "I would like to open a savings account, please.",
+        "lessonHint": "Why “compte-épargne”?",
+        "bank": [
+          "Je voudrais",
+          "ouvrir",
+          "un compte-épargne",
+          "s'il vous plaît",
+          "carte",
+          "débit"
+        ],
+        "bankEn": [
+          "I would like",
+          "to open",
+          "a savings account",
+          "please",
+          "card",
+          "debit"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "lessonCorrectTitle": "Très bien fait ! 🎉",
+        "lessonCorrectBody": "“Je voudrais” (I would like) approaches requests gently and respectfully.",
+        "lessonWrongBody": "Begin with “Je voudrais” when expressing a desire to do something.",
+        "cultureCaption": "Banque Nationale · 2pm",
+        "cultureTitle": "Understanding French Banking",
+        "cultureBody": "Opening a bank account in France requires patience and paperwork. Always carry identification and relevant documents.",
+        "culturePhrase": "“Pourrais-je avoir un relevé de compte ?” — essential in requesting a statement.",
+        "milestoneTitle": "You can now open and manage a bank account in France.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Bonjour, comment puis-je vous aider aujourd'hui ?",
+            "en": "Hello, how can I assist you today?"
+          },
+          {
+            "who": "u",
+            "n": "Je voudrais ouvrir un compte-épargne, s'il vous plaît.",
+            "fb": "Great — expressed your desire politely"
+          },
+          {
+            "who": "p",
+            "n": "D'accord, avez-vous vos pièces d'identité avec vous ?",
+            "en": "Okay, do you have your identification documents with you?"
+          },
+          {
+            "who": "u",
+            "n": "Oui, les voici.",
+            "fb": "Perfect — smoothly provided necessary documents"
+          },
+          {
+            "who": "p",
+            "n": "Très bien, je vais préparer les documents nécessaires.",
+            "en": "Very well, I’ll prepare the necessary documents."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Financial formalities",
+            "body": "Always be ready with identification and be patient with the process."
+          },
+          {
+            "title": "Niceties in service",
+            "body": "“Bonjour” and “Merci” go a long way in service settings."
+          }
+        ],
+        "grammarMini": "formal vs informal requests",
+        "grammarTitle": "Making Polite Requests",
+        "grammarIntro": "Politeness in requests requires more consistency in phrasing:",
+        "gTermA": "pourrais-je",
+        "gDescA": "could I — very polite, shows humility",
+        "gExA": "Pourrais-je consulter mon compte ?",
+        "gTermB": "j'ai besoin de",
+        "gDescB": "I need — direct, states requirement",
+        "gExB": "J'ai besoin d'une carte.",
+        "clip": "Les démarches bancaires à Paris",
+        "podcast": "Moniteur de banque — ép. 9",
+        "article": "Guide pratique de la banque française",
+        "reader": [
+          {
+            "t": "À la banque, assurez-vous de comprendre tous les "
+          },
+          {
+            "w": "termes",
+            "d": "terms (from terme — term)"
+          },
+          {
+            "t": " utilisés dans les transactions. N'hésitez pas à "
+          },
+          {
+            "w": "demander",
+            "d": "ask (from demander — to ask)"
+          },
+          {
+            "t": " des clarifications au conseiller."
+          }
+        ],
+        "reviewWord": "demander",
+        "reviewSource": "from your banking guide, 4 days ago",
+        "reviewMeaning": "to ask"
+      },
+      {
+        "chapterTitle": "Chapter 15 · Prendre le train",
+        "lessonTitle": "Train Travel Tips",
+        "goalTitle": "Catch it: find your platform & board",
+        "goalLine": "Navigate the station to board the right train at the right time.",
+        "goalShort": "train travel",
+        "scenario": "train",
+        "partnerName": "Julien",
+        "partnerInitial": "J",
+        "partnerRole": "agent de gare",
+        "partnerPlace": "Gare du Nord",
+        "scenarioTitle": "Prendre le train · Paris",
+        "scenarioSub": "Roleplay · finding platforms & validating tickets",
+        "lessonPromptEn": "Which platform is the train for Marseille?",
+        "lessonHint": "Platform in French translates a bit differently.",
+        "bank": [
+          "De quel",
+          "quai",
+          "part",
+          "le train",
+          "destination",
+          "arrivée"
+        ],
+        "bankEn": [
+          "Which",
+          "platform",
+          "leaves",
+          "the train",
+          "destination",
+          "arrival"
+        ],
+        "correct": [
+          0,
+          1,
+          3,
+          2
+        ],
+        "lessonCorrectTitle": "C'est parfait ! 🎉",
+        "lessonCorrectBody": "“De quel quai” is essential in asking for platform information.",
+        "lessonWrongBody": "Use “De quel quai” to start your platform question.",
+        "cultureCaption": "Gare du Nord · 7am",
+        "cultureTitle": "Navigating the Rails",
+        "cultureBody": "Station etiquette requires having tickets ready and boarding swiftly. Validate your ticket if required.",
+        "culturePhrase": "“Le train pour Marseille part à 8h.” — listen carefully for train times.",
+        "milestoneTitle": "You can now navigate train travel seamlessly in France.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Bonjour, je peux vous renseigner ?",
+            "en": "Hello, can I help you with something?"
+          },
+          {
+            "who": "u",
+            "n": "De quel quai part le train pour Marseille ?",
+            "fb": "Perfect — clear and exact question"
+          },
+          {
+            "who": "p",
+            "n": "Quai numéro cinq, et il part dans quinze minutes.",
+            "en": "Platform number five, and it leaves in fifteen minutes."
+          },
+          {
+            "who": "u",
+            "n": "Merci beaucoup pour l'information.",
+            "fb": "Great — acknowledged the help offered"
+          },
+          {
+            "who": "p",
+            "n": "Avec plaisir, bon voyage !",
+            "en": "My pleasure, have a good journey!"
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Being time-conscious",
+            "body": "Arrive with time to spare and double-check schedules."
+          },
+          {
+            "title": "Platform punctuality",
+            "body": "Be prepared to board swiftly upon announcement."
+          }
+        ],
+        "grammarMini": "questions using quel",
+        "grammarTitle": "Using “Quel” in Questions",
+        "grammarIntro": "Use “quel” to ask questions about specific items:",
+        "gTermA": "Quel",
+        "gDescA": "which/what — before masculine singular nouns",
+        "gExA": "Quel train prend-on ?",
+        "gTermB": "Quelle",
+        "gDescB": "which/what — before feminine singular nouns",
+        "gExB": "Quelle heure est-il ?",
+        "clip": "La vie sur les rails",
+        "podcast": "Voyager en train — ép. 8",
+        "article": "Guide du voyage en train en France",
+        "reader": [
+          {
+            "t": "Voyager en train en France est très "
+          },
+          {
+            "w": "pratique",
+            "d": "convenient (from pratique — practical)"
+          },
+          {
+            "t": ". Les trains sont "
+          },
+          {
+            "w": "rapides",
+            "d": "fast (from rapide — rapid)"
+          },
+          {
+            "t": " et les gares sont faciles à naviguer avec un peu de repérage."
+          }
+        ],
+        "reviewWord": "rapides",
+        "reviewSource": "from your train travel guide, 3 days ago",
+        "reviewMeaning": "fast"
       }
     ]
   },
@@ -2233,6 +4120,1157 @@ export const LANGS: any = {
         "reviewWord": "ऐम्बुलेंस",
         "reviewSource": "from your emergency call, 6 days ago",
         "reviewMeaning": "ambulance"
+      },
+      {
+        "chapterTitle": "Chapter 7 · हवाई अड्डा Airport experience",
+        "lessonTitle": "Flying & communication",
+        "goalTitle": "Navigate it: airport procedures",
+        "goalLine": "Check-in and navigate the airport.",
+        "goalShort": "navigate airport",
+        "scenario": "airport",
+        "partnerName": "सुषमा Sushma",
+        "partnerInitial": "S",
+        "partnerRole": "check-in officer",
+        "partnerPlace": "Indira Gandhi International Airport",
+        "scenarioTitle": "हवाई अड्डा · Airport",
+        "scenarioSub": "Roleplay · airport check-in & chat",
+        "lessonPromptEn": "I have a reservation.",
+        "lessonHint": "Why “मेरी … है”?",
+        "bank": [
+          "मेरी",
+          "एक",
+          "रिज़र्वेशन",
+          "है",
+          "कैरी",
+          "बैग"
+        ],
+        "bankEn": [
+          "my",
+          "a",
+          "reservation",
+          "is",
+          "carry",
+          "bag"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "lessonCorrectTitle": "बहुत बढ़िया! 🎉",
+        "lessonCorrectBody": "“मेरी … है” translates directly to “my … is.”",
+        "lessonWrongBody": "Start with “मेरी” (my), then the item, followed by “है.”",
+        "cultureCaption": "Check-in counters at the airport · busy morning",
+        "cultureTitle": "Airports: a hub of movement and connection",
+        "cultureBody": "Air travel in India is a vibrant hub of activity, connecting distant parts of the country. The rhythm of announcements, luggage trolleys, and the shared journey often spark new conversations.",
+        "culturePhrase": "“कितनी देर में उड़ान?” (kitni der mein udaan?) — “how long until the flight?”",
+        "milestoneTitle": "You can now check-in and manage airport procedures smoothly.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "नमस्ते! आपकी उड़ान कहाँ की है?",
+            "en": "Hello! Where is your flight to?"
+          },
+          {
+            "who": "u",
+            "n": "मेरी एक दिल्ली की उड़ान है।",
+            "fb": "Great — “मेरी … है” is the right construct"
+          },
+          {
+            "who": "p",
+            "n": "आपका पासपोर्ट, कृपया?",
+            "en": "Your passport, please?"
+          },
+          {
+            "who": "u",
+            "n": "यह रहा, धन्यवाद।",
+            "fb": "Good job — using “यह रहा” to present something"
+          },
+          {
+            "who": "p",
+            "n": "आपका गेट नंबर 3 है।",
+            "en": "Your gate number is 3."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "“धन्यवाद” vs “शुक्रिया”",
+            "body": "Either can be used casually, though “धन्यवाद” is slightly formal."
+          },
+          {
+            "title": "Aspirated consonants",
+            "body": "Hindi has more aspirated sounds — try a slight puff of air with “ढ” as in “धन्यवाद.”"
+          }
+        ],
+        "grammarMini": "मेरी … है",
+        "grammarTitle": "“मेरी … है” — how to say “I have” or “my is”",
+        "grammarIntro": "Possession in Hindi often uses the structure: topic + ‘है’.",
+        "gTermA": "मेरी (meri)",
+        "gDescA": "“my” — for feminine nouns",
+        "gExA": "मेरी उड़ान है।",
+        "gTermB": "है (hai)",
+        "gDescB": "“is” — confirms the existence/possession",
+        "gExB": "मेरी रिज़र्वेशन है।",
+        "clip": "हवाई अड्डे की हलचल",
+        "podcast": "आकाश मार्ग — एपिसोड 7",
+        "article": "हवाई अड्डे का अनुभव",
+        "reader": [
+          {
+            "t": "भारत के हवाई अड्डे विभिन्न "
+          },
+          {
+            "w": "संस्कृतियों",
+            "d": "cultures — a mix of diverse traditions"
+          },
+          {
+            "t": " का "
+          },
+          {
+            "w": "मिलन",
+            "d": "meeting — convergence"
+          },
+          {
+            "t": " बिंदु हैं। यात्री विभिन्न "
+          },
+          {
+            "w": "बोलियाँ",
+            "d": "languages or dialects"
+          },
+          {
+            "t": " बोलते हैं और नए "
+          },
+          {
+            "w": "संबंध",
+            "d": "connections"
+          },
+          {
+            "t": " बनाते हैं।"
+          }
+        ],
+        "reviewWord": "रिज़र्वेशन",
+        "reviewSource": "from your airport check-in, 7 days ago",
+        "reviewMeaning": "reservation"
+      },
+      {
+        "chapterTitle": "Chapter 8 · रेस्टोरेंट डिनर Restaurant Dining",
+        "lessonTitle": "Dinner & companionship",
+        "goalTitle": "Order it: enjoy a meal",
+        "goalLine": "Order dinner and share a conversation.",
+        "goalShort": "order dinner",
+        "scenario": "dinner",
+        "partnerName": "अमित Amit",
+        "partnerInitial": "A",
+        "partnerRole": "waiter",
+        "partnerPlace": "Jaipur Dining Hall",
+        "scenarioTitle": "रेस्टोरेंट · Dinner",
+        "scenarioSub": "Roleplay · order dinner & friendly chat",
+        "lessonPromptEn": "I'd like a dal and roti, please.",
+        "lessonHint": "Think “मुझे … चाहिए”.",
+        "bank": [
+          "मुझे",
+          "एक",
+          "दाल",
+          "चाहिए",
+          "रोटी",
+          "दही"
+        ],
+        "bankEn": [
+          "I want",
+          "a",
+          "dal",
+          "is needed",
+          "roti",
+          "curd"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "lessonCorrectTitle": "शानदार! 🎉",
+        "lessonCorrectBody": "“मुझे … चाहिए” conveys your want politely and accurately.",
+        "lessonWrongBody": "Start with “मुझे,” follow with the quantity and item, ending with “चाहिए.”",
+        "cultureCaption": "A restaurant in Jaipur · vibrant evening",
+        "cultureTitle": "Dining as a celebration",
+        "cultureBody": "Meals in India are often enjoyed as a communal experience, where sharing food means sharing life. A typical restaurant dinner often blends flavors from rich history and tradition with modern tastes.",
+        "culturePhrase": "“यह कितना है?” (ye kitna hai?) — “How much is this?” often asked during meals.",
+        "milestoneTitle": "You can now order meals and chat comfortably in a restaurant.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "नमस्ते! क्या मंगवाएँगे आप?",
+            "en": "Hello! What would you like to order?"
+          },
+          {
+            "who": "u",
+            "n": "मुझे एक दाल और रोटी चाहिए।",
+            "fb": "Excellent — using “मुझे” to indicate what you’d like"
+          },
+          {
+            "who": "p",
+            "n": "कुछ और लेंगे?",
+            "en": "Would you like anything else?"
+          },
+          {
+            "who": "u",
+            "n": "बस दही चाहिए, धन्यवाद।",
+            "fb": "Well done — “बस … चाहिए” limits the order"
+          },
+          {
+            "who": "p",
+            "n": "ज़ी हाँ, दाल और रोटी अभी आ जाएगी।",
+            "en": "Sure, dal and roti will be right up."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Dining Etiquette",
+            "body": "Always respond with ‘धन्यवाद’ even for simple services — it’s respected."
+          },
+          {
+            "title": "“ज़ी हाँ” vs “हाँ”",
+            "body": "“ज़ी हाँ” is a polite and formal version of “हाँ” (yes), often showing respect."
+          }
+        ],
+        "grammarMini": "मुझे … चाहिए",
+        "grammarTitle": "“मुझे … चाहिए” — how to say “I’d like”",
+        "grammarIntro": "Expressing desires uses this simple construct for direct requests.",
+        "gTermA": "मुझे (mujhe)",
+        "gDescA": "“I/me” as the receiver of what is wanted",
+        "gExA": "मुझे रोटी चाहिए।",
+        "gTermB": "चाहिए (chahiye)",
+        "gDescB": "“is needed/wanted” structures the request",
+        "gExB": "मुझे पानी चाहिए।",
+        "clip": "जोधपुर की खाने की झलक",
+        "podcast": "अमित के साथ भोजन यात्रा — एपिसोड 8",
+        "article": "भारतीय रात्रि भोजन का एक दृश्य",
+        "reader": [
+          {
+            "t": "भारत में "
+          },
+          {
+            "w": "खाना",
+            "d": "food — a vital cultural element"
+          },
+          {
+            "t": " केवल "
+          },
+          {
+            "w": "भोजन",
+            "d": "meal — the act of eating"
+          },
+          {
+            "t": " नहीं, "
+          },
+          {
+            "w": "सांस्कृतिक",
+            "d": "cultural — related to traditions"
+          },
+          {
+            "t": " पहचान है। लोग "
+          },
+          {
+            "w": "साथ",
+            "d": "together"
+          },
+          {
+            "t": "में खाते हैं, "
+          },
+          {
+            "w": "कहानी",
+            "d": "stories"
+          },
+          {
+            "t": "साझा करते हैं।"
+          }
+        ],
+        "reviewWord": "रोटी",
+        "reviewSource": "from your dinner order, 8 days ago",
+        "reviewMeaning": "Indian flatbread"
+      },
+      {
+        "chapterTitle": "Chapter 9 · नौकरी के लिए साक्षात्कार Job Interview",
+        "lessonTitle": "Interview & impression",
+        "goalTitle": "Ace it: job interview",
+        "goalLine": "Introduce yourself and discuss experience.",
+        "goalShort": "job interview",
+        "scenario": "interview",
+        "partnerName": "प्रियंका Priyanka",
+        "partnerInitial": "P",
+        "partnerRole": "HR manager",
+        "partnerPlace": "Mumbai Corporate Office",
+        "scenarioTitle": "साक्षात्कार · Interview",
+        "scenarioSub": "Roleplay · introduce yourself & express qualifications",
+        "lessonPromptEn": "I am experienced in management.",
+        "lessonHint": "Think “मेरे पास … है”.",
+        "bank": [
+          "मेरे",
+          "पास",
+          "प्रबंधन",
+          "में",
+          "अनुभव",
+          "है"
+        ],
+        "bankEn": [
+          "I",
+          "have",
+          "management",
+          "in",
+          "experience",
+          "is"
+        ],
+        "correct": [
+          0,
+          1,
+          4,
+          5
+        ],
+        "lessonCorrectTitle": "शानदार! 🎉",
+        "lessonCorrectBody": "“मेरे पास … है” effectively communicates possession or experience.",
+        "lessonWrongBody": "Start with “मेरे पास”, follow with the field and experience, ending with “है.”",
+        "cultureCaption": "Interview room · Mumbai business district",
+        "cultureTitle": "Professionalism and courtesy",
+        "cultureBody": "In Indian interviews, punctuality and dressing conservatively are valued. Introductions often ease into formal discussions, blending personal and professional nuances.",
+        "culturePhrase": "“आपका अनुभव क्या है?” (aapka anubhav kya hai?) — “What is your experience?”",
+        "milestoneTitle": "You can now navigate job interviews in Hindi professionally.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "नमस्ते, अपना परिचय दीजिये।",
+            "en": "Hello, please introduce yourself."
+          },
+          {
+            "who": "u",
+            "n": "नमस्ते, मेरे पास प्रबंधन में अनुभव है।",
+            "fb": "Well said — followed the grammatical structure correctly"
+          },
+          {
+            "who": "p",
+            "n": "आप कितने साल से काम कर रहे हैं?",
+            "en": "How many years have you been working?"
+          },
+          {
+            "who": "u",
+            "n": "मैं पाँच साल से काम कर रहा हूँ।",
+            "fb": "Perfect — using ‘पाँच साल’ gives a clear picture"
+          },
+          {
+            "who": "p",
+            "n": "बहुत अच्छे, धन्यवाद।",
+            "en": "Very good, thank you."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Introduction Etiquette",
+            "body": "Start with polite greetings and wait for the interviewer’s cue."
+          },
+          {
+            "title": "“आपका“ vs “तुम्हारा”",
+            "body": "“आपका” is formal and polite, suitable for interviews."
+          }
+        ],
+        "grammarMini": "मेरे पास … है",
+        "grammarTitle": "“मेरे पास … है” — expressing possession",
+        "grammarIntro": "To express possession of skills or experience.",
+        "gTermA": "मेरे पास (mere paas)",
+        "gDescA": "“I have” / possession construct",
+        "gExA": "मेरे पास अनुभव है।",
+        "gTermB": "अनुभव (anubhav)",
+        "gDescB": "“experience” — important noun in professional contexts",
+        "gExB": "मेरे पास IT में अनुभव है।",
+        "clip": "मुंबई के कार्यालय की झलक",
+        "podcast": "प्रियंका की साक्षात्कार युक्तियाँ — एपिसोड 9",
+        "article": "साक्षात्कार की तैयारी",
+        "reader": [
+          {
+            "t": "एक सफल नौकरी "
+          },
+          {
+            "w": "साक्षात्कार",
+            "d": "interview — a professional presentation"
+          },
+          {
+            "t": "के लिए आपको न केवल अपने "
+          },
+          {
+            "w": "कौशल",
+            "d": "skills — competencies and abilities"
+          },
+          {
+            "t": " दिखाने होते हैं बल्कि "
+          },
+          {
+            "w": "आत्मविश्वास",
+            "d": "confidence — self-assurance"
+          },
+          {
+            "t": "भी रखना होता है।"
+          }
+        ],
+        "reviewWord": "अनुभव",
+        "reviewSource": "from your job interview, 9 days ago",
+        "reviewMeaning": "experience"
+      },
+      {
+        "chapterTitle": "Chapter 10 · दवा की दुकान At the Pharmacy",
+        "lessonTitle": "Health & remedy",
+        "goalTitle": "Ask for it: get medicine",
+        "goalLine": "Request medicine and understand usage.",
+        "goalShort": "get medicine",
+        "scenario": "pharmacy",
+        "partnerName": "नील Nilesh",
+        "partnerInitial": "N",
+        "partnerRole": "pharmacist",
+        "partnerPlace": "Green Pharmacy, Bangalore",
+        "scenarioTitle": "दवा की दुकान · Pharmacy",
+        "scenarioSub": "Roleplay · ask for medicine & directions",
+        "lessonPromptEn": "I need medicine for a cough, please.",
+        "lessonHint": "Think “मुझे … के लिए चाहिए”.",
+        "bank": [
+          "मुझे",
+          "खाँसी",
+          "की",
+          "दवा",
+          "के",
+          "लिए"
+        ],
+        "bankEn": [
+          "I need",
+          "cough",
+          "of",
+          "medicine",
+          "for",
+          "for"
+        ],
+        "correct": [
+          0,
+          1,
+          4,
+          3
+        ],
+        "lessonCorrectTitle": "शानदार! 🎉",
+        "lessonCorrectBody": "“मुझे … के लिए चाहिए” translates effectively for need-specific requests.",
+        "lessonWrongBody": "Begin with “मुझे,” mention the ailment with “के लिए” and end with “चाहिए.”",
+        "cultureCaption": "Pharmacists at a pharmacy counter · Bangalore",
+        "cultureTitle": "Pharmacists: more than just medication",
+        "cultureBody": "Pharmacists in India serve both rural and urban populations, often advising on general health. They’re crucial in the healthcare system, being readily accessible for queries on ailments.",
+        "culturePhrase": "“आपके पास … है?” (aapke paas … hai?) — “Do you have …?” often needed in pharmacies.",
+        "milestoneTitle": "You can now ask for and understand medicine instructions confidently.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "नमस्ते, आपको कौन सी दवा चाहिए?",
+            "en": "Hello, which medicine do you need?"
+          },
+          {
+            "who": "u",
+            "n": "मुझे खाँसी के लिए दवा चाहिए।",
+            "fb": "Nicely done — clear structure for asking"
+          },
+          {
+            "who": "p",
+            "n": "एक्सपेक्टोरेंट या सिरप?",
+            "en": "Expectorant or syrup?"
+          },
+          {
+            "who": "u",
+            "n": "सिरप, धन्यवाद।",
+            "fb": "Good choice — ‘सिरप’ fits the context perfectly"
+          },
+          {
+            "who": "p",
+            "n": "यह सिरप दो बार लीजिए।",
+            "en": "Take this syrup twice a day."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Medicine-related questions",
+            "body": "Ask about dosage in clear terms — follow pharmacist guidance."
+          },
+          {
+            "title": "Pronunciation of ‘सिरप’",
+            "body": "Sounds like ‘seer-up’ unlike the English ‘syr-up’."
+          }
+        ],
+        "grammarMini": "मुझे … के लिए चाहिए",
+        "grammarTitle": "“मुझे … के लिए चाहिए” — asking for something specifically",
+        "grammarIntro": "Specify need or purpose with ‘के लिए’.",
+        "gTermA": "मुझे (mujhe)",
+        "gDescA": "“I need” or request starter",
+        "gExA": "मुझे बुखार के लिए दवा चाहिए।",
+        "gTermB": "दवा (dava)",
+        "gDescB": "“medicine” — critical noun in medical context",
+        "gExB": "मुझे सिरदर्द के लिए दवा चाहिए।",
+        "clip": "बेंगलुरु के दवा स्टोर की यात्रा",
+        "podcast": "नील के साथ स्वास्थ्य चर्चा — एपिसोड 10",
+        "article": "आवश्यक भारतीय दवाओं की सूची",
+        "reader": [
+          {
+            "t": "भारत की "
+          },
+          {
+            "w": "फार्मेसियाँ",
+            "d": "pharmacies — essential health services"
+          },
+          {
+            "t": "देश भर में "
+          },
+          {
+            "w": "स्वास्थ्य",
+            "d": "health — well-being and care"
+          },
+          {
+            "t": "सेवाएँ प्रदान करती हैं। ये दवाएँ और "
+          },
+          {
+            "w": "सलाह",
+            "d": "advice — guidance"
+          },
+          {
+            "t": "भी देती हैं।"
+          }
+        ],
+        "reviewWord": "दवा",
+        "reviewSource": "from your pharmacy purchase, 10 days ago",
+        "reviewMeaning": "medicine"
+      },
+      {
+        "chapterTitle": "Chapter 11 · बहस Debate discourse",
+        "lessonTitle": "Argue & convince",
+        "goalTitle": "Engage it: debate effectively",
+        "goalLine": "Present your argument and debate confidently.",
+        "goalShort": "debate",
+        "scenario": "debate",
+        "partnerName": "अदिति Aditi",
+        "partnerInitial": "A",
+        "partnerRole": "debate participant",
+        "partnerPlace": "Delhi University Amphitheatre",
+        "scenarioTitle": "बहस · Debate",
+        "scenarioSub": "Roleplay · express opinions & counterarguments",
+        "lessonPromptEn": "I believe in equal rights.",
+        "lessonHint": "Consider “मुझे … विश्वास है”.",
+        "bank": [
+          "मुझे",
+          "बराबरी",
+          "के",
+          "अधिकार",
+          "में",
+          "विश्वास"
+        ],
+        "bankEn": [
+          "I",
+          "equality",
+          "of",
+          "rights",
+          "in",
+          "belief"
+        ],
+        "correct": [
+          0,
+          4,
+          1,
+          5
+        ],
+        "lessonCorrectTitle": "अद्भुत! 🎉",
+        "lessonCorrectBody": "“मुझे … में विश्वास है” confidently shares beliefs or philosophies.",
+        "lessonWrongBody": "Open with “मुझे” and place ‘में विश्वास है’ around your belief.",
+        "cultureCaption": "Debate forum · active discussion",
+        "cultureTitle": "Debate: the heart of intellectual engagement",
+        "cultureBody": "In Indian culture, debates are vibrant platforms to exchange ideas across all areas from schools to political rallies. They extend respect and an opportunity to consider multiple perspectives.",
+        "culturePhrase": "“इस पर आपका मत क्या है?” (is par aapka mat kya hai?) — “What’s your opinion on this topic?”",
+        "milestoneTitle": "You can now debate and present arguments effectively in Hindi.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "आपका तर्क क्या है?",
+            "en": "What is your argument?"
+          },
+          {
+            "who": "u",
+            "n": "मुझे बराबरी के अधिकार में विश्वास है।",
+            "fb": "Well articulated — makes your point clearly"
+          },
+          {
+            "who": "p",
+            "n": "आपके तथ्य क्या हैं?",
+            "en": "What are your facts?"
+          },
+          {
+            "who": "u",
+            "n": "अध्ययन दिखाता है कि इससे समाज सुखी होता है।",
+            "fb": "Good use of ‘अध्ययन दिखाता है’ to present data"
+          },
+          {
+            "who": "p",
+            "n": "बहुत सही कहा!",
+            "en": "Very well said!"
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Debating styles",
+            "body": "Listen carefully, respect your opponent’s views, and respond coherently."
+          },
+          {
+            "title": "Presenting facts",
+            "body": "Use phrases like ‘अध्ययन दिखाता है…’ to quote research or evidence."
+          }
+        ],
+        "grammarMini": "मुझे … में विश्वास है",
+        "grammarTitle": "“मुझे … में विश्वास है” — expressing belief",
+        "grammarIntro": "State confidence or belief using this strong phrase.",
+        "gTermA": "मुझे (mujhe)",
+        "gDescA": "“I” or initiator of belief",
+        "gExA": "मुझे सत्य में विश्वास है।",
+        "gTermB": "विश्वास (vishwas)",
+        "gDescB": "“belief” — key in argument presentation",
+        "gExB": "मुझे शिक्षा में विश्वास है।",
+        "clip": "दिल्ली की बहस का मंच",
+        "podcast": "अदिति के साथ बहस दर्शन — एपिसोड 11",
+        "article": "लोकतांत्रिक बहसें: क्यों और कैसे",
+        "reader": [
+          {
+            "t": "भारत के "
+          },
+          {
+            "w": "शैक्षणिक",
+            "d": "academic — pertaining to education"
+          },
+          {
+            "t": "और "
+          },
+          {
+            "w": "राजनीतिक",
+            "d": "political — related to governance"
+          },
+          {
+            "t": " मंचों पर "
+          },
+          {
+            "w": "बहसें",
+            "d": "debates — discussions for resolving issues"
+          },
+          {
+            "t": "सामान्य हैं। ये विचारों का "
+          },
+          {
+            "w": "विनिमय",
+            "d": "exchange — sharing or trading"
+          },
+          {
+            "t": "प्रोत्साहित करती हैं।"
+          }
+        ],
+        "reviewWord": "विश्वास",
+        "reviewSource": "from your debate engagement, 11 days ago",
+        "reviewMeaning": "belief"
+      },
+      {
+        "chapterTitle": "Chapter 12 · स्वतंत्र बातचीत Free Talk",
+        "lessonTitle": "Engage & express",
+        "goalTitle": "Freely converse: any topic",
+        "goalLine": "Engage in unstructured conversation comfortably.",
+        "goalShort": "casual talk",
+        "scenario": "freetalk",
+        "partnerName": "कार्तिक Kartik",
+        "partnerInitial": "K",
+        "partnerRole": "acquaintance",
+        "partnerPlace": "Mumbai Cafe",
+        "scenarioTitle": "खुली बातचीत · Free Talk",
+        "scenarioSub": "Roleplay · spontaneous conversation",
+        "lessonPromptEn": "Tell me something new.",
+        "lessonHint": "Use “मुझे ... बताओ”.",
+        "bank": [
+          "मुझे",
+          "कुछ",
+          "नया",
+          "बताओ",
+          "कहानी",
+          "सुनाओ"
+        ],
+        "bankEn": [
+          "tell",
+          "something",
+          "new",
+          "inform",
+          "story",
+          "narrate"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "lessonCorrectTitle": "शानदार! 🎉",
+        "lessonCorrectBody": "“मुझे ... बताओ” simplifies the request for information.",
+        "lessonWrongBody": "Initiate with ‘मुझे,’ imply what's desired, and end with ‘बताओ’.",
+        "cultureCaption": "Friends chatting at a cafe · Mumbai's famous spot",
+        "cultureTitle": "Free talk: bridging gaps with words",
+        "cultureBody": "Casual conversations in India weave stories with the past, blending anecdotes from various regions that often conclude with shared laughter and understanding.",
+        "culturePhrase": "“क्या हाल है?” (kya haal hai?) — “How are you?” sparks most conversations.",
+        "milestoneTitle": "You can now engage in spontaneous chats on various topics.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "आपका आज का दिन कैसा रहा?",
+            "en": "How was your day today?"
+          },
+          {
+            "who": "u",
+            "n": "बहुत अच्छा था। मुझे कुछ नया बताओ।",
+            "fb": "Nice opener for keeping the exchange continuous"
+          },
+          {
+            "who": "p",
+            "n": "मैंने एक नया कैफे खोजा।",
+            "en": "I found a new cafe."
+          },
+          {
+            "who": "u",
+            "n": "वहाँ का खाना कैसा था?",
+            "fb": "Excellent follow-up question"
+          },
+          {
+            "who": "p",
+            "n": "लाजवाब था, आपको बहुत पसंद आएगा।",
+            "en": "It was amazing, you will really like it."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Engaging responses",
+            "body": "Acknowledge in conversations with ‘वाह!’, ‘अच्छा!’ for keeping interest."
+          },
+          {
+            "title": "Questions that encourage",
+            "body": "Use open questions like ‘मुझे बताओ’, ‘क्या कहोगे’ to express interest."
+          }
+        ],
+        "grammarMini": "मुझे ... बताओ",
+        "grammarTitle": "“मुझे ... बताओ” — open invitation to share",
+        "grammarIntro": "Guide conversations by asking for interesting pieces openly.",
+        "gTermA": "मुझे (mujhe)",
+        "gDescA": "Serve as the focus for inquiries",
+        "gExA": "मुझे आपकी राय बताओ।",
+        "gTermB": "बताओ (batao)",
+        "gDescB": "“inform” or “tell” — seeks specific information",
+        "gExB": "मुझे एक मजेदार कहानी बताओ।",
+        "clip": "मुंबई कैफे की कहानियाँ",
+        "podcast": "कार्तिक की वार्तालाप चहलकदमी — एपिसोड 12",
+        "article": "मजेदार किस्से: साझा करना सीखें",
+        "reader": [
+          {
+            "t": "भारत में खुले "
+          },
+          {
+            "w": "बातचीत",
+            "d": "conversation — informal discussion"
+          },
+          {
+            "t": " का "
+          },
+          {
+            "w": "महत्व",
+            "d": "importance — significance and value"
+          },
+          {
+            "t": "है। ये "
+          },
+          {
+            "w": "मित्रता",
+            "d": "friendship — camaraderie"
+          },
+          {
+            "t": " और "
+          },
+          {
+            "w": "समझदारी",
+            "d": "understanding — judgment and tolerance"
+          },
+          {
+            "t": "बढ़ाती हैं।"
+          }
+        ],
+        "reviewWord": "नया",
+        "reviewSource": "from your free talk session, 12 days ago",
+        "reviewMeaning": "new"
+      },
+      {
+        "chapterTitle": "Chapter 13 · स्थान का परीक्षण Placement Check",
+        "lessonTitle": "Ascertain & evaluate",
+        "goalTitle": "Determine it: placement suitability",
+        "goalLine": "Evaluate skills and positions.",
+        "goalShort": "placement test",
+        "scenario": "placement",
+        "partnerName": "ध्रुव Dhruv",
+        "partnerInitial": "D",
+        "partnerRole": "placement officer",
+        "partnerPlace": "Pune Test Center",
+        "scenarioTitle": "स्थान परीक्षण · Placement Check",
+        "scenarioSub": "Roleplay · assess skills & propose placements",
+        "lessonPromptEn": "I have skills in analytics.",
+        "lessonHint": "Use “मेरे पास … कौशल है”.",
+        "bank": [
+          "मेरे",
+          "पास",
+          "विश्लेषणात्मक",
+          "कौशल",
+          "है",
+          "उत्कृष्ट"
+        ],
+        "bankEn": [
+          "I have",
+          "skills",
+          "analytical",
+          "skills",
+          "is",
+          "excellent"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          4
+        ],
+        "lessonCorrectTitle": "अद्भुत! 🎉",
+        "lessonCorrectBody": "“मेरे पास … कौशल है” is a straightforward way to express expertise.",
+        "lessonWrongBody": "Begin with “मेरे पास,” insert skill type, conclude with ‘है’.",
+        "cultureCaption": "Placement officers guiding students · Pune",
+        "cultureTitle": "Placement tests: shaping future paths",
+        "cultureBody": "Placement in India is a supportive process that offers students insights into suitable careers based on their strengths, driving them towards paths they may excel at leveraging local and global opportunities.",
+        "culturePhrase": "“आपकी प्राथमिकताएँ क्या हैं?” (aapki prathmiktaen kya hain?) — “What are your priorities?” useful for discussions.",
+        "milestoneTitle": "You can now assess placement suitability proficiently in Hindi.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "आपको किस क्षेत्र में कौशल है?",
+            "en": "In which field do you have skills?"
+          },
+          {
+            "who": "u",
+            "n": "मेरे पास विश्लेषणात्मक कौशल है।",
+            "fb": "Spot on — uses convinced clarity"
+          },
+          {
+            "who": "p",
+            "n": "आपकी प्राथमिकताएँ क्या हैं?",
+            "en": "What are your priorities?"
+          },
+          {
+            "who": "u",
+            "n": "मार्केटिंग मेरे लिए महत्वपूर्ण है।",
+            "fb": "Good — expresses the area of interest"
+          },
+          {
+            "who": "p",
+            "n": "आपके पास उज्ज्वल अवसर हैं!",
+            "en": "You have bright opportunities!"
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Expressing skills",
+            "body": "Highlight your strengths with ‘मेरे पास … कौशल है’, showing competence."
+          },
+          {
+            "title": "Goal alignment",
+            "body": "Use ‘प्राथमिकताएँ’ (priorities) to outline your career focus clearly."
+          }
+        ],
+        "grammarMini": "मेरे पास … कौशल है",
+        "grammarTitle": "“मेरे पास … कौशल है” — stating your skills",
+        "grammarIntro": "Frame your professional abilities in conversations succinctly.",
+        "gTermA": "मेरे पास (mere paas)",
+        "gDescA": "Indicates ownership/possession of abilities",
+        "gExA": "मेरे पास प्रोग्रामिंग कौशल है।",
+        "gTermB": "कौशल (kaushal)",
+        "gDescB": "“skill” — vital for career discussions",
+        "gExB": "मेरे पास लेखन कौशल है।",
+        "clip": "पुणे की प्रशिक्षण बैठकें",
+        "podcast": "ध्रुव के साथ करियर दृष्टिकोण — एपिसोड 13",
+        "article": "प्रभावी स्थान निर्धारण",
+        "reader": [
+          {
+            "t": "भारत का "
+          },
+          {
+            "w": "कैरियर",
+            "d": "career — professional path"
+          },
+          {
+            "t": "निर्देशन "
+          },
+          {
+            "w": "छात्रों",
+            "d": "students"
+          },
+          {
+            "t": "को सही "
+          },
+          {
+            "w": "रास्ता",
+            "d": "path — route or direction"
+          },
+          {
+            "t": "दिखाने में मदद करता है।"
+          }
+        ],
+        "reviewWord": "कौशल",
+        "reviewSource": "from your placement discussion, 13 days ago",
+        "reviewMeaning": "skill"
+      },
+      {
+        "chapterTitle": "Chapter 14 · बैंक में In the Bank",
+        "lessonTitle": "Finance & transactions",
+        "goalTitle": "Handle it: bank dealings",
+        "goalLine": "Open an account and conduct transactions.",
+        "goalShort": "banking",
+        "scenario": "bank",
+        "partnerName": "रचना Rachna",
+        "partnerInitial": "R",
+        "partnerRole": "bank manager",
+        "partnerPlace": "SBI Bank, Chennai Branch",
+        "scenarioTitle": "बैंक · Banking",
+        "scenarioSub": "Roleplay · manage funds & open accounts",
+        "lessonPromptEn": "I want to open a savings account.",
+        "lessonHint": "Think “मैं … खोलना चाहता हूँ”.",
+        "bank": [
+          "मैं",
+          "बचत",
+          "खाता",
+          "खोलना",
+          "चाहता",
+          "हूँ"
+        ],
+        "bankEn": [
+          "I",
+          "savings",
+          "account",
+          "open",
+          "want",
+          "am"
+        ],
+        "correct": [
+          0,
+          3,
+          2,
+          5
+        ],
+        "lessonCorrectTitle": "अद्भुत! 🎉",
+        "lessonCorrectBody": "“मैं … खोलना चाहता हूँ” delicately requests to initiate an activity.",
+        "lessonWrongBody": "Initiate with ‘मैं,’ clarify your intent, conclude with ‘चाहता हूँ’.",
+        "cultureCaption": "Bank counters in Chennai · financial activity",
+        "cultureTitle": "Banks: the gateway to financial security",
+        "cultureBody": "Banks in India offer varied services, often walking the extra mile to educate customers on digital banking, savings, and financial planning, solidifying trust within communities.",
+        "culturePhrase": "“अकाउंट खोलना कैसे है?” (account kholna kaise hai?) — “How to open an account?”",
+        "milestoneTitle": "You can now perform banking transactions and inquiries confidently in Hindi.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "नमस्ते, मैं आपकी कैसे मदद कर सकती हूँ?",
+            "en": "Hello, how may I assist you?"
+          },
+          {
+            "who": "u",
+            "n": "मैं एक बचत खाता खोलना चाहता हूँ।",
+            "fb": "Exactly right — straightforward request"
+          },
+          {
+            "who": "p",
+            "n": "कृपया अपने दस्तावेज़ दिखाइए।",
+            "en": "Please show your documents."
+          },
+          {
+            "who": "u",
+            "n": "यह रहे, धन्यवाद।",
+            "fb": "Good response — ‘यह रहे’ while presenting items"
+          },
+          {
+            "who": "p",
+            "n": "आपका खाता तैयार है।",
+            "en": "Your account is ready."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Formal Transactions",
+            "body": "Ensure politeness and attentiveness — use ‘कृपया’ liberally."
+          },
+          {
+            "title": "Hindi number use",
+            "body": "Be familiar with basic Hindi numbers to understand account details."
+          }
+        ],
+        "grammarMini": "मैं … खोलना चाहता हूँ",
+        "grammarTitle": "“मैं … खोलना चाहता हूँ” — starting formal processes",
+        "grammarIntro": "To formally commence an action or transaction.",
+        "gTermA": "मैं (main)",
+        "gDescA": "Signals the personal initiator",
+        "gExA": "मैं फ़िक्स्ड डिपॉज़िट खोलना चाहता हूँ।",
+        "gTermB": "खोलना (kholna)",
+        "gDescB": "“opening” — action verb denoting initiation",
+        "gExB": "मैं चेकिंग खाता खोलना चाहता हूँ।",
+        "clip": "चेन्नई का बैंकिंग अनुभव",
+        "podcast": "रचना के वित्तीय मार्गदर्शन — एपिसोड 14",
+        "article": "पहला खाता: रूपए और प्रक्रिया",
+        "reader": [
+          {
+            "t": "भारत के बैंकिंग सिस्टम ने "
+          },
+          {
+            "w": "विकास",
+            "d": "growth — expansion and improvement"
+          },
+          {
+            "t": "और "
+          },
+          {
+            "w": "तकनीकी",
+            "d": "technological — related to technology"
+          },
+          {
+            "t": "अग्रिमताओं की "
+          },
+          {
+            "w": "अपनाई",
+            "d": "adopted — accepted and integrated"
+          },
+          {
+            "t": "हुई हैं।"
+          }
+        ],
+        "reviewWord": "खाता",
+        "reviewSource": "from your bank visit, 14 days ago",
+        "reviewMeaning": "account"
+      },
+      {
+        "chapterTitle": "Chapter 15 · ट्रेन का सफर Taking the Train",
+        "lessonTitle": "Travel & boarding",
+        "goalTitle": "Catch it: enjoy train travel",
+        "goalLine": "Book tickets and navigate the train journey.",
+        "goalShort": "train travel",
+        "scenario": "train",
+        "partnerName": "राजेश Rajesh",
+        "partnerInitial": "R",
+        "partnerRole": "ticket officer",
+        "partnerPlace": "Howrah Railway Station",
+        "scenarioTitle": "ट्रेन यात्रा · Train Journey",
+        "scenarioSub": "Roleplay · book tickets & embark journey",
+        "lessonPromptEn": "I need a ticket to Varanasi.",
+        "lessonHint": "Use “मुझे … का टिकट चाहिए”.",
+        "bank": [
+          "मुझे",
+          "वाराणसी",
+          "के",
+          "लिए",
+          "टिकट",
+          "चाहिए"
+        ],
+        "bankEn": [
+          "I need",
+          "Varanasi",
+          "for",
+          "to",
+          "ticket",
+          "please"
+        ],
+        "correct": [
+          0,
+          1,
+          4,
+          5
+        ],
+        "lessonCorrectTitle": "अद्भुत! 🎉",
+        "lessonCorrectBody": "“मुझे … का टिकट चाहिए” effectively states your travel need.",
+        "lessonWrongBody": "Start with ‘मुझे,’ specify the destination, conclude with ‘का टिकट चाहिए’.",
+        "cultureCaption": "Passengers preparing for train journey · Howrah Station",
+        "cultureTitle": "Train journeys: an interconnected tapestry",
+        "cultureBody": "Trains are essences of India's rhythm, enabling cultural exchanges across regions. The diversity visible in compartments and tales through windows adds vibrancy and stories to every ride.",
+        "culturePhrase": "“यह गाड़ी कब चलेगी?” (ye gaadi kab chalegi?) — “When does this train leave?”",
+        "milestoneTitle": "You can now book tickets and manage train travel scenarios with ease.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "आपको कहाँ का टिकट चाहिए?",
+            "en": "Where do you need a ticket to?"
+          },
+          {
+            "who": "u",
+            "n": "मुझे वाराणसी के लिए टिकट चाहिए।",
+            "fb": "Right on — asked confidently"
+          },
+          {
+            "who": "p",
+            "n": "क्या तारीख चाहिए?",
+            "en": "For what date?"
+          },
+          {
+            "who": "u",
+            "n": "कल के लिए, धन्यवाद।",
+            "fb": "Correct — succinct and timely"
+          },
+          {
+            "who": "p",
+            "n": "यह रहा आपका टिकट, शुभ यात्रा!",
+            "en": "Here’s your ticket, have a good journey!"
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Check your platform",
+            "body": "Always confirm the platform and carriage number from the ticket for smooth boarding."
+          },
+          {
+            "title": "Interaction phrases",
+            "body": "Use ‘शुभ यात्रा’ for wishing someone safe travels."
+          }
+        ],
+        "grammarMini": "मुझे … का टिकट चाहिए",
+        "grammarTitle": "“मुझे … का टिकट चाहिए” — requesting travel tickets",
+        "grammarIntro": "A precise phrase to state ticket needs when traveling.",
+        "gTermA": "मुझे (mujhe)",
+        "gDescA": "Initiates need for travel",
+        "gExA": "मुझे आगरा का टिकट चाहिए।",
+        "gTermB": "चाहिए (chahiye)",
+        "gDescB": "Indicates necessity or desire for specific tickets",
+        "gExB": "मुझे दिल्ली का टिकट चाहिए।",
+        "clip": "कोलकाता के रेल यात्री दृश्य",
+        "podcast": "रेल यात्रा के किस्से — एपिसोड 15",
+        "article": "भारतीय रेल का परिवहन चमत्कार",
+        "reader": [
+          {
+            "t": "भारत में ट्रेनें न केवल "
+          },
+          {
+            "w": "आवाजाही",
+            "d": "commuting — regular travel"
+          },
+          {
+            "t": "के साधन हैं, "
+          },
+          {
+            "w": "बल्कि",
+            "d": "but — indicates a contrast"
+          },
+          {
+            "t": "संस्कृतियों का "
+          },
+          {
+            "w": "पुल",
+            "d": "bridge — connector"
+          },
+          {
+            "t": "भी हैं।"
+          }
+        ],
+        "reviewWord": "टिकट",
+        "reviewSource": "from your train booking, 15 days ago",
+        "reviewMeaning": "ticket"
       }
     ]
   },
@@ -3728,6 +6766,1081 @@ export const LANGS: any = {
         "reviewWord": "도와주세요",
         "reviewSource": "from your emergency call, 3 days ago",
         "reviewMeaning": "help me, please"
+      },
+      {
+        "chapterTitle": "Chapter 7 · 공항 Airport",
+        "lessonTitle": "Navigating & requesting",
+        "goalTitle": "Build it: find your gate",
+        "goalLine": "Politely ask for directions to your gate.",
+        "goalShort": "find your gate",
+        "scenario": "airport",
+        "partnerName": "민수 Minsu",
+        "partnerInitial": "M",
+        "partnerRole": "information officer",
+        "partnerPlace": "Incheon Airport",
+        "scenarioTitle": "공항 · Incheon",
+        "scenarioSub": "Roleplay · directions & assistance",
+        "lessonPromptEn": "Which way to Gate 5, please?",
+        "lessonHint": "Note the use of '어디예요?' for locations.",
+        "bank": [
+          "게이트",
+          "오",
+          "번",
+          "어디예요",
+          "비행기",
+          "가방"
+        ],
+        "bankEn": [
+          "gate",
+          "five",
+          "number",
+          "where is it",
+          "plane",
+          "bag"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "lessonCorrectTitle": "완벽해요! 🎉",
+        "lessonCorrectBody": "Use '어디예요?' to ask where something is; '오 번' — 'number 5.'",
+        "lessonWrongBody": "Remember to start with the item, like '게이트 오 번,' then '어디예요?'",
+        "cultureCaption": "Incheon Airport · afternoon",
+        "cultureTitle": "Politeness at the airport",
+        "cultureBody": "Koreans value politeness highly, especially in international settings like airports. Using '어디예요?' can soften your inquiries.",
+        "culturePhrase": "“도와주세요” (dowajuseyo) — a common polite way to ask for help.",
+        "milestoneTitle": "You can now politely ask for directions at the airport.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "안녕하세요! 어떻게 도와드릴까요?",
+            "en": "Hello! How can I assist you?"
+          },
+          {
+            "who": "u",
+            "n": "게이트 오 번 어디예요?",
+            "fb": "Great! Start with the item, followed by '어디예요?'"
+          },
+          {
+            "who": "p",
+            "n": "저쪽으로 가시면 됩니다.",
+            "en": "It’s that way."
+          },
+          {
+            "who": "u",
+            "n": "감사합니다!",
+            "fb": "Good use of 'thank you'!"
+          },
+          {
+            "who": "p",
+            "n": "좋은 여행 되세요.",
+            "en": "Have a nice trip!"
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Polite inquiries",
+            "body": "Using '어디예요' makes your question more polite and friendly."
+          },
+          {
+            "title": "Numbering in Korean",
+            "body": "Numbers like '오 번' show where to go, using native Korean numbers for simplicity."
+          }
+        ],
+        "grammarMini": "-어디예요",
+        "grammarTitle": "'어디예요?' — asking for location",
+        "grammarIntro": "Attach '어디예요?' for polite location inquiries:",
+        "gTermA": "어디예요? (eodiyeyo?)",
+        "gDescA": "'where is it' — a polite way to ask for directions",
+        "gExA": "화장실 어디예요?",
+        "gTermB": "도와주세요 (dowajuseyo)",
+        "gDescB": "please help me — polite request for assistance",
+        "gExB": "짐 찾는 것 도와주세요.",
+        "clip": "인천 공항의 아침, 여행객들과 함께",
+        "podcast": "여행 팟캐스트 #7: 공항 이용 팁",
+        "article": "공항에서 시간을 보내는 법",
+        "reader": [
+          {
+            "t": "공항에서는 많은 사람들이 "
+          },
+          {
+            "w": "게이트",
+            "d": "gate"
+          },
+          {
+            "t": "를 찾습니다. "
+          },
+          {
+            "w": "어디예요",
+            "d": "where is it"
+          },
+          {
+            "t": "라고 물어보세요. "
+          },
+          {
+            "w": "친절",
+            "d": "kindness, politeness"
+          },
+          {
+            "t": "은 여행의 시작입니다."
+          }
+        ],
+        "reviewWord": "도와주세요",
+        "reviewSource": "from your airport inquiry, 3 days ago",
+        "reviewMeaning": "please help me (polite request)"
+      },
+      {
+        "chapterTitle": "Chapter 8 · 음식점 저녁식사 Restaurant Dinner",
+        "lessonTitle": "Ordering & gratitude",
+        "goalTitle": "Build it: politely order dinner",
+        "goalLine": "Order dinner, showing politeness in Korean.",
+        "goalShort": "order dinner",
+        "scenario": "dinner",
+        "partnerName": "효진 Hyojin",
+        "partnerInitial": "H",
+        "partnerRole": "waitress",
+        "partnerPlace": "Seoul restaurant",
+        "scenarioTitle": "음식점 · Seoul",
+        "scenarioSub": "Roleplay · order & show gratitude",
+        "lessonPromptEn": "One bulgogi, please.",
+        "lessonHint": "Remember the word for 'one' and the polite endings.",
+        "bank": [
+          "불고기",
+          "하나",
+          "주세요",
+          "김치",
+          "이",
+          "반찬"
+        ],
+        "bankEn": [
+          "bulgogi",
+          "one",
+          "please",
+          "kimchi",
+          "two",
+          "side dish"
+        ],
+        "correct": [
+          0,
+          1,
+          2
+        ],
+        "lessonCorrectTitle": "완벽해요! 🎉",
+        "lessonCorrectBody": "'하나' is the native Korean number for 'one'; end with '주세요' to be polite.",
+        "lessonWrongBody": "Remember the sequence: item, count '하나,' and '주세요.'",
+        "cultureCaption": "Seoul Restaurant · evening",
+        "cultureTitle": "Dining and respect",
+        "cultureBody": "Politeness, particularly during dining, is embedded in Korean culture. Always thank the waiter after ordering with '감사합니다.'",
+        "culturePhrase": "“맛있게 드세요” (mas-iss-ge deu-seyo) — ‘Enjoy your meal’, a phrase for wishing others pleasant dining.",
+        "milestoneTitle": "You can now order dinner politely in Korean.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "어서 오세요! 주문하시겠어요?",
+            "en": "Welcome! Would you like to order?"
+          },
+          {
+            "who": "u",
+            "n": "불고기 하나 주세요.",
+            "fb": "Good! Using '하나' and '주세요' makes it polite."
+          },
+          {
+            "who": "p",
+            "n": "음료도 필요하신가요?",
+            "en": "Would you like drinks as well?"
+          },
+          {
+            "who": "u",
+            "n": "아니요, 괜찮습니다.",
+            "fb": "Great response to decline politely."
+          },
+          {
+            "who": "p",
+            "n": "알겠습니다, 바로 준비해드릴게요.",
+            "en": "Alright, I’ll prepare that immediately."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Use of “하나”",
+            "body": "Native numbers like '하나' simplify counting in casual settings."
+          },
+          {
+            "title": "The verb “주세요”",
+            "body": "Ending requests with '주세요' is a sign of respect in dining contexts."
+          }
+        ],
+        "grammarMini": "-주세요",
+        "grammarTitle": "“-주세요” — the polite 'please'",
+        "grammarIntro": "Attach '주세요' to nouns and verbs for polite requests:",
+        "gTermA": "하나 (hana)",
+        "gDescA": "'one' — native Korean counting, often used casually",
+        "gExA": "물 하나 주세요.",
+        "gTermB": "감사합니다 (gamsahamnida)",
+        "gDescB": "thank you — fundamental courtesy phrase",
+        "gExB": "주문 받아줘서 감사합니다.",
+        "clip": "서울의 저녁, 음식점에서",
+        "podcast": "한식의 세계 #8: 저녁식사 문화",
+        "article": "저녁 시간, 한국 음식점에서의 매너",
+        "reader": [
+          {
+            "t": "많은 사람들이 저녁에 "
+          },
+          {
+            "w": "음식점",
+            "d": "restaurant"
+          },
+          {
+            "t": "에 갑니다. 주문할 때 "
+          },
+          {
+            "w": "하나",
+            "d": "one (native Korean number)"
+          },
+          {
+            "t": "라고 말하고, "
+          },
+          {
+            "w": "감사합니다",
+            "d": "thank you"
+          },
+          {
+            "t": " 라고 인사합니다."
+          }
+        ],
+        "reviewWord": "감사합니다",
+        "reviewSource": "from your dinner order, 3 days ago",
+        "reviewMeaning": "thank you"
+      },
+      {
+        "chapterTitle": "Chapter 9 · 면접 Job Interview",
+        "lessonTitle": "Confidence and humility",
+        "goalTitle": "Build it: present yourself confidently",
+        "goalLine": "Introduce yourself with confidence in Korean.",
+        "goalShort": "introduce yourself",
+        "scenario": "interview",
+        "partnerName": "영호 Youngho",
+        "partnerInitial": "Y",
+        "partnerRole": "interviewer",
+        "partnerPlace": "Seoul office",
+        "scenarioTitle": "면접 · Seoul",
+        "scenarioSub": "Roleplay · introduction & first impressions",
+        "lessonPromptEn": "I am pleased to meet you.",
+        "lessonHint": "Focus on proper sentence structure and politeness.",
+        "bank": [
+          "만나서",
+          "반갑습니다",
+          "저는",
+          "입니다",
+          "학생",
+          "에서"
+        ],
+        "bankEn": [
+          "to meet",
+          "pleased",
+          "I",
+          "am",
+          "student",
+          "at"
+        ],
+        "correct": [
+          2,
+          0,
+          1
+        ],
+        "lessonCorrectTitle": "완벽해요! 🎉",
+        "lessonCorrectBody": "'만나서 반갑습니다' translates to 'I'm pleased to meet you'; crucial in first introductions.",
+        "lessonWrongBody": "Begin with '저는' for 'I am,' then '만나서 반갑습니다.'",
+        "cultureCaption": "Seoul Office · morning",
+        "cultureTitle": "Interview etiquette",
+        "cultureBody": "In interviews, express gratitude and professionalism. Stay formal with titles and polite endings.",
+        "culturePhrase": "“잘 부탁드립니다” (jal butak deurimnida) — 'I look forward to your kind cooperation', commonly used in professional settings.",
+        "milestoneTitle": "You can now introduce yourself confidently in Korean interviews.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "자기소개 부탁드립니다.",
+            "en": "Please introduce yourself."
+          },
+          {
+            "who": "u",
+            "n": "저는 홍길동입니다. 만나서 반갑습니다.",
+            "fb": "Excellent use of polite self-introduction!"
+          },
+          {
+            "who": "p",
+            "n": "경력을 말씀해 주세요.",
+            "en": "Can you tell me about your experience?"
+          },
+          {
+            "who": "u",
+            "n": "네, 저는 3년간 일했습니다.",
+            "fb": "Polite and concise explanation of experience."
+          },
+          {
+            "who": "p",
+            "n": "알겠습니다. 잘 부탁드립니다.",
+            "en": "Understood. I look forward to working with you."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Using formal language",
+            "body": "Formality shows respect; maintain professional tone with '니다' endings."
+          },
+          {
+            "title": "Self-introduction",
+            "body": "Start with '저는' (I am) followed by your name or title."
+          }
+        ],
+        "grammarMini": "입니다",
+        "grammarTitle": "'입니다' — assertion of being",
+        "grammarIntro": "Use '입니다' to assert oneself or identity in formal settings:",
+        "gTermA": "입니다 (imnida)",
+        "gDescA": "to be — a formal stative verb for introductions",
+        "gExA": "저는 학생입니다.",
+        "gTermB": "반갑습니다 (bangapseumnida)",
+        "gDescB": "pleased — a greeting part, formal context",
+        "gExB": "여러분을 만나서 반갑습니다.",
+        "clip": "서울의 아침, 직장인과 함께",
+        "podcast": "면접 이야기 #9: 성공을 위한 팁",
+        "article": "한국에서의 첫 면접, 준비 가이드",
+        "reader": [
+          {
+            "t": "면접 때는 "
+          },
+          {
+            "w": "만나서",
+            "d": "to meet"
+          },
+          {
+            "t": " 반갑습니다와 "
+          },
+          {
+            "w": "입니다",
+            "d": "am/are"
+          },
+          {
+            "t": "의 표현을 씁니다. "
+          },
+          {
+            "w": "자기소개",
+            "d": "introduce oneself"
+          },
+          {
+            "t": "를 잘 준비하세요."
+          }
+        ],
+        "reviewWord": "반갑습니다",
+        "reviewSource": "from your interview introduction, 3 days ago",
+        "reviewMeaning": "pleased to meet you"
+      },
+      {
+        "chapterTitle": "Chapter 10 · 약국 Pharmacy",
+        "lessonTitle": "Health and asking for help",
+        "goalTitle": "Build it: purchase medicine with respect",
+        "goalLine": "Purchase medicine politely in Korean.",
+        "goalShort": "purchase medicine",
+        "scenario": "pharmacy",
+        "partnerName": "소영 Soyeong",
+        "partnerInitial": "S",
+        "partnerRole": "pharmacist",
+        "partnerPlace": "Seoul pharmacy",
+        "scenarioTitle": "약국 · Seoul",
+        "scenarioSub": "Roleplay · inquiry & purchase",
+        "lessonPromptEn": "Do you have cold medicine?",
+        "lessonHint": "Focus on the structure for questions about availability.",
+        "bank": [
+          "감기",
+          "약",
+          "있어요",
+          "없어요",
+          "주세요",
+          "가격"
+        ],
+        "bankEn": [
+          "cold",
+          "medicine",
+          "have",
+          "not have",
+          "please",
+          "price"
+        ],
+        "correct": [
+          0,
+          1,
+          2
+        ],
+        "lessonCorrectTitle": "완벽해요! 🎉",
+        "lessonCorrectBody": "'있어요?' means 'do you have?'; perfect for checking availability.",
+        "lessonWrongBody": "Start with the item '감기 약,' then ask '있어요?'",
+        "cultureCaption": "Seoul Pharmacy · day",
+        "cultureTitle": "Pharmacy etiquette",
+        "cultureBody": "Be courteous when inquiring about medications. Use respectful language to communicate effectively.",
+        "culturePhrase": "“어떤 약이 좋을까요?” (eotteon yagi joh-eulkkayo) — 'Which medicine would be good?', a polite inquiry for advice.",
+        "milestoneTitle": "You can now ask for medicine politely in Korean.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "어떻게 오셨어요?",
+            "en": "How may I help you?"
+          },
+          {
+            "who": "u",
+            "n": "감기 약 있어요?",
+            "fb": "Good use of '있어요?' to ask about stock."
+          },
+          {
+            "who": "p",
+            "n": "네, 있습니다. 몇 개 드릴까요?",
+            "en": "Yes, we do. How many would you like?"
+          },
+          {
+            "who": "u",
+            "n": "하나 주세요.",
+            "fb": "Simple and polite request."
+          },
+          {
+            "who": "p",
+            "n": "네, 여기 있습니다.",
+            "en": "Here you go."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Availability check",
+            "body": "Use '있어요?' to politely inquire about the availability of items."
+          },
+          {
+            "title": "Polite request",
+            "body": "Always end with '주세요' for polite, respectful interactions."
+          }
+        ],
+        "grammarMini": "있어요",
+        "grammarTitle": "'있어요?' — indicating presence",
+        "grammarIntro": "Use '있어요' to state presence or availability:",
+        "gTermA": "있어요 (isseoyo)",
+        "gDescA": "'have/exist' — used to confirm item is present",
+        "gExA": "우유 있어요?",
+        "gTermB": "약국 (yakguk)",
+        "gDescB": "pharmacy — where you buy medicine",
+        "gExB": "약국에 가요.",
+        "clip": "서울의 오후, 약사와 함께",
+        "podcast": "건강 이야기 #10: 약국에서의 소통",
+        "article": "약국에서 필요한 예절",
+        "reader": [
+          {
+            "t": "약품 구매 시에는 "
+          },
+          {
+            "w": "있어요",
+            "d": "have"
+          },
+          {
+            "t": "를 사용해 물어봅니다. "
+          },
+          {
+            "w": "약",
+            "d": "medicine"
+          },
+          {
+            "t": "은 항상 "
+          },
+          {
+            "w": "약국",
+            "d": "pharmacy"
+          },
+          {
+            "t": "에서 사세요."
+          }
+        ],
+        "reviewWord": "있어요",
+        "reviewSource": "from your pharmacy inquiry, 3 days ago",
+        "reviewMeaning": "have/exist"
+      },
+      {
+        "chapterTitle": "Chapter 11 · 토론 Debate",
+        "lessonTitle": "Expressing opinions",
+        "goalTitle": "Construct it: agree/disagree respectfully",
+        "goalLine": "Express agreement or disagreement formally.",
+        "goalShort": "express opinions",
+        "scenario": "debate",
+        "partnerName": "지훈 Jihoon",
+        "partnerInitial": "J",
+        "partnerRole": "debate partner",
+        "partnerPlace": "Seoul university",
+        "scenarioTitle": "토론 · Seoul University",
+        "scenarioSub": "Roleplay · express & respect opinions",
+        "lessonPromptEn": "I agree with your point.",
+        "lessonHint": "Focus on phrases that express agreement.",
+        "bank": [
+          "동의합니다",
+          "의견",
+          "말",
+          "맞아요",
+          "생각",
+          "틀리다"
+        ],
+        "bankEn": [
+          "agree",
+          "opinion",
+          "words",
+          "right",
+          "thought",
+          "wrong"
+        ],
+        "correct": [
+          0,
+          4,
+          1
+        ],
+        "lessonCorrectTitle": "완벽해요! 🎉",
+        "lessonCorrectBody": "'동의합니다' clearly expresses agreement; respectful and formal.",
+        "lessonWrongBody": "Mention the 'opinion' or '생각' and use '동의합니다.'",
+        "cultureCaption": "Seoul University · discussion",
+        "cultureTitle": "Korean debate culture",
+        "cultureBody": "Korean debates value logical reasoning and respect. Formal language in disagreements is essential.",
+        "culturePhrase": "“물론입니다” (mullon-imnida) — ‘Of course’, useful for strong yet polite agreements.",
+        "milestoneTitle": "You can now participate in debates respectfully in Korean.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "그 제안에 대해 어떻게 생각하세요?",
+            "en": "What do you think about that proposal?"
+          },
+          {
+            "who": "u",
+            "n": "저는 그 생각에 동의합니다.",
+            "fb": "Strong and polite statement of agreement."
+          },
+          {
+            "who": "p",
+            "n": "다른 의견도 들어 보실래요?",
+            "en": "Would you like to hear other opinions?"
+          },
+          {
+            "who": "u",
+            "n": "물론입니다, 다양성을 존중합니다.",
+            "fb": "Good use of polite language to express openness to ideas."
+          },
+          {
+            "who": "p",
+            "n": "좋습니다, 함께 논의해 봅시다.",
+            "en": "Great, let’s discuss together."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Respectful debate",
+            "body": "Use '동의합니다' for agreement and show respect even in disagreement."
+          },
+          {
+            "title": "Politeness in discussion",
+            "body": "Maintain formality with ‘-입니다’ endings to show professionalism."
+          }
+        ],
+        "grammarMini": "동의합니다",
+        "grammarTitle": "'동의합니다' — expressing agreement",
+        "grammarIntro": "Use '동의합니다' for formal agreement in discussions:",
+        "gTermA": "동의합니다 (dong-ihamnida)",
+        "gDescA": "'agree' — used in formal contexts to express agreement",
+        "gExA": "저는 의견에 동의합니다.",
+        "gTermB": "생각 (saeng-gak)",
+        "gDescB": "thought — referring to one’s opinion",
+        "gExB": "생각이 큽니다.",
+        "clip": "대학에서의 토론, 배움의 순간들",
+        "podcast": "토론 팟캐스트 #11: 논리적 사고 기르기",
+        "article": "한국 대학생의 토론 문화",
+        "reader": [
+          {
+            "t": "토론은 다양한 "
+          },
+          {
+            "w": "의견",
+            "d": "opinion"
+          },
+          {
+            "t": "을 존중하며 진행됩니다. "
+          },
+          {
+            "w": "동의합니다",
+            "d": "agree"
+          },
+          {
+            "t": " 표현은 중요합니다."
+          }
+        ],
+        "reviewWord": "동의합니다",
+        "reviewSource": "from your debate participation, 3 days ago",
+        "reviewMeaning": "agree"
+      },
+      {
+        "chapterTitle": "Chapter 12 · 자유 대화 Free Talk",
+        "lessonTitle": "Conversational Flow",
+        "goalTitle": "Build it: maintain a natural conversation",
+        "goalLine": "Keep a flow in conversations naturally.",
+        "goalShort": "natural conversation",
+        "scenario": "freetalk",
+        "partnerName": "수미 Sumi",
+        "partnerInitial": "S",
+        "partnerRole": "friend",
+        "partnerPlace": "Seoul park",
+        "scenarioTitle": "자유 대화 · Seoul",
+        "scenarioSub": "Roleplay · engage & keep flow",
+        "lessonPromptEn": "What did you do yesterday?",
+        "lessonHint": "Focus on smooth conversation starters.",
+        "bank": [
+          "어제",
+          "뭐",
+          "했어요",
+          "지금",
+          "시간",
+          "일"
+        ],
+        "bankEn": [
+          "yesterday",
+          "what",
+          "did",
+          "now",
+          "time",
+          "work"
+        ],
+        "correct": [
+          0,
+          1,
+          2
+        ],
+        "lessonCorrectTitle": "완벽해요! 🎉",
+        "lessonCorrectBody": "Correct sequence for asking what someone did: '어제 뭐 했어요?'",
+        "lessonWrongBody": "Remember to start with the time reference: '어제,' then lead with '뭐 했어요?'",
+        "cultureCaption": "Seoul Park · afternoon",
+        "cultureTitle": "Korean conversational culture",
+        "cultureBody": "Casual conversations in Korea often include asking after one's day or experiences. Keep respect in mind even in informal settings.",
+        "culturePhrase": "“잘 지냈어요?” (jal jinaess-eoyo?) — 'Have you been well?', a warm way to start a conversation.",
+        "milestoneTitle": "You can now maintain natural conversations in Korean.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "요즘 어떻게 지내세요?",
+            "en": "How have you been lately?"
+          },
+          {
+            "who": "u",
+            "n": "잘 지냈어요, 감사합니다. 어제 뭐 했어요?",
+            "fb": "Nice flow from appreciation to query."
+          },
+          {
+            "who": "p",
+            "n": "친구랑 영화 봤어요.",
+            "en": "I watched a movie with friends."
+          },
+          {
+            "who": "u",
+            "n": "좋아요! 어떤 영화였어요?",
+            "fb": "Well done keeping the conversation going."
+          },
+          {
+            "who": "p",
+            "n": "새로운 코미디 영화였어요.",
+            "en": "It was a new comedy movie."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Asking questions naturally",
+            "body": "Use conversation starters like '어제 뭐 했어요?' to invite dialogue."
+          },
+          {
+            "title": "Conversational connectors",
+            "body": "Words like '그래요?' ('really?') act as simple ways to keep conversations flowing."
+          }
+        ],
+        "grammarMini": "했어요",
+        "grammarTitle": "'했어요' — past tense actions",
+        "grammarIntro": "Use '했어요' to talk about past actions casually:",
+        "gTermA": "했어요 (haess-eoyo)",
+        "gDescA": "'did' — common past tense verb form in casual conversations",
+        "gExA": "공부했어요.",
+        "gTermB": "지내세요 (jinae-seyo)",
+        "gDescB": "to live; to get along — often used in daily greetings",
+        "gExB": "잘 지내세요?",
+        "clip": "서울의 오후, 공원에서의 대화",
+        "podcast": "일상 이야기 #12: 친구와의 대화",
+        "article": "캐주얼 대화를 위한 팁",
+        "reader": [
+          {
+            "t": "한국어로 대화할 때는 "
+          },
+          {
+            "w": "자연스러운",
+            "d": "natural"
+          },
+          {
+            "t": " 질문을 던져 보세요. "
+          },
+          {
+            "w": "어제",
+            "d": "yesterday"
+          },
+          {
+            "t": " 한 일은 좋은 시작입니다."
+          }
+        ],
+        "reviewWord": "지내세요",
+        "reviewSource": "from your casual talks, 3 days ago",
+        "reviewMeaning": "to live; to get along"
+      },
+      {
+        "chapterTitle": "Chapter 13 · 배치 고사 Placement Check",
+        "lessonTitle": "Skill assessment",
+        "goalTitle": "Build it: discuss skill levels",
+        "goalLine": "Talk about language levels and strengths in Korean.",
+        "goalShort": "discuss skills",
+        "scenario": "placement",
+        "partnerName": "연아 Yeona",
+        "partnerInitial": "Y",
+        "partnerRole": "teacher",
+        "partnerPlace": "Seoul language center",
+        "scenarioTitle": "배치 고사 · Seoul",
+        "scenarioSub": "Roleplay · self-assessment & proficiency",
+        "lessonPromptEn": "What is your level of Korean?",
+        "lessonHint": "Think about how to express skill levels clearly.",
+        "bank": [
+          "수준",
+          "한국어",
+          "어떤",
+          "초급",
+          "중급",
+          "고급"
+        ],
+        "bankEn": [
+          "level",
+          "Korean",
+          "what",
+          "beginner",
+          "intermediate",
+          "advanced"
+        ],
+        "correct": [
+          1,
+          0,
+          2
+        ],
+        "lessonCorrectTitle": "완벽해요! 🎉",
+        "lessonCorrectBody": "Use '한국어 수준 어떤' to ask about someone's language level.",
+        "lessonWrongBody": "Start with '한국어 수준' then ask '어떤.'",
+        "cultureCaption": "Seoul language center · morning",
+        "cultureTitle": "Language proficiency discussions",
+        "cultureBody": "Korean learning embraces humility and continuous improvement. It's crucial to assess skills honestly.",
+        "culturePhrase": "“열심히 하겠습니다” (yeolsimhi hagetseumnida) — 'I will work hard', expressing dedication in language learning.",
+        "milestoneTitle": "You can now discuss language skills in Korean.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "한국어 수준이 어떤가요?",
+            "en": "What is your level of Korean?"
+          },
+          {
+            "who": "u",
+            "n": "중급입니다. 쓰기가 강해요.",
+            "fb": "Good mention of specific strengths!"
+          },
+          {
+            "who": "p",
+            "n": "그렇군요, 강한 부분을 계속 발전시키세요.",
+            "en": "I see, keep developing your strengths."
+          },
+          {
+            "who": "u",
+            "n": "네, 열심히 하겠습니다.",
+            "fb": "Positive attitude towards improvement."
+          },
+          {
+            "who": "p",
+            "n": "좋아요, 기대하겠습니다.",
+            "en": "Great, I look forward to it."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Skill level discussion",
+            "body": "Use terms like '초급,' '중급,' '고급' to specify proficiency."
+          },
+          {
+            "title": "Personal strengths",
+            "body": "Mention specific skills or areas where you excel."
+          }
+        ],
+        "grammarMini": "수준",
+        "grammarTitle": "'수준' — level or standard",
+        "grammarIntro": "Use '수준' to discuss levels or standards of capabilities:",
+        "gTermA": "수준 (sujun)",
+        "gDescA": "'level' — pertaining to proficiency or standard",
+        "gExA": "그의 수학 수준은 높아요.",
+        "gTermB": "강해요 (ganghaeyo)",
+        "gDescB": "strong — indicating a strong skill area",
+        "gExB": "그녀는 읽기가 강해요.",
+        "clip": "서울의 아침, 언어 배움의 현장",
+        "podcast": "한국어 배우기 #13: 수준별 학습 팁",
+        "article": "언어 수준 평가의 중요성",
+        "reader": [
+          {
+            "t": "한국어 "
+          },
+          {
+            "w": "수준",
+            "d": "level"
+          },
+          {
+            "t": "에 대해 이야기할 때는 "
+          },
+          {
+            "w": "어떤",
+            "d": "what"
+          },
+          {
+            "t": "지를 사용합니다. 스스로를 잘 평가해 보세요."
+          }
+        ],
+        "reviewWord": "수준",
+        "reviewSource": "from your placement discussion, 3 days ago",
+        "reviewMeaning": "level"
+      },
+      {
+        "chapterTitle": "Chapter 14 · 은행 At the Bank",
+        "lessonTitle": "Financial transactions",
+        "goalTitle": "Build it: open a bank account",
+        "goalLine": "Open a bank account using the correct terms.",
+        "goalShort": "open a bank account",
+        "scenario": "bank",
+        "partnerName": "수혁 Suhyeok",
+        "partnerInitial": "S",
+        "partnerRole": "bank clerk",
+        "partnerPlace": "Seoul bank",
+        "scenarioTitle": "은행 · Seoul",
+        "scenarioSub": "Roleplay · inquiry & setup",
+        "lessonPromptEn": "I want to open an account, please.",
+        "lessonHint": "Focus on the word for 'account' and polite requests.",
+        "bank": [
+          "계좌",
+          "새로운",
+          "열고",
+          "싶어요",
+          "필요해요",
+          "은행"
+        ],
+        "bankEn": [
+          "account",
+          "new",
+          "open",
+          "want",
+          "need",
+          "bank"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "lessonCorrectTitle": "완벽해요! 🎉",
+        "lessonCorrectBody": "Use '계좌 새로운 열고 싶어요' to express the desire to open an account.",
+        "lessonWrongBody": "Begin with '계좌,' then indicate '새로운' you want '열고 싶어요.'",
+        "cultureCaption": "Seoul Bank · morning",
+        "cultureTitle": "Banking etiquette in Korea",
+        "cultureBody": "Politeness and clarity are essential in Korean financial interactions. Ensure all documents are complete and accurate.",
+        "culturePhrase": "“신분증을 지참하세요” (sinbunjeungeul jichamsaeyo) — 'Please bring identification', a common reminder for bank visits.",
+        "milestoneTitle": "You can now open a bank account in Korean.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "무엇을 도와드릴까요?",
+            "en": "How may I assist you?"
+          },
+          {
+            "who": "u",
+            "n": "계좌를 열고 싶어요.",
+            "fb": "Simple and clear expression of your intention."
+          },
+          {
+            "who": "p",
+            "n": "새로운 계좌입니까, 기존 계좌입니까?",
+            "en": "Is it for a new account or existing one?"
+          },
+          {
+            "who": "u",
+            "n": "새로운 것입니다.",
+            "fb": "Good clarification for the bank’s query."
+          },
+          {
+            "who": "p",
+            "n": "알겠습니다, 서류를 작성해 주세요.",
+            "en": "Understood, please fill out these forms."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Financial discussions",
+            "body": "Learn words like '계좌' and '은행' for navigating financial settings."
+          },
+          {
+            "title": "Polite request",
+            "body": "Always include '싶어요' to soften requests."
+          }
+        ],
+        "grammarMini": "계좌",
+        "grammarTitle": "'계좌' — bank account terms",
+        "grammarIntro": "Use '계좌' to refer specifically to bank accounts:",
+        "gTermA": "계좌 (gyejwa)",
+        "gDescA": "'account' — key term for banking",
+        "gExA": "계좌를 열고 싶어요.",
+        "gTermB": "은행 (eunhaeng)",
+        "gDescB": "bank — place to conduct financial transactions",
+        "gExB": "은행에 갑니다.",
+        "clip": "서울의 아침, 금융의 세계",
+        "podcast": "재테크 이야기 #14: 은행 계좌 관리법",
+        "article": "한국에서 계좌 개설하기",
+        "reader": [
+          {
+            "t": "은행에서 "
+          },
+          {
+            "w": "계좌",
+            "d": "account"
+          },
+          {
+            "t": "를 열고 싶다면 "
+          },
+          {
+            "w": "필요해요",
+            "d": "need"
+          },
+          {
+            "t": ". 모든 서류를 준비하십시오."
+          }
+        ],
+        "reviewWord": "계좌",
+        "reviewSource": "from your bank visit, 3 days ago",
+        "reviewMeaning": "account"
+      },
+      {
+        "chapterTitle": "Chapter 15 · 기차 이용 Taking the Train",
+        "lessonTitle": "Travel organization",
+        "goalTitle": "Build it: buy a train ticket",
+        "goalLine": "Purchase a train ticket correctly in Korean.",
+        "goalShort": "buy a train ticket",
+        "scenario": "train",
+        "partnerName": "준석 Junseok",
+        "partnerInitial": "J",
+        "partnerRole": "ticket agent",
+        "partnerPlace": "Seoul Station",
+        "scenarioTitle": "기차 · Seoul",
+        "scenarioSub": "Roleplay · transaction & inquiry",
+        "lessonPromptEn": "One ticket to Busan, please.",
+        "lessonHint": "Focus on correct order and polite requests.",
+        "bank": [
+          "기차표",
+          "한",
+          "장",
+          "부산",
+          "가요",
+          "주세요"
+        ],
+        "bankEn": [
+          "train ticket",
+          "one",
+          "sheet",
+          "Busan",
+          "go",
+          "please"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          5
+        ],
+        "lessonCorrectTitle": "완벽해요! 🎉",
+        "lessonCorrectBody": "Use '기차표 한 장 주세요' to ask for one train ticket, ending with politeness.",
+        "lessonWrongBody": "Begin with '기차표,' then count '한 장,' and finally '주세요.'",
+        "cultureCaption": "Seoul Station · morning",
+        "cultureTitle": "Train travel etiquette",
+        "cultureBody": "Train travel in Korea is punctual and organized. Always address staff politely and arrive on time.",
+        "culturePhrase": "“기차 안에서는 조용히 하세요” (gicha an-eseoneun joyonghi haseyo) — 'Please be quiet inside the train', a standard respectful reminder.",
+        "milestoneTitle": "You can now purchase train tickets smoothly in Korean.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "안녕하세요, 무엇을 도와드릴까요?",
+            "en": "Hello, how can I help you?"
+          },
+          {
+            "who": "u",
+            "n": "부산까지 기차표 한 장 주세요.",
+            "fb": "Nice purchase phrasing with destination included."
+          },
+          {
+            "who": "p",
+            "n": "왕복이세요, 편도세요?",
+            "en": "Round trip or one way?"
+          },
+          {
+            "who": "u",
+            "n": "편도입니다.",
+            "fb": "Good specification of ticket type."
+          },
+          {
+            "who": "p",
+            "n": "확인했습니다, 잠시만요.",
+            "en": "Got it, one moment please."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Ask for tickets",
+            "body": "Use '기차표 한 장 주세요' to clearly state your intent."
+          },
+          {
+            "title": "Number counters like '장'",
+            "body": "'장' stands for sheets, useful for tickets and paper-related items."
+          }
+        ],
+        "grammarMini": "이용",
+        "grammarTitle": "'기차표' — train ticket essentials",
+        "grammarIntro": "Use '기차표' to specifically request train tickets:",
+        "gTermA": "기차표 (gichapyo)",
+        "gDescA": "'train ticket' — necessary for train travel",
+        "gExA": "기차표를 사러 갑니다.",
+        "gTermB": "부산 (Busan)",
+        "gDescB": "Busan — popular travel destination city",
+        "gExB": "부산에 여행 갑니다.",
+        "clip": "서울의 사색, 기차에서 본 풍경",
+        "podcast": "기차 여행기 #15: KOTrain의 모든 것",
+        "article": "기차 여행을 위한 준비 사항",
+        "reader": [
+          {
+            "t": "기차 여행을 위해 먼저 "
+          },
+          {
+            "w": "기차표",
+            "d": "train ticket"
+          },
+          {
+            "t": "를 구매해야 합니다. "
+          },
+          {
+            "w": "부산",
+            "d": "Busan"
+          },
+          {
+            "t": " 은 항상 인기 있는 여행지입니다."
+          }
+        ],
+        "reviewWord": "기차표",
+        "reviewSource": "from your train ticket purchase, 3 days ago",
+        "reviewMeaning": "train ticket"
       }
     ]
   },
@@ -4453,6 +8566,1059 @@ export const LANGS: any = {
         "reviewWord": "Hilfe",
         "reviewSource": "from your emergency role-play, 2 days ago",
         "reviewMeaning": "help"
+      },
+      {
+        "chapterTitle": "Chapter 7 · Am Flughafen",
+        "lessonTitle": "Checking In & Security",
+        "goalTitle": "Build it: check in",
+        "goalLine": "Check in for your flight — in German.",
+        "goalShort": "check in for your flight",
+        "scenario": "airport",
+        "partnerName": "Anna",
+        "partnerInitial": "A",
+        "partnerRole": "Check-in Agent",
+        "partnerPlace": "Berlin Tegel",
+        "scenarioTitle": "Am Flughafen · Berlin",
+        "scenarioSub": "Roleplay · check-in & questions",
+        "lessonPromptEn": "I would like to check in for my flight to Munich.",
+        "lessonHint": "Mind the destination.",
+        "bank": [
+          "Ich möchte",
+          "einchecken",
+          "für meinen Flug",
+          "nach München",
+          "die Bordkarte",
+          "zusätzliches Gepäck"
+        ],
+        "bankEn": [
+          "I would like",
+          "to check in",
+          "for my flight",
+          "to Munich",
+          "the boarding pass",
+          "extra luggage"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "lessonCorrectTitle": "Perfekt! 🎉",
+        "lessonCorrectBody": "“Ich möchte” (I would like) is a polite and clear way to start.",
+        "lessonWrongBody": "Start with what you want and your destination.",
+        "cultureCaption": "At a German airport terminal",
+        "cultureTitle": "On Time & Prepared",
+        "cultureBody": "Germans value punctuality — arrive early and be prepared. Have your passport and booking reference ready.",
+        "culturePhrase": "“Pünktlich” — timely or punctual.",
+        "milestoneTitle": "You can now check in — in German.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Guten Morgen! Wie kann ich Ihnen helfen?",
+            "en": "Good morning! How can I help you?"
+          },
+          {
+            "who": "u",
+            "n": "Ich möchte einchecken für meinen Flug nach München.",
+            "fb": "Perfect — polite and direct."
+          },
+          {
+            "who": "p",
+            "n": "Natürlich. Kann ich Ihren Pass sehen?",
+            "en": "Certainly. May I see your passport?"
+          },
+          {
+            "who": "u",
+            "n": "Hier ist er. Danke.",
+            "fb": "Great use of formal politeness."
+          },
+          {
+            "who": "p",
+            "n": "Danke sehr. Hier ist Ihre Bordkarte.",
+            "en": "Thank you very much. Here is your boarding pass."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Formal Interactions",
+            "body": "Always use “Sie” for officials or staff you're meeting for the first time."
+          },
+          {
+            "title": "Destination Clarity",
+            "body": "Specify your destination clearly to avoid confusion. "
+          }
+        ],
+        "grammarMini": "your/zu deinem",
+        "grammarTitle": "“dein · dein*e” — Possessives",
+        "grammarIntro": "Possessive pronouns change based on gender and case.",
+        "gTermA": "dein → dein*e",
+        "gDescA": "informs of ownership (your), varies with noun gender.",
+        "gExA": "Ist das dein Pass?",
+        "gTermB": "mein / seine",
+        "gDescB": "similar use as 'your', possessive.",
+        "gExB": "meine Tickets",
+        "clip": "Flughafen Berlin — Check-In Prozeduren",
+        "podcast": "Urlaubsplanungen und Tipps am Flughafen",
+        "article": "Wie Sie Ihre deutsche Reiseroute effizient machen",
+        "reader": [
+          {
+            "t": "In einem "
+          },
+          {
+            "w": "Flughafen",
+            "d": "airport"
+          },
+          {
+            "t": " muss man immer vorbereitet sein. Deutsch sprechende "
+          },
+          {
+            "w": "Passagiere",
+            "d": "passengers"
+          },
+          {
+            "t": " haben oft alle Dokumente zur Hand."
+          }
+        ],
+        "reviewWord": "Bordkarte",
+        "reviewSource": "from your airport check-in, yesterday",
+        "reviewMeaning": "the boarding pass (feminine: die Bordkarte)"
+      },
+      {
+        "chapterTitle": "Chapter 8 · Beim Abendessen",
+        "lessonTitle": "Ordering & Etiquette",
+        "goalTitle": "Build it: order dinner",
+        "goalLine": "Order a full dinner with drinks — politely, in German.",
+        "goalShort": "order dinner",
+        "scenario": "dinner",
+        "partnerName": "Markus",
+        "partnerInitial": "M",
+        "partnerRole": "Kellner",
+        "partnerPlace": "Berlin Restaurant",
+        "scenarioTitle": "Beim Abendessen · Berlin",
+        "scenarioSub": "Roleplay · ordering & table manners",
+        "lessonPromptEn": "I would like the special with a glass of red wine.",
+        "lessonHint": "Consider the definite article.",
+        "bank": [
+          "Ich nehme",
+          "das Tagesgericht",
+          "mit einem Glas",
+          "Rotwein",
+          "der Nachtisch",
+          "die Vorspeise"
+        ],
+        "bankEn": [
+          "I would like",
+          "the special",
+          "with a glass of",
+          "red wine",
+          "the dessert",
+          "the appetizer"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "lessonCorrectTitle": "Sehr gut! 🎉",
+        "lessonCorrectBody": "“Ich nehme” sets the phrase nicely for ordering.",
+        "lessonWrongBody": "Mention what you'd like and with what.",
+        "cultureCaption": "Dining at a Berlin restaurant · 8pm",
+        "cultureTitle": "Formal Dining",
+        "cultureBody": "Germans appreciate etiquette and courtesy at dinner. Wait until everyone is served before eating.",
+        "culturePhrase": "“Guten Appetit” — enjoy your meal.",
+        "milestoneTitle": "You can now order dinner — in German.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Guten Abend! Sind Sie bereit zu bestellen?",
+            "en": "Good evening! Are you ready to order?"
+          },
+          {
+            "who": "u",
+            "n": "Ich nehme das Tagesgericht mit einem Glas Rotwein.",
+            "fb": "Excellent choice — well-phrased."
+          },
+          {
+            "who": "p",
+            "n": "Sehr gut. Möchten Sie einen Nachtisch?",
+            "en": "Very good. Would you like a dessert?"
+          },
+          {
+            "who": "u",
+            "n": "Nein, danke. Nur die Rechnung, bitte.",
+            "fb": "Polite conclusion to the meal."
+          },
+          {
+            "who": "p",
+            "n": "Kommt sofort. Vielen Dank.",
+            "en": "Coming right up. Thank you very much."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Meal Phrasing",
+            "body": "Use polite and clear phrases for ordering to show respect."
+          },
+          {
+            "title": "Special Requests",
+            "body": "Specify clearly and use polite terms for requests."
+          }
+        ],
+        "grammarMini": "mein/dein",
+        "grammarTitle": "Possessive Adjectives",
+        "grammarIntro": "Possessives adapt to the gender and case of the noun.",
+        "gTermA": "mein/e",
+        "gDescA": "indicates ownership; adjusts to noun.",
+        "gExA": "mein Tisch",
+        "gTermB": "dein/e",
+        "gDescB": "similar for another person's items.",
+        "gExB": "dein Essen",
+        "clip": "Berliner Abendessen mit Freunden",
+        "podcast": "Fein speisen in Deutschland",
+        "article": "Die kulinarische Kunst eines Deutschen Restaurants",
+        "reader": [
+          {
+            "t": "Beim "
+          },
+          {
+            "w": "Abendessen",
+            "d": "dinner"
+          },
+          {
+            "t": " in einem deutschen Restaurant teilt man oft, und das "
+          },
+          {
+            "w": "Essen",
+            "d": "food"
+          },
+          {
+            "t": " wird genossen."
+          }
+        ],
+        "reviewWord": "Tagesgericht",
+        "reviewSource": "from your dinner order, yesterday",
+        "reviewMeaning": "the special (neutral: das Tagesgericht)"
+      },
+      {
+        "chapterTitle": "Chapter 9 · Vorstellungsgespräch",
+        "lessonTitle": "Interview Preparedness",
+        "goalTitle": "Build it: introduce yourself",
+        "goalLine": "Introduce yourself at an interview — in German.",
+        "goalShort": "introduce yourself",
+        "scenario": "interview",
+        "partnerName": "Herr Schmidt",
+        "partnerInitial": "S",
+        "partnerRole": "Interviewer",
+        "partnerPlace": "Berlin Office",
+        "scenarioTitle": "Vorstellungsgespräch · Berlin",
+        "scenarioSub": "Roleplay · introductions & discussions",
+        "lessonPromptEn": "I am eager to join your team as a developer.",
+        "lessonHint": "Observe the position title.",
+        "bank": [
+          "Ich bin",
+          "begeistert",
+          "zu Ihrem Team",
+          "als Entwickler",
+          "freue ich mich",
+          "mit Ihnen arbeiten"
+        ],
+        "bankEn": [
+          "I am",
+          "eager",
+          "to join your team",
+          "as a developer",
+          "I look forward",
+          "to work with you"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "lessonCorrectTitle": "Gut gemacht! 🎉",
+        "lessonCorrectBody": "“Ich bin begeistert” is enthusiastic and professional.",
+        "lessonWrongBody": "Start with your eagerness and your role.",
+        "cultureCaption": "Professional settings in Berlin",
+        "cultureTitle": "Professional Formalities",
+        "cultureBody": "Formal attire and punctuality are key. Address interviewers with their titles.",
+        "culturePhrase": "“Herr Schmidt” — Mr. Schmidt, using last names and titles is polite.",
+        "milestoneTitle": "You can now introduce yourself — in German.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Guten Tag, wie können Sie unser Team bereichern?",
+            "en": "Hello, how can you enrich our team?"
+          },
+          {
+            "who": "u",
+            "n": "Ich bin begeistert, zu Ihrem Team als Entwickler zu kommen.",
+            "fb": "Excellent expression of enthusiasm."
+          },
+          {
+            "who": "p",
+            "n": "Das klingt gut. Haben Sie schon Erfahrungen in diesem Bereich?",
+            "en": "Sounds good. Do you have experience in this area?"
+          },
+          {
+            "who": "u",
+            "n": "Ja, ich habe bereits drei Jahre Erfahrung in der Entwicklung.",
+            "fb": "Confidence shines through — well done."
+          },
+          {
+            "who": "p",
+            "n": "Sehr gut, wir freuen uns, mehr zu hören.",
+            "en": "Very good, we look forward to hearing more."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Use of Titles",
+            "body": "Always use the title followed by last name to show respect."
+          },
+          {
+            "title": "Positive Language",
+            "body": "Use positive and proactive language, demonstrating eagerness."
+          }
+        ],
+        "grammarMini": "Mit/zu",
+        "grammarTitle": "Prepositions in Context",
+        "grammarIntro": "Prepositions determine relationships and often require specific cases.",
+        "gTermA": "mit",
+        "gDescA": "accompanying or together, often dative.",
+        "gExA": "mit Ihnen arbeiten",
+        "gTermB": "zu",
+        "gDescB": "towards or to join, often directional.",
+        "gExB": "zu Ihrem Team",
+        "clip": "Professionelles Gespräch mit einem Arbeitgeber",
+        "podcast": "Vorbereitung auf das deutsche Vorstellungsgespräch",
+        "article": "Wie man in einem deutschen Unternehmen erfolgreich ist",
+        "reader": [
+          {
+            "t": "In einem "
+          },
+          {
+            "w": "Vorstellungsgespräch",
+            "d": "job interview"
+          },
+          {
+            "t": " ist es entscheidend, höflich und vorbereitet zu sein. Die "
+          },
+          {
+            "w": "Firma",
+            "d": "company"
+          },
+          {
+            "t": " wird Ihre Professionalität schätzen."
+          }
+        ],
+        "reviewWord": "Entwickler",
+        "reviewSource": "from your interview introduction, today",
+        "reviewMeaning": "the developer (masculine: der Entwickler)"
+      },
+      {
+        "chapterTitle": "Chapter 10 · In der Apotheke",
+        "lessonTitle": "Inquiring & Assistance",
+        "goalTitle": "Build it: ask for medicine",
+        "goalLine": "Inquire about medicine needs — in German.",
+        "goalShort": "ask for medicine",
+        "scenario": "pharmacy",
+        "partnerName": "Frau Müller",
+        "partnerInitial": "M",
+        "partnerRole": "Pharmacist",
+        "partnerPlace": "Berlin Apotheke",
+        "scenarioTitle": "In der Apotheke · Berlin",
+        "scenarioSub": "Roleplay · needs & prescriptions",
+        "lessonPromptEn": "I need some aspirin, please.",
+        "lessonHint": "Use a formal request.",
+        "bank": [
+          "Ich brauche",
+          "etwas Aspirin",
+          "haben Sie",
+          "Schmerzmittel",
+          "für Kopfschmerzen",
+          "auch Medikamente"
+        ],
+        "bankEn": [
+          "I need",
+          "some aspirin",
+          "do you have",
+          "pain reliever",
+          "for headaches",
+          "any medicine"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "lessonCorrectTitle": "Genau richtig! 🎉",
+        "lessonCorrectBody": "“Ich brauche” is direct but polite if said warmly.",
+        "lessonWrongBody": "State your needs followed by the specific item.",
+        "cultureCaption": "Inside a Berlin pharmacy",
+        "cultureTitle": "Consultations and Advice",
+        "cultureBody": "Pharmacists in Germany often provide medical advice; be prepared to discuss symptoms.",
+        "culturePhrase": "“Rezeptfrei” — over the counter, without prescription.",
+        "milestoneTitle": "You can now inquire about medicine — in German.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Guten Tag! Wie kann ich Ihnen helfen?",
+            "en": "Good day! How may I assist you?"
+          },
+          {
+            "who": "u",
+            "n": "Ich brauche etwas Aspirin, bitte.",
+            "fb": "Concise and effective — well done."
+          },
+          {
+            "who": "p",
+            "n": "Natürlich. Haben Sie sonst noch irgendwelche Beschwerden?",
+            "en": "Certainly. Do you have any other symptoms?"
+          },
+          {
+            "who": "u",
+            "n": "Nur Kopfschmerzen, danke.",
+            "fb": "Clear and to the point."
+          },
+          {
+            "who": "p",
+            "n": "Verstanden. Hier ist das Medikament für Sie.",
+            "en": "Understood. Here's the medication for you."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Polite Demands",
+            "body": "Direct yet polite phrases show respect and clarity."
+          },
+          {
+            "title": "Symptom Clarity",
+            "body": "Clearly state symptoms for accurate assistance."
+          }
+        ],
+        "grammarMini": "brauch/benötigen",
+        "grammarTitle": "Polite Requests in Context",
+        "grammarIntro": "Variations of requesting are numerous and context-heavy.",
+        "gTermA": "brauchen",
+        "gDescA": "common for needing or requiring, more direct.",
+        "gExA": "Ich brauche Hilfe.",
+        "gTermB": "benötigen",
+        "gDescB": "more formal or nuanced term.",
+        "gExB": "Ich benötige Informationen.",
+        "clip": "Ein deutscher Apothekenbesuch erklärt",
+        "podcast": "Gesundheitstipps für den Alltag",
+        "article": "Apothekenkultur in Deutschland: Was Sie wissen müssen",
+        "reader": [
+          {
+            "t": "In einer deutschen "
+          },
+          {
+            "w": "Apotheke",
+            "d": "pharmacy"
+          },
+          {
+            "t": " kann man viele "
+          },
+          {
+            "w": "Gesundheitsprodukte",
+            "d": "health products"
+          },
+          {
+            "t": " finden und Ratschläge von Fachleuten bekommen."
+          }
+        ],
+        "reviewWord": "Schmerzmittel",
+        "reviewSource": "from your pharmacy visit, earlier today",
+        "reviewMeaning": "pain reliever (neutral: das Schmerzmittel)"
+      },
+      {
+        "chapterTitle": "Chapter 11 · Debatte führen",
+        "lessonTitle": "Debating Skills",
+        "goalTitle": "Build it: present an argument",
+        "goalLine": "Present an argument — in German.",
+        "goalShort": "present an argument",
+        "scenario": "debate",
+        "partnerName": "Eva",
+        "partnerInitial": "E",
+        "partnerRole": "Debater",
+        "partnerPlace": "Berlin Forum",
+        "scenarioTitle": "Debattieren · Berlin",
+        "scenarioSub": "Roleplay · discuss & counterpoints",
+        "lessonPromptEn": "I believe we need to reduce environmental impact.",
+        "lessonHint": "Connect belief and action.",
+        "bank": [
+          "Ich glaube",
+          "wir müssen",
+          "den Umwelteinfluss",
+          "reduzieren",
+          "auf der anderen Seite",
+          "sind wir uns einig"
+        ],
+        "bankEn": [
+          "I believe",
+          "we need to",
+          "the environmental impact",
+          "reduce",
+          "on the other hand",
+          "we agree"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "lessonCorrectTitle": "Sehr überzeugend! 🎉",
+        "lessonCorrectBody": "“Ich glaube” is a confident start for presenting opinions.",
+        "lessonWrongBody": "Express a belief and the requirement connected.",
+        "cultureCaption": "Engaging in debate at a Berlin forum",
+        "cultureTitle": "Balanced Arguments",
+        "cultureBody": "Debates are respected platforms — backing points with evidence goes a long way.",
+        "culturePhrase": "“Gegner” — opponent, challenging but necessary in debates.",
+        "milestoneTitle": "You can now present an argument — in German.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Was ist Ihr Standpunkt zu Umweltthemen?",
+            "en": "What's your stance on environmental issues?"
+          },
+          {
+            "who": "u",
+            "n": "Ich glaube, wir müssen den Umwelteinfluss reduzieren.",
+            "fb": "A solid, clear stance."
+          },
+          {
+            "who": "p",
+            "n": "Interessant. Wie denken Sie, sollte das erfolgen?",
+            "en": "Interesting. How do you think it should be done?"
+          },
+          {
+            "who": "u",
+            "n": "Durch Innovation und strenge Gesetze.",
+            "fb": "Concise, with a focus on solutions."
+          },
+          {
+            "who": "p",
+            "n": "Das ist ein wettbewerbsfähiger Ansatz.",
+            "en": "That's a competitive approach."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Rooted in Evidence",
+            "body": "Provide ample evidence or suggestions to strengthen your argument."
+          },
+          {
+            "title": "Respect for Opposition",
+            "body": "Acknowledge opposing views to show well-rounded understanding."
+          }
+        ],
+        "grammarMini": "glaub/müssen",
+        "grammarTitle": "Expressing Beliefs with Confidence",
+        "grammarIntro": "Convictions may combine with needs for strong statements.",
+        "gTermA": "glauben",
+        "gDescA": "belief or trust in a statement.",
+        "gExA": "Ich glaube an die Notwendigkeit.",
+        "gTermB": "müssen",
+        "gDescB": "necessity or obligation.",
+        "gExB": "Wir müssen handeln.",
+        "clip": "Debatten im Studentenzentrum Berlin",
+        "podcast": "Die Kunst der Debatte",
+        "article": "Argumentieren in Deutschland: Eine Einführung",
+        "reader": [
+          {
+            "t": "In einer "
+          },
+          {
+            "w": "Debatte",
+            "d": "debate"
+          },
+          {
+            "t": " ist es wichtig, sowohl "
+          },
+          {
+            "w": "Argumente",
+            "d": "arguments"
+          },
+          {
+            "t": " vorzubringen als auch zuzuhören."
+          }
+        ],
+        "reviewWord": "Umwelteinfluss",
+        "reviewSource": "from your debate stance, yesterday",
+        "reviewMeaning": "the environmental impact (masculine: der Umwelteinfluss)"
+      },
+      {
+        "chapterTitle": "Chapter 12 · Freies Gespräch",
+        "lessonTitle": "Conversational Flow",
+        "goalTitle": "Build it: engage in free talk",
+        "goalLine": "Engage naturally in free conversation — in German.",
+        "goalShort": "engage in conversation",
+        "scenario": "freetalk",
+        "partnerName": "Jan",
+        "partnerInitial": "J",
+        "partnerRole": "Local",
+        "partnerPlace": "Berlin Park",
+        "scenarioTitle": "Freies Gespräch · Berlin",
+        "scenarioSub": "Roleplay · discussion & bonding",
+        "lessonPromptEn": "What do you enjoy doing on weekends?",
+        "lessonHint": "Focus on activities.",
+        "bank": [
+          "Was machen",
+          "Sie gern",
+          "am Wochenende",
+          "Freizeitaktivitäten",
+          "zusammen ausgehen",
+          "Hobbys"
+        ],
+        "bankEn": [
+          "What do",
+          "you enjoy",
+          "on weekends",
+          "leisure activities",
+          "go out together",
+          "hobbies"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "lessonCorrectTitle": "Angenehm! 🎉",
+        "lessonCorrectBody": "“Was machen Sie gern” invites the listener to share openly.",
+        "lessonWrongBody": "Invite them to talk about what they enjoy.",
+        "cultureCaption": "Conversing in a Berlin park",
+        "cultureTitle": "Social Interaction Enjoyment",
+        "cultureBody": "Germans value genuine engagement — show curiosity in others' lives without prying.",
+        "culturePhrase": "“Gesprächsthemen” — topics of conversation.",
+        "milestoneTitle": "You can now engage in free talk — in German.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Hallo! Was machen Sie gern am Wochenende?",
+            "en": "Hello! What do you enjoy on weekends?"
+          },
+          {
+            "who": "u",
+            "n": "Ich fahre gern Fahrrad und gehe in den Park.",
+            "fb": "Relatable and interesting!"
+          },
+          {
+            "who": "p",
+            "n": "Das klingt schön. Sind Sie gerne draußen?",
+            "en": "That sounds nice. Do you enjoy being outdoors?"
+          },
+          {
+            "who": "u",
+            "n": "Ja, die Natur ist sehr entspannend.",
+            "fb": "Such appreciation shines in conversation."
+          },
+          {
+            "who": "p",
+            "n": "Da stimme ich zu. Berliner Parks sind wunderbar.",
+            "en": "I agree. Berlin parks are wonderful."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Engagement Skills",
+            "body": "Show genuine interest in others, keeping the conversation balanced."
+          },
+          {
+            "title": "Appreciation and Agreement",
+            "body": "Agree with positive elements to foster relationship development."
+          }
+        ],
+        "grammarMini": "machen/gern",
+        "grammarTitle": "Preferences and Enjoyment",
+        "grammarIntro": "Germans often use 'gern' to indicate preferences.",
+        "gTermA": "machen",
+        "gDescA": "to do or to make, setting up activities.",
+        "gExA": "Was machen Sie?",
+        "gTermB": "gern",
+        "gDescB": "suggests 'liking' when combined with verbs.",
+        "gExB": "Ich schwimme gern.",
+        "clip": "Freizeit in Berliner Natur",
+        "podcast": "Entspanntes Plaudern im Park",
+        "article": "Die Kunst des entspannten Gesprächs in Deutschland",
+        "reader": [
+          {
+            "t": "Bei einem "
+          },
+          {
+            "w": "freien Gespräch",
+            "d": "free conversation"
+          },
+          {
+            "t": " ist es üblich, über "
+          },
+          {
+            "w": "Gemeininteressen",
+            "d": "common interests"
+          },
+          {
+            "t": " zu sprechen."
+          }
+        ],
+        "reviewWord": "Freizeitaktivitäten",
+        "reviewSource": "from your free talk, last week",
+        "reviewMeaning": "leisure activities (plural: die Freizeitaktivitäten)"
+      },
+      {
+        "chapterTitle": "Chapter 13 · Einstufungsprüfung",
+        "lessonTitle": "Presentation & Assessment",
+        "goalTitle": "Build it: describe your skills",
+        "goalLine": "Communicate your skills clearly — in German.",
+        "goalShort": "present your skills",
+        "scenario": "placement",
+        "partnerName": "Professor Weber",
+        "partnerInitial": "W",
+        "partnerRole": "Examiner",
+        "partnerPlace": "Berlin University",
+        "scenarioTitle": "Einstufungsprüfung · Berlin",
+        "scenarioSub": "Roleplay · Introduction & skills",
+        "lessonPromptEn": "I have advanced skills in data analysis and project management.",
+        "lessonHint": "Highlight key skills eloquently.",
+        "bank": [
+          "Ich habe",
+          "fortgeschrittene Fähigkeiten",
+          "in Datenanalyse",
+          "und Projektmanagement",
+          "manchmal",
+          "entwickelt"
+        ],
+        "bankEn": [
+          "I have",
+          "advanced skills",
+          "in data analysis",
+          "and project management",
+          "sometimes",
+          "developed"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "lessonCorrectTitle": "Sehr beeindruckend! 🎉",
+        "lessonCorrectBody": "“Ich habe” starts off strong when listing skills.",
+        "lessonWrongBody": "Begin with your skills followed by specifics.",
+        "cultureCaption": "Upon taking a placement test in Berlin",
+        "cultureTitle": "Assessment Etiquette",
+        "cultureBody": "Be prepared to discuss academic and practical experiences besides formal qualifications.",
+        "culturePhrase": "“Qualifikationen” — qualifications, vital to any discussion.",
+        "milestoneTitle": "You can now describe skills — in German.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Bitte stellen Sie Ihre Fähigkeiten vor.",
+            "en": "Please introduce your skills."
+          },
+          {
+            "who": "u",
+            "n": "Ich habe fortgeschrittene Fähigkeiten in Datenanalyse und Projektmanagement.",
+            "fb": "A concise and strong presentation."
+          },
+          {
+            "who": "p",
+            "n": "Interessant. Arbeiten Sie gerne im Team?",
+            "en": "Interesting. Do you enjoy working in teams?"
+          },
+          {
+            "who": "u",
+            "n": "Ja, das Teamwork ist sehr inspirierend.",
+            "fb": "Stresses positivity and collaboration."
+          },
+          {
+            "who": "p",
+            "n": "Wunderbar, wir schätzen Teamplayer hoch.",
+            "en": "Wonderful, we value team players highly."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Structured Descriptions",
+            "body": "Use clear structures to outline skills and experiences."
+          },
+          {
+            "title": "Balance of Soft and Hard Skills",
+            "body": "Include both interpersonal and technical skills for breadth."
+          }
+        ],
+        "grammarMini": "infinitive/coop",
+        "grammarTitle": "Descriptive Skill Use",
+        "grammarIntro": "Express advanced or specialized abilities using specific terms and context.",
+        "gTermA": "fortgeschritten",
+        "gDescA": "advanced, used for showing high level capability.",
+        "gExA": "fortgeschrittene Spieler",
+        "gTermB": "in",
+        "gDescB": "indicating capacity within a field or topic.",
+        "gExB": "in Mathematik",
+        "clip": "Academic Skills Presentation in Berlin",
+        "podcast": "Karriere und Kompetenzen",
+        "article": "Selbstpräsentation in Deutscher Institut",
+        "reader": [
+          {
+            "t": "Für eine "
+          },
+          {
+            "w": "Einstufungsprüfung",
+            "d": "placement test"
+          },
+          {
+            "t": " ist es hilfreich, die eigenen "
+          },
+          {
+            "w": "Fähigkeiten",
+            "d": "skills"
+          },
+          {
+            "t": " gut formulieren zu können."
+          }
+        ],
+        "reviewWord": "Projektmanagement",
+        "reviewSource": "from your placement description, recently",
+        "reviewMeaning": "project management (neutral: das Projektmanagement)"
+      },
+      {
+        "chapterTitle": "Chapter 14 · Bei der Bank",
+        "lessonTitle": "Banking Procedures",
+        "goalTitle": "Build it: open a bank account",
+        "goalLine": "Open a bank account — in German.",
+        "goalShort": "open a bank account",
+        "scenario": "bank",
+        "partnerName": "Herr Bauer",
+        "partnerInitial": "B",
+        "partnerRole": "Bank Clerk",
+        "partnerPlace": "Berlin Bank",
+        "scenarioTitle": "Bei der Bank · Berlin",
+        "scenarioSub": "Roleplay · transactions & enquiries",
+        "lessonPromptEn": "I would like to open a checking account.",
+        "lessonHint": "Consider the type of account.",
+        "bank": [
+          "Ich möchte",
+          "ein Girokonto",
+          "eröffnen",
+          "bitte",
+          "der Zinssatz",
+          "Eröffnungsgebühr"
+        ],
+        "bankEn": [
+          "I would like",
+          "a checking account",
+          "to open",
+          "please",
+          "the interest rate",
+          "opening fee"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "lessonCorrectTitle": "Blockchain! 🎉",
+        "lessonCorrectBody": "“Ich möchte” allows you to politely state your intent.",
+        "lessonWrongBody": "Start with your request, then what you need.",
+        "cultureCaption": "Opening an account in a Berlin bank",
+        "cultureTitle": "Thorough, Transparent",
+        "cultureBody": "Expect thorough procedures; necessary documentation includes ID, proof of address.",
+        "culturePhrase": "“Konten” — accounts, the basis of all banking relationships.",
+        "milestoneTitle": "You can now open a bank account — in German.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Guten Tag, was kann ich für Sie tun?",
+            "en": "Good day, what can I do for you?"
+          },
+          {
+            "who": "u",
+            "n": "Ich möchte bitte ein Girokonto eröffnen.",
+            "fb": "Nicely formal and clear — excellent."
+          },
+          {
+            "who": "p",
+            "n": "Selbstverständlich. Haben Sie alle notwendigen Dokumente mitgebracht?",
+            "en": "Of course. Do you have all your necessary documents?"
+          },
+          {
+            "who": "u",
+            "n": "Ja, hier sind sie.",
+            "fb": "Prepared and polite."
+          },
+          {
+            "who": "p",
+            "n": "Ausgezeichnet, wir können beginnen.",
+            "en": "Excellent, we can begin."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Documentation Needs",
+            "body": "Specify necessary documents right at the start to expedite processes."
+          },
+          {
+            "title": "Account Preferences",
+            "body": "Mention specific account types for better service."
+          }
+        ],
+        "grammarMini": "Girokonto/Kreditkonto",
+        "grammarTitle": "Types of Bank Accounts",
+        "grammarIntro": "There are different accounts catering to needs, recognize and name them.",
+        "gTermA": "Girokonto",
+        "gDescA": "checking account, for daily use.",
+        "gExA": "Ich überweise vom Girokonto",
+        "gTermB": "Kreditkonto",
+        "gDescB": "credit account, for loans or credit lines.",
+        "gExB": "ein neues Kreditkonto",
+        "clip": "Effiziente Bankprozesse in Deutschland",
+        "podcast": "Geld, Konten und mehr",
+        "article": "Wichtige Deutsche Bankverfahren erklärt",
+        "reader": [
+          {
+            "t": "Um ein "
+          },
+          {
+            "w": "Girokonto",
+            "d": "checking account"
+          },
+          {
+            "t": " in Deutschland zu eröffnen, benötigt man verschiedene "
+          },
+          {
+            "w": "Unterlagen",
+            "d": "documents"
+          },
+          {
+            "t": " und Identifikationen."
+          }
+        ],
+        "reviewWord": "Zinssatz",
+        "reviewSource": "today from your bank account opening",
+        "reviewMeaning": "the interest rate (masculine: der Zinssatz)"
+      },
+      {
+        "chapterTitle": "Chapter 15 · Mit dem Zug",
+        "lessonTitle": "Navigating Train Travel",
+        "goalTitle": "Build it: buy train tickets",
+        "goalLine": "Purchase train tickets — in German.",
+        "goalShort": "buy train tickets",
+        "scenario": "train",
+        "partnerName": "Herr Fischer",
+        "partnerInitial": "F",
+        "partnerRole": "Ticket Agent",
+        "partnerPlace": "Berlin Hauptbahnhof",
+        "scenarioTitle": "Mit dem Zug · Berlin",
+        "scenarioSub": "Roleplay · ticketing & directions",
+        "lessonPromptEn": "I need two tickets to Hamburg, please.",
+        "lessonHint": "Consider the destination.",
+        "bank": [
+          "Ich brauche",
+          "zwei Fahrkarten",
+          "nach Hamburg",
+          "hin und zurück",
+          "der Fahrplan",
+          "umsteigen"
+        ],
+        "bankEn": [
+          "I need",
+          "two tickets",
+          "to Hamburg",
+          "round-trip",
+          "the schedule",
+          "transfer"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "lessonCorrectTitle": "Auf geht's! 🎉",
+        "lessonCorrectBody": "“Ich brauche” is fitting for a direct request.",
+        "lessonWrongBody": "Begin with what you need and state where to.",
+        "cultureCaption": "Buying tickets at Berlin's main train station",
+        "cultureTitle": "Punctuality and Precision",
+        "cultureBody": "German trains run on a strict schedule. Make sure you confirm platform and changes.",
+        "culturePhrase": "“Fahrplan” — schedule, knowing this keeps you informed.",
+        "milestoneTitle": "You can now buy train tickets — in German.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Guten Tag, wohin möchten Sie reisen?",
+            "en": "Good day, where would you like to travel?"
+          },
+          {
+            "who": "u",
+            "n": "Ich brauche zwei Fahrkarten nach Hamburg, bitte.",
+            "fb": "Very clear intent."
+          },
+          {
+            "who": "p",
+            "n": "Möchten Sie eine Hin- und Rückfahrt oder nur einfach?",
+            "en": "Would you like a round-trip or one way?"
+          },
+          {
+            "who": "u",
+            "n": "Hin und zurück, bitte.",
+            "fb": "Well specified."
+          },
+          {
+            "who": "p",
+            "n": "Perfekt, hier sind Ihre Tickets. Gute Reise!",
+            "en": "Perfect, here are your tickets. Have a good trip!"
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Direct Transportation Questions",
+            "body": "Precise questions make travel easier, especially regarding transfers or schedules."
+          },
+          {
+            "title": "Destination Details",
+            "body": "Always double-check your tickets for accuracy in destination and return options."
+          }
+        ],
+        "grammarMini": "kar/und",
+        "grammarTitle": "Accuracy in Describing Travel",
+        "grammarIntro": "Different situations require different prepositions and agreements.",
+        "gTermA": "zwei",
+        "gDescA": "indicating two or dual items.",
+        "gExA": "zwei Fahrten",
+        "gTermB": "umsteigen",
+        "gDescB": "changing trains, critical for plan accuracy.",
+        "gExB": "Ich muss umsteigen.",
+        "clip": "Reisen mit dem Zug in Deutschland",
+        "podcast": "Fahrten und Abenteuer in der Bahn",
+        "article": "Zugfahren in Deutschland: Der vollständige Leitfaden",
+        "reader": [
+          {
+            "t": "Beim Bahnreisen in Deutschland kann man "
+          },
+          {
+            "w": "effizient",
+            "d": "efficiently"
+          },
+          {
+            "t": " von Stadt zu Stadt fahren. Der "
+          },
+          {
+            "w": "Fahrplan",
+            "d": "schedule"
+          },
+          {
+            "t": " hilft Reisenden, ihre Reisen gut zu planen."
+          }
+        ],
+        "reviewWord": "Fahrkarten",
+        "reviewSource": "from your train travel, a few days ago",
+        "reviewMeaning": "train tickets (plural: die Fahrkarten)"
       }
     ]
   },
@@ -5173,6 +10339,1122 @@ export const LANGS: any = {
         "reviewWord": "aiuto",
         "reviewSource": "from your emergency call, last month",
         "reviewMeaning": "help (l'aiuto)"
+      },
+      {
+        "chapterTitle": "Chapter 7 · All'aeroporto",
+        "lessonTitle": "Travel & Check-in",
+        "goalTitle": "Build it: check in for a flight",
+        "goalLine": "Check in at the airport — the Italian way.",
+        "goalShort": "check in",
+        "scenario": "airport",
+        "partnerName": "Marco",
+        "partnerInitial": "M",
+        "partnerRole": "assistente di volo",
+        "partnerPlace": "Fiumicino",
+        "scenarioTitle": "All'aeroporto · Fiumicino",
+        "scenarioSub": "Roleplay · check-in & ticket handling",
+        "lessonPromptEn": "I need to check in for my flight, please.",
+        "lessonHint": "Use “ho bisogno di” to express need.",
+        "bank": [
+          "Ho bisogno di",
+          "fare il check-in",
+          "per il mio volo",
+          "per favore",
+          "un bagaglio",
+          "quanto costa"
+        ],
+        "bankEn": [
+          "I need to",
+          "check in",
+          "for my flight",
+          "please",
+          "a luggage",
+          "how much does it cost"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "lessonCorrectTitle": "Ben fatto! 🎉",
+        "lessonCorrectBody": "“Ho bisogno di” is used for expressing needs politely.",
+        "lessonWrongBody": "Start with “Ho bisogno di,” then what you need to do.",
+        "cultureCaption": "Aeroporto di Fiumicino, Roma",
+        "cultureTitle": "Check-in: il primo passo",
+        "cultureBody": "In Italy, checking in is often a personal process. Be on time and have your documents ready, particularly at busy airports.",
+        "culturePhrase": "“Fare il check-in” is the standard phrase for checking in at airports.",
+        "milestoneTitle": "You can now check in at the airport — the Italian way.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Buongiorno! Come posso aiutarla?",
+            "en": "Good morning! How can I assist you?"
+          },
+          {
+            "who": "u",
+            "n": "Ho bisogno di fare il check-in per il mio volo, per favore.",
+            "fb": "Excellent — correctly using “Ho bisogno di”"
+          },
+          {
+            "who": "p",
+            "n": "Certamente. Ha un bagaglio da imbarcare?",
+            "en": "Certainly. Do you have any luggage to check in?"
+          },
+          {
+            "who": "u",
+            "n": "Sì, un bagaglio, grazie.",
+            "fb": "Perfect — “un bagaglio” is the right term"
+          },
+          {
+            "who": "p",
+            "n": "Va bene, proceda al banco 5. Buon viaggio!",
+            "en": "Alright, proceed to counter 5. Have a good trip!"
+          }
+        ],
+        "debrief": [
+          {
+            "title": "“Bagaglio” vs. “valigia”",
+            "body": "Both mean luggage, but “bagaglio” is more general, and “valigia” refers specifically to suitcases."
+          },
+          {
+            "title": "Using “Ho bisogno di”",
+            "body": "This is a commonly used phrase in Italy for expressing needs and requests."
+          }
+        ],
+        "grammarMini": "prepositions",
+        "grammarTitle": "Prepositions: “di” and “a”",
+        "grammarIntro": "Prepositions are important in Italian, changing based on context:",
+        "gTermA": "di",
+        "gDescA": "of; to express need or origin",
+        "gExA": "Ho bisogno di, un caffè di Roma",
+        "gTermB": "a",
+        "gDescB": "to; indicating direction or location",
+        "gExB": "Vado a Roma, Sono a casa",
+        "clip": "Partenze e arrivi a Fiumicino",
+        "podcast": "Via col vento — ep. 10",
+        "article": "Consigli per viaggiare in Italia",
+        "reader": [
+          {
+            "t": "Molti italiani volano con "
+          },
+          {
+            "w": "compagnie low-cost",
+            "d": "low-cost airlines"
+          },
+          {
+            "t": ". È importante arrivare presto "
+          },
+          {
+            "w": "all'aeroporto",
+            "d": "to the airport"
+          },
+          {
+            "t": " per "
+          },
+          {
+            "w": "evitare",
+            "d": "avoid"
+          },
+          {
+            "t": " ritardi. Buon viaggio!"
+          }
+        ],
+        "reviewWord": "volo",
+        "reviewSource": "from your airport experience, 2 days ago",
+        "reviewMeaning": "flight (il volo)"
+      },
+      {
+        "chapterTitle": "Chapter 8 · Cenare al ristorante",
+        "lessonTitle": "Dining Out",
+        "goalTitle": "Build it: order dinner",
+        "goalLine": "Order a meal at an Italian restaurant.",
+        "goalShort": "order dinner",
+        "scenario": "dinner",
+        "partnerName": "Luca",
+        "partnerInitial": "L",
+        "partnerRole": "cameriere",
+        "partnerPlace": "Ristorante La Dolce Vita",
+        "scenarioTitle": "Cenare al ristorante · La Dolce Vita",
+        "scenarioSub": "Roleplay · order & enjoy a meal",
+        "lessonPromptEn": "I'd like the pasta with tomato sauce, please.",
+        "lessonHint": "Use “vorrei” for a polite request.",
+        "bank": [
+          "Vorrei",
+          "la pasta",
+          "al pomodoro",
+          "per favore",
+          "il conto",
+          "il menu"
+        ],
+        "bankEn": [
+          "I would like",
+          "the pasta",
+          "with tomato sauce",
+          "please",
+          "the bill",
+          "the menu"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "lessonCorrectTitle": "Eccellente! 🎉",
+        "lessonCorrectBody": "“Vorrei” is a softer way to express what you'd like.",
+        "lessonWrongBody": "Begin with “Vorrei,” then mention your dish.",
+        "cultureCaption": "Un ristorante in Italia",
+        "cultureTitle": "Mangiare è un'arte",
+        "cultureBody": "Dinner in Italy is cherished, often an event that extends beyond the meal itself. Italians especially value good company and conversation.",
+        "culturePhrase": "Ordering “la pasta al pomodoro” is a classic choice — simple but delicious.",
+        "milestoneTitle": "You can now order dinner in an Italian restaurant.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Buonasera! Ha deciso cosa ordinare?",
+            "en": "Good evening! Have you decided what to order?"
+          },
+          {
+            "who": "u",
+            "n": "Vorrei la pasta al pomodoro, per favore.",
+            "fb": "Well done — polite and direct"
+          },
+          {
+            "who": "p",
+            "n": "Benissimo. Da bere?",
+            "en": "Great. To drink?"
+          },
+          {
+            "who": "u",
+            "n": "Acqua naturale, grazie.",
+            "fb": "Nice choice — Acqua naturale is common"
+          },
+          {
+            "who": "p",
+            "n": "Perfetto. Arriva subito.",
+            "en": "Perfect. Coming right up."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Choosing your pasta",
+            "body": "Pasta comes with a variety of sauces — al pomodoro is simple, yet traditional."
+          },
+          {
+            "title": "The art of ordering",
+            "body": "Using the conditional form like “Vorrei” softens requests, which is appreciated in Italian culture."
+          }
+        ],
+        "grammarMini": "definite articles",
+        "grammarTitle": "Definite articles: “il”, “la” and their forms",
+        "grammarIntro": "Definite articles depend on gender and number of nouns:",
+        "gTermA": "il (m.)",
+        "gDescA": "singular masculine",
+        "gExA": "il vino, il pane",
+        "gTermB": "la (f.)",
+        "gDescB": "singular feminine",
+        "gExB": "la pasta, la birra",
+        "clip": "Cucina Italiana dal vivo",
+        "podcast": "La cucina di nonna — ep. 3",
+        "article": "Alla scoperta della cucina regionale italiana",
+        "reader": [
+          {
+            "t": "Gli italiani amano mangiare "
+          },
+          {
+            "w": "insieme",
+            "d": "together"
+          },
+          {
+            "t": " e i pasti sono momenti "
+          },
+          {
+            "w": "sociali",
+            "d": "social"
+          },
+          {
+            "t": ". Si può "
+          },
+          {
+            "w": "gustare",
+            "d": "taste"
+          },
+          {
+            "t": " del vino locale con ogni pasto."
+          }
+        ],
+        "reviewWord": "pasta",
+        "reviewSource": "from your dining experience, 2 days ago",
+        "reviewMeaning": "pasta (la pasta)"
+      },
+      {
+        "chapterTitle": "Chapter 9 · Colloquio di lavoro",
+        "lessonTitle": "Professional Interactions",
+        "goalTitle": "Build it: introduce yourself at interview",
+        "goalLine": "Conduct an introductory part of a job interview — Italian style.",
+        "goalShort": "job interview",
+        "scenario": "interview",
+        "partnerName": "Chiara",
+        "partnerInitial": "C",
+        "partnerRole": "HR manager",
+        "partnerPlace": "Ufficio HR",
+        "scenarioTitle": "Colloquio di lavoro · Ufficio HR",
+        "scenarioSub": "Roleplay · self-presentation",
+        "lessonPromptEn": "Good morning, my name is Mario Rossi. It's a pleasure to meet you.",
+        "lessonHint": "Start with “Buongiorno” for professionalism.",
+        "bank": [
+          "Buongiorno",
+          "mi chiamo",
+          "Mario Rossi",
+          "piacere di conoscerla",
+          "la posizione",
+          "il tuo tempo"
+        ],
+        "bankEn": [
+          "Good morning",
+          "my name is",
+          "Mario Rossi",
+          "pleasure to meet you",
+          "the position",
+          "your time"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "lessonCorrectTitle": "Ottimo inizio! 🎉",
+        "lessonCorrectBody": "Starting with “Buongiorno” ensures a polite and professional tone.",
+        "lessonWrongBody": "Introduce yourself with a greeting, then give your name.",
+        "cultureCaption": "Un colloquio di lavoro in Italia",
+        "cultureTitle": "Lavorare in Italia",
+        "cultureBody": "In Italian culture, job interviews put emphasis on personal presentation and rapport building. It's important to balance professional competence with a friendly disposition.",
+        "culturePhrase": "“Mi chiamo” followed by your name is a clear introduction.",
+        "milestoneTitle": "You can now introduce yourself at a job interview in Italian.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Buongiorno e benvenuto!",
+            "en": "Good morning and welcome!"
+          },
+          {
+            "who": "u",
+            "n": "Buongiorno, mi chiamo Mario Rossi. Piacere di conoscerla.",
+            "fb": "Nicely done — clear and professional"
+          },
+          {
+            "who": "p",
+            "n": "Il piacere è mio. Può parlarmi di sé?",
+            "en": "The pleasure is mine. Can you tell me about yourself?"
+          },
+          {
+            "who": "u",
+            "n": "Certo, ho una passione per la tecnologia e il marketing.",
+            "fb": "Great detail — highlights your interests"
+          },
+          {
+            "who": "p",
+            "n": "Interessante, continuiamo...",
+            "en": "Interesting, let's continue..."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Introducing yourself",
+            "body": "Use a formal greeting followed by your full name for introductions."
+          },
+          {
+            "title": "Building rapport",
+            "body": "Focus on a balance of professionalism and friendliness."
+          }
+        ],
+        "grammarMini": "reflexive verbs",
+        "grammarTitle": "Using reflexive verbs: “mi chiamo” vs. “chiamo”",
+        "grammarIntro": "Reflexive verbs reflect the action on the subject itself:",
+        "gTermA": "mi chiamo",
+        "gDescA": "I call myself, used for introductions",
+        "gExA": "Mi chiamo Luca.",
+        "gTermB": "chiamo",
+        "gDescB": "I call, used for calling someone else",
+        "gExB": "Chiamo la polizia.",
+        "clip": "Simulazione colloquio di lavoro",
+        "podcast": "Il mondo del lavoro — ep. 7",
+        "article": "Come prepararsi per un colloquio in Italia",
+        "reader": [
+          {
+            "t": "Quando sostieni un "
+          },
+          {
+            "w": "colloquio",
+            "d": "interview"
+          },
+          {
+            "t": " in Italia, è importante essere ben "
+          },
+          {
+            "w": "preparati",
+            "d": "prepared"
+          },
+          {
+            "t": " e "
+          },
+          {
+            "w": "pronti",
+            "d": "ready"
+          },
+          {
+            "t": " a descrivere le proprie esperienze."
+          }
+        ],
+        "reviewWord": "colloquio",
+        "reviewSource": "from your interview experience, 2 days ago",
+        "reviewMeaning": "interview (il colloquio)"
+      },
+      {
+        "chapterTitle": "Chapter 10 · In farmacia",
+        "lessonTitle": "Seek Remedies",
+        "goalTitle": "Build it: explain a symptom to the pharmacist",
+        "goalLine": "Describe your symptoms and ask for a remedy at the pharmacy.",
+        "goalShort": "pharmacy visit",
+        "scenario": "pharmacy",
+        "partnerName": "Alessandro",
+        "partnerInitial": "A",
+        "partnerRole": "farmacista",
+        "partnerPlace": "Farmacia Centrale",
+        "scenarioTitle": "In farmacia · Farmacia Centrale",
+        "scenarioSub": "Roleplay · describing symptoms & asking for help",
+        "lessonPromptEn": "I have a headache, can you help me?",
+        "lessonHint": "Use “ho mal di testa” for headache.",
+        "bank": [
+          "Ho",
+          "mal di testa",
+          "potrebbe",
+          "aiutarmi",
+          "le compresse",
+          "la ricetta"
+        ],
+        "bankEn": [
+          "I have",
+          "headache",
+          "could",
+          "help me",
+          "the tablets",
+          "the prescription"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "lessonCorrectTitle": "Bene! 🎉",
+        "lessonCorrectBody": "“Ho mal di testa” is the right way to express having a headache.",
+        "lessonWrongBody": "Start with “Ho mal di testa” for headaches.",
+        "cultureCaption": "Entrare in una farmacia italiana",
+        "cultureTitle": "La farmacia: un aiuto quotidiano",
+        "cultureBody": "Italian pharmacies offer not only medications but also advice and consultation. They are often the first stop for health concerns and minor ailments.",
+        "culturePhrase": "“Potrebbe aiutarmi?” is useful for politely asking for help.",
+        "milestoneTitle": "You can now ask for help at a pharmacy in Italy.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Buongiorno, come posso aiutarla?",
+            "en": "Good morning, how can I help you?"
+          },
+          {
+            "who": "u",
+            "n": "Ho mal di testa, potrebbe aiutarmi?",
+            "fb": "Good request — direct and clear"
+          },
+          {
+            "who": "p",
+            "n": "Certo, le consiglio queste compresse.",
+            "en": "Sure, I recommend these tablets."
+          },
+          {
+            "who": "u",
+            "n": "Va bene, quanti ne devo prendere al giorno?",
+            "fb": "Great question — ensures understanding"
+          },
+          {
+            "who": "p",
+            "n": "Due volte al giorno dopo i pasti.",
+            "en": "Twice a day after meals."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Describing pain",
+            "body": "Use expressions like “mal di testa” to describe specific aches."
+          },
+          {
+            "title": "Consulting pharmacists",
+            "body": "Pharmacists can offer advice and suggest treatments without a prescription."
+          }
+        ],
+        "grammarMini": "expressions with 'di'",
+        "grammarTitle": "Expressions: 'mal di', 'bisogno di'",
+        "grammarIntro": "Some expressions require 'di' to connect the main element:",
+        "gTermA": "mal di",
+        "gDescA": "used to describe physical pain",
+        "gExA": "mal di testa, mal di pancia",
+        "gTermB": "bisogno di",
+        "gDescB": "used to express a need",
+        "gExB": "ho bisogno di aiuto",
+        "clip": "La guida dei farmaci utili",
+        "podcast": "Salute e benessere — ep. 2",
+        "article": "Come navigare l'effetto placebo",
+        "reader": [
+          {
+            "t": "Quando visiti una "
+          },
+          {
+            "w": "farmacia",
+            "d": "pharmacy"
+          },
+          {
+            "t": ", puoi chiedere "
+          },
+          {
+            "w": "consigli",
+            "d": "advice"
+          },
+          {
+            "t": " su quale "
+          },
+          {
+            "w": "medicina",
+            "d": "medicine"
+          },
+          {
+            "t": " usare per i tuoi sintomi."
+          }
+        ],
+        "reviewWord": "compresse",
+        "reviewSource": "from your pharmacy visit, 2 days ago",
+        "reviewMeaning": "tablets (le compresse)"
+      },
+      {
+        "chapterTitle": "Chapter 11 · Dibattito",
+        "lessonTitle": "Expressing Opinions",
+        "goalTitle": "Build it: participate in a debate",
+        "goalLine": "Contribute your point of view in a debate — Italian style.",
+        "goalShort": "debate",
+        "scenario": "debate",
+        "partnerName": "Federica",
+        "partnerInitial": "F",
+        "partnerRole": "moderatore",
+        "partnerPlace": "Sala conferenze",
+        "scenarioTitle": "Dibattito · Sala conferenze",
+        "scenarioSub": "Roleplay · present an argument",
+        "lessonPromptEn": "I believe that renewable energy is the future.",
+        "lessonHint": "Start with “credo che” to express beliefs.",
+        "bank": [
+          "Credo che",
+          "le energie rinnovabili",
+          "siano il futuro",
+          "sono importanti",
+          "cambiamenti",
+          "l'ambiente"
+        ],
+        "bankEn": [
+          "I believe that",
+          "renewable energy",
+          "is the future",
+          "are important",
+          "changes",
+          "the environment"
+        ],
+        "correct": [
+          0,
+          1,
+          2
+        ],
+        "lessonCorrectTitle": "Argomento convincente! 🎉",
+        "lessonCorrectBody": "“Credo che” is used to introduce a belief or opinion.",
+        "lessonWrongBody": "Begin with “Credo che,” then state your opinion.",
+        "cultureCaption": "Partecipare a un dibattito in Italia",
+        "cultureTitle": "Il dibattito: una tradizione viva",
+        "cultureBody": "Debating is a respected activity, often used to encourage critical thinking and express ideas. It's normal to engage in lively discussions.",
+        "culturePhrase": "“Le energie rinnovabili” are frequently discussed topics.",
+        "milestoneTitle": "You can now express your opinions in a debate in Italian.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Benvenuti al dibattito di oggi. Qual è la tua posizione?",
+            "en": "Welcome to today's debate. What is your position?"
+          },
+          {
+            "who": "u",
+            "n": "Credo che le energie rinnovabili siano il futuro.",
+            "fb": "Strong start — precise and forward-thinking"
+          },
+          {
+            "who": "p",
+            "n": "Interessante. Puoi spiegare il perché?",
+            "en": "Interesting. Can you explain why?"
+          },
+          {
+            "who": "u",
+            "n": "Sono importanti per la sostenibilità ambientale.",
+            "fb": "Good point — highlights a key issue"
+          },
+          {
+            "who": "p",
+            "n": "Un punto di vista valido, grazie per il contributo.",
+            "en": "A valid point of view, thank you for the contribution."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Expressing opinions politely",
+            "body": "Start with phrases like “credo che” or “penso che” to express beliefs."
+          },
+          {
+            "title": "Debate culture",
+            "body": "In Italy, debates are seen as an opportunity to explore different perspectives."
+          }
+        ],
+        "grammarMini": "subjunctive",
+        "grammarTitle": "Using the subjunctive: “siano” vs. “sono”",
+        "grammarIntro": "Subjunctive is used after words expressing doubt, desire, or emotion:",
+        "gTermA": "siano",
+        "gDescA": "subjunctive; used for uncertain beliefs",
+        "gExA": "Credo che siano...",
+        "gTermB": "sono",
+        "gDescB": "indicative; used for statements of fact",
+        "gExB": "Le case sono blu.",
+        "clip": "Il futuro delle energie rinnovabili",
+        "podcast": "Discussioni aperte — ep. 5",
+        "article": "Prosperità e sostenibilità",
+        "reader": [
+          {
+            "t": "In un "
+          },
+          {
+            "w": "dibattito",
+            "d": "debate"
+          },
+          {
+            "t": ", è "
+          },
+          {
+            "w": "importante",
+            "d": "important"
+          },
+          {
+            "t": " esprimere le proprie "
+          },
+          {
+            "w": "opinioni",
+            "d": "opinions"
+          },
+          {
+            "t": " con rispetto."
+          }
+        ],
+        "reviewWord": "energie rinnovabili",
+        "reviewSource": "from your debate experience, 2 days ago",
+        "reviewMeaning": "renewable energy"
+      },
+      {
+        "chapterTitle": "Chapter 12 · Conversazione libera",
+        "lessonTitle": "Casual Conversation",
+        "goalTitle": "Build it: engage in open talk",
+        "goalLine": "Join and maintain a casual conversation naturally.",
+        "goalShort": "casual talk",
+        "scenario": "freetalk",
+        "partnerName": "Elena",
+        "partnerInitial": "E",
+        "partnerRole": "amica",
+        "partnerPlace": "Caffè Letterario",
+        "scenarioTitle": "Conversazione libera · Caffè Letterario",
+        "scenarioSub": "Roleplay · sustain a natural dialogue",
+        "lessonPromptEn": "So, what do you think about the event?",
+        "lessonHint": "Use “cosa ne pensi di” for opinions.",
+        "bank": [
+          "Allora",
+          "cosa ne pensi di",
+          "l'evento",
+          "mi piace",
+          "davvero",
+          "semplice"
+        ],
+        "bankEn": [
+          "So",
+          "what do you think about",
+          "the event",
+          "I like",
+          "really",
+          "simple"
+        ],
+        "correct": [
+          0,
+          1,
+          2
+        ],
+        "lessonCorrectTitle": "Conversazione fluida! 🎉",
+        "lessonCorrectBody": "“Cosa ne pensi di” helps keep the conversation flowing with opinions.",
+        "lessonWrongBody": "Start with “Allora,” then invite an opinion.",
+        "cultureCaption": "Partecipare a una conversazione in Italia",
+        "cultureTitle": "La conversazione: un'arte sociale",
+        "cultureBody": "Casual conversations in Italy often blend topics, from personal to public affairs. Italians are expressive and value genuine connections.",
+        "culturePhrase": "Find many ways to say “I like it” or “Non mi piace” to express your taste.",
+        "milestoneTitle": "You can now engage in casual Italian conversations.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Ciao! Hai partecipato all'evento?",
+            "en": "Hi! Did you attend the event?"
+          },
+          {
+            "who": "u",
+            "n": "Sì, allora, cosa ne pensi dell'evento?",
+            "fb": "Good — invites open discussion"
+          },
+          {
+            "who": "p",
+            "n": "Mi è piaciuto molto, è stato interessante.",
+            "en": "I liked it a lot, it was interesting."
+          },
+          {
+            "who": "u",
+            "n": "Anche a me è piaciuto, davvero ben organizzato.",
+            "fb": "Excellent agreement — continues the flow"
+          },
+          {
+            "who": "p",
+            "n": "Magari ci vediamo al prossimo.",
+            "en": "Maybe we'll see each other at the next one."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Blending topics",
+            "body": "In casual conversations, topics can shift quickly; stay adaptable."
+          },
+          {
+            "title": "Engagement",
+            "body": "Encourage others to share by asking for their opinions."
+          }
+        ],
+        "grammarMini": "questions",
+        "grammarTitle": "Formulating questions and responses",
+        "grammarIntro": "Learn how to ask and respond with ease:",
+        "gTermA": "cosa ne pensi",
+        "gDescA": "what do you think; used for opinions",
+        "gExA": "Cosa ne pensi del film?",
+        "gTermB": "mi piace",
+        "gDescB": "I like it; expressing taste",
+        "gExB": "Mi piace il caffè.",
+        "clip": "Un'ora al caffè",
+        "podcast": "Dialoghi aperti — ep. 9",
+        "article": "Conoscere gli italiani: un'esperienza culturale",
+        "reader": [
+          {
+            "t": "Durante un "
+          },
+          {
+            "w": "incontro",
+            "d": "meeting"
+          },
+          {
+            "t": ", gli "
+          },
+          {
+            "w": "italiani",
+            "d": "Italians"
+          },
+          {
+            "t": " spesso parlano di molte "
+          },
+          {
+            "w": "cose",
+            "d": "things"
+          },
+          {
+            "t": ", dal cibo al tempo libero."
+          }
+        ],
+        "reviewWord": "evento",
+        "reviewSource": "from your conversation, 2 days ago",
+        "reviewMeaning": "event (l'evento)"
+      },
+      {
+        "chapterTitle": "Chapter 13 · Test di valutazione",
+        "lessonTitle": "Placement and Levels",
+        "goalTitle": "Build it: assess your language skills",
+        "goalLine": "Commit to a self-assessment of your Italian proficiency.",
+        "goalShort": "self-assessment",
+        "scenario": "placement",
+        "partnerName": "Gianni",
+        "partnerInitial": "G",
+        "partnerRole": "insegnante",
+        "partnerPlace": "Scuola di lingue",
+        "scenarioTitle": "Test di valutazione · Scuola di lingue",
+        "scenarioSub": "Roleplay · evaluate your skills",
+        "lessonPromptEn": "I need to test my Italian level, please.",
+        "lessonHint": "Use “vorrei valutare” to state your wish.",
+        "bank": [
+          "Vorrei",
+          "valutare",
+          "il mio livello",
+          "di italiano",
+          "per favore",
+          "immersione"
+        ],
+        "bankEn": [
+          "I would like",
+          "to assess",
+          "my level",
+          "of Italian",
+          "please",
+          "immersion"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "lessonCorrectTitle": "Pragmatico! 🎉",
+        "lessonCorrectBody": "“Vorrei valutare” expresses a desire politely.",
+        "lessonWrongBody": "Begin with “Vorrei valutare il mio livello di italiano.”",
+        "cultureCaption": "Partecipare a un test di lingua",
+        "cultureTitle": "Valutazioni linguistiche in Italia",
+        "cultureBody": "Italian language assessments often include written, oral, and listening components to ensure a comprehensive understanding of proficiency levels.",
+        "culturePhrase": "“Il mio livello” refers to your capability in a specific skill or subject.",
+        "milestoneTitle": "You are now equipped to assess your Italian language skills.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Benvenuto alla scuola di lingue. Come posso aiutarla?",
+            "en": "Welcome to the language school. How can I help you?"
+          },
+          {
+            "who": "u",
+            "n": "Vorrei valutare il mio livello di italiano, per favore.",
+            "fb": "Good — clear statement of purpose"
+          },
+          {
+            "who": "p",
+            "n": "Certamente, abbiamo un test al computer.",
+            "en": "Certainly, we have a test on the computer."
+          },
+          {
+            "who": "u",
+            "n": "Grazie, è necessario prenotare?",
+            "fb": "Nice follow-up — ensures preparedness"
+          },
+          {
+            "who": "p",
+            "n": "No, può iniziare subito. Buona fortuna!",
+            "en": "No, you can start immediately. Good luck!"
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Utilizing assessments",
+            "body": "Testing where you stand helps plan the next steps in your learning journey."
+          },
+          {
+            "title": "Evaluating proficiency",
+            "body": "Multiple aspects like speaking and reading are often assessed."
+          }
+        ],
+        "grammarMini": "verb infinitives",
+        "grammarTitle": "Using infinitives: “valutare” and others",
+        "grammarIntro": "Infinitives are the base form of verbs, ending with -are, -ere, -ire:",
+        "gTermA": "valutare",
+        "gDescA": "to assess; indicating the action of evaluating",
+        "gExA": "Vorrei valutare il mio livello.",
+        "gTermB": "parlare",
+        "gDescB": "to speak; indicating the action of talking",
+        "gExB": "Mi piace parlare italiano.",
+        "clip": "Test linguistici nelle scuole italiane",
+        "podcast": "Imparare l'italiano — ep. 1",
+        "article": "Metodi di apprendimento linguistico",
+        "reader": [
+          {
+            "t": "Molte "
+          },
+          {
+            "w": "scuole di lingue",
+            "d": "language schools"
+          },
+          {
+            "t": " offrono "
+          },
+          {
+            "w": "corsi",
+            "d": "courses"
+          },
+          {
+            "t": " con un metodo di "
+          },
+          {
+            "w": "immersione",
+            "d": "immersion"
+          },
+          {
+            "t": " completo."
+          }
+        ],
+        "reviewWord": "valutare",
+        "reviewSource": "from your placement experience, 2 days ago",
+        "reviewMeaning": "to assess (valutare)"
+      },
+      {
+        "chapterTitle": "Chapter 14 · In banca",
+        "lessonTitle": "Financial Transactions",
+        "goalTitle": "Build it: open a bank account",
+        "goalLine": "Open a new bank account smoothly in Italian.",
+        "goalShort": "banking",
+        "scenario": "bank",
+        "partnerName": "Roberto",
+        "partnerInitial": "R",
+        "partnerRole": "banchiere",
+        "partnerPlace": "Banca Milano",
+        "scenarioTitle": "In banca · Banca Milano",
+        "scenarioSub": "Roleplay · set up an account",
+        "lessonPromptEn": "I would like to open a bank account, please.",
+        "lessonHint": "Start with “Vorrei aprire” to state intentions.",
+        "bank": [
+          "Vorrei",
+          "aprire",
+          "un conto",
+          "in banca",
+          "per favore",
+          "risparmio"
+        ],
+        "bankEn": [
+          "I would like",
+          "to open",
+          "an account",
+          "in bank",
+          "please",
+          "savings"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "lessonCorrectTitle": "Affare concluso! 🎉",
+        "lessonCorrectBody": "“Vorrei aprire” specified your intent clearly.",
+        "lessonWrongBody": "Begin with “Vorrei aprire” when stating what you'd like to do.",
+        "cultureCaption": "Aprire un conto in banca in Italia",
+        "cultureTitle": "Opzioni bancarie in Italia",
+        "cultureBody": "Italian banking requires several documents, and sometimes an appointment is needed. Basic accounts provide essential services.",
+        "culturePhrase": "“Un conto risparmio” refers to a savings account.",
+        "milestoneTitle": "You can now open a bank account in Italy.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Buongiorno, come posso assisterla oggi?",
+            "en": "Good morning, how can I assist you today?"
+          },
+          {
+            "who": "u",
+            "n": "Vorrei aprire un conto in banca, per favore.",
+            "fb": "Clear intent — well stated"
+          },
+          {
+            "who": "p",
+            "n": "Ha un documento d'identità?",
+            "en": "Do you have an identification document?"
+          },
+          {
+            "who": "u",
+            "n": "Sì, ce l'ho qui con me.",
+            "fb": "Good, shows preparedness"
+          },
+          {
+            "who": "p",
+            "n": "Perfetto, lo esaminerò e apriremo subito il conto.",
+            "en": "Perfect, I'll check it and open the account right away."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Opening accounts",
+            "body": "Have identification and necessary documents ready."
+          },
+          {
+            "title": "Understanding terms",
+            "body": "Know the types of accounts to choose the one that suits your needs."
+          }
+        ],
+        "grammarMini": "verb phrases",
+        "grammarTitle": "Verb phrases: “aprire un conto”",
+        "grammarIntro": "Verbs can be coupled with nouns to form common phrases:",
+        "gTermA": "aprire",
+        "gDescA": "to open; the act of starting",
+        "gExA": "Vorrei aprire un conto.",
+        "gTermB": "risparmiare",
+        "gDescB": "to save; conserving resources or money",
+        "gExB": "Mi piace risparmiare denaro.",
+        "clip": "Guideline banking in Italy",
+        "podcast": "Finanze per principianti — ep. 6",
+        "article": "I migliori conti bancari per studenti",
+        "reader": [
+          {
+            "t": "Molte "
+          },
+          {
+            "w": "banche",
+            "d": "banks"
+          },
+          {
+            "t": " offrono "
+          },
+          {
+            "w": "conti",
+            "d": "accounts"
+          },
+          {
+            "t": " speciali per i "
+          },
+          {
+            "w": "risparmiatori",
+            "d": "savers"
+          },
+          {
+            "t": ": informati sulle opzioni disponibili."
+          }
+        ],
+        "reviewWord": "conto",
+        "reviewSource": "from your visit to the bank, 2 days ago",
+        "reviewMeaning": "account (il conto)"
+      },
+      {
+        "chapterTitle": "Chapter 15 · Prendere il treno",
+        "lessonTitle": "Navigating Rail Travel",
+        "goalTitle": "Build it: purchase a train ticket",
+        "goalLine": "Buy a train ticket and navigate the Italian railway.",
+        "goalShort": "train travel",
+        "scenario": "train",
+        "partnerName": "Silvio",
+        "partnerInitial": "S",
+        "partnerRole": "dipendente ferroviario",
+        "partnerPlace": "Stazione Termini",
+        "scenarioTitle": "Prendere il treno · Stazione Termini",
+        "scenarioSub": "Roleplay · buy a ticket & find your platform",
+        "lessonPromptEn": "I need a ticket to Florence, please.",
+        "lessonHint": "Use “un biglietto per” for destinations.",
+        "bank": [
+          "Vorrei",
+          "un biglietto",
+          "per Firenze",
+          "per favore",
+          "in ritardo",
+          "binario"
+        ],
+        "bankEn": [
+          "I need",
+          "a ticket",
+          "to Florence",
+          "please",
+          "delayed",
+          "platform"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "lessonCorrectTitle": "Viaggio in arrivo! 🎉",
+        "lessonCorrectBody": "“Un biglietto per” lets you specify your travel destination.",
+        "lessonWrongBody": "Start with “Vorrei” to express what you need.",
+        "cultureCaption": "Prendere il treno in Italia",
+        "cultureTitle": "Il viaggio ferroviario: un'opzione conveniente",
+        "cultureBody": "Trains in Italy provide an efficient and scenic way to travel between cities. Make sure to validate your ticket before boarding.",
+        "culturePhrase": "“Binario” is the term for platform.",
+        "milestoneTitle": "You can now purchase train tickets in Italy.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Buongiorno, come posso aiutarla?",
+            "en": "Good morning, how can I help you?"
+          },
+          {
+            "who": "u",
+            "n": "Vorrei un biglietto per Firenze, per favore.",
+            "fb": "Nice — makes your need clear"
+          },
+          {
+            "who": "p",
+            "n": "Certo, il prossimo treno alle 14:30 dal binario 4.",
+            "en": "Sure, the next train is at 14:30 from platform 4."
+          },
+          {
+            "who": "u",
+            "n": "Grazie, devo convalidare il biglietto?",
+            "fb": "Good — asks about validation correctly"
+          },
+          {
+            "who": "p",
+            "n": "Sì, c'è la macchinetta gialla sui binari.",
+            "en": "Yes, there's a yellow machine on the platforms."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Navigating stations",
+            "body": "Look for signs like “binario” for platforms, and validate tickets before traveling."
+          },
+          {
+            "title": "Purchasing tickets",
+            "body": "Explain your destination clearly when buying tickets."
+          }
+        ],
+        "grammarMini": "travel phrases",
+        "grammarTitle": "Travel phrases and verb forms",
+        "grammarIntro": "Learn key phrases for seamless travel experiences:",
+        "gTermA": "biglietto",
+        "gDescA": "ticket; required for boarding",
+        "gExA": "Ho un biglietto per Napoli.",
+        "gTermB": "ritardo",
+        "gDescB": "delay; a common occurrence",
+        "gExB": "Il treno è in ritardo.",
+        "clip": "Esperienze di viaggio in treno",
+        "podcast": "Storie dai binari — ep. 11",
+        "article": "Guida alle stazioni ferroviarie italiane",
+        "reader": [
+          {
+            "t": "Prendere il "
+          },
+          {
+            "w": "treno",
+            "d": "train"
+          },
+          {
+            "t": " in Italia è un modo "
+          },
+          {
+            "w": "comodo",
+            "d": "comfortable"
+          },
+          {
+            "t": " per "
+          },
+          {
+            "w": "viaggiare",
+            "d": "travel"
+          },
+          {
+            "t": " tra le città."
+          }
+        ],
+        "reviewWord": "biglietto",
+        "reviewSource": "from your train station experience, 2 days ago",
+        "reviewMeaning": "ticket (il biglietto)"
       }
     ]
   },
@@ -6135,6 +12417,1087 @@ export const LANGS: any = {
         "reviewWord": "帮助",
         "reviewSource": "from your emergency call, yesterday",
         "reviewMeaning": "help (for assistance)"
+      },
+      {
+        "chapterTitle": "Chapter 7 · 机场 Airport",
+        "lessonTitle": "Checking In & Boarding",
+        "goalTitle": "Build it: check in for your flight",
+        "goalLine": "Check in for your flight — efficiently, in Mandarin.",
+        "goalShort": "check in",
+        "scenario": "airport",
+        "partnerName": "小明 Xiǎomíng",
+        "partnerInitial": "明",
+        "partnerRole": "工作人员 staff",
+        "partnerPlace": "Shanghai Airport",
+        "scenarioTitle": "机场 · Shanghai",
+        "scenarioSub": "Roleplay · check-in & seat preference",
+        "lessonPromptEn": "I need to check in for my flight.",
+        "lessonHint": "Why “需要”?",
+        "bank": [
+          "我",
+          "需要",
+          "办理",
+          "登机",
+          "托运",
+          "护照"
+        ],
+        "bankEn": [
+          "I",
+          "need",
+          "to check in",
+          "boarding",
+          "baggage",
+          "passport"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "lessonCorrectTitle": "完美！(Perfect!) 🎉",
+        "lessonCorrectBody": "“我需要 (wǒ xūyào)” = “I need”; “办理登机 (bànlǐ dēngjī)” = “to check in.”",
+        "lessonWrongBody": "Start with “我 (I),” then “需要 (need),” continue with action word.",
+        "cultureCaption": "Shanghai Airport · morning",
+        "cultureTitle": "礼貌用语 Polite expressions",
+        "cultureBody": "Using polite expressions such as “请 (qǐng)” for 'please' can greatly improve the interaction. For example, “请问登机口在哪？” (May I ask where the boarding gate is?)",
+        "culturePhrase": "“请问 (qǐng wèn)” — may I ask",
+        "milestoneTitle": "You can now check in for your flight — efficiently, in Mandarin.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "你好！请问需要什么帮助？",
+            "en": "Hello! How can I help you?"
+          },
+          {
+            "who": "u",
+            "n": "我需要办理登机。",
+            "fb": "Great — started with '我需要' (I need)"
+          },
+          {
+            "who": "p",
+            "n": "好的，请给我您的护照。",
+            "en": "Okay, please give me your passport."
+          },
+          {
+            "who": "u",
+            "n": "好的，我的护照在这里。",
+            "fb": "Perfect — '护照' = passport"
+          },
+          {
+            "who": "p",
+            "n": "谢谢，请到7号登机口。",
+            "en": "Thank you, proceed to Gate 7."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Handling possessions",
+            "body": "Use '我的' to show possession, as in '我的护照' (my passport)."
+          },
+          {
+            "title": "Need (需要) vs Want (想要)",
+            "body": "“需要” implies necessity, whereas “想要” is more of a wish."
+          }
+        ],
+        "grammarMini": "possessions",
+        "grammarTitle": "Possessions — the '我的' rule",
+        "grammarIntro": "Mandarin expresses possession in simple form without complex structures:",
+        "gTermA": "的 (de)",
+        "gDescA": "possessive particle to indicate 'of' or 'belonging to'",
+        "gExA": "我的护照 — my passport",
+        "gTermB": "这 (zhè)",
+        "gDescB": "demonstrative pronoun for this, common in conversations",
+        "gExB": "这本书 — this book",
+        "clip": "机场的忙碌早晨，与小明",
+        "podcast": "和小明在机场 — 第7集",
+        "article": "机场的快速通道",
+        "reader": [
+          {
+            "t": "在机场，人们通常要"
+          },
+          {
+            "w": "排队",
+            "d": "queue (páiduì)"
+          },
+          {
+            "t": "。他们递给工作人员"
+          },
+          {
+            "w": "护照",
+            "d": "passport (hùzhào)"
+          },
+          {
+            "t": "，并收到"
+          },
+          {
+            "w": "登机牌",
+            "d": "boarding pass (dēngjī pái)"
+          },
+          {
+            "t": "。"
+          }
+        ],
+        "reviewWord": "办理",
+        "reviewSource": "from your check-in scenario, 5 days ago",
+        "reviewMeaning": "to handle or process (an application)"
+      },
+      {
+        "chapterTitle": "Chapter 8 · 餐厅晚餐 Restaurant Dinner",
+        "lessonTitle": "Ordering & Dining Etiquette",
+        "goalTitle": "Build it: order dinner for two",
+        "goalLine": "Order a dinner for two — considerately, in Mandarin.",
+        "goalShort": "order dinner",
+        "scenario": "dinner",
+        "partnerName": "小丽 Xiǎolì",
+        "partnerInitial": "丽",
+        "partnerRole": "服务员 waitress",
+        "partnerPlace": "Beijing restaurant",
+        "scenarioTitle": "餐厅 · Beijing",
+        "scenarioSub": "Roleplay · ordering & polite requests",
+        "lessonPromptEn": "I'd like to order dinner for two.",
+        "lessonHint": "How do we express politeness?",
+        "bank": [
+          "我",
+          "想要",
+          "点",
+          "两份",
+          "晚餐",
+          "菜单"
+        ],
+        "bankEn": [
+          "I",
+          "would like",
+          "to order",
+          "two servings",
+          "dinner",
+          "menu"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "lessonCorrectTitle": "完美！(Perfect!) 🎉",
+        "lessonCorrectBody": "“我想要 (wǒ xiǎng yào)” = “I would like”; “点 (diǎn)” = “to order”",
+        "lessonWrongBody": "Begin with “我想要 (I would like),” then the action with specifics.",
+        "cultureCaption": "Beijing restaurant · evening",
+        "cultureTitle": "用餐礼仪 Dining etiquette",
+        "cultureBody": "In China, ordering the right amount of food and showing gratitude by saying '谢谢' upon receiving dishes is a part of dining etiquette.",
+        "culturePhrase": "“请给我 (qǐng gěi wǒ)” — please give me",
+        "milestoneTitle": "Order a dinner for two — considerately, in Mandarin.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "您好！您想要点些什么？",
+            "en": "Hello! What would you like to order?"
+          },
+          {
+            "who": "u",
+            "n": "我想要点两份晚餐。",
+            "fb": "Well done! '两份晚餐' captures the number and type."
+          },
+          {
+            "who": "p",
+            "n": "您要喝点什么？",
+            "en": "Would you like something to drink?"
+          },
+          {
+            "who": "u",
+            "n": "请给我一壶茶，谢谢。",
+            "fb": "Perfect — '一壶茶' (a pot of tea)"
+          },
+          {
+            "who": "p",
+            "n": "好的，稍等。",
+            "en": "Okay, please wait."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Measure word 份",
+            "body": "Use '份' for servings, as in '两份晚餐' (two servings of dinner)."
+          },
+          {
+            "title": "Expressing desire with 想要",
+            "body": "“想要” suggests you would like or wish for something politely."
+          }
+        ],
+        "grammarMini": "politeness in requests",
+        "grammarTitle": "Politeness — the '请给我' form",
+        "grammarIntro": "To express requests politely, use the following constructions:",
+        "gTermA": "请 (qǐng)",
+        "gDescA": "used for 'please,' marking requests as polite",
+        "gExA": "请给我菜单 — please give me the menu",
+        "gTermB": "想要 (xiǎng yào)",
+        "gDescB": "indicating a polite desire for something",
+        "gExB": "我想要这道菜 — I would like this dish",
+        "clip": "餐厅里的晚餐，与小丽",
+        "podcast": "和小丽共进晚餐 — 第8集",
+        "article": "餐厅的独特氛围",
+        "reader": [
+          {
+            "t": "在餐厅，人们喜欢点"
+          },
+          {
+            "w": "菜肴",
+            "d": "dishes (càiyáo)"
+          },
+          {
+            "t": "。服务员会问想要"
+          },
+          {
+            "w": "饮料",
+            "d": "drinks (yǐnliào)"
+          },
+          {
+            "t": "。点完餐后，要"
+          },
+          {
+            "w": "说",
+            "d": "say (shuō)"
+          },
+          {
+            "t": "谢谢。"
+          }
+        ],
+        "reviewWord": "两份",
+        "reviewSource": "from your dinner order, 4 days ago",
+        "reviewMeaning": "two servings (number + measure word for portions)"
+      },
+      {
+        "chapterTitle": "Chapter 9 · 工作面试 Job Interview",
+        "lessonTitle": "Introducing Yourself & Strengths",
+        "goalTitle": "Build it: present yourself confidently",
+        "goalLine": "Present yourself confidently — in Mandarin.",
+        "goalShort": "interview introduction",
+        "scenario": "interview",
+        "partnerName": "张老师 Zhāng lǎoshī",
+        "partnerInitial": "张",
+        "partnerRole": "面试官 interviewer",
+        "partnerPlace": "Shanghai office",
+        "scenarioTitle": "工作面试 · Shanghai",
+        "scenarioSub": "Roleplay · self-presentation & strengths",
+        "lessonPromptEn": "I have five years of experience.",
+        "lessonHint": "Where does the number go?",
+        "bank": [
+          "我",
+          "有",
+          "五年",
+          "经验",
+          "技能",
+          "团队"
+        ],
+        "bankEn": [
+          "I",
+          "have",
+          "five years",
+          "experience",
+          "skills",
+          "team"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "lessonCorrectTitle": "太棒了！(Awesome!) 🎉",
+        "lessonCorrectBody": "“我有 (wǒ yǒu)” = “I have”; “五年经验 (wǔ nián jīngyàn)” = “five years of experience.”",
+        "lessonWrongBody": "Begin with '我有 (I have)' followed by number and noun.",
+        "cultureCaption": "Shanghai office · noon",
+        "cultureTitle": "职场文化 Workplace culture",
+        "cultureBody": "Being punctual and properly addressing your superiors, using terms like '老师' or '经理' (teacher/manager), shows respect during interviews.",
+        "culturePhrase": "“老师 (lǎoshī)” — teacher or respected professional",
+        "milestoneTitle": "Present yourself confidently — in Mandarin.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "你好，请介绍一下你自己。",
+            "en": "Hello, please introduce yourself."
+          },
+          {
+            "who": "u",
+            "n": "我是小王，我有五年经验。",
+            "fb": "Well done — specific introduction with '五年经验'"
+          },
+          {
+            "who": "p",
+            "n": "你有什么技能？",
+            "en": "What skills do you have?"
+          },
+          {
+            "who": "u",
+            "n": "我擅长团队合作。",
+            "fb": "Great — '团队合作' means teamwork"
+          },
+          {
+            "who": "p",
+            "n": "不错，谢谢。",
+            "en": "Not bad, thank you."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Experience expressed in years",
+            "body": "Using numbers before years, as in '五年经验,' is a standard way to express experience length."
+          },
+          {
+            "title": "Suitability with 擅长",
+            "body": "“擅长” is used to mean 'be good at', indicating strengths and skills."
+          }
+        ],
+        "grammarMini": "expressing abilities",
+        "grammarTitle": "Abilities — the '擅长' form",
+        "grammarIntro": "To express something you are good at, use this format:",
+        "gTermA": "擅长 (shàncháng)",
+        "gDescA": "means 'to be skilled at,' essential for indicating talents",
+        "gExA": "我擅长数学 — I am good at math",
+        "gTermB": "能力 (nénglì)",
+        "gDescB": "means 'ability,' often followed by specific domains",
+        "gExB": "沟通能力 — communication skills",
+        "clip": "办公室访谈，与张老师",
+        "podcast": "和张老师面试 — 第9集",
+        "article": "职场新人的自我推销",
+        "reader": [
+          {
+            "t": "在面试中，重要的是能够"
+          },
+          {
+            "w": "自信",
+            "d": "confidence (zìxìn)"
+          },
+          {
+            "t": "地展示自己，尤其是"
+          },
+          {
+            "w": "技能",
+            "d": "skills (jìnéng)"
+          },
+          {
+            "t": "和"
+          },
+          {
+            "w": "经验",
+            "d": "experience (jīngyàn)"
+          },
+          {
+            "t": "。"
+          }
+        ],
+        "reviewWord": "五年",
+        "reviewSource": "from your interview introduction, 7 days ago",
+        "reviewMeaning": "five years (expressing duration)"
+      },
+      {
+        "chapterTitle": "Chapter 10 · 药店 Pharmacy",
+        "lessonTitle": "Describing Symptoms & Finding Medicine",
+        "goalTitle": "Build it: ask for medicine",
+        "goalLine": "Ask for medicine — specifically, in Mandarin.",
+        "goalShort": "ask for medicine",
+        "scenario": "pharmacy",
+        "partnerName": "小红 Xiǎohóng",
+        "partnerInitial": "红",
+        "partnerRole": "药剂师 pharmacist",
+        "partnerPlace": "Guilin pharmacy",
+        "scenarioTitle": "药店 · Guilin",
+        "scenarioSub": "Roleplay · symptoms & product retrieval",
+        "lessonPromptEn": "I have a headache. Could you recommend something?",
+        "lessonHint": "Why use “有” with symptoms?",
+        "bank": [
+          "我",
+          "有",
+          "头疼",
+          "推荐",
+          "感冒",
+          "止痛药"
+        ],
+        "bankEn": [
+          "I",
+          "have",
+          "headache",
+          "recommend",
+          "cold",
+          "painkiller"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          4
+        ],
+        "lessonCorrectTitle": "优秀！(Excellent!) 🎉",
+        "lessonCorrectBody": "“我有 (wǒ yǒu)” works to express having something, such as 'headache.'",
+        "lessonWrongBody": "Describe symptoms with '我有 (I have)' followed by the condition.",
+        "cultureCaption": "Guilin pharmacy · afternoon",
+        "cultureTitle": "中西医药 Western & Chinese Medicine",
+        "cultureBody": "In Chinese pharmacies, you can find western medicines and traditional Chinese medicine. The phrase “中西药” refers to both western and eastern practices.",
+        "culturePhrase": "中药 (zhōngyào) — traditional Chinese medicine",
+        "milestoneTitle": "You can now ask for medicine — specifically, in Mandarin.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "欢迎光临，请问有什么需要的？",
+            "en": "Welcome! How may I help you?"
+          },
+          {
+            "who": "u",
+            "n": "我有头疼，你有什么推荐吗？",
+            "fb": "Well done! Stating the symptom first with '我有'"
+          },
+          {
+            "who": "p",
+            "n": "你要中药还是西药？",
+            "en": "Do you prefer Chinese medicine or western medicine?"
+          },
+          {
+            "who": "u",
+            "n": "我想要西药。",
+            "fb": "Great — chose '西药' (western medicine)"
+          },
+          {
+            "who": "p",
+            "n": "好，这里有一种止痛药。",
+            "en": "Okay, here is a type of painkiller."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Symptoms using 有",
+            "body": "In Mandarin, express symptoms with '有,' as in '我有感冒.'"
+          },
+          {
+            "title": "Choosing medication types",
+            "body": "'中药' and '西药' distinguish between traditional and western medicine."
+          }
+        ],
+        "grammarMini": "medication types",
+        "grammarTitle": "Medication Types — '中药' vs. '西药'",
+        "grammarIntro": "Inquiring about different medication categories can be done by:",
+        "gTermA": "中药 (zhōngyào)",
+        "gDescA": "traditional medicine, often used in cultural contexts",
+        "gExA": "我想要中药治感冒 — I want Chinese medicine for a cold",
+        "gTermB": "西药 (xīyào)",
+        "gDescB": "western medicine, popular and widely known",
+        "gExB": "他买了西药治头疼 — He bought western medicine for his headache",
+        "clip": "药店的选择，与小红",
+        "podcast": "和小红在药店 — 第10集",
+        "article": "中药在现代生活中的地位",
+        "reader": [
+          {
+            "t": "在药店，你可以找到"
+          },
+          {
+            "w": "各种",
+            "d": "various (gèzhǒng)"
+          },
+          {
+            "t": "药物。如果你"
+          },
+          {
+            "w": "不舒服",
+            "d": "feel unwell (bù shūfú)"
+          },
+          {
+            "t": "，可以向药剂师"
+          },
+          {
+            "w": "咨询",
+            "d": "consult (zīxún)"
+          },
+          {
+            "t": "。"
+          }
+        ],
+        "reviewWord": "头疼",
+        "reviewSource": "from your pharmacy visit, 6 days ago",
+        "reviewMeaning": "headache (symptom description)"
+      },
+      {
+        "chapterTitle": "Chapter 11 · 辩论 Debate",
+        "lessonTitle": "Expressing Opinions & Support",
+        "goalTitle": "Build it: state your argument",
+        "goalLine": "State your argument — firmly, in Mandarin.",
+        "goalShort": "debate argument",
+        "scenario": "debate",
+        "partnerName": "小云 Xiǎoyún",
+        "partnerInitial": "云",
+        "partnerRole": "对手 opponent",
+        "partnerPlace": "University campus",
+        "scenarioTitle": "辩论 · University",
+        "scenarioSub": "Roleplay · stating & defending arguments",
+        "lessonPromptEn": "I believe we should support local businesses.",
+        "lessonHint": "How do we introduce beliefs?",
+        "bank": [
+          "我",
+          "认为",
+          "我们",
+          "应该",
+          "支持",
+          "企业"
+        ],
+        "bankEn": [
+          "I",
+          "believe",
+          "we",
+          "should",
+          "support",
+          "businesses"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "lessonCorrectTitle": "完美无缺！(Flawless!) 🎉",
+        "lessonCorrectBody": "“我认为 (wǒ rènwéi)” = “I believe”; “应该 (yīnggāi)” suggests ought to or should.",
+        "lessonWrongBody": "Start with '我认为 (I believe),' then state your stance.",
+        "cultureCaption": "University campus · afternoon",
+        "cultureTitle": "文化支持 Cultural support",
+        "cultureBody": "Debating in Mandarin is often formalized with structure, including opening lines like '我认为.' Respectful dialogue is key.",
+        "culturePhrase": "“不同意 (bù tóngyì)” — disagree",
+        "milestoneTitle": "State your argument — firmly, in Mandarin.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "你对这个问题怎么看？",
+            "en": "What is your opinion on this matter?"
+          },
+          {
+            "who": "u",
+            "n": "我认为我们应该支持本地企业。",
+            "fb": "Great! Used '我认为' to introduce belief"
+          },
+          {
+            "who": "p",
+            "n": "为什么这样认为？",
+            "en": "Why do you think so?"
+          },
+          {
+            "who": "u",
+            "n": "因为它能促进经济。",
+            "fb": "Perfect — clear reason given"
+          },
+          {
+            "who": "p",
+            "n": "你说得有道理。",
+            "en": "You make a valid point."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Belief introduction",
+            "body": "Starting with '我认为' makes a sentence more assertive and opens your argument clearly."
+          },
+          {
+            "title": "Using 应该 for suggestions",
+            "body": "'应该' often precedes actions or supports suggestions you deem necessary."
+          }
+        ],
+        "grammarMini": "expressing beliefs",
+        "grammarTitle": "Expressing Beliefs — the '我认为' form",
+        "grammarIntro": "Introducing beliefs and thoughts with assertive yet respectful phrases:",
+        "gTermA": "认为 (rènwéi)",
+        "gDescA": "means 'to believe' or 'consider'",
+        "gExA": "我认为他很优秀 — I believe he is outstanding",
+        "gTermB": "支持 (zhīchí)",
+        "gDescB": "to express support or be in favor",
+        "gExB": "支持环保 — support environmental protection",
+        "clip": "辩论的火花，与小云",
+        "podcast": "和小云辩论 — 第11集",
+        "article": "如何在辩论中表达观点",
+        "reader": [
+          {
+            "t": "在辩论中，你需要"
+          },
+          {
+            "w": "表明",
+            "d": "express (biǎomíng)"
+          },
+          {
+            "t": "你的观点，并且用"
+          },
+          {
+            "w": "理由",
+            "d": "reasons (lǐyóu)"
+          },
+          {
+            "t": "去支持它。"
+          }
+        ],
+        "reviewWord": "支持",
+        "reviewSource": "from your debate, 3 days ago",
+        "reviewMeaning": "support (expression of agreement)"
+      },
+      {
+        "chapterTitle": "Chapter 12 · 自由交谈 Free Talk",
+        "lessonTitle": "Casual Conversations & Small Talk",
+        "goalTitle": "Build it: engage in small talk",
+        "goalLine": "Engage in small talk — naturally, in Mandarin.",
+        "goalShort": "small talk",
+        "scenario": "freetalk",
+        "partnerName": "小白 Xiǎobái",
+        "partnerInitial": "白",
+        "partnerRole": "朋友 friend",
+        "partnerPlace": "Local coffee shop",
+        "scenarioTitle": "自由交谈 · Café",
+        "scenarioSub": "Roleplay · spontaneous conversation",
+        "lessonPromptEn": "It is nice weather today.",
+        "lessonHint": "How do we highlight observed conditions?",
+        "bank": [
+          "今天天气",
+          "很",
+          "好",
+          "你",
+          "觉得",
+          "如何"
+        ],
+        "bankEn": [
+          "Today's weather",
+          "very",
+          "good",
+          "you",
+          "think",
+          "how"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          5
+        ],
+        "lessonCorrectTitle": "一针见血！(Spot on!) 🎉",
+        "lessonCorrectBody": "“今天天气很 (jīntiān tiānqì hěn)” = “Today's weather is”; “好” reinforces condition as positive.",
+        "lessonWrongBody": "Specify the topic; '今天天气很 (Today's weather is)' sets the condition.",
+        "cultureCaption": "Local coffee shop · afternoon",
+        "cultureTitle": "闲聊传统 Small talk traditions",
+        "cultureBody": "In Chinese culture, talking about the weather or a shared environment is a common icebreaker.",
+        "culturePhrase": "“天气真好 (tiānqì zhēn hǎo)” — the weather is really nice",
+        "milestoneTitle": "Engage in small talk — naturally, in Mandarin.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "今天天气真不错。",
+            "en": "The weather is quite nice today."
+          },
+          {
+            "who": "u",
+            "n": "是啊，今天天气很好。",
+            "fb": "Correct — '今天天气' structure is spot on."
+          },
+          {
+            "who": "p",
+            "n": "你通常去哪儿散步？",
+            "en": "Where do you usually go for a walk?"
+          },
+          {
+            "who": "u",
+            "n": "我喜欢去公园。",
+            "fb": "Great — concise answer"
+          },
+          {
+            "who": "p",
+            "n": "那真不错！",
+            "en": "That's nice!"
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Stating obvious conditions",
+            "body": "Expressing obvious or shared conditions using '今天天气' or similar setups."
+          },
+          {
+            "title": "Engaging with 是啊",
+            "body": "'是啊' is a casual agreement, echoing friendliness in a chat."
+          }
+        ],
+        "grammarMini": "casual agreement",
+        "grammarTitle": "Agreement — the '是啊' form",
+        "grammarIntro": "Utilize casual expressions for agreement in relaxed settings:",
+        "gTermA": "是啊 (shì a)",
+        "gDescA": "casual affirming like 'yeah' or 'right'",
+        "gExA": "天气很好，是啊？ — The weather's nice, yeah?",
+        "gTermB": "不错 (búcuò)",
+        "gDescB": "means 'not bad' or affirming positively",
+        "gExB": "这个菜不错 — This dish is good",
+        "clip": "咖啡店里的小闲聊，与小白",
+        "podcast": "和小白自由闲聊 — 第12集",
+        "article": "中国人的闲聊艺术",
+        "reader": [
+          {
+            "t": "在中国，朋友们喜欢闲聊"
+          },
+          {
+            "w": "见闻",
+            "d": "what they've seen and heard (jiànwén)"
+          },
+          {
+            "t": "，特别是关于"
+          },
+          {
+            "w": "天气",
+            "d": "weather (tiānqì)"
+          },
+          {
+            "t": "。"
+          }
+        ],
+        "reviewWord": "很好",
+        "reviewSource": "from your café conversation, 2 days ago",
+        "reviewMeaning": "very good (simple positive statement)"
+      },
+      {
+        "chapterTitle": "Chapter 13 · 分班测试 Placement Check",
+        "lessonTitle": "Assessing Levels & Offering Guidance",
+        "goalTitle": "Build it: describe your language level",
+        "goalLine": "Describe your language level — clearly, in Mandarin.",
+        "goalShort": "language level",
+        "scenario": "placement",
+        "partnerName": "老师老师 Lǎoshī",
+        "partnerInitial": "师",
+        "partnerRole": "评估员 assessor",
+        "partnerPlace": "Language Institute",
+        "scenarioTitle": "分班测试 · Institute",
+        "scenarioSub": "Roleplay · expressing level & receiving advice",
+        "lessonPromptEn": "I am at the intermediate level.",
+        "lessonHint": "Using '在' for stating status/place?",
+        "bank": [
+          "我",
+          "在",
+          "中级",
+          "语言",
+          "水平",
+          "班级"
+        ],
+        "bankEn": [
+          "I",
+          "am at",
+          "intermediate",
+          "language",
+          "level",
+          "class"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          4
+        ],
+        "lessonCorrectTitle": "非常好！(Very good!) 🎉",
+        "lessonCorrectBody": "“我在 (wǒ zài)” = “I am at”; “中级水平 (zhōngjí shuǐpíng)” defines 'intermediate level.'",
+        "lessonWrongBody": "Identify yourself first, then '在' to place context.",
+        "cultureCaption": "Language Institute · morning",
+        "cultureTitle": "学习进展 Progress in learning",
+        "cultureBody": "Communicating your language capabilities in a clear and meaningful way can greatly enhance guidance received.",
+        "culturePhrase": "“继续努力 (jìxù nǔlì)” — keep working hard",
+        "milestoneTitle": "Describe your language level — clearly, in Mandarin.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "请告诉我你的语言水平。",
+            "en": "Please tell me your language level."
+          },
+          {
+            "who": "u",
+            "n": "我在中级水平。",
+            "fb": "Good clarity with '我在'"
+          },
+          {
+            "who": "p",
+            "n": "我建议你参加中级班。",
+            "en": "I suggest you join the intermediate class."
+          },
+          {
+            "who": "u",
+            "n": "谢谢您的建议。",
+            "fb": "Polite gratitude in response"
+          },
+          {
+            "who": "p",
+            "n": "不客气，继续努力！",
+            "en": "You're welcome, keep it up!"
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Placing context with 在",
+            "body": "Use '在' when indicating status, level, or place."
+          },
+          {
+            "title": "Offering suggestions",
+            "body": "Using 建议 (suggest), reflects helpful counsel."
+          }
+        ],
+        "grammarMini": "descriptive status",
+        "grammarTitle": "Describing Status — the '我在' form",
+        "grammarIntro": "Situating oneself contextually includes the tools like:",
+        "gTermA": "在 (zài)",
+        "gDescA": "acts as 'at' or 'in,' situational or noun settings",
+        "gExA": "我在家 — I am at home",
+        "gTermB": "水平 (shuǐpíng)",
+        "gDescB": "means 'level,' crucial for assessing competence",
+        "gExB": "语言水平 — language level",
+        "clip": "语言学院的测试评估",
+        "podcast": "和老师老师的水平测试 — 第13集",
+        "article": "语言学习者的自我评估",
+        "reader": [
+          {
+            "t": "在语言班级中，你可以根据"
+          },
+          {
+            "w": "自身",
+            "d": "oneself (zìshēn)"
+          },
+          {
+            "t": "水平选择适合的"
+          },
+          {
+            "w": "课程",
+            "d": "courses (kèchéng)"
+          },
+          {
+            "t": "。"
+          }
+        ],
+        "reviewWord": "中级",
+        "reviewSource": "from your placement session, 7 days ago",
+        "reviewMeaning": "intermediate (level descriptor)"
+      },
+      {
+        "chapterTitle": "Chapter 14 · 银行 At the Bank",
+        "lessonTitle": "Banking Transactions & Inquiries",
+        "goalTitle": "Build it: withdraw cash",
+        "goalLine": "Withdraw cash — securely, in Mandarin.",
+        "goalShort": "withdraw cash",
+        "scenario": "bank",
+        "partnerName": "小刘 Xiǎoliú",
+        "partnerInitial": "刘",
+        "partnerRole": "收银员 teller",
+        "partnerPlace": "Beijing Bank",
+        "scenarioTitle": "银行 · Beijing",
+        "scenarioSub": "Roleplay · transaction & inquiry",
+        "lessonPromptEn": "I would like to withdraw 500 yuan.",
+        "lessonHint": "How do we involve quantity?",
+        "bank": [
+          "我",
+          "想",
+          "取",
+          "五百",
+          "元",
+          "现金"
+        ],
+        "bankEn": [
+          "I",
+          "want",
+          "withdraw",
+          "five hundred",
+          "yuan",
+          "cash"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          4
+        ],
+        "lessonCorrectTitle": "真不错！(Very nice!) 🎉",
+        "lessonCorrectBody": "“我想 (wǒ xiǎng)” = “I would like”; “取现金 (qǔ xiànjīn)” = “withdraw cash.”",
+        "lessonWrongBody": "Start with '我想 (I would like),' then specify amount and purpose.",
+        "cultureCaption": "Beijing Bank · noon",
+        "cultureTitle": "银行交易 Bank transactions",
+        "cultureBody": "In Mandarin, using polite expressions in banks can assist smoother operations. Practicing clear intent with numbers is key.",
+        "culturePhrase": "“存款 (cúnkuǎn)” — deposit",
+        "milestoneTitle": "Withdraw cash — securely, in Mandarin.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "您好，需要办理什么业务？",
+            "en": "Hello, what service do you need?"
+          },
+          {
+            "who": "u",
+            "n": "我想取五百元现金。",
+            "fb": "Well placed request with '我想取'"
+          },
+          {
+            "who": "p",
+            "n": "请出示您的身份证。",
+            "en": "Please show your ID card."
+          },
+          {
+            "who": "u",
+            "n": "好的，这是我的身份证。",
+            "fb": "Good provision of document."
+          },
+          {
+            "who": "p",
+            "n": "谢谢，稍等。",
+            "en": "Thank you, please wait."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Numbers in transactions",
+            "body": "Ensure precision with numbers like '五百' for clarity in transactions."
+          },
+          {
+            "title": "Stating financial actions",
+            "body": "Select terms like '取,' meaning to take or withdraw, specific to actions."
+          }
+        ],
+        "grammarMini": "numbers & finance",
+        "grammarTitle": "Numbers & Finance — the '五百元' form",
+        "grammarIntro": "Incorporate exact numbers for finance-related conversations:",
+        "gTermA": "元 (yuán)",
+        "gDescA": "basic monetary unit, used in everyday transitions",
+        "gExA": "三十元 — thirty yuan",
+        "gTermB": "现金 (xiànjīn)",
+        "gDescB": "means 'cash', relevant when discussing types of money",
+        "gExB": "支付现金 — pay in cash",
+        "clip": "银行交易的日常，与小刘",
+        "podcast": "和小刘的银行事务 — 第14集",
+        "article": "了解银行服务的基础",
+        "reader": [
+          {
+            "t": "在银行，你可以选择"
+          },
+          {
+            "w": "取款",
+            "d": "withdraw (qǔkuǎn)"
+          },
+          {
+            "t": "或者"
+          },
+          {
+            "w": "存款",
+            "d": "deposit (cúnkuǎn)"
+          },
+          {
+            "t": "。"
+          }
+        ],
+        "reviewWord": "取现",
+        "reviewSource": "from your banking transaction, 4 days ago",
+        "reviewMeaning": "withdraw cash (financial action)"
+      },
+      {
+        "chapterTitle": "Chapter 15 · 坐火车 Taking the Train",
+        "lessonTitle": "Buying Tickets & Giving Directions",
+        "goalTitle": "Build it: buy a train ticket",
+        "goalLine": "Buy a train ticket — efficiently, in Mandarin.",
+        "goalShort": "buy train ticket",
+        "scenario": "train",
+        "partnerName": "小张 Xiǎozhāng",
+        "partnerInitial": "张",
+        "partnerRole": "售票员 ticket clerk",
+        "partnerPlace": "Shanghai Station",
+        "scenarioTitle": "火车站 · Shanghai",
+        "scenarioSub": "Roleplay · purchasing tickets & finding platforms",
+        "lessonPromptEn": "I need a ticket to Beijing.",
+        "lessonHint": "How does need differ from want?",
+        "bank": [
+          "我",
+          "要",
+          "买",
+          "去",
+          "北京",
+          "的票"
+        ],
+        "bankEn": [
+          "I",
+          "want",
+          "buy",
+          "to",
+          "Beijing",
+          "ticket"
+        ],
+        "correct": [
+          0,
+          1,
+          3,
+          5
+        ],
+        "lessonCorrectTitle": "十分完美！(Really perfect!) 🎉",
+        "lessonCorrectBody": "“我要 (wǒ yào)” = “I want to”; “的票 (de piào)” = “ticket” specific to destination.",
+        "lessonWrongBody": "Lead with '我' and express objective with '要.'",
+        "cultureCaption": "Shanghai Station · morning",
+        "cultureTitle": "铁路出行 Train travel",
+        "cultureBody": "Train travel is common in China, requiring clear destination requests. Phrases like '去哪里' help determine the destination clearly.",
+        "culturePhrase": "“终点 (zhōngdiǎn)” — destination",
+        "milestoneTitle": "Buy a train ticket — efficiently, in Mandarin.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "您好，请问去哪里？",
+            "en": "Hello, where to?"
+          },
+          {
+            "who": "u",
+            "n": "我要去北京的票。",
+            "fb": "Great accuracy with '去北京的票.'"
+          },
+          {
+            "who": "p",
+            "n": "单程还是往返？",
+            "en": "One-way or round trip?"
+          },
+          {
+            "who": "u",
+            "n": "单程，谢谢。",
+            "fb": "Right choice with '单程.'"
+          },
+          {
+            "who": "p",
+            "n": "好的，您的票。",
+            "en": "Okay, here is your ticket."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Defining route with 去",
+            "body": "'去' clarifies intended route or destination, crucial in transport."
+          },
+          {
+            "title": "Travel ticket types",
+            "body": "Specify '单程' (one-way) or '往返' (round trip) for clear communication."
+          }
+        ],
+        "grammarMini": "location & movement",
+        "grammarTitle": "Travel Directions — the '去北京' form",
+        "grammarIntro": "Requesting travel specifics necessitates clear intent and structure:",
+        "gTermA": "去 (qù)",
+        "gDescA": "direction, often associated with reaching places or goals",
+        "gExA": "去学校 — go to school",
+        "gTermB": "票 (piào)",
+        "gDescB": "indicates ticket, necessary in travel discussions",
+        "gExB": "两张票 — two tickets",
+        "clip": "火车站的旅途，与小张",
+        "podcast": "和小张的火车出行 — 第15集",
+        "article": "中国铁路旅行的指南",
+        "reader": [
+          {
+            "t": "在火车站，乘客通常需要"
+          },
+          {
+            "w": "购票",
+            "d": "purchase tickets (gòupiào)"
+          },
+          {
+            "t": "并查看"
+          },
+          {
+            "w": "列车",
+            "d": "trains (lièchē)"
+          },
+          {
+            "t": "信息。"
+          }
+        ],
+        "reviewWord": "北京的票",
+        "reviewSource": "from your train booking, 5 days ago",
+        "reviewMeaning": "ticket to Beijing (destination specific)"
       }
     ]
   },
@@ -6858,6 +14221,1061 @@ export const LANGS: any = {
         "reviewWord": "مساعدة",
         "reviewSource": "from your safety lesson, 5 days ago",
         "reviewMeaning": "help (musāʿada)"
+      },
+      {
+        "chapterTitle": "Chapter 7 · في المطار Airport",
+        "lessonTitle": "Traveling & Customs",
+        "goalTitle": "Navigate it: pass through customs",
+        "goalLine": "Successfully pass through customs — in Arabic.",
+        "goalShort": "pass through customs",
+        "scenario": "airport",
+        "partnerName": "أحمد Ahmed",
+        "partnerInitial": "أ",
+        "partnerRole": "موظف الجمارك customs officer",
+        "partnerPlace": "the airport",
+        "scenarioTitle": "في المطار · Airport",
+        "scenarioSub": "Roleplay · customs & travel vocab",
+        "lessonPromptEn": "I'm here on vacation.",
+        "lessonHint": "Why “عطلة”?",
+        "bank": [
+          "أنا",
+          "هنا",
+          "في",
+          "عطلة",
+          "العمل",
+          "جواز"
+        ],
+        "bankEn": [
+          "I",
+          "here",
+          "on/in",
+          "vacation",
+          "work",
+          "passport"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "lessonCorrectTitle": "ممتاز! (Excellent!) 🎉",
+        "lessonCorrectBody": "“أنا (ana)” = “I”; “عطلة (ʿuṭla)” = “vacation” in Arabic.",
+        "lessonWrongBody": "Start with “أنا” (I), follow with your intention “هنا في عطلة”.",
+        "cultureCaption": "An airport · gateway",
+        "cultureTitle": "Respectful Interaction at Customs",
+        "cultureBody": "In the Arab world, politely addressing customs officers is important. A simple “السلام عليكم” (peace be upon you) can make the process smoother.",
+        "culturePhrase": "“السلام عليكم (as-salāmu ʿalaykum)” — peace be upon you; typical greeting.",
+        "milestoneTitle": "You can now navigate airport customs — in Arabic.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "مرحباً! هل هذه أول مرة لك في هذا البلد؟",
+            "en": "Hello! Is this your first time in this country?"
+          },
+          {
+            "who": "u",
+            "n": "نعم، أنا هنا في عطلة.",
+            "fb": "Good — ‘في عطلة’ means on vacation."
+          },
+          {
+            "who": "p",
+            "n": "أين ستقيم؟",
+            "en": "Where will you be staying?"
+          },
+          {
+            "who": "u",
+            "n": "في الفندق، وسط المدينة.",
+            "fb": "Perfect — ‘في الفندق’ is common for ‘in the hotel’."
+          },
+          {
+            "who": "p",
+            "n": "حسناً، استمتع برحلتك!",
+            "en": "Alright, enjoy your trip!"
+          }
+        ],
+        "debrief": [
+          {
+            "title": "النص فوق الأرقام",
+            "body": "Remember, Arabic is read right-to-left, including numbers written in Arabic script."
+          },
+          {
+            "title": "استخدام السلام عليكم",
+            "body": "‘السلام عليكم’ can replace ‘hello,’ especially in formal contexts like customs."
+          }
+        ],
+        "grammarMini": "عطلة vacation",
+        "grammarTitle": "The Word ‘عطلة’",
+        "grammarIntro": "‘عطلة’ can mean holiday or vacation depending on the context:",
+        "gTermA": "عطلة رسمية",
+        "gDescA": "“official holiday” — often public holidays.",
+        "gExA": "عطلة رسمية في البلاد اليوم.",
+        "gTermB": "عطلة نهاية الأسبوع",
+        "gDescB": "“weekend” — common term",
+        "gExB": "عطلة نهاية الأسبوع تبدأ غداً.",
+        "clip": "ميناء الطائرات، في النهار والليل",
+        "podcast": "حكايات المسافرين — الحلقة 7",
+        "article": "السفر والضيافة في العالم العربي",
+        "reader": [
+          {
+            "t": "عند وصولك إلى المطار، يجب "
+          },
+          {
+            "w": "أحياناً",
+            "d": "sometimes ('aḥyānāan)"
+          },
+          {
+            "t": "الانتظار لفترة ضمن إجراءات "
+          },
+          {
+            "w": "الجمارك",
+            "d": "customs (al-jamārak)"
+          },
+          {
+            "t": " . مرحباً بكم في بلدنا!"
+          }
+        ],
+        "reviewWord": "جواز",
+        "reviewSource": "from your airport visit, 3 days ago",
+        "reviewMeaning": "passport"
+      },
+      {
+        "chapterTitle": "Chapter 8 · في المطعم Dinner",
+        "lessonTitle": "Ordering Dinner",
+        "goalTitle": "Order it: make a dinner reservation",
+        "goalLine": "Reserve a table and order dinner — in Arabic.",
+        "goalShort": "make a reservation",
+        "scenario": "dinner",
+        "partnerName": "سامي Sami",
+        "partnerInitial": "س",
+        "partnerRole": "نادل waiter",
+        "partnerPlace": "a restaurant",
+        "scenarioTitle": "في المطعم · Dinner",
+        "scenarioSub": "Roleplay · reservation and ordering",
+        "lessonPromptEn": "I'd like to reserve a table for two.",
+        "lessonHint": "Why “أريد”?",
+        "bank": [
+          "أريد",
+          "حجز",
+          "طاولة",
+          "لشخصين",
+          "القائمة",
+          "المشروبات"
+        ],
+        "bankEn": [
+          "I want",
+          "reservation",
+          "table",
+          "for two people",
+          "menu",
+          "drinks"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "lessonCorrectTitle": "ممتاز! (Excellent!) 🎉",
+        "lessonCorrectBody": "“أريد (urīd)” = “I want”; “لشخصين (li-shakhsayn) = “for two people.”",
+        "lessonWrongBody": "Start with “أريد” (I'd like), then specify “حجز طاولة لشخصين.”",
+        "cultureCaption": "A dinner table · inviting atmosphere",
+        "cultureTitle": "Dinner Etiquette",
+        "cultureBody": "In Arab cultures, sharing a meal is an invitation to bond as much as it is to eat. Meals often start with ‘بسم الله’ (in the name of God).",
+        "culturePhrase": "“بسم الله (bismillah)” — said before beginning to eat.",
+        "milestoneTitle": "You can now make dinner reservations — in Arabic.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "مرحباً، كيف يمكنني مساعدتك؟",
+            "en": "Hello, how can I assist you?"
+          },
+          {
+            "who": "u",
+            "n": "أريد حجز طاولة لشخصين من فضلك.",
+            "fb": "Well done — `لشخصين` is key for ‘for two people.’"
+          },
+          {
+            "who": "p",
+            "n": "هل تود رؤية القائمة أولاً؟",
+            "en": "Would you like to see the menu first?"
+          },
+          {
+            "who": "u",
+            "n": "نعم، من فضلك.",
+            "fb": "Perfect — `من فضلك` keeps it polite."
+          },
+          {
+            "who": "p",
+            "n": "تفضّل القائمه، استمتع بوقتك معنا!",
+            "en": "Here is the menu, enjoy your time with us!"
+          }
+        ],
+        "debrief": [
+          {
+            "title": "حقائق عن الحجز",
+            "body": "Making reservations is common in high-end restaurants; in smaller spots, a call can suffice."
+          },
+          {
+            "title": "ماذا تعني القائمة",
+            "body": "In Arabic, ‘القائمة’ is specifically for menus, like ‘la carte’ in French."
+          }
+        ],
+        "grammarMini": "طاولة table",
+        "grammarTitle": "Using ‘طاولة’ for Table",
+        "grammarIntro": "‘طاولة’ is the term for table, essential for dining:",
+        "gTermA": "طاولة الطعام",
+        "gDescA": "“dining table” — used for family meals",
+        "gExA": "نحن نتناول الطعام على طاولة الطعام.",
+        "gTermB": "طاولة الاجتماع",
+        "gDescB": "“meeting table” — used in office settings.",
+        "gExB": "الاجتماع سيعقد على طاولة الاجتماع.",
+        "clip": "في المدينة، أصوات المطاعم والطهاة",
+        "podcast": "مغامرات الطهاة — الحلقة 8",
+        "article": "فن الطعام في الشرق الأوسط",
+        "reader": [
+          {
+            "t": "إذا دخلت مطعماً عربياً، قد "
+          },
+          {
+            "w": "تلاحظ",
+            "d": "notice (tulāḥiẓ)"
+          },
+          {
+            "t": " كيف"
+          },
+          {
+            "w": "يهتم",
+            "d": "care (yahtam)"
+          },
+          {
+            "t": " النادل بكل شيء."
+          }
+        ],
+        "reviewWord": "المشروبات",
+        "reviewSource": "from your dinner visit, yesterday",
+        "reviewMeaning": "drinks"
+      },
+      {
+        "chapterTitle": "Chapter 9 · مقابلة العمل Job Interview",
+        "lessonTitle": "Professional & Ambitions",
+        "goalTitle": "Ace it: answer interview questions",
+        "goalLine": "Confidently handle a job interview — in Arabic.",
+        "goalShort": "pass interview",
+        "scenario": "interview",
+        "partnerName": "مريم Mariam",
+        "partnerInitial": "م",
+        "partnerRole": "مديرة الموارد البشرية HR Manager",
+        "partnerPlace": "the HR office",
+        "scenarioTitle": "مقابلة العمل · Interview",
+        "scenarioSub": "Roleplay · answering & questioning",
+        "lessonPromptEn": "I am looking for new challenges.",
+        "lessonHint": "Why “تحديات”?",
+        "bank": [
+          "أنا",
+          "أبحث",
+          "عن",
+          "تحديات",
+          "شخصية",
+          "وظيفة"
+        ],
+        "bankEn": [
+          "I",
+          "am looking",
+          "for",
+          "challenges",
+          "personal",
+          "job"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "lessonCorrectTitle": "ممتاز! (Excellent!) 🎉",
+        "lessonCorrectBody": "“أنا (ana)” = “I”; “تحديات (taḥaddiyāt)” = “challenges” shows initiative.",
+        "lessonWrongBody": "Start with “أنا أبحث” (I am looking), then “عن تحديات.”",
+        "cultureCaption": "Professional setting · office vibe",
+        "cultureTitle": "Navigate Job Interviews",
+        "cultureBody": "In the Arab world, showcasing both your skills and personality is essential. Being respectful and poised is often valued highly.",
+        "culturePhrase": "“إن شاء الله (in shā’ Allāh)” — often used when discussing future intentions or plans.",
+        "milestoneTitle": "You can now participate in job interviews — in Arabic.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "مرحباً، حدثني عن نفسك قليلاً.",
+            "en": "Hello, tell me a bit about yourself."
+          },
+          {
+            "who": "u",
+            "n": "أنا أبحث عن تحديات جديدة.",
+            "fb": "Great — it implies you welcome growth."
+          },
+          {
+            "who": "p",
+            "n": "ما هي المهارات التي تجلبها للفريق؟",
+            "en": "What skills do you bring to the team?"
+          },
+          {
+            "who": "u",
+            "n": "لدي خبرة في الإدارة وقيادة الفرق.",
+            "fb": "Perfect — highlights leadership and management skills."
+          },
+          {
+            "who": "p",
+            "n": "هذا جيد، سنبقى على اتصال!",
+            "en": "That's good, we will keep in touch!"
+          }
+        ],
+        "debrief": [
+          {
+            "title": "كون موجزاً وموضوعياً",
+            "body": "Interviews often value concise yet comprehensive responses—think big picture."
+          },
+          {
+            "title": "استخدام التعبيرات المناسبة",
+            "body": "Using ‘إن شاء الله’ can demonstrate cultural understanding and respect."
+          }
+        ],
+        "grammarMini": "البحث search",
+        "grammarTitle": "The Verb ‘بحث’",
+        "grammarIntro": "In Arabic, ‘بحث’ denotes searching or researching:",
+        "gTermA": "بحث علمي",
+        "gDescA": "“scientific research” — used in academic contexts",
+        "gExA": "يقوم الطلاب بإجراء بحث علمي.",
+        "gTermB": "بحث عن وظيفة",
+        "gDescB": "“job hunting” — common phrase",
+        "gExB": "أبحث عن وظيفة جديدة منذ شهر.",
+        "clip": "المدينة، مع زملاء ومكالمات العمل",
+        "podcast": "حديث الشركات الناشئة — الحلقة 9",
+        "article": "المقابلات الوظيفية وثقافة العمل",
+        "reader": [
+          {
+            "t": "يمكنك البدء بتحية المُقابِل، ثم "
+          },
+          {
+            "w": "الإجابة",
+            "d": "answer (al-ījāba)"
+          },
+          {
+            "t": " عن كل أسئلته بوضوح وثقة، ولا تنسى قول "
+          },
+          {
+            "w": "شكراً",
+            "d": "thank you (shukran)"
+          },
+          {
+            "t": " في النهاية."
+          }
+        ],
+        "reviewWord": "وظيفة",
+        "reviewSource": "from your interview prep, 4 days ago",
+        "reviewMeaning": "job"
+      },
+      {
+        "chapterTitle": "Chapter 10 · في الصيدلية Pharmacy",
+        "lessonTitle": "Health & Remedies",
+        "goalTitle": "Solve it: find the right medicine",
+        "goalLine": "Find and buy the right medicine — in Arabic.",
+        "goalShort": "get medicine",
+        "scenario": "pharmacy",
+        "partnerName": "لينا Leena",
+        "partnerInitial": "ل",
+        "partnerRole": "صيدلانية pharmacist",
+        "partnerPlace": "a pharmacy",
+        "scenarioTitle": "في الصيدلية · Pharmacy",
+        "scenarioSub": "Roleplay · health advice",
+        "lessonPromptEn": "I need something for a headache.",
+        "lessonHint": "Why “صداع”?",
+        "bank": [
+          "أنا",
+          "أحتاج",
+          "إلى",
+          "شيء",
+          "لصداع",
+          "دواء"
+        ],
+        "bankEn": [
+          "I",
+          "need",
+          "to",
+          "something",
+          "for headache",
+          "medicine"
+        ],
+        "correct": [
+          0,
+          1,
+          3,
+          4
+        ],
+        "lessonCorrectTitle": "ممتاز! (Excellent!) 🎉",
+        "lessonCorrectBody": "“أنا (ana)” = “I”; “صداع (ṣudāʿ)” = “headache,” crucial for describing pain.",
+        "lessonWrongBody": "Start with “أنا أحتاج” (I need), then mention “إلى شيء لصداع.”",
+        "cultureCaption": "Efficient service · health advice",
+        "cultureTitle": "Pharmacy Etiquette",
+        "cultureBody": "Arab pharmacists are often approachable and helpful; explaining symptoms clearly aids effective assistance.",
+        "culturePhrase": "“لو سمحت (law samaḥt)” — ‘please’ when asking for something.",
+        "milestoneTitle": "You can now request and buy medicine — in Arabic.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "مرحباً، كيف يمكنني مساعدتك اليوم؟",
+            "en": "Hello, how can I help you today?"
+          },
+          {
+            "who": "u",
+            "n": "أحتاج إلى شيء لصداع من فضلك.",
+            "fb": "Good — ‘لصداع’ directly addresses your need."
+          },
+          {
+            "who": "p",
+            "n": "هل هناك أي أعراض أخرى؟",
+            "en": "Are there any other symptoms?"
+          },
+          {
+            "who": "u",
+            "n": "لا، فقط الصداع.",
+            "fb": "Perfect — direct and to the point."
+          },
+          {
+            "who": "p",
+            "n": "سأحضر لك الدواء المناسب حالاً.",
+            "en": "I will get you the right medicine immediately."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "اسلوب المحادثة الصحية",
+            "body": "In medical settings, clear, polite communication is key to successful assistance."
+          },
+          {
+            "title": "صيدليات العرب",
+            "body": "Pharmacies in Arab countries sometimes offer consultation services apart from just dispensing medication."
+          }
+        ],
+        "grammarMini": "المضاد الحيوي antibiotic",
+        "grammarTitle": "Using ‘المضاد الحيوي’",
+        "grammarIntro": "This term refers to antibiotics, crucial in medical lingo:",
+        "gTermA": "مضاد حيوي طبيعي",
+        "gDescA": "“natural antibiotic” — remedy from natural sources.",
+        "gExA": "بعض الأعشاب تعمل كمضاد حيوي طبيعي.",
+        "gTermB": "جرعة دواء",
+        "gDescB": "“medicine dosage” — important in prescriptions.",
+        "gExB": "ما هي الجرعة المناسبة لهذا المضاد الحيوي؟",
+        "clip": "المدينة، العيادات العامة والصيدليات",
+        "podcast": "حديث الصحة — الحلقة 10",
+        "article": "نصائح عامة للتعامل مع الأدوية",
+        "reader": [
+          {
+            "t": "عند زيارة الصيدلية، يمكنك "
+          },
+          {
+            "w": "طلب",
+            "d": "request (ṭalab)"
+          },
+          {
+            "t": " المشورة حول أي دواء تحتاجه، وشرح أعراض "
+          },
+          {
+            "w": "المرض",
+            "d": "illness (al-maraḍ)"
+          },
+          {
+            "t": " بوضوح."
+          }
+        ],
+        "reviewWord": "دواء",
+        "reviewSource": "from your pharmacy experience, 1 day ago",
+        "reviewMeaning": "medicine"
+      },
+      {
+        "chapterTitle": "Chapter 11 · مناظرة Debate",
+        "lessonTitle": "Exchange & Defend",
+        "goalTitle": "Present it: defend an argument",
+        "goalLine": "Effectively argue and defend a point — in Arabic.",
+        "goalShort": "debate an argument",
+        "scenario": "debate",
+        "partnerName": "ياسر Yaser",
+        "partnerInitial": "ي",
+        "partnerRole": "محاور debater",
+        "partnerPlace": "debate forum",
+        "scenarioTitle": "مناظرة · Debate",
+        "scenarioSub": "Roleplay · articulate & reason",
+        "lessonPromptEn": "I believe that education is a right.",
+        "lessonHint": "Why “حق”?",
+        "bank": [
+          "أنا",
+          "أعتقد",
+          "أن",
+          "التعليم",
+          "حق",
+          "واجب"
+        ],
+        "bankEn": [
+          "I",
+          "believe",
+          "that",
+          "education",
+          "right",
+          "duty"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "lessonCorrectTitle": "ممتاز! (Excellent!) 🎉",
+        "lessonCorrectBody": "“أنا (ana)” = “I”; “حق (ḥaqq)” = “right,” a strong assertion.",
+        "lessonWrongBody": "Start with “أنا أعتقد” (I believe), then your stance “أن التعليم حق.”",
+        "cultureCaption": "Formal setting · passionate speakers",
+        "cultureTitle": "The Art of Debate",
+        "cultureBody": "Debating in the Arab world emphasizes respecting your opponent while passionately defending your stance, making room for eloquence and logic.",
+        "culturePhrase": "“مع احترامي (maʿ iḥtirāmī)” — ‘with respect,’ used before disagreeing.",
+        "milestoneTitle": "You can now partake in debates — in Arabic.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "أهلاً بكم، ما هو موضوع نقاشكم اليوم؟",
+            "en": "Welcome, what is your debate topic today?"
+          },
+          {
+            "who": "u",
+            "n": "أنا أعتقد أن التعليم حق لكل فرد.",
+            "fb": "Great — firm yet inclusive statement."
+          },
+          {
+            "who": "p",
+            "n": "ما الحجج التي تدعم بها فكرتك؟",
+            "en": "What arguments support your idea?"
+          },
+          {
+            "who": "u",
+            "n": "التعليم يعزز التنمية ويقلل الفقر.",
+            "fb": "Perfect — ties education to societal benefits."
+          },
+          {
+            "who": "p",
+            "n": "اتفق معك جزئياً، لكن...",
+            "en": "I partially agree with you, but..."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "المناظرة فن الحوار",
+            "body": "Debates hinge on logic and prepared rebuttals; stay focused and courteous."
+          },
+          {
+            "title": "مهارات التعبير",
+            "body": "Articulate using respectful language, grounding arguments in evidence."
+          }
+        ],
+        "grammarMini": "حق وواجب right and duty",
+        "grammarTitle": "Distinguishing Rights and Duties",
+        "grammarIntro": "‘حق’ and ‘واجب’ are crucial in discussions:",
+        "gTermA": "حق الإنسان",
+        "gDescA": "“human right” — inalienable privileges",
+        "gExA": "كل شخص له حق الحياة والحرية.",
+        "gTermB": "الواجب الوطني",
+        "gDescB": "“national duty” — civic responsibilities",
+        "gExB": "الواجب الوطني يدعونا للمشاركة في الانتخابات.",
+        "clip": "قاعة النقاش، مع المحاورين والخبراء",
+        "podcast": "فن المناظرة والتناظر — الحلقة 11",
+        "article": "أهمية المناظرات في تطوير الفكر",
+        "reader": [
+          {
+            "t": "عندما تشارك في مناظرة، عليك "
+          },
+          {
+            "w": "تحضير",
+            "d": "prepare (taḥḍīr)"
+          },
+          {
+            "t": " حججك جيداً واستخدام "
+          },
+          {
+            "w": "الاحترام",
+            "d": "respect (al-iḥtirām)"
+          },
+          {
+            "t": " في الحوار."
+          }
+        ],
+        "reviewWord": "واجب",
+        "reviewSource": "from your debate practice, 2 days ago",
+        "reviewMeaning": "duty"
+      },
+      {
+        "chapterTitle": "Chapter 12 · حديث حر Free Talk",
+        "lessonTitle": "Casual Conversations",
+        "goalTitle": "Free flow it: engage in light conversation",
+        "goalLine": "Confidently chat about daily things — in Arabic.",
+        "goalShort": "casual chat",
+        "scenario": "freetalk",
+        "partnerName": "نورا Nora",
+        "partnerInitial": "ن",
+        "partnerRole": "زميلة colleague",
+        "partnerPlace": "a café",
+        "scenarioTitle": "حديث حر · Free Talk",
+        "scenarioSub": "Roleplay · informal interaction",
+        "lessonPromptEn": "How's your day going?",
+        "lessonHint": "Why “يومك”?",
+        "bank": [
+          "كيف",
+          "حال",
+          "يومك",
+          "أمس",
+          "جميل",
+          "مشغول"
+        ],
+        "bankEn": [
+          "how",
+          "is",
+          "your day",
+          "yesterday",
+          "beautiful",
+          "busy"
+        ],
+        "correct": [
+          0,
+          1,
+          2
+        ],
+        "lessonCorrectTitle": "ممتاز! (Excellent!) 🎉",
+        "lessonCorrectBody": "“كيف (kayfa)” = “how”; “يومك (yawmuk)” = “your day,” a personal touch.",
+        "lessonWrongBody": "Start with “كيف” (how), follow with “حال يومك.”",
+        "cultureCaption": "Relaxing atmosphere · welcoming",
+        "cultureTitle": "Friendly Chats",
+        "cultureBody": "Café culture is central in Arab society, a place for relaxed conversation and shared moments. Asking about someone's day shows genuine interest.",
+        "culturePhrase": "“كيف حالك؟ (kayfa ḥālak?)” — how are you? A warm greeting.",
+        "milestoneTitle": "You can now engage in casual chats — in Arabic.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "مرحباً، يبدو أنك مشغول اليوم!",
+            "en": "Hi, you seem busy today!"
+          },
+          {
+            "who": "u",
+            "n": "نعم، ولكن كيف حال يومك؟",
+            "fb": "Nicely done — reciprocating interest."
+          },
+          {
+            "who": "p",
+            "n": "يومي كان جيداً، شكراً! ماذا عن أمس؟",
+            "en": "My day was good, thank you! What about yesterday?"
+          },
+          {
+            "who": "u",
+            "n": "كان يوماً جميلاً مع الأصدقاء.",
+            "fb": "Perfect — keeps it lively and positive."
+          },
+          {
+            "who": "p",
+            "n": "هذا رائع! نحن بحاجة لهذه الأيام.",
+            "en": "That's great! We need those days."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "المحادثة الحرّة",
+            "body": "Keep discussions light and friendly, remember to smile—it builds rapport."
+          },
+          {
+            "title": "إنشاء الأواصر الشخصية",
+            "body": "Warm inquiries about someone's day can pave the way for richer interactions."
+          }
+        ],
+        "grammarMini": "أمس و اليوم yesterday and today",
+        "grammarTitle": "Tense Expressions",
+        "grammarIntro": "Using time-related terms enriches conversation:",
+        "gTermA": "اليوم",
+        "gDescA": "“today” — present tense context",
+        "gExA": "اليوم أشعر بالسعادة.",
+        "gTermB": "أمس",
+        "gDescB": "“yesterday” — past tense reference",
+        "gExB": "أمس شاهدت فيلماً رائعاً.",
+        "clip": "المقهى، مع مناقشات صغيرة وكبيرة",
+        "podcast": "لحظات الحياة اليومية — الحلقة 12",
+        "article": "الأحاديث الاجتماعية والعلاقات الإنسانية",
+        "reader": [
+          {
+            "t": "في المقاهي، يمكنك "
+          },
+          {
+            "w": "تبادل",
+            "d": "exchange (tabādul)"
+          },
+          {
+            "t": " الحديث عن "
+          },
+          {
+            "w": "المواضيع",
+            "d": "topics (al-mawāḍīʿ)"
+          },
+          {
+            "t": " اليومية بسهولة."
+          }
+        ],
+        "reviewWord": "مشغول",
+        "reviewSource": "from your chat session, 5 days ago",
+        "reviewMeaning": "busy"
+      },
+      {
+        "chapterTitle": "Chapter 13 · اختبار تحديد المستوى Placement Check",
+        "lessonTitle": "Assessing & Evaluating",
+        "goalTitle": "Test it: gauge your language level",
+        "goalLine": "Understand and complete a placement test — in Arabic.",
+        "goalShort": "placement test",
+        "scenario": "placement",
+        "partnerName": "علاء Alaa",
+        "partnerInitial": "ع",
+        "partnerRole": "مدرس teacher",
+        "partnerPlace": "test center",
+        "scenarioTitle": "اختبار تحديد المستوى · Placement",
+        "scenarioSub": "Roleplay · comprehension & response",
+        "lessonPromptEn": "What level do you believe represents your skills?",
+        "lessonHint": "Why “مستوى”?",
+        "bank": [
+          "ما",
+          "هو",
+          "المستوى",
+          "الذي",
+          "يعكس",
+          "قدراتك"
+        ],
+        "bankEn": [
+          "what",
+          "is",
+          "the level",
+          "that",
+          "represents",
+          "your skills"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "lessonCorrectTitle": "ممتاز! (Excellent!) 🎉",
+        "lessonCorrectBody": "“المستوى (al-mustawá)” = “the level”; a key phrase in educational settings.",
+        "lessonWrongBody": "Start with “ما هو” (what is), then proceed to “المستوى الذي يعكس قدراتك.”",
+        "cultureCaption": "Classroom · evaluative moment",
+        "cultureTitle": "Understanding Placement Tests",
+        "cultureBody": "Such tests assess where best a student fits. It isn't only about marking current skills but also about potential growth.",
+        "culturePhrase": "“تطوير (taṭwīr)” — development, a common educational goal.",
+        "milestoneTitle": "You can now navigate placement tests — in Arabic.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "مرحباً، هل أنت مستعد للاختبار؟",
+            "en": "Hello, are you ready for the test?"
+          },
+          {
+            "who": "u",
+            "n": "نعم، ما هو المستوى الذي يعكس قدراتي؟",
+            "fb": "Great — asking your level shows self-awareness."
+          },
+          {
+            "who": "p",
+            "n": "لنبدأ بالإجابة عن بعض الأسئلة.",
+            "en": "Let's start with answering some questions."
+          },
+          {
+            "who": "u",
+            "n": "أنا جاهز. تفضل بالسؤال.",
+            "fb": "Perfect — keeping it focused and ready."
+          },
+          {
+            "who": "p",
+            "n": "سأقوم بتقييمك بعد الاختبار النهائي.",
+            "en": "I'll evaluate you after the final test."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "تحديد المستوى بموضوعية",
+            "body": "Placement tests are not an end, but a guide to further language learning."
+          },
+          {
+            "title": "الثقة أثناء الاختبار",
+            "body": "Confidence and calm help when placed under timed or evaluative conditions."
+          }
+        ],
+        "grammarMini": "تقييم evaluation",
+        "grammarTitle": "‘تقييم’ in Education",
+        "grammarIntro": "‘تقييم’ is crucial, used throughout academic assessments:",
+        "gTermA": "تقييم الطالب",
+        "gDescA": "“student evaluation” — for performance feedback.",
+        "gExA": "تقييم الطالب يساعد في تطوير مهاراته.",
+        "gTermB": "تقييم العمل",
+        "gDescB": "“work evaluation” — common in job contexts.",
+        "gExB": "تم تقييم العمل بناءً على الجودة والدقة.",
+        "clip": "الاختبارات، مع الطلاب والمعلمين",
+        "podcast": "تعلم واستفادة — الحلقة 13",
+        "article": "دليل الطالب لاختبارات تحديد المستوى",
+        "reader": [
+          {
+            "t": "في اختبار تحديد المستوى، يمكنك "
+          },
+          {
+            "w": "قياس",
+            "d": "measure (qiyās)"
+          },
+          {
+            "t": " قدراتك والكشف عن "
+          },
+          {
+            "w": "الإمكانات",
+            "d": "potentials (al-imkanāt)"
+          },
+          {
+            "t": " المخفية."
+          }
+        ],
+        "reviewWord": "القدرات",
+        "reviewSource": "from your placement discussion, today",
+        "reviewMeaning": "skills"
+      },
+      {
+        "chapterTitle": "Chapter 14 · في البنك At the Bank",
+        "lessonTitle": "Finances & Services",
+        "goalTitle": "Handle it: open an account",
+        "goalLine": "Successfully open a bank account — in Arabic.",
+        "goalShort": "open account",
+        "scenario": "bank",
+        "partnerName": "خالد Khalid",
+        "partnerInitial": "خ",
+        "partnerRole": "موظف البنك bank clerk",
+        "partnerPlace": "the bank",
+        "scenarioTitle": "في البنك · Bank",
+        "scenarioSub": "Roleplay · banking procedures",
+        "lessonPromptEn": "I would like to open a savings account.",
+        "lessonHint": "Why “حساب توفير”?",
+        "bank": [
+          "أريد",
+          "فتح",
+          "حساب",
+          "توفير",
+          "جاري",
+          "البطاقة"
+        ],
+        "bankEn": [
+          "I want",
+          "open",
+          "account",
+          "savings",
+          "current",
+          "card"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "lessonCorrectTitle": "ممتاز! (Excellent!) 🎉",
+        "lessonCorrectBody": "“فتح حساب توفير” means “open a savings account”; start with intention ‘أريد’.",
+        "lessonWrongBody": "Begin with “أريد فتح” (I want to open) then type of account “حساب توفير.”",
+        "cultureCaption": "Bank setting · formal interaction",
+        "cultureTitle": "Banking Basics",
+        "cultureBody": "Arab banks require personal identification for account operations. Knowledge of terms like ‘حساب توفير’ (savings account) and ‘حساب جاري’ (current account) is essential.",
+        "culturePhrase": "“الحساب البنكي (al-ḥisāb al-bankī)” — the bank account.",
+        "milestoneTitle": "You can now open a bank account — in Arabic.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "مرحباً، كيف يمكنني مساعدتك في البنك اليوم؟",
+            "en": "Hello, how can I help you at the bank today?"
+          },
+          {
+            "who": "u",
+            "n": "أريد فتح حساب توفير.",
+            "fb": "Good — specifies the type of account needed."
+          },
+          {
+            "who": "p",
+            "n": "هل لديك بطاقة هوية؟",
+            "en": "Do you have an ID card?"
+          },
+          {
+            "who": "u",
+            "n": "نعم، لدي بطاقتي معي.",
+            "fb": "Perfect — confirms readiness for the procedure."
+          },
+          {
+            "who": "p",
+            "n": "حسناً، استكمل البيانات هنا.",
+            "en": "Alright, fill in the details here."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "الإجراءات المصرفية",
+            "body": "Bank procedures typically require clear documentation and formalities."
+          },
+          {
+            "title": "المستندات الضرورية",
+            "body": "Legal identification and initial deposits are often mandatory for new accounts."
+          }
+        ],
+        "grammarMini": "الإجراءات banking procedures",
+        "grammarTitle": "Key Banking Vocabulary",
+        "grammarIntro": "Understand essential banking terms for smooth transactions:",
+        "gTermA": "سحب المال",
+        "gDescA": "“withdraw money” — essential banking action.",
+        "gExA": "هل يمكنني سحب المال من هذا الحساب؟",
+        "gTermB": "إيداع نقدي",
+        "gDescB": "“cash deposit” — used for account funding.",
+        "gExB": "قمت بإيداع نقدي في حسابي اليوم.",
+        "clip": "الأيام في البنوك، مع العملاء والموظفين",
+        "podcast": "عالم المال والأعمال — الحلقة 14",
+        "article": "إرشادات حول إدارة الحسابات البنكية",
+        "reader": [
+          {
+            "t": "لفتح حساب في البنك، يجب "
+          },
+          {
+            "w": "تقديم",
+            "d": "submit (taqdīm)"
+          },
+          {
+            "t": " بطاقة الهوية والموافقة على "
+          },
+          {
+            "w": "الشروط",
+            "d": "terms (al-shurūṭ)"
+          },
+          {
+            "t": " المطلوبة."
+          }
+        ],
+        "reviewWord": "البطاقة",
+        "reviewSource": "from your banking experience, 2 days ago",
+        "reviewMeaning": "card"
+      },
+      {
+        "chapterTitle": "Chapter 15 · في القطار Taking the Train",
+        "lessonTitle": "Traveling & Railways",
+        "goalTitle": "Ride it: use the train system",
+        "goalLine": "Purchase a ticket and ride the train — in Arabic.",
+        "goalShort": "take the train",
+        "scenario": "train",
+        "partnerName": "عادل Adel",
+        "partnerInitial": "ع",
+        "partnerRole": "موظف التذاكر ticket agent",
+        "partnerPlace": "the train station",
+        "scenarioTitle": "في القطار · Train",
+        "scenarioSub": "Roleplay · ticket purchase and travel",
+        "lessonPromptEn": "I'd like a ticket to Riyadh, please.",
+        "lessonHint": "Why “التذكرة”?",
+        "bank": [
+          "أريد",
+          "تذكرة",
+          "إلى",
+          "الرياض",
+          "الجدول",
+          "الرحلة"
+        ],
+        "bankEn": [
+          "I want",
+          "ticket",
+          "to",
+          "Riyadh",
+          "schedule",
+          "trip"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "lessonCorrectTitle": "ممتاز! (Excellent!) 🎉",
+        "lessonCorrectBody": "“تذكرة” means “ticket,” and “إلى الرياض” specifies the destination.",
+        "lessonWrongBody": "Begin with “أريد تذكرة” (I want a ticket), then “إلى الرياض.”",
+        "cultureCaption": "Train station · bustling travel",
+        "cultureTitle": "Train Etiquette",
+        "cultureBody": "Train journeys are efficient in many Arab regions. Knowing routes and etiquette serve well. Approach staff with “لو سمحت” (please).",
+        "culturePhrase": "“الرجاء التوجه إلى المنصة (ar-rajā’ at-tawajuh ilā al-manṣa)” — please proceed to the platform.",
+        "milestoneTitle": "You can now purchase train tickets — in Arabic.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "مرحباً بك في محطة القطار، كيف يمكنني مساعدتك؟",
+            "en": "Welcome to the train station, how can I assist you?"
+          },
+          {
+            "who": "u",
+            "n": "أريد تذكرة إلى الرياض من فضلك.",
+            "fb": "Good — specifies travel intent and destination."
+          },
+          {
+            "who": "p",
+            "n": "ستكون الرحلة القادمة بعد ساعة.",
+            "en": "The next trip is in an hour."
+          },
+          {
+            "who": "u",
+            "n": "هذا مناسب، سأنتظر.",
+            "fb": "Perfect — suggests willingness to wait."
+          },
+          {
+            "who": "p",
+            "n": "حسناً، الوصول للمنصة يكون قبل عشر دقائق.",
+            "en": "Alright, proceed to the platform ten minutes prior."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "السفر بالقطار",
+            "body": "It's crucial to know departure times and platforms for smooth train travel."
+          },
+          {
+            "title": "طلب المساعدة",
+            "body": "Staff at stations are generally helpful—use polite Arabic phrases for assistance."
+          }
+        ],
+        "grammarMini": "النقل transportation",
+        "grammarTitle": "Key Train Travel Vocabulary",
+        "grammarIntro": "Learning key terms improves the commuting experience:",
+        "gTermA": "جدول القطارات",
+        "gDescA": "“train schedule” — crucial for timing",
+        "gExA": "الرجاء التحقق من جدول القطارات قبل السفر.",
+        "gTermB": "ركوب القطار",
+        "gDescB": "“boarding the train” — start of journey",
+        "gExB": "ركوب القطار يبدأ قبل عشر دقائق من الانطلاق.",
+        "clip": "محطات القطارات، مع المسافرين والمواعيد",
+        "podcast": "اكتشاف المدن بالقطار — الحلقة 15",
+        "article": "استكشاف رحلة القطار في أنحاء البلاد",
+        "reader": [
+          {
+            "t": "قبل السفر بالقطار، يجب "
+          },
+          {
+            "w": "التأكد",
+            "d": "ensure (at-ta’kud)"
+          },
+          {
+            "t": " من التذاكر ومتابعة "
+          },
+          {
+            "w": "الإرشادات",
+            "d": "instructions (al-irshādāt)"
+          },
+          {
+            "t": " المعلنة."
+          }
+        ],
+        "reviewWord": "الرحلة",
+        "reviewSource": "from your train trip, today",
+        "reviewMeaning": "trip"
       }
     ]
   },
@@ -9039,6 +17457,1090 @@ export const LANGS: any = {
         "reviewWord": "khẩn cấp",
         "reviewSource": "from your emergency preparedness, 11 days ago",
         "reviewMeaning": "emergency"
+      },
+      {
+        "chapterTitle": "Chapter 7 · Ở sân bay",
+        "lessonTitle": "Travel & Arrival",
+        "goalTitle": "Build it: check in flight",
+        "goalLine": "Check in for a flight — correctly, in Vietnamese.",
+        "goalShort": "check in flight",
+        "scenario": "airport",
+        "partnerName": "Minh",
+        "partnerInitial": "M",
+        "partnerRole": "nhân viên sân bay",
+        "partnerPlace": "Sân bay Tân Sơn Nhất",
+        "scenarioTitle": "Sân bay · Tân Sơn Nhất",
+        "scenarioSub": "Roleplay · check-in & short exchange",
+        "lessonPromptEn": "I need to check in for my flight, please.",
+        "lessonHint": "Why “làm ơn”?",
+        "bank": [
+          "Tôi",
+          "cần",
+          "làm thủ tục",
+          "xoay",
+          "gửi",
+          "hành lý"
+        ],
+        "bankEn": [
+          "I",
+          "need",
+          "check in",
+          "turn",
+          "send",
+          "luggage"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          5
+        ],
+        "lessonCorrectTitle": "Xuất sắc! 🎉",
+        "lessonCorrectBody": "“Tôi cần” is direct. Ending with “làm ơn” makes it polite.",
+        "lessonWrongBody": "Begin with “Tôi cần” (I need), then the action phrase, then “làm ơn” if needed.",
+        "cultureCaption": "Sân bay quốc tế tại Việt Nam",
+        "cultureTitle": "Flying in Vietnam",
+        "cultureBody": "Flying is common in Vietnam, connecting the vast landscapes. Manners are essential — politeness eases travel stress.",
+        "culturePhrase": "“Làm ơn” — please; adds politeness smoothly.",
+        "milestoneTitle": "You can now check in for a flight — in Vietnamese.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Xin chào, chuyến bay của bạn số mấy?",
+            "en": "Hello, what’s your flight number?"
+          },
+          {
+            "who": "u",
+            "n": "Tôi cần làm thủ tục cho chuyến bay AA123.",
+            "fb": "Excellent — stating flight number helps"
+          },
+          {
+            "who": "p",
+            "n": "Bạn có hành lý ký gửi không?",
+            "en": "Do you have checked luggage?"
+          },
+          {
+            "who": "u",
+            "n": "Có, đây là vali của tôi.",
+            "fb": "Great — stating luggage keeps it smooth"
+          },
+          {
+            "who": "p",
+            "n": "Được, đây là thẻ lên máy bay của bạn.",
+            "en": "Okay, here’s your boarding pass."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Expressing need politely",
+            "body": "Using “làm ơn” turns direct requests into polite expressions."
+          },
+          {
+            "title": "Luggage terms",
+            "body": "“Hành lý” is key for talking about your bags at airports."
+          }
+        ],
+        "grammarMini": "word order",
+        "grammarTitle": "Word Order — building sentences",
+        "grammarIntro": "Generally, Vietnamese keeps a Subject-Verb-Object structure:",
+        "gTermA": "cần",
+        "gDescA": "means need / want",
+        "gExA": "Tôi cần vé — I need a ticket",
+        "gTermB": "làm thủ tục",
+        "gDescB": "for check-in processes",
+        "gExB": "làm thủ tục chuyến bay — check in flight",
+        "clip": "Sân bay nhộn nhịp tại Tân Sơn Nhất",
+        "podcast": "Hành trình bay — tập 1",
+        "article": "Kinh nghiệm bay trong nước Việt",
+        "reader": [
+          {
+            "t": "Việt Nam có nhiều "
+          },
+          {
+            "w": "sân bay",
+            "d": "airport"
+          },
+          {
+            "t": ". An toàn là ưu tiên hàng đầu. Du khách nên làm thủ tục "
+          },
+          {
+            "w": "sớm",
+            "d": "early"
+          },
+          {
+            "t": " và luôn giữ "
+          },
+          {
+            "w": "giấy tờ",
+            "d": "documents"
+          },
+          {
+            "t": " bên mình."
+          }
+        ],
+        "reviewWord": "hành lý",
+        "reviewSource": "from airport check-in, 2 days ago",
+        "reviewMeaning": "luggage"
+      },
+      {
+        "chapterTitle": "Chapter 8 · Tại nhà hàng buổi tối",
+        "lessonTitle": "Dining & Delight",
+        "goalTitle": "Build it: order dinner",
+        "goalLine": "Order a dinner meal — politely, in Vietnamese.",
+        "goalShort": "order dinner",
+        "scenario": "dinner",
+        "partnerName": "Trúc",
+        "partnerInitial": "T",
+        "partnerRole": "phục vụ",
+        "partnerPlace": "Nhà hàng Hoa Sen",
+        "scenarioTitle": "Nhà hàng · Buổi tối",
+        "scenarioSub": "Roleplay · order & enjoy the meal",
+        "lessonPromptEn": "I would like to order the fish, please.",
+        "lessonHint": "Why honorifics?",
+        "bank": [
+          "Tôi",
+          "muốn",
+          "gọi",
+          "món",
+          "cá",
+          "thịt"
+        ],
+        "bankEn": [
+          "I",
+          "want",
+          "order",
+          "dish",
+          "fish",
+          "meat"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          4
+        ],
+        "lessonCorrectTitle": "Tuyệt vời! 🎉",
+        "lessonCorrectBody": "“Tôi muốn gọi món cá, làm ơn” keeps it polite and clear.",
+        "lessonWrongBody": "Structure it with “Tôi muốn” + action + dish + “làm ơn” for politeness.",
+        "cultureCaption": "Nhà hàng Việt Nam vào buổi tối",
+        "cultureTitle": "Dining Vietnamese Style",
+        "cultureBody": "Dinners are events to savor, with families gathering around shared dishes, stories, and laughter.",
+        "culturePhrase": "“Làm ơn” — please; a polite necessity.",
+        "milestoneTitle": "You can order dinner — politely — in Vietnamese.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Xin chào, quý khách dùng gì ạ?",
+            "en": "Hello, what would you like?"
+          },
+          {
+            "who": "u",
+            "n": "Tôi muốn gọi món cá, làm ơn.",
+            "fb": "Lovely choice — fish is often fresh and flavorful"
+          },
+          {
+            "who": "p",
+            "n": "Có cần khai vị không?",
+            "en": "Would you like a starter?"
+          },
+          {
+            "who": "u",
+            "n": "Không, cảm ơn.",
+            "fb": "No problem — straightforward and polite"
+          },
+          {
+            "who": "p",
+            "n": "Được rồi, món sẽ có ngay.",
+            "en": "Alright, the dish will be ready soon."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Ordering With Politeness",
+            "body": "Using “làm ơn” keeps the interaction smooth and respectful."
+          },
+          {
+            "title": "The Importance of “muốn”",
+            "body": "“Muốn” clearly expresses desires, pivotal for ordering."
+          }
+        ],
+        "grammarMini": "politeness markers",
+        "grammarTitle": "Politeness Markers in Dining",
+        "grammarIntro": "Markers add respect; their use varies with context:",
+        "gTermA": "làm ơn",
+        "gDescA": "use respectfully across interactions",
+        "gExA": "làm ơn cho tôi menu — please give me the menu",
+        "gTermB": "quý khách",
+        "gDescB": "for addressing customers",
+        "gExB": "quý khách muốn gì — what would you like?",
+        "clip": "Bữa tối cùng gia đình tại nhà hàng",
+        "podcast": "Ẩm thực Việt — tập 2",
+        "article": "Văn hoá ăn tối của người Việt",
+        "reader": [
+          {
+            "t": "Buổi tối, "
+          },
+          {
+            "w": "nhiều người",
+            "d": "many people"
+          },
+          {
+            "t": " cùng nhau đến nhà hàng. Họ thường "
+          },
+          {
+            "w": "chia sẻ",
+            "d": "share"
+          },
+          {
+            "t": " món ăn và tận hưởng "
+          },
+          {
+            "w": "cảm giác",
+            "d": "feeling"
+          },
+          {
+            "t": " ấm êm."
+          }
+        ],
+        "reviewWord": "quý khách",
+        "reviewSource": "from dinner order, 3 days ago",
+        "reviewMeaning": "address to customers"
+      },
+      {
+        "chapterTitle": "Chapter 9 · Phỏng vấn xin việc",
+        "lessonTitle": "Career & Confidence",
+        "goalTitle": "Build it: answer job interview",
+        "goalLine": "Respond to job interview questions — confidently, in Vietnamese.",
+        "goalShort": "interview response",
+        "scenario": "interview",
+        "partnerName": "Hùng",
+        "partnerInitial": "H",
+        "partnerRole": "nhà tuyển dụng",
+        "partnerPlace": "Công ty TopTech",
+        "scenarioTitle": "Phỏng vấn · Công ty",
+        "scenarioSub": "Roleplay · answer & impress",
+        "lessonPromptEn": "I have experience in marketing.",
+        "lessonHint": "Why focus on experience?",
+        "bank": [
+          "Tôi",
+          "có",
+          "kinh nghiệm",
+          "trong",
+          "lĩnh vực",
+          "bán hàng"
+        ],
+        "bankEn": [
+          "I",
+          "have",
+          "experience",
+          "in",
+          "field",
+          "sales"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          4
+        ],
+        "lessonCorrectTitle": "Tuyệt quá! 🎉",
+        "lessonCorrectBody": "“Kinh nghiệm” shows expertise; crucial in interviews.",
+        "lessonWrongBody": "With interviews, highlight with “Tôi có” + “kinh nghiệm” + field.",
+        "cultureCaption": "Buổi phỏng vấn tại công ty",
+        "cultureTitle": "Nailing Vietnamese Interviews",
+        "cultureBody": "Interviews focus on competence and cultural fit. Prepare stories to highlight skills effectively.",
+        "culturePhrase": "“Kinh nghiệm” — experience; highlights your capability.",
+        "milestoneTitle": "You can now handle job interviews — in Vietnamese.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Chào bạn, tôi xin phép hỏi về kinh nghiệm của bạn.",
+            "en": "Hello, may I ask about your experience?"
+          },
+          {
+            "who": "u",
+            "n": "Tôi có kinh nghiệm trong lĩnh vực marketing.",
+            "fb": "Perfect — specific field shows clarity"
+          },
+          {
+            "who": "p",
+            "n": "Bạn có kỹ năng gì khác không?",
+            "en": "Do you have any other skills?"
+          },
+          {
+            "who": "u",
+            "n": "Tôi có kỹ năng lãnh đạo nhóm.",
+            "fb": "Great skill — showing leadership adds value"
+          },
+          {
+            "who": "p",
+            "n": "Rất tốt, đó là điều chúng tôi cần.",
+            "en": "Very good, that’s what we need."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Focusing on Skills",
+            "body": "Highlighting specific skills makes your application standout."
+          },
+          {
+            "title": "The Role of “lĩnh vực”",
+            "body": "Expression of the field adds clarity in discussions."
+          }
+        ],
+        "grammarMini": "expressing experience",
+        "grammarTitle": "Expressing Experience",
+        "grammarIntro": "To express experience or skills, structure matters:",
+        "gTermA": "kinh nghiệm",
+        "gDescA": "signals practical experience",
+        "gExA": "kinh nghiệm quản lý — management experience",
+        "gTermB": "lĩnh vực",
+        "gDescB": "specifies field or area",
+        "gExB": "lĩnh vực công nghệ — tech field",
+        "clip": "Buổi phỏng vấn tại văn phòng sáng tạo",
+        "podcast": "Thành công trong nghề — tập 5",
+        "article": "Mẹo luyện phỏng vấn hiệu quả",
+        "reader": [
+          {
+            "t": "Khi đi xin việc, "
+          },
+          {
+            "w": "ứng viên",
+            "d": "candidate"
+          },
+          {
+            "t": " cần chuẩn bị kĩ và "
+          },
+          {
+            "w": "trình bày",
+            "d": "present"
+          },
+          {
+            "t": " rõ ràng về "
+          },
+          {
+            "w": "kinh nghiệm",
+            "d": "experience"
+          },
+          {
+            "t": "  và kỹ năng."
+          }
+        ],
+        "reviewWord": "lĩnh vực",
+        "reviewSource": "from the job interview scenario, 1 day ago",
+        "reviewMeaning": "field"
+      },
+      {
+        "chapterTitle": "Chapter 10 · Tại hiệu thuốc",
+        "lessonTitle": "Health & Help",
+        "goalTitle": "Build it: find medicine",
+        "goalLine": "Ask for medication — effectively, in Vietnamese.",
+        "goalShort": "ask for medicine",
+        "scenario": "pharmacy",
+        "partnerName": "Thảo",
+        "partnerInitial": "T",
+        "partnerRole": "dược sĩ",
+        "partnerPlace": "Hiệu thuốc An Khánh",
+        "scenarioTitle": "Hiệu thuốc · An Khánh",
+        "scenarioSub": "Roleplay · request medicine & advice",
+        "lessonPromptEn": "I need medicine for a headache.",
+        "lessonHint": "Why emphasize symptoms?",
+        "bank": [
+          "Tôi",
+          "cần",
+          "thuốc",
+          "nhức đầu",
+          "cho",
+          "mệt mỏi"
+        ],
+        "bankEn": [
+          "I",
+          "need",
+          "medicine",
+          "headache",
+          "for",
+          "fatigue"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "lessonCorrectTitle": "Giỏi quá! 🎉",
+        "lessonCorrectBody": "“Nhức đầu” effectively explains the symptom faced.",
+        "lessonWrongBody": "Express need with “Tôi cần” + medication + symptom.",
+        "cultureCaption": "Hiệu thuốc Việt Nam",
+        "cultureTitle": "Navigating Pharmacies",
+        "cultureBody": "Pharmacies are accessible in Vietnam, and pharmacists guide you to the right medication professionally.",
+        "culturePhrase": "“Thuốc” — medicine; knowing what you need eases communication.",
+        "milestoneTitle": "You can ask for medicine — in Vietnamese.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Xin chào, bạn cần thuốc gì?",
+            "en": "Hello, what medicine do you need?"
+          },
+          {
+            "who": "u",
+            "n": "Tôi cần thuốc cho nhức đầu.",
+            "fb": "Clear — describing symptoms guides the pharmacist"
+          },
+          {
+            "who": "p",
+            "n": "Có cần thêm gì không?",
+            "en": "Do you need anything else?"
+          },
+          {
+            "who": "u",
+            "n": "Không, cảm ơn.",
+            "fb": "Keeping it simple helps focus"
+          },
+          {
+            "who": "p",
+            "n": "Được rồi, đây là thuốc.",
+            "en": "Alright, here’s the medicine."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Understanding “Nhức đầu”",
+            "body": "Specific terms ensure the right treatment is recommended."
+          }
+        ],
+        "grammarMini": "symptom specificity",
+        "grammarTitle": "Specificity of Symptoms",
+        "grammarIntro": "Symptom language is key in medical contexts:",
+        "gTermA": "nhức đầu",
+        "gDescA": "common term for headache",
+        "gExA": "thuốc nhức đầu — headache medicine",
+        "gTermB": "cần",
+        "gDescB": "expresses necessity or need",
+        "gExB": "cần thuốc đau nhức — need pain medicine",
+        "clip": "Một ngày tại hiệu thuốc địa phương",
+        "podcast": "Sức khoẻ và bạn — tập 2",
+        "article": "Làm sao mua thuốc tại Việt Nam",
+        "reader": [
+          {
+            "t": "Khi bị ốm, "
+          },
+          {
+            "w": "dược sĩ",
+            "d": "pharmacist"
+          },
+          {
+            "t": " sẽ hỗ trợ bạn. Bạn nên"
+          },
+          {
+            "w": "mô tả",
+            "d": "describe"
+          },
+          {
+            "t": " rõ ràng triệu chứng của mình."
+          }
+        ],
+        "reviewWord": "thuốc",
+        "reviewSource": "from your pharmacy visit, yesterday",
+        "reviewMeaning": "medicine"
+      },
+      {
+        "chapterTitle": "Chapter 11 · Cuộc tranh luận",
+        "lessonTitle": "Expression & Persuasion",
+        "goalTitle": "Build it: express opinions",
+        "goalLine": "Express your opinion in a debate — effectively, in Vietnamese.",
+        "goalShort": "express opinion",
+        "scenario": "debate",
+        "partnerName": "Duy",
+        "partnerInitial": "D",
+        "partnerRole": "bạn cùng tranh luận",
+        "partnerPlace": "Câu lạc bộ Tranh luận Sài Gòn",
+        "scenarioTitle": "Tranh luận · Câu lạc bộ",
+        "scenarioSub": "Roleplay · argue & express",
+        "lessonPromptEn": "I believe that this solution is effective.",
+        "lessonHint": "Why “tôi nghĩ rằng”?",
+        "bank": [
+          "Tôi",
+          "tin rằng",
+          "giải pháp",
+          "này",
+          "hiệu quả",
+          "không"
+        ],
+        "bankEn": [
+          "I",
+          "believe",
+          "solution",
+          "this",
+          "effective",
+          "not"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          4
+        ],
+        "lessonCorrectTitle": "Tuyệt hảo! 🎉",
+        "lessonCorrectBody": "“Tin rằng” emphasizes belief strongly in debates.",
+        "lessonWrongBody": "Start with “Tôi tin rằng” + the subject you believe in.",
+        "cultureCaption": "Câu lạc bộ tranh luận",
+        "cultureTitle": "Debate in Vietnam",
+        "cultureBody": "Vietnamese debates focus on respect and clarity. Engaging thoughtfully is valued over heated arguments.",
+        "culturePhrase": "“Tin rằng” — I believe; central for expressing opinions.",
+        "milestoneTitle": "You can express opinions — in Vietnamese debates.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Chào bạn, quan điểm của bạn là gì?",
+            "en": "Hello, what’s your opinion?"
+          },
+          {
+            "who": "u",
+            "n": "Tôi tin rằng giải pháp này hiệu quả.",
+            "fb": "Shows confidence in your belief"
+          },
+          {
+            "who": "p",
+            "n": "Tại sao bạn nghĩ như vậy?",
+            "en": "Why do you think so?"
+          },
+          {
+            "who": "u",
+            "n": "Nó có bằng chứng rõ ràng.",
+            "fb": "Supporting evidence strengthens arguments"
+          },
+          {
+            "who": "p",
+            "n": "Rất thú vị, cảm ơn bạn.",
+            "en": "Very interesting, thank you."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Clarity in Expression",
+            "body": "Ensure your points are clear and supported by evidence."
+          },
+          {
+            "title": "Using “Tin rằng” Effectively",
+            "body": "Conveys belief firmly, essential in persuasive contexts."
+          }
+        ],
+        "grammarMini": "opinion phrases",
+        "grammarTitle": "Expressing Opinions",
+        "grammarIntro": "Opinion phrases rely on phrases like “Tôi nghĩ rằng”:",
+        "gTermA": "tin rằng",
+        "gDescA": "for stronger beliefs",
+        "gExA": "tin rằng điều này đúng — believe this is correct",
+        "gTermB": "quan điểm",
+        "gDescB": "means viewpoint, opinion",
+        "gExB": "quan điểm cá nhân — personal opinion",
+        "clip": "Cuộc thi tranh luận vui nhộn",
+        "podcast": "Tranh luận hùng biện — tập 3",
+        "article": "Kỹ năng tranh luận trong tiếng Việt",
+        "reader": [
+          {
+            "t": "Người Việt "
+          },
+          {
+            "w": "tôn trọng",
+            "d": "respect"
+          },
+          {
+            "t": " ý kiến và "
+          },
+          {
+            "w": "khéo léo",
+            "d": "skillfully"
+          },
+          {
+            "t": " thuyết phục trong tranh luận."
+          }
+        ],
+        "reviewWord": "tin rằng",
+        "reviewSource": "from the debate participation, last week",
+        "reviewMeaning": "believe"
+      },
+      {
+        "chapterTitle": "Chapter 12 · Nói chuyện tự do",
+        "lessonTitle": "Interact & Engage",
+        "goalTitle": "Build it: free conversation",
+        "goalLine": "Engage in a free-flowing conversation — naturally, in Vietnamese.",
+        "goalShort": "free conversation",
+        "scenario": "freetalk",
+        "partnerName": "Nhi",
+        "partnerInitial": "N",
+        "partnerRole": "bạn mới",
+        "partnerPlace": "Công viên trung tâm",
+        "scenarioTitle": "Trò chuyện · Công viên",
+        "scenarioSub": "Roleplay · casual chat & connection",
+        "lessonPromptEn": "What hobbies do you have, my friend?",
+        "lessonHint": "Why “này”?",
+        "bank": [
+          "Bạn",
+          "có",
+          "sở thích",
+          "nào",
+          "không",
+          "này"
+        ],
+        "bankEn": [
+          "You",
+          "have",
+          "hobbies",
+          "any",
+          "not",
+          "friend"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "lessonCorrectTitle": "Tuyệt! 🎉",
+        "lessonCorrectBody": "Questions with “nào không” invite sharing naturally.",
+        "lessonWrongBody": "Begin with ‘Bạn có’ and end with ‘nào không’ for inclusive questions.",
+        "cultureCaption": "Công viên tập trung nhiều bạn trẻ trò chuyện",
+        "cultureTitle": "Vietnam's Love for Community Chats",
+        "cultureBody": "Socializing is central in Vietnam, with parks and streets buzzing with friendly exchanges and stories.",
+        "culturePhrase": "“Sở thích” — hobbies; sharing often fosters quick friendships.",
+        "milestoneTitle": "You can navigate conversations — casually — in Vietnamese.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Xin chào, lâu lâu gặp bạn.",
+            "en": "Hello, good to see you again."
+          },
+          {
+            "who": "u",
+            "n": "Mình muốn biết sở thích của bạn.",
+            "fb": "Opens dialogue warmly"
+          },
+          {
+            "who": "p",
+            "n": "Mình thích chơi đàn guitar.",
+            "en": "I enjoy playing guitar."
+          },
+          {
+            "who": "u",
+            "n": "Nghe thú vị quá, mình cũng thích âm nhạc.",
+            "fb": "Finding common ground helps build bonds"
+          },
+          {
+            "who": "p",
+            "n": "Mình sẽ mời bạn đến nghe đàn nhé.",
+            "en": "I’d invite you to listen sometime."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Ensuring Engagement",
+            "body": "Open questions promote inclusive, engaging discussions."
+          },
+          {
+            "title": "Understanding “Sở thích”",
+            "body": "Knowing hobbies builds instant connections."
+          }
+        ],
+        "grammarMini": "open questions",
+        "grammarTitle": "Creating Open Questions",
+        "grammarIntro": "Use question patterns to allow natural flow:",
+        "gTermA": "nào không",
+        "gDescA": "elicits open-ended responses",
+        "gExA": "bạn có hứng thú nào không? — any interests?",
+        "gTermB": "còn bạn",
+        "gDescB": "means and you",
+        "gExB": "còn bạn thì sao? — how about you?",
+        "clip": "Trò chuyện sáng tạo tại công viên",
+        "podcast": "Chuyện phiếm cùng bạn — tập 7",
+        "article": "Giao tiếp tự nhiên với người Việt",
+        "reader": [
+          {
+            "t": "Công viên là nơi "
+          },
+          {
+            "w": "lý tưởng",
+            "d": "ideal"
+          },
+          {
+            "t": " để trò chuyện và "
+          },
+          {
+            "w": "chia sẻ",
+            "d": "share"
+          },
+          {
+            "t": " sở thích với nhau."
+          }
+        ],
+        "reviewWord": "sở thích",
+        "reviewSource": "from your casual conversation, 5 days ago",
+        "reviewMeaning": "hobbies"
+      },
+      {
+        "chapterTitle": "Chapter 13 · Đánh giá trình độ",
+        "lessonTitle": "Assess & Reassure",
+        "goalTitle": "Build it: express capabilities",
+        "goalLine": "Express your skills effectively — in Vietnamese.",
+        "goalShort": "state skills",
+        "scenario": "placement",
+        "partnerName": "Lan",
+        "partnerInitial": "L",
+        "partnerRole": "người phỏng vấn",
+        "partnerPlace": "Viện Ngôn Ngữ Việt",
+        "scenarioTitle": "Đánh giá trình độ · Viện ngôn ngữ",
+        "scenarioSub": "Roleplay · discuss and determine level",
+        "lessonPromptEn": "I am proficient in Vietnamese language.",
+        "lessonHint": "Why “thành thạo”?",
+        "bank": [
+          "Tôi",
+          "thành thạo",
+          "tiếng Việt",
+          "trình độ",
+          "khác",
+          "nói"
+        ],
+        "bankEn": [
+          "I",
+          "proficient",
+          "Vietnamese",
+          "level",
+          "other",
+          "speak"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          4
+        ],
+        "lessonCorrectTitle": "Tuyệt diệu! 🎉",
+        "lessonCorrectBody": "“Thành thạo” showcases confidence in abilities.",
+        "lessonWrongBody": "Address the language with “Tôi” + skill level + language.",
+        "cultureCaption": "Viện Ngôn Ngữ - nơi đánh giá và kết nối",
+        "cultureTitle": "Language Proficiency in Vietnam",
+        "cultureBody": "Proficiency assessments help non-natives integrate better. Clear communication of skills is key.",
+        "culturePhrase": "“Thành thạo” — indicates proficiency level.",
+        "milestoneTitle": "You can express language skills — in Vietnamese.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Chào bạn, bạn đánh giá trình độ tiếng Việt của bạn ra sao?",
+            "en": "Hi, how do you assess your Vietnamese skills?"
+          },
+          {
+            "who": "u",
+            "n": "Tôi thành thạo tiếng Việt.",
+            "fb": "Directly stating proficiency shows confidence"
+          },
+          {
+            "who": "p",
+            "n": "Bạn có thể nói thêm về kỹ năng khác không?",
+            "en": "Can you share about any other skills?"
+          },
+          {
+            "who": "u",
+            "n": "Tôi có khả năng giao tiếp tốt.",
+            "fb": "Good to mention communication as it’s key"
+          },
+          {
+            "who": "p",
+            "n": "Rất tuyệt, điều đó rất hữu ích.",
+            "en": "Great, that’s very helpful."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Expressing Proficiency",
+            "body": "Using specific terms portrays clarity and confidence."
+          },
+          {
+            "title": "Understanding “Thành thạo”",
+            "body": "Essential for expressing high competence in any skill."
+          }
+        ],
+        "grammarMini": "skill expression",
+        "grammarTitle": "Expressing Skills Clearly",
+        "grammarIntro": "Skill expressions need clarity and assurance:",
+        "gTermA": "thành thạo",
+        "gDescA": "conveys advanced level of capability",
+        "gExA": "thành thạo tin học — proficient in IT",
+        "gTermB": "trình độ",
+        "gDescB": "means level or grade",
+        "gExB": "trình độ cao cấp — advanced level",
+        "clip": "Khám phá trình độ ngôn ngữ tại viện",
+        "podcast": "Việt ngữ và bạn — tập 8",
+        "article": "Đánh giá năng lực ngôn ngữ của người học",
+        "reader": [
+          {
+            "t": "Việt Nam đang trở thành điểm thu hút "
+          },
+          {
+            "w": "học viên",
+            "d": "students"
+          },
+          {
+            "t": " học tiếng Việt cho "
+          },
+          {
+            "w": "người nước ngoài",
+            "d": "foreigners"
+          },
+          {
+            "t": " vì lối sống và ngôn ngữ hấp dẫn."
+          }
+        ],
+        "reviewWord": "thành thạo",
+        "reviewSource": "from language proficiency discussion, last week",
+        "reviewMeaning": "proficient"
+      },
+      {
+        "chapterTitle": "Chapter 14 · Ngân hàng",
+        "lessonTitle": "Finance & Trust",
+        "goalTitle": "Build it: open a bank account",
+        "goalLine": "Open a bank account — successfully, in Vietnamese.",
+        "goalShort": "open account",
+        "scenario": "bank",
+        "partnerName": "Quang",
+        "partnerInitial": "Q",
+        "partnerRole": "nhân viên ngân hàng",
+        "partnerPlace": "Ngân hàng VietBank",
+        "scenarioTitle": "Ngân hàng · Mở tài khoản",
+        "scenarioSub": "Roleplay · engage & secure financial services",
+        "lessonPromptEn": "I need to open a bank account.",
+        "lessonHint": "Why mention “tài khoản”?",
+        "bank": [
+          "Tôi",
+          "muốn",
+          "mở",
+          "tài khoản",
+          "ngân hàng",
+          "tiền mặt"
+        ],
+        "bankEn": [
+          "I",
+          "want",
+          "open",
+          "account",
+          "bank",
+          "cash"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "lessonCorrectTitle": "Hoàn hảo! 🎉",
+        "lessonCorrectBody": "“Tài khoản” is essential for banking conversations.",
+        "lessonWrongBody": "Start requests with “Tôi muốn” and direct action with “tài khoản”.",
+        "cultureCaption": "Ngân hàng hiện đại tại Việt Nam",
+        "cultureTitle": "Banking the Vietnamese Way",
+        "cultureBody": "Banks in Vietnam focus on customer service and trust. Knowing terms facilitates smoother processes.",
+        "culturePhrase": "“Tài khoản”  — account; your entry to financial engagements.",
+        "milestoneTitle": "You can open bank accounts — in Vietnamese.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Xin chào, quý khách cần tôi giúp gì?",
+            "en": "Hello, what can I assist with?"
+          },
+          {
+            "who": "u",
+            "n": "Tôi muốn mở tài khoản ngân hàng.",
+            "fb": "Direct request smoothens processing"
+          },
+          {
+            "who": "p",
+            "n": "Quý khách có giấy tờ cần thiết không?",
+            "en": "Do you have the necessary documents?"
+          },
+          {
+            "who": "u",
+            "n": "Có, đây là hộ chiếu của tôi.",
+            "fb": "Quickly providing documents eases the process"
+          },
+          {
+            "who": "p",
+            "n": "Rất tốt, chúng tôi sẽ xử lý ngay.",
+            "en": "Great, we’ll process it immediately."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Understanding Banking Terms",
+            "body": "Familiarity with terms fastens services—keeping you informed."
+          },
+          {
+            "title": "Significance of “Tài khoản”",
+            "body": "Magic word for essential banking needs."
+          }
+        ],
+        "grammarMini": "banking requests",
+        "grammarTitle": "Constructing Banking Requests",
+        "grammarIntro": "Successful financial interactions use clear structures:",
+        "gTermA": "tài khoản",
+        "gDescA": "represents an account",
+        "gExA": "tài khoản tiết kiệm — savings account",
+        "gTermB": "ngân hàng",
+        "gDescB": "translates to bank",
+        "gExB": "ngân hàng nhà nước — state bank",
+        "clip": "Không khí thân thiện tại ngân hàng địa phương",
+        "podcast": "Tài chính cho bạn — tập 6",
+        "article": "Hướng dẫn mở tài khoản ngân hàng Việt",
+        "reader": [
+          {
+            "t": "Khi mở tài khoản, "
+          },
+          {
+            "w": "khách hàng",
+            "d": "customer"
+          },
+          {
+            "t": " cần chuẩn bị đầy đủ "
+          },
+          {
+            "w": "thủ tục",
+            "d": "documents"
+          },
+          {
+            "t": " và hợp tác với "
+          },
+          {
+            "w": "nhân viên",
+            "d": "staff"
+          },
+          {
+            "t": " ngân hàng."
+          }
+        ],
+        "reviewWord": "tài khoản",
+        "reviewSource": "from bank interaction, 4 days ago",
+        "reviewMeaning": "account"
+      },
+      {
+        "chapterTitle": "Chapter 15 · Đi tàu",
+        "lessonTitle": "Navigate & Journey",
+        "goalTitle": "Build it: buy train ticket",
+        "goalLine": "Purchase a train ticket — securely, in Vietnamese.",
+        "goalShort": "buy train ticket",
+        "scenario": "train",
+        "partnerName": "Hà",
+        "partnerInitial": "H",
+        "partnerRole": "nhân viên bán vé",
+        "partnerPlace": "Ga Hà Nội",
+        "scenarioTitle": "Ga tàu · Hà Nội",
+        "scenarioSub": "Roleplay · purchase & board",
+        "lessonPromptEn": "I need a ticket to Hue.",
+        "lessonHint": "Why focus on specific destination?",
+        "bank": [
+          "Tôi",
+          "cần",
+          "một",
+          "vé",
+          "đi",
+          "Huế"
+        ],
+        "bankEn": [
+          "I",
+          "need",
+          "a",
+          "ticket",
+          "to",
+          "Hue"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "lessonCorrectTitle": "Thông suốt! 🎉",
+        "lessonCorrectBody": "“Vé đi” + destination makes requests clear.",
+        "lessonWrongBody": "Requests work best with “Tôi cần” + ticket + destination.",
+        "cultureCaption": "Ga tàu hối hả với hành khách đi lại",
+        "cultureTitle": "Travelling by Train in Vietnam",
+        "cultureBody": "Trains offer scenic views and comfortable journeys. Early booking ensures seats.",
+        "culturePhrase": "“Vé” — ticket; essential for all transport.",
+        "milestoneTitle": "You can buy train tickets — in Vietnamese.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Chào bạn, bạn cần mua vé đi đâu?",
+            "en": "Hello, where do you need a ticket to?"
+          },
+          {
+            "who": "u",
+            "n": "Tôi cần một vé đi Huế.",
+            "fb": "Direct and clear; avoids confusion"
+          },
+          {
+            "who": "p",
+            "n": "Có cần vé khứ hồi không?",
+            "en": "Do you need a round trip ticket?"
+          },
+          {
+            "who": "u",
+            "n": "Không, chỉ đi một chiều thôi, cảm ơn.",
+            "fb": "Clarifies the need succinctly"
+          },
+          {
+            "who": "p",
+            "n": "Vậy, vé của bạn đã chuẩn bị xong.",
+            "en": "Alright, your ticket is ready."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Importance of Destination",
+            "body": "Specific destinations eliminate ambiguity in purchasing."
+          },
+          {
+            "title": "Understanding “Vé” Usage",
+            "body": "Highlights ticket transactions in various scenarios."
+          }
+        ],
+        "grammarMini": "request clarity",
+        "grammarTitle": "Clarity in Ticket Requests",
+        "grammarIntro": "Clarity ensures efficiency in transport scenarios:",
+        "gTermA": "vé",
+        "gDescA": "denotes a ticket for travel",
+        "gExA": "vé tàu — train ticket",
+        "gTermB": "đi",
+        "gDescB": "to denote destination",
+        "gExB": "đi Sài Gòn — to Saigon",
+        "clip": "Cuộc hành trình bằng tàu đến miền Trung",
+        "podcast": "Hành trình trên ray — tập 4",
+        "article": "Mẹo đi tàu hiệu quả ở Việt Nam",
+        "reader": [
+          {
+            "t": "Đi tàu ở Việt Nam "
+          },
+          {
+            "w": "giúp",
+            "d": "helps"
+          },
+          {
+            "t": " bạn khám phá "
+          },
+          {
+            "w": "vẻ đẹp",
+            "d": "beauty"
+          },
+          {
+            "t": " phong cảnh và "
+          },
+          {
+            "w": "trải nghiệm",
+            "d": "experience"
+          },
+          {
+            "t": " những điều thú vị trên đường."
+          }
+        ],
+        "reviewWord": "vé",
+        "reviewSource": "from train ticket purchase, 2 weeks ago",
+        "reviewMeaning": "ticket"
       }
     ]
   },
@@ -9271,10 +18773,7 @@ export const LANGS: any = {
       },
       "clip",
       "article",
-      "reader",
-      "reviewWord",
-      "reviewSource",
-      "reviewMeaning"
+      "reader"
     ]
   },
   "pl": {
@@ -9867,6 +19366,1011 @@ export const LANGS: any = {
         "gTermB": "potrzebuje",
         "gDescB": "a frequent request form for needs",
         "gExB": "Potrzebuję lekarza!"
+      },
+      {
+        "chapterTitle": "Chapter 7 · Na lotnisku",
+        "lessonTitle": "Checking In & Queries",
+        "goalTitle": "Build it: check in and find your gate",
+        "goalLine": "Successfully check in and locate your gate in Polish.",
+        "goalShort": "check in at airport",
+        "scenario": "airport",
+        "partnerName": "Piotr",
+        "partnerInitial": "P",
+        "partnerRole": "pracownik lotniska",
+        "partnerPlace": "Lotnisko Chopina w Warszawie",
+        "scenarioTitle": "Na lotnisku · Warszawa",
+        "scenarioSub": "Roleplay · check in & ask for gate information",
+        "lessonPromptEn": "I'd like to check in, where is gate 12?",
+        "lessonHint": "Remember 'poproszę' for politeness.",
+        "bank": [
+          "poproszę",
+          "odprawę",
+          "gdzie",
+          "jest",
+          "brama",
+          "dwanaście"
+        ],
+        "bankEn": [
+          "I'd like",
+          "check in",
+          "where",
+          "is",
+          "gate",
+          "twelve"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          5
+        ],
+        "lessonCorrectTitle": "Dobrze zrobione! ✈️",
+        "lessonCorrectBody": "“Poproszę” (I'd like) and asking “gdzie jest” (where is) indicate a smooth inquiry.",
+        "lessonWrongBody": "Start with “Poproszę,” followed by your request, and finish with “gdzie jest...”",
+        "cultureCaption": "An airport in Warsaw · hustle and bustle",
+        "cultureTitle": "Polish Politeness in Travel",
+        "cultureBody": "Travel scenarios require politeness: use “Pan/Pani” with staff, and maintain patience. Airports are busy yet staffed by helpful, warm agents.",
+        "culturePhrase": "“Proszę” and “dziękuję” are invaluable in navigating travel inquiries.",
+        "milestoneTitle": "You can now check in and find your gate — politely, in Polish.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Dzień dobry! Jak mogę pomóc?",
+            "en": "Good morning! How can I help you?"
+          },
+          {
+            "who": "u",
+            "n": "Poproszę odprawę. Gdzie jest brama dwanaście?",
+            "fb": "Great use of 'poproszę' and 'gdzie jest'."
+          },
+          {
+            "who": "p",
+            "n": "Proszę bardzo. Brama dwanaście jest na lewo.",
+            "en": "Certainly. Gate twelve is on the left."
+          },
+          {
+            "who": "u",
+            "n": "Dziękuję bardzo.",
+            "fb": "Perfect — always finish with 'dziękuję'."
+          },
+          {
+            "who": "p",
+            "n": "Proszę uprzejmie, miłego lotu!",
+            "en": "You're welcome, have a great flight!"
+          }
+        ],
+        "debrief": [
+          {
+            "title": "“Poproszę” and Questions",
+            "body": "Remember, 'poproszę' is versatile. Use it when requesting or inquiring at airports."
+          },
+          {
+            "title": "Nasal “ę” in 'odprawę'",
+            "body": "The ę has a nasal tonality — let your nasal 'n' flow slightly."
+          }
+        ],
+        "grammarMini": "cases",
+        "grammarTitle": "Cases — why “odprawa” becomes “odprawę”",
+        "grammarIntro": "Objects involved in requests shift endings with these flexible rules.",
+        "gTermA": "odprawa",
+        "gDescA": "base form (nominative) — check-in",
+        "gExA": "To jest odprawa.",
+        "gTermB": "odprawę",
+        "gDescB": "accusative — the thing you initiate",
+        "gExB": "Poproszę odprawę.",
+        "clip": "Warsaw's airport busy scene",
+        "podcast": "Sky Talk — odcinek 7",
+        "article": "Jak poruszać się po polskim lotnisku",
+        "reader": [
+          {
+            "t": "Na lotnisku w Warszawie, podróżni pytają o "
+          },
+          {
+            "w": "odprawę",
+            "d": "check-in"
+          },
+          {
+            "t": " i szukają swoich bram. Kelnerzy mówią, \"Miłego lotu!\""
+          }
+        ],
+        "reviewWord": "odprawę",
+        "reviewSource": "from your airport visit, 2 days ago",
+        "reviewMeaning": "check-in"
+      },
+      {
+        "chapterTitle": "Chapter 8 · Kolacja w restauracji",
+        "lessonTitle": "Ordering & Dining Etiquette",
+        "goalTitle": "Build it: place a dinner order",
+        "goalLine": "Order a full meal in Polish while displaying proper etiquette.",
+        "goalShort": "order dinner",
+        "scenario": "dinner",
+        "partnerName": "Ania",
+        "partnerInitial": "A",
+        "partnerRole": "kelnerka",
+        "partnerPlace": "Restauracja Sielankowa",
+        "scenarioTitle": "Kolacja w restauracji · Sielankowa",
+        "scenarioSub": "Roleplay · full dining experience",
+        "lessonPromptEn": "I'll have steak with potatoes and a glass of wine, please.",
+        "lessonHint": "Use 'poproszę' for your order.",
+        "bank": [
+          "poproszę",
+          "stek",
+          "z ziemniakami",
+          "i",
+          "kieliszek",
+          "wina"
+        ],
+        "bankEn": [
+          "I'd like",
+          "steak",
+          "with potatoes",
+          "and",
+          "a glass of",
+          "wine"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "lessonCorrectTitle": "Wspaniale! 🍽️",
+        "lessonCorrectBody": "“Poproszę” (I'd like) makes your order polite and appropriately direct.",
+        "lessonWrongBody": "Begin with “Poproszę,” continue with the dish, and include details like “i kieliszek wina.”",
+        "cultureCaption": "A fine dining experience in Poland",
+        "cultureTitle": "Dining Etiquette",
+        "cultureBody": "In Poland, meals are shared pleasurably. Address staff gently and finish with a genuine 'dziękuję.'",
+        "culturePhrase": "“Proszę” when ordering; “dziękuję” to express gratitude.",
+        "milestoneTitle": "You can now order dinner — elegantly, in Polish.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Dobry wieczór! Co chcecie zamówić?",
+            "en": "Good evening! What would you like to order?"
+          },
+          {
+            "who": "u",
+            "n": "Poproszę stek z ziemniakami i kieliszek wina.",
+            "fb": "Excellent choice of words and structure."
+          },
+          {
+            "who": "p",
+            "n": "Jasne! Czy chciałby Pan coś jeszcze?",
+            "en": "Certainly! Would you like anything else?"
+          },
+          {
+            "who": "u",
+            "n": "Nie, dziękuję bardzo.",
+            "fb": "Great closure with 'dziękuję'."
+          },
+          {
+            "who": "p",
+            "n": "Dziękuję, zaraz przyniosę deser.",
+            "en": "Thank you, I will bring dessert shortly."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Ordering Naturally",
+            "body": "Use 'poproszę' to make polite, specific requests. Combine items with 'i' for 'and'."
+          },
+          {
+            "title": "Stek vs. 'steak'",
+            "body": "Notice 'stek' is a common noun use in Polish like its English counterpart."
+          }
+        ],
+        "grammarMini": "conjunctions",
+        "grammarTitle": "When to Use 'i'",
+        "grammarIntro": "Polish uses 'i' for 'and' between linked things in a phrase or list.",
+        "gTermA": "ziemniaki",
+        "gDescA": "potatoes",
+        "gExA": "Stek z ziemniakami.",
+        "gTermB": "i",
+        "gDescB": "and (links items)",
+        "gExB": "stek i ziemniaki",
+        "clip": "Dining room sounds in Sielankowa",
+        "podcast": "Dining Out — odcinek 8",
+        "article": "Polska kuchnia: odkrywanie nowych smaków",
+        "reader": [
+          {
+            "t": "W Polsce kolacja to "
+          },
+          {
+            "w": "przyjemny",
+            "d": "pleasant"
+          },
+          {
+            "t": " czas z rodziną i przyjaciółmi przy suto zastawionym stole."
+          }
+        ],
+        "reviewWord": "kieliszek",
+        "reviewSource": "from your restaurant dinner, 2 days ago",
+        "reviewMeaning": "a glass of"
+      },
+      {
+        "chapterTitle": "Chapter 9 · Rozmowa kwalifikacyjna",
+        "lessonTitle": "Interview Preparation & Conduct",
+        "goalTitle": "Build it: ace your job interview",
+        "goalLine": "Confidently conduct yourself in a job interview in Polish.",
+        "goalShort": "job interview",
+        "scenario": "interview",
+        "partnerName": "Marek",
+        "partnerInitial": "M",
+        "partnerRole": "rekruter",
+        "partnerPlace": "Warszawskie Biuro",
+        "scenarioTitle": "Rozmowa kwalifikacyjna · Warszawska firma",
+        "scenarioSub": "Roleplay · showcase your strengths",
+        "lessonPromptEn": "I'm dedicated and eager to learn. When could I start?",
+        "lessonHint": "Use 'jestem' to describe qualities.",
+        "bank": [
+          "jestem",
+          "zaangażowany",
+          "i",
+          "żądny",
+          "nauki",
+          "kiedy"
+        ],
+        "bankEn": [
+          "I am",
+          "dedicated",
+          "and",
+          "eager",
+          "to learn",
+          "when"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "lessonCorrectTitle": "Świetna odpowiedź! 👔",
+        "lessonCorrectBody": "“Jestem” (I am) mixes well with adjectives, conveying a strong profile.",
+        "lessonWrongBody": "Start with “Jestem” to assertively present your skills.",
+        "cultureCaption": "Polish offices · professionalism and politeness",
+        "cultureTitle": "The Polish Interview Process",
+        "cultureBody": "Interviews demand respect: use formal titles and introduce your skills confidently. 'When can I start?' shows readiness.",
+        "culturePhrase": "“Jestem” sets a firm tone for presenting skills.",
+        "milestoneTitle": "You can now confidently handle job interviews in Polish.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Dzień dobry! Dlaczego jesteś zainteresowany tą pracą?",
+            "en": "Good morning! Why are you interested in this job?"
+          },
+          {
+            "who": "u",
+            "n": "Jestem zaangażowany i żądny nauki. Kiedy mogę zacząć?",
+            "fb": "Good confidence through 'jestem' and curiosity with 'kiedy'."
+          },
+          {
+            "who": "p",
+            "n": "To dobre nastawienie! Poszukujemy kogoś takiego.",
+            "en": "That's a good attitude! We need someone like that."
+          },
+          {
+            "who": "u",
+            "n": "Świetnie! Cieszę się na współpracę.",
+            "fb": "Positive affirmation is key in interviews."
+          },
+          {
+            "who": "p",
+            "n": "Super, zadzwonimy do Ciebie z odpowiedzią.",
+            "en": "Great, we will call you with an answer."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "“Jestem” for Introductions",
+            "body": "Using 'jestem' introduces personal strengths effectively."
+          },
+          {
+            "title": "Adjectives Agreement",
+            "body": "Ensure adjectives suit the noun's gender, e.g., 'zaangażowana' for females."
+          }
+        ],
+        "grammarMini": "adjectives",
+        "grammarTitle": "Adjective Agreement",
+        "grammarIntro": "Adjective endings adjust based on noun gender and number.",
+        "gTermA": "zaangażowany",
+        "gDescA": "male form — dedicated",
+        "gExA": "Jestem zaangażowany.",
+        "gTermB": "zaangażowana",
+        "gDescB": "female form — dedicated",
+        "gExB": "Jestem zaangażowana.",
+        "clip": "Office interview ambiance",
+        "podcast": "Career Talks — odcinek 9",
+        "article": "Znalezienie wymarzonej pracy w Polsce",
+        "reader": [
+          {
+            "t": "Podczas rozmowy kwalifikacyjnej należy być "
+          },
+          {
+            "w": "przygotowanym",
+            "d": "prepared"
+          },
+          {
+            "t": " i pewnym siebie, aby zaimponować rekruterowi."
+          }
+        ],
+        "reviewWord": "zaangażowany",
+        "reviewSource": "from your job interview, 2 days ago",
+        "reviewMeaning": "dedicated"
+      },
+      {
+        "chapterTitle": "Chapter 10 · W aptece",
+        "lessonTitle": "Medicine & Health Queries",
+        "goalTitle": "Build it: get medicine and advice",
+        "goalLine": "Secure medicine and basic health advice in Polish.",
+        "goalShort": "get medicine",
+        "scenario": "pharmacy",
+        "partnerName": "Zofia",
+        "partnerInitial": "Z",
+        "partnerRole": "farmaceutka",
+        "partnerPlace": "Apteka Czysta",
+        "scenarioTitle": "W aptece · Zakupy",
+        "scenarioSub": "Roleplay · checking symptoms",
+        "lessonPromptEn": "Can I have something for a headache and fever, please?",
+        "lessonHint": "Use 'na' after medicine names.",
+        "bank": [
+          "poproszę",
+          "coś",
+          "na",
+          "ból",
+          "głowy",
+          "i"
+        ],
+        "bankEn": [
+          "I'd like",
+          "something",
+          "for",
+          "headache",
+          "and",
+          "fever"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3,
+          5
+        ],
+        "lessonCorrectTitle": "Znakomity wybór! 💊",
+        "lessonCorrectBody": "“Poproszę coś na…” (I'd like something for…) contextualizes the ailment.",
+        "lessonWrongBody": "Use “poproszę” to ask kindly, followed by the ailment prefixed by 'na'.",
+        "cultureCaption": "Pharmacy settings in Poland",
+        "cultureTitle": "Pharmacy Visits",
+        "cultureBody": "Seek pharmacist advice for minor ailments. Poles appreciate 'proszę' to initiate requests for remedies.",
+        "culturePhrase": "'Dziękuję' upon receipt of medicine shows respect.",
+        "milestoneTitle": "You can now obtain medicine — politely, in Polish.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Witam! W czym mogę pomóc?",
+            "en": "Hello! How can I help you?"
+          },
+          {
+            "who": "u",
+            "n": "Poproszę coś na ból głowy i gorączkę.",
+            "fb": "Good request format and use of 'poproszę'."
+          },
+          {
+            "who": "p",
+            "n": "Mamy tabletki na takie objawy. Coś jeszcze?",
+            "en": "We have pills for those symptoms. Anything else?"
+          },
+          {
+            "who": "u",
+            "n": "Nie, dziękuję. To wszystko.",
+            "fb": "Finish your transaction with 'dziękuję'."
+          },
+          {
+            "who": "p",
+            "n": "Proszę bardzo. Zdrowia życzę!",
+            "en": "You're welcome. Wishing you good health!"
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Pharmacy Approach",
+            "body": "Combine 'poproszę' with specific remedies prefixed by 'na' for smooth requests."
+          },
+          {
+            "title": "Headache and Fever Words",
+            "body": "Common ailments like 'ból głowy' (headache) and 'gorączka' (fever) must follow the preposition 'na'."
+          }
+        ],
+        "grammarMini": "prepositions",
+        "grammarTitle": "Using 'na' with treatments",
+        "grammarIntro": "Prepositions show relations: 'na' indicates suitable ailments for medications.",
+        "gTermA": "ból",
+        "gDescA": "pain (general)",
+        "gExA": "mam ból głowy",
+        "gTermB": "na",
+        "gDescB": "for — indicates treatment",
+        "gExB": "na gorączkę",
+        "clip": "Calm pharmacy atmosphere",
+        "podcast": "Health Matters — odcinek 10",
+        "article": "Zdrowie w polskim stylu: apteki i domowe sposoby",
+        "reader": [
+          {
+            "t": "W aptece w Polsce można kupić zarówno"
+          },
+          {
+            "w": "leki",
+            "d": "medicines"
+          },
+          {
+            "t": " jak i "
+          },
+          {
+            "w": "suplementy",
+            "d": "supplements"
+          },
+          {
+            "t": ". Zawsze pomagają farmaceuci."
+          }
+        ],
+        "reviewWord": "coś",
+        "reviewSource": "from your pharmacy visit, 2 days ago",
+        "reviewMeaning": "something"
+      },
+      {
+        "chapterTitle": "Chapter 11 · Debata",
+        "lessonTitle": "Debating Skills & Language",
+        "goalTitle": "Build it: argue confidently",
+        "goalLine": "Defend your viewpoint convincingly in a Polish debate.",
+        "goalShort": "debate",
+        "scenario": "debate",
+        "partnerName": "Paweł",
+        "partnerInitial": "P",
+        "partnerRole": "uczestnik debaty",
+        "partnerPlace": "Uniwersytet Jagielloński",
+        "scenarioTitle": "Debata · Stół dyskusyjny",
+        "scenarioSub": "Roleplay · defend your viewpoint",
+        "lessonPromptEn": "I believe that education is the foundation of success.",
+        "lessonHint": "Use 'uważam, że' to state beliefs.",
+        "bank": [
+          "uważam",
+          "że",
+          "edukacja",
+          "jest",
+          "podstawą",
+          "sukcesu"
+        ],
+        "bankEn": [
+          "I believe",
+          "that",
+          "education",
+          "is",
+          "the foundation",
+          "of success"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "lessonCorrectTitle": "Perfekcyjnie! 🎓",
+        "lessonCorrectBody": "“Uważam, że” (I believe that) is strong for sharing personal views in debates.",
+        "lessonWrongBody": "Begin with “Uważam, że,” then the subject and proposition.",
+        "cultureCaption": "Polish universities · vibrant discourse",
+        "cultureTitle": "Debate Culture",
+        "cultureBody": "Open discussion is valued. Form bonds through sharing strong views respectfully.",
+        "culturePhrase": "“Uważam, że…” to introduce beliefs decisively.",
+        "milestoneTitle": "You can now argue effectively and confidently in Polish debates.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Jakie jest twoje zdanie na ten temat?",
+            "en": "What’s your opinion on this topic?"
+          },
+          {
+            "who": "u",
+            "n": "Uważam, że edukacja jest podstawą sukcesu.",
+            "fb": "Solid start with 'uważam, że'."
+          },
+          {
+            "who": "p",
+            "n": "Czy masz na to jakieś dowody?",
+            "en": "Do you have any evidence for this?"
+          },
+          {
+            "who": "u",
+            "n": "Tak, badania potwierdzają tę tezę.",
+            "fb": "Excellent backing with results."
+          },
+          {
+            "who": "p",
+            "n": "Przekonałeś mnie. To dobry punkt.",
+            "en": "You’ve convinced me. That’s a good point."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Structuring Opinions",
+            "body": "Use 'uważam, że' followed by logic for persuasive debater skills."
+          },
+          {
+            "title": "Backing Claims",
+            "body": "Support notions with facts or examples to reinforce arguments."
+          }
+        ],
+        "grammarMini": "conjunctions",
+        "grammarTitle": "'że' to Link Opinions and Facts",
+        "grammarIntro": "'że' brings together opinions and the facts, adding substance.",
+        "gTermA": "uważam",
+        "gDescA": "I believe",
+        "gExA": "Uważam, że masz rację.",
+        "gTermB": "że",
+        "gDescB": "that (links ideas)",
+        "gExB": "że edukacja jest...",
+        "clip": "Engaged university debate scene",
+        "podcast": "Debate Club — odcinek 11",
+        "article": "Sztuka argumentacji: debaty w polskich szkołach",
+        "reader": [
+          {
+            "t": "Podczas debaty używa się konstrukcji: "
+          },
+          {
+            "w": "uważam, że",
+            "d": "I believe that"
+          },
+          {
+            "t": ", aby wzmocnić argumenty."
+          }
+        ],
+        "reviewWord": "uważam",
+        "reviewSource": "from your debate participation, 2 days ago",
+        "reviewMeaning": "I believe"
+      },
+      {
+        "chapterTitle": "Chapter 12 · Swobodna rozmowa",
+        "lessonTitle": "Casual Conversation Skills",
+        "goalTitle": "Build it: talk freely with peers",
+        "goalLine": "Conduct a relaxed conversation in Polish.",
+        "goalShort": "free talk",
+        "scenario": "freetalk",
+        "partnerName": "Marta",
+        "partnerInitial": "M",
+        "partnerRole": "znajoma",
+        "partnerPlace": "Kawiarnia na rogu",
+        "scenarioTitle": "Swobodna rozmowa · Czas wolny",
+        "scenarioSub": "Roleplay · informal catch-up",
+        "lessonPromptEn": "What did you do over the weekend?",
+        "lessonHint": "Use 'co robiłeś' or 'co robiłaś' to ask.",
+        "bank": [
+          "co",
+          "robiłeś",
+          "w weekend",
+          "jak",
+          "było",
+          "pogoda"
+        ],
+        "bankEn": [
+          "what",
+          "did you do (for males)",
+          "on the weekend",
+          "how",
+          "was",
+          "weather"
+        ],
+        "correct": [
+          0,
+          1,
+          2
+        ],
+        "lessonCorrectTitle": "Tak trzymaj! ☕",
+        "lessonCorrectBody": "“Co robiłeś w weekend?” (What did you do over the weekend?) naturally opens informal chats.",
+        "lessonWrongBody": "Start confidently with 'Co robiłeś' followed by time and activity in question.",
+        "cultureCaption": "A cozy café conversation",
+        "cultureTitle": "Keeping conversations casual",
+        "cultureBody": "Poles cherish personal chats. A good coffee opens the door to hours of meaningful talk.",
+        "culturePhrase": "'Co słychać?' is a frequent icebreaker to check in casually.",
+        "milestoneTitle": "You’re now able to have relaxed conversations in Polish!",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Cześć, co robiłeś w weekend?",
+            "en": "Hi, what did you do over the weekend?"
+          },
+          {
+            "who": "u",
+            "n": "Pojechałem na wycieczkę. Jak było u ciebie?",
+            "fb": "Good response with a personal activity."
+          },
+          {
+            "who": "p",
+            "n": "Odwiedziłam rodzinę. Jak była pogoda?",
+            "en": "I visited family. How was the weather?"
+          },
+          {
+            "who": "u",
+            "n": "Pogoda była świetna. Dobrze się bawiliśmy.",
+            "fb": "Weather and enjoyment well shared."
+          },
+          {
+            "who": "p",
+            "n": "To świetnie. Może się spotykamy w przyszłym tygodniu?",
+            "en": "That's great. Maybe we’ll meet next week?"
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Casual Inquiries",
+            "body": "Using 'co robiłeś' invites someone to share weekend activities generously."
+          },
+          {
+            "title": "Conversation Fillers",
+            "body": "'Jak było?' (How was it?) keeps dialogues effortless and inviting."
+          }
+        ],
+        "grammarMini": "past tense",
+        "grammarTitle": "Using the Past Tense",
+        "grammarIntro": "Polish past tense varies by subject gender and number.",
+        "gTermA": "robiłeś",
+        "gDescA": "did you do (male)",
+        "gExA": "Co robiłeś w weekend?",
+        "gTermB": "robiłaś",
+        "gDescB": "did you do (female)",
+        "gExB": "Co robiłaś w weekend?",
+        "clip": "Sounds of laughter in a café",
+        "podcast": "Coffee Chat — odcinek 12",
+        "article": "Swobodne rozmowy w kawiarniach",
+        "reader": [
+          {
+            "t": "Często pytamy znajomych "
+          },
+          {
+            "w": "jak spędzili",
+            "d": "how they spent"
+          },
+          {
+            "t": " czas wolny by nawiązać rozmowę."
+          }
+        ],
+        "reviewWord": "pogoda",
+        "reviewSource": "from your casual chat, 2 days ago",
+        "reviewMeaning": "weather"
+      },
+      {
+        "chapterTitle": "Chapter 13 · Sprawdzenie Poziomu",
+        "lessonTitle": "Positioning & Checking Understanding",
+        "goalTitle": "Build it: Find your proficiency level",
+        "goalLine": "Assess your Polish proficiency and discuss goals.",
+        "goalShort": "placement check",
+        "scenario": "placement",
+        "partnerName": "Ewa",
+        "partnerInitial": "E",
+        "partnerRole": "nauczycielka",
+        "partnerPlace": "Szkoła Językowa",
+        "scenarioTitle": "Sprawdzenie poziomu · Test",
+        "scenarioSub": "Roleplay · evaluate proficiency",
+        "lessonPromptEn": "Could you tell me which level I am currently at?",
+        "lessonHint": "Use 'czy możesz' to ask questions.",
+        "bank": [
+          "czy",
+          "możesz",
+          "mi",
+          "powiedzieć",
+          "na jakim jestem",
+          "poziomie"
+        ],
+        "bankEn": [
+          "can",
+          "you",
+          "me",
+          "tell",
+          "what level am I at",
+          "level"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "lessonCorrectTitle": "Doskonałe! 📚",
+        "lessonCorrectBody": "Start requests with “czy możesz” to ask for specifics school-related.",
+        "lessonWrongBody": "Formulate by “czy możesz mi powiedzieć” before stating questions.",
+        "cultureCaption": "Language school for all ages",
+        "cultureTitle": "Poland's Education Approach",
+        "cultureBody": "Languages are valued. Engage instructors with 'czy możesz' for clarity and learning.",
+        "culturePhrase": "'Jak szybko' encourages feedback about progression speed.",
+        "milestoneTitle": "You can now assess your Polish proficiency and set goals.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Jak oceniasz swoje umiejętności w języku polskim?",
+            "en": "How do you evaluate your skills in Polish?"
+          },
+          {
+            "who": "u",
+            "n": "Czy możesz mi powiedzieć, na jakim jestem poziomie?",
+            "fb": "Direct but polite inquiry via 'czy możesz'."
+          },
+          {
+            "who": "p",
+            "n": "Myślę, że poziom średniozaawansowany. Jak szybko chcesz się rozwijać?",
+            "en": "I think intermediate level. How fast do you want to improve?"
+          },
+          {
+            "who": "u",
+            "n": "Chciałbym szybko się rozwijać z kolejnymi lekcjami.",
+            "fb": "Clearly stated intent and learning goals."
+          },
+          {
+            "who": "p",
+            "n": "Dobrze. Skupimy się na mówieniu i słuchaniu.",
+            "en": "Alright. We'll focus on speaking and listening."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Establishing Levels",
+            "body": "'czy możesz mi powiedzieć' is a polite, formal way to initiate level checks."
+          },
+          {
+            "title": "Expressing Goals",
+            "body": "Clearly outline progress desires with 'chcę się rozwijać'."
+          }
+        ],
+        "grammarMini": "conditional",
+        "grammarTitle": "Conditional Inquiries",
+        "grammarIntro": "Use 'czy' to form polite, formal questions.",
+        "gTermA": "czy",
+        "gDescA": "can",
+        "gExA": "Czy mogę zapytać?",
+        "gTermB": "możesz",
+        "gDescB": "you can",
+        "gExB": "czy możesz mi pomóc?",
+        "clip": "Classroom sounds, students communicating",
+        "podcast": "Language Progress — odcinek 13",
+        "article": "Sprawdzenie poziomu języka: jak się przygotować",
+        "reader": [
+          {
+            "t": "Aby dowiedzieć się, "
+          },
+          {
+            "w": "jak szybko",
+            "d": "how fast"
+          },
+          {
+            "t": " się rozwijasz, regularnie sprawdzaj swój postęp."
+          }
+        ],
+        "reviewWord": "poziomie",
+        "reviewSource": "from your placement evaluation, 3 days ago",
+        "reviewMeaning": "level"
+      },
+      {
+        "chapterTitle": "Chapter 14 · W banku",
+        "lessonTitle": "Managing Finances",
+        "goalTitle": "Build it: manage basic banking needs",
+        "goalLine": "Complete a bank transaction in Polish.",
+        "goalShort": "banking needs",
+        "scenario": "bank",
+        "partnerName": "Kamil",
+        "partnerInitial": "K",
+        "partnerRole": "bankier",
+        "partnerPlace": "Bank Rzeczypospolitej",
+        "scenarioTitle": "W banku · Zarządzanie finansami",
+        "scenarioSub": "Roleplay · basic transactions",
+        "lessonPromptEn": "I need to withdraw 500 złoty, please.",
+        "lessonHint": "Use 'chciałbym' for polite requests.",
+        "bank": [
+          "chciałbym",
+          "wypłacić",
+          "pięćset",
+          "złotych",
+          "na",
+          "konto"
+        ],
+        "bankEn": [
+          "I would like",
+          "to withdraw",
+          "five hundred",
+          "złoty",
+          "to",
+          "account"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "lessonCorrectTitle": "Dobrze zrobione! 🏦",
+        "lessonCorrectBody": "“Chciałbym wypłacić…” (I would like to withdraw…) ensures smooth transactions.",
+        "lessonWrongBody": "Start requests with “chciałbym” followed by the action.",
+        "cultureCaption": "Poland's banking systems · professionalism",
+        "cultureTitle": "Banking in Poland",
+        "cultureBody": "Banks maintain meticulous order. Address tellers politely using 'Pani/Pan'.",
+        "culturePhrase": "'Proszę' accompanies bank requests for smooth interactions.",
+        "milestoneTitle": "You can now handle basic banking transactions in Polish.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Jak mogę pomóc w kwestiach finansowych?",
+            "en": "How can I assist you with your financial matters?"
+          },
+          {
+            "who": "u",
+            "n": "Chciałbym wypłacić pięćset złotych, proszę.",
+            "fb": "Correct use of 'chciałbym' and transaction details."
+          },
+          {
+            "who": "p",
+            "n": "Czy ma Pan konto w naszym banku?",
+            "en": "Do you have an account with our bank?"
+          },
+          {
+            "who": "u",
+            "n": "Tak, oto moja karta. Proszę bardzo.",
+            "fb": "Transaction backed with courtesy and evidence."
+          },
+          {
+            "who": "p",
+            "n": "Dziękuję. Proszę poczekać chwilę.",
+            "en": "Thank you. Please wait a moment."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Bank Communication",
+            "body": "Always frame requests with 'chciałbym' for superior customer service experiences."
+          },
+          {
+            "title": "Managing Currency",
+            "body": "Don't forget to specify amounts with 'złotych' (for złoty amounts) in exchanges."
+          }
+        ],
+        "grammarMini": "cases",
+        "grammarTitle": "Using Numeric Forms",
+        "grammarIntro": "Currencies like 'złotych' follow the numeral-dependent form.",
+        "gTermA": "złoty",
+        "gDescA": "złoty in base form",
+        "gExA": "To kosztuje pięć złoty.",
+        "gTermB": "złotych",
+        "gDescB": "numerical form for values over one",
+        "gExB": "Pięćset złotych",
+        "clip": "Professional bank environment sounds",
+        "podcast": "Finance Talk — odcinek 14",
+        "article": "Zarządzanie pieniędzmi: przykłady z banków",
+        "reader": [
+          {
+            "t": "W Polsce, aby wypłacić gotówkę, należy użyć "
+          },
+          {
+            "w": "karty",
+            "d": "card"
+          },
+          {
+            "t": " lub ID, aby zweryfikować tożsamość."
+          }
+        ],
+        "reviewWord": "wypłacić",
+        "reviewSource": "from your bank appointment, 4 days ago",
+        "reviewMeaning": "to withdraw"
+      },
+      {
+        "chapterTitle": "Chapter 15 · Podróż pociągiem",
+        "lessonTitle": "Navigating Train Travel",
+        "goalTitle": "Build it: buy a ticket and find your seat",
+        "goalLine": "Purchase train tickets and locate your seats in Polish.",
+        "goalShort": "train travel",
+        "scenario": "train",
+        "partnerName": "Olek",
+        "partnerInitial": "O",
+        "partnerRole": "kasjer",
+        "partnerPlace": "Dworzec Główny Kraków",
+        "scenarioTitle": "Podróż pociągiem · Stacja kolejowa",
+        "scenarioSub": "Roleplay · purchase and verify seats",
+        "lessonPromptEn": "I would like a ticket to Wrocław, in first class, please.",
+        "lessonHint": "'Poproszę bilet' is essential.",
+        "bank": [
+          "poproszę",
+          "bilet",
+          "do",
+          "Wrocławia",
+          "klasa",
+          "pierwsza"
+        ],
+        "bankEn": [
+          "I'd like",
+          "a ticket",
+          "to",
+          "Wrocław",
+          "class",
+          "first"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "lessonCorrectTitle": "Świetnie! 🚂",
+        "lessonCorrectBody": "“Poproszę bilet do…” (I'd like a ticket to…) covers essential railway exchanges.",
+        "lessonWrongBody": "Begin with 'Poproszę' then specify destination, class, and preference.",
+        "cultureCaption": "Train travels in Poland",
+        "cultureTitle": "Polish Railways",
+        "cultureBody": "Efficient and scenic — train travel is popular. Polite phrases smooth the journey.",
+        "culturePhrase": "Use 'poproszę' as a suggestion to shape elevated service.",
+        "milestoneTitle": "You can now navigate train travel confidently and politely in Polish.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Witam! Jak mogę pomóc?",
+            "en": "Hello! How can I help you?"
+          },
+          {
+            "who": "u",
+            "n": "Poproszę bilet do Wrocławia, klasa pierwsza.",
+            "fb": "Correct order and nice expressiveness with ‘poproszę’."
+          },
+          {
+            "who": "p",
+            "n": "Świetny wybór. Kiedy chcesz wyjechać?",
+            "en": "Great choice. When do you want to leave?"
+          },
+          {
+            "who": "u",
+            "n": "Jutro rano, jeśli to możliwe.",
+            "fb": "Be specific about travel times, very helpful."
+          },
+          {
+            "who": "p",
+            "n": "Dobrze, oto twój bilet. Miłej podróży!",
+            "en": "Okay, here’s your ticket. Have a great trip!"
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Requesting Train Tickets",
+            "body": "Use 'Poproszę bilet' followed by specifics to simplify transactions."
+          },
+          {
+            "title": "Travel Details",
+            "body": "Always accentuate your preferences: class, date, and time."
+          }
+        ],
+        "grammarMini": "prepositions",
+        "grammarTitle": "Prepositions on the Move",
+        "grammarIntro": "Use 'do' without a formal case change in travel direction phrases.",
+        "gTermA": "do",
+        "gDescA": "to (indicates travel destination)",
+        "gExA": "Bilet do Warszawy",
+        "gTermB": "bilet",
+        "gDescB": "ticket",
+        "gExB": "Poproszę bilet",
+        "clip": "Busy station noise, train announcements",
+        "podcast": "Rail Talks — odcinek 15",
+        "article": "Polska koleją: jak podróżować komfortowo",
+        "reader": [
+          {
+            "t": "Podróżując pociągiem, ważne jest znać "
+          },
+          {
+            "w": "rozkład",
+            "d": "schedule"
+          },
+          {
+            "t": " i być na czas."
+          }
+        ],
+        "reviewWord": "bilet",
+        "reviewSource": "from your train journey, 4 days ago",
+        "reviewMeaning": "ticket"
       }
     ]
   },
@@ -12270,42 +22774,7 @@ export const LANGS: any = {
       "clip",
       "מדריך לסיורים בעיר תל אביב",
       "podcast",
-      "שיחה על הנחיות — פרק 8",
-      "article",
-      "אמנות ההתמצאות בתל אביב",
-      "reader",
-      [
-        {
-          "t": "בתל אביב, הנחיות הן "
-        },
-        {
-          "w": "חשובות",
-          "d": "important (khshuvot)"
-        },
-        {
-          "t": ". אנשים אוהבים "
-        },
-        {
-          "w": "לעזור",
-          "d": "to help (la'azor)"
-        },
-        {
-          "t": " ל"
-        },
-        {
-          "w": "תיירים",
-          "d": "tourists (tayarim)"
-        },
-        {
-          "t": "."
-        }
-      ],
-      "reviewWord",
-      "מוזיאון",
-      "reviewSource",
-      "from your directions quest, 2 days ago",
-      "reviewMeaning",
-      "museum (muzion)"
+      "שיחה על הנחיות — פרק 8"
     ]
   },
   "uk": {
@@ -12899,6 +23368,830 @@ export const LANGS: any = {
         "gTermB": "допоможіть",
         "gDescB": "imperative — command or urgent request for help",
         "gExB": "Допоможіть!"
+      },
+      {
+        "chapterTitle": "Chapter 7 · В аеропорту",
+        "lessonTitle": "Airport Check-In",
+        "goalTitle": "Build it: check in for a flight",
+        "goalLine": "Check in for a flight — smoothly, in Ukrainian.",
+        "goalShort": "check in for a flight",
+        "scenario": "airport",
+        "partnerName": "Іван Ivan",
+        "partnerInitial": "І",
+        "partnerRole": "реєстратор",
+        "partnerPlace": "Boryspil Airport",
+        "scenarioTitle": "В аеропорту · Boryspil",
+        "scenarioSub": "Roleplay · check-in & boarding pass inquiry",
+        "lessonPromptEn": "I need to check in, please.",
+        "lessonHint": "Use “потрібно” to express need.",
+        "bank": [
+          "Мені потрібно",
+          "зареєструватися",
+          "будь ласка",
+          "паспорт",
+          "квиток",
+          "багаж"
+        ],
+        "bankEn": [
+          "I need to",
+          "check in",
+          "please",
+          "passport",
+          "ticket",
+          "luggage"
+        ],
+        "correct": [
+          0,
+          1,
+          2
+        ],
+        "lessonCorrectTitle": "Чудова робота! 🎉",
+        "lessonCorrectBody": "“Мені потрібно” means “I need to” in a polite and formal way.",
+        "lessonWrongBody": "Start with “Мені потрібно,” followed by the action, then “будь ласка.”",
+        "cultureCaption": "An airport in Kyiv · busy morning",
+        "cultureTitle": "Ukrainian airports — quick, efficient, and friendly",
+        "cultureBody": "Boryspil, one of Ukraine's busy hubs, balances efficiency and friendliness. Be ready to present your documents and expect swift service.",
+        "culturePhrase": "“Доброго дня (dobroho dnia)” — good day; “будь ласка” is please and you're welcome.",
+        "milestoneTitle": "You can now check in for a flight — smoothly, in Ukrainian.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Доброго дня! Як можу вам допомогти?",
+            "en": "Good day! How may I assist you?"
+          },
+          {
+            "who": "u",
+            "n": "Мені потрібно зареєструватися, будь ласка.",
+            "fb": "Good choice — start with “Мені потрібно.”"
+          },
+          {
+            "who": "p",
+            "n": "Ваш паспорт, будь ласка.",
+            "en": "Your passport, please."
+          },
+          {
+            "who": "u",
+            "n": "Ось, дякую.",
+            "fb": "Right — “ось” means “here you are.”"
+          },
+          {
+            "who": "p",
+            "n": "Дякую, ось ваш посадковий талон.",
+            "en": "Thank you, here is your boarding pass."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "“потрібно” vs “треба”",
+            "body": "“потрібно” is used formally, whereas “треба” is more casual."
+          },
+          {
+            "title": "Smooth sounds of 'і'",
+            "body": "'і' and 'и' have different sounds, making a nuanced difference in meaning."
+          }
+        ],
+        "grammarMini": "verbs",
+        "grammarTitle": "Verbs — how to express need",
+        "grammarIntro": "Ukrainian verbs show action. Use 'потрібно' for necessity in a polite form.",
+        "gTermA": "зберігати",
+        "gDescA": "base form — to keep",
+        "gExA": "Мені потрібно зберігати квитки.",
+        "gTermB": "зареєструватися",
+        "gDescB": "to register",
+        "gExB": "Мені потрібно зареєструватися."
+      },
+      {
+        "chapterTitle": "Chapter 8 · Вечеря в ресторані",
+        "lessonTitle": "Restaurant Etiquette",
+        "goalTitle": "Build it: order dinner",
+        "goalLine": "Order dinner — elegantly, in Ukrainian.",
+        "goalShort": "order dinner",
+        "scenario": "dinner",
+        "partnerName": "Анна Anna",
+        "partnerInitial": "А",
+        "partnerRole": "офіціантка",
+        "partnerPlace": "Lviv Restaurant",
+        "scenarioTitle": "Вечеря в ресторані · Lviv",
+        "scenarioSub": "Roleplay · ordering & special requests",
+        "lessonPromptEn": "I would like to order dinner, please.",
+        "lessonHint": "Politeness in Ukrainian uses “хотів/хотіла би.”",
+        "bank": [
+          "Я хотів би",
+          "вечерю",
+          "замовити",
+          "меню",
+          "десерт",
+          "вино"
+        ],
+        "bankEn": [
+          "I would like",
+          "dinner",
+          "order",
+          "menu",
+          "dessert",
+          "wine"
+        ],
+        "correct": [
+          0,
+          2,
+          1,
+          2
+        ],
+        "lessonCorrectTitle": "Ви чудові! 🎉",
+        "lessonCorrectBody": "“хотів би” (m.) / “хотіла би” (f.) shows politeness and conditional tense.",
+        "lessonWrongBody": "Begin with the polite “I would like,” then use the verb “order,” and end with “please.”",
+        "cultureCaption": "Dining in Lviv · cozy evening",
+        "cultureTitle": "Dining out in Ukraine — a cherished ritual",
+        "cultureBody": "Dinner in Ukraine is time for family, friends, and connection. It's culture through cuisine, savored slowly with customs warmly observed.",
+        "culturePhrase": "“Дякую — thank you; “замовити” — to order.",
+        "milestoneTitle": "You can now order dinner — elegantly, in Ukrainian.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Вітаю! Що бажаєте замовити?",
+            "en": "Hello! What would you like to order?"
+          },
+          {
+            "who": "u",
+            "n": "Я хотів би замовити вечерю, будь ласка.",
+            "fb": "Perfect phrasing for ordering dinner."
+          },
+          {
+            "who": "p",
+            "n": "Вам подати меню?",
+            "en": "Would you like the menu?"
+          },
+          {
+            "who": "u",
+            "n": "Так, дякую. І бокал вина, будь ласка.",
+            "fb": "Good use of “так” for yes."
+          },
+          {
+            "who": "p",
+            "n": "Будь ласка, ваше вино і меню.",
+            "en": "Here is your wine and menu, please."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Want vs Order",
+            "body": "Differentiate “хотів/хотіла би” for politeness from “хочу” for straightforward desire."
+          },
+          {
+            "title": "Meals and their role",
+            "body": "Meals set the stage for social gatherings in Ukrainian culture."
+          }
+        ],
+        "grammarMini": "articles",
+        "grammarTitle": "Articles — nuanced use in Ukrainian",
+        "grammarIntro": "Ukrainian language doesn’t have articles, relying on context to clarify subjects.",
+        "gTermA": "вечеря",
+        "gDescA": "dinner as a noun",
+        "gExA": "Вечеря готова.",
+        "gTermB": "замовити вечерю",
+        "gDescB": "to order dinner",
+        "gExB": "Я хотів би замовити вечерю."
+      },
+      {
+        "chapterTitle": "Chapter 9 · Співбесіда",
+        "lessonTitle": "Job Interview Confidence",
+        "goalTitle": "Build it: present yourself",
+        "goalLine": "Present yourself — effectively, in Ukrainian.",
+        "goalShort": "present yourself",
+        "scenario": "interview",
+        "partnerName": "Леся Lesya",
+        "partnerInitial": "Л",
+        "partnerRole": "інтерв'юер",
+        "partnerPlace": "Kyiv Office",
+        "scenarioTitle": "Співбесіда · Київ",
+        "scenarioSub": "Roleplay · introducing & experience talk",
+        "lessonPromptEn": "I have experience in management.",
+        "lessonHint": "Experience starts with “я маю.”",
+        "bank": [
+          "Я маю",
+          "досвід",
+          "в",
+          "управлінні",
+          "компанія",
+          "команда"
+        ],
+        "bankEn": [
+          "I have",
+          "experience",
+          "in",
+          "management",
+          "company",
+          "team"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "lessonCorrectTitle": "Ви перемагаєте! 🎉",
+        "lessonCorrectBody": "“Я маю” is used for possessing qualities or experience.",
+        "lessonWrongBody": "Start with “Я маю” to state what experience you possess.",
+        "cultureCaption": "An office in Kyiv · professional vibe",
+        "cultureTitle": "Ukrainian workplaces — disciplined yet personable",
+        "cultureBody": "Ukrainian professional settings balance formality with genuine personal engagement. Presenting with confidence and warmth builds respect and relationships.",
+        "culturePhrase": "“Досвід роботи”— work experience; “управління” — management.",
+        "milestoneTitle": "You can now present yourself — effectively, in Ukrainian.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Добрий день! Розкажіть про ваш досвід.",
+            "en": "Good day! Tell us about your experience."
+          },
+          {
+            "who": "u",
+            "n": "Я маю досвід в управлінні.",
+            "fb": "Excellent introduction of yourself."
+          },
+          {
+            "who": "p",
+            "n": "З якими компаніями ви працювали?",
+            "en": "Which companies have you worked with?"
+          },
+          {
+            "who": "u",
+            "n": "Я працював у командах великих компаній.",
+            "fb": "Great job mentioning teamwork."
+          },
+          {
+            "who": "p",
+            "n": "Чудово, дякуємо за інформацію.",
+            "en": "Great, thanks for the information."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Presenting Confidence",
+            "body": "Express assuredness through “я маю,” delivering a strong statement of ability."
+          },
+          {
+            "title": "Ukrainian formality",
+            "body": "Balance formality with personal warmth during professional exchanges."
+          }
+        ],
+        "grammarMini": "nouns",
+        "grammarTitle": "Nouns — roles and responsibilities",
+        "grammarIntro": "In Ukrainian, nouns denote roles distinctly using gender and case endings.",
+        "gTermA": "управлінець",
+        "gDescA": "manager as a noun",
+        "gExA": "Я управлінець.",
+        "gTermB": "управління",
+        "gDescB": "management",
+        "gExB": "Я маю досвід в управлінні."
+      },
+      {
+        "chapterTitle": "Chapter 10 · В аптеці",
+        "lessonTitle": "Pharmacy Needs",
+        "goalTitle": "Build it: request medicine",
+        "goalLine": "Request medicine — politely, in Ukrainian.",
+        "goalShort": "request medicine",
+        "scenario": "pharmacy",
+        "partnerName": "Микола Mykola",
+        "partnerInitial": "М",
+        "partnerRole": "фармацевт",
+        "partnerPlace": "Odessa Pharmacy",
+        "scenarioTitle": "В аптеці · Одеса",
+        "scenarioSub": "Roleplay · medication inquiry & purchase",
+        "lessonPromptEn": "I need some medicine, please.",
+        "lessonHint": "Use “мені потрібно” for formulating requests.",
+        "bank": [
+          "Мені потрібно",
+          "ліки",
+          "будь ласка",
+          "рецепт",
+          "пачка",
+          "знеболювальне"
+        ],
+        "bankEn": [
+          "I need",
+          "medicine",
+          "please",
+          "prescription",
+          "package",
+          "painkiller"
+        ],
+        "correct": [
+          0,
+          1,
+          2
+        ],
+        "lessonCorrectTitle": "Будьте здорові! 🎉",
+        "lessonCorrectBody": "“Мені потрібно” is formally used for needs or requests.",
+        "lessonWrongBody": "Open with “Мені потрібно” followed by the thing you require.",
+        "cultureCaption": "Odessa Pharmacy · cheerful service",
+        "cultureTitle": "Pharmacy visits in Ukraine — helpful and attentive",
+        "cultureBody": "Ukrainian pharmacies are centers of care, attentive to detail and community. Staff are knowledgeable, ensuring precise service.",
+        "culturePhrase": "“Мені погано”— I feel unwell; “ліки”— medicine.",
+        "milestoneTitle": "You can now request medicine — politely, in Ukrainian.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Доброго дня, чим можу допомогти?",
+            "en": "Good day, how can I help?"
+          },
+          {
+            "who": "u",
+            "n": "Мені потрібно ліки, будь ласка.",
+            "fb": "Well stated need for medicine."
+          },
+          {
+            "who": "p",
+            "n": "У вас є рецепт?",
+            "en": "Do you have a prescription?"
+          },
+          {
+            "who": "u",
+            "n": "Так, ось.",
+            "fb": "“Так, ось”— a handy way to agree and present."
+          },
+          {
+            "who": "p",
+            "n": "Дякую. Пачка анальгетика коштує 50 гривень.",
+            "en": "Thanks. A pack of painkillers costs 50 hryvnias."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Needs in conversation",
+            "body": "“Мені потрібно” serves to politely convey the necessity or request."
+          },
+          {
+            "title": "Curative expressions",
+            "body": "Discuss ailments and remedies with balance and respect for context."
+          }
+        ],
+        "grammarMini": "phrases",
+        "grammarTitle": "Phrases — polite requests",
+        "grammarIntro": "Politeness is valued. Begin requests with “мені” showcasing need formally.",
+        "gTermA": "ліки",
+        "gDescA": "medicine - general",
+        "gExA": "Мені потрібні ліки.",
+        "gTermB": "знеболювальне",
+        "gDescB": "painkiller",
+        "gExB": "Я купую знеболювальне."
+      },
+      {
+        "chapterTitle": "Chapter 11 · Дебати",
+        "lessonTitle": "Participating in Debates",
+        "goalTitle": "Build it: express an opinion",
+        "goalLine": "Express an opinion — convincingly, in Ukrainian.",
+        "goalShort": "express opinion",
+        "scenario": "debate",
+        "partnerName": "Тарас Taras",
+        "partnerInitial": "Т",
+        "partnerRole": "доповідач",
+        "partnerPlace": "University Hall",
+        "scenarioTitle": "Дебати · Університет",
+        "scenarioSub": "Roleplay · agreeing & questioning",
+        "lessonPromptEn": "In my opinion, this is correct.",
+        "lessonHint": "Start opinions with “на мою думку.”",
+        "bank": [
+          "На мою думку",
+          "це",
+          "правильно",
+          "я погоджуюсь",
+          "дискусія",
+          "позиція"
+        ],
+        "bankEn": [
+          "In my opinion",
+          "this",
+          "is correct",
+          "I agree",
+          "discussion",
+          "position"
+        ],
+        "correct": [
+          0,
+          1,
+          2
+        ],
+        "lessonCorrectTitle": "Влучно! 🎉",
+        "lessonCorrectBody": "“На мою думку” prefaces Ukrainian opinions formally.",
+        "lessonWrongBody": "Begin with “На мою думку,” following with what you opine.",
+        "cultureCaption": "University Debate · Interactive Session",
+        "cultureTitle": "Expressing Ideas — a vital Ukrainian tradition",
+        "cultureBody": "Debates are arenas for thought exchange, valued for shared insights and democratic dialogue.",
+        "culturePhrase": "“На мою думку”— in my opinion; “дискусія”— discussion.",
+        "milestoneTitle": "You can now express an opinion — convincingly, in Ukrainian.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Доброго дня! Що ви думаєте про тему?",
+            "en": "Good day! What is your view on the topic?"
+          },
+          {
+            "who": "u",
+            "n": "На мою думку, це правильно.",
+            "fb": "Well done starting your viewpoint with a definitive phrase."
+          },
+          {
+            "who": "p",
+            "n": "Чи є інші переконання?",
+            "en": "Are there other beliefs?"
+          },
+          {
+            "who": "u",
+            "n": "Я погоджуюсь, але відкрита для обговорення.",
+            "fb": "Good balancing assertiveness and openness."
+          },
+          {
+            "who": "p",
+            "n": "Дискусія потрібна для підтримки науки.",
+            "en": "Discussion is essential for supporting science."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Mastering perspectives",
+            "body": "Prefacing opinion with “на мою думку” is crucial for intellectual respect."
+          },
+          {
+            "title": "Engaged talk",
+            "body": "Embrace conversational pauses and thoughtful responses while debating."
+          }
+        ],
+        "grammarMini": "expressions",
+        "grammarTitle": "Expressions — introducing opinions",
+        "grammarIntro": "Frame opinions with importance using “на мою думку” with assertive clarity.",
+        "gTermA": "думка",
+        "gDescA": "opinion",
+        "gExA": "На мою думку, ми повинні змінитись.",
+        "gTermB": "дискусія",
+        "gDescB": "discussion",
+        "gExB": "Дискусія починається."
+      },
+      {
+        "chapterTitle": "Chapter 12 · Вільна розмова",
+        "lessonTitle": "Engaging Free Talk",
+        "goalTitle": "Build it: talk about a hobby",
+        "goalLine": "Discuss a hobby — engagingly, in Ukrainian.",
+        "goalShort": "discuss hobbies",
+        "scenario": "freetalk",
+        "partnerName": "Оксана Oksana",
+        "partnerInitial": "О",
+        "partnerRole": "подруга",
+        "partnerPlace": "Odessa Cafe",
+        "scenarioTitle": "Вільна розмова · Одеса",
+        "scenarioSub": "Roleplay · sharing interests & mutual topics",
+        "lessonPromptEn": "I like to paint in my free time.",
+        "lessonHint": "Use “мені подобається” to express likes.",
+        "bank": [
+          "Мені подобається",
+          "малювати",
+          "у вільний час",
+          "читати",
+          "слухати музику",
+          "спорт"
+        ],
+        "bankEn": [
+          "I like",
+          "to paint",
+          "in my free time",
+          "to read",
+          "to listen to music",
+          "sports"
+        ],
+        "correct": [
+          0,
+          1,
+          2
+        ],
+        "lessonCorrectTitle": "Ви мистецько вправні! 🎉",
+        "lessonCorrectBody": "“Мені подобається” is the phrase for expressing delight or favorable hobbies.",
+        "lessonWrongBody": "Start with “Мені подобається,” and add your favorite pastime.",
+        "cultureCaption": "Social cafe chat · Odessa",
+        "cultureTitle": "Пleasure through conversation in Odessa",
+        "cultureBody": "Exploring leisure activities over coffee is a cherished pastime, promoting empathy and shared joy in Ukraine.",
+        "culturePhrase": "“Мені подобається”— I like; “у вільний час”— free time.",
+        "milestoneTitle": "You can now discuss a hobby — engagingly, in Ukrainian.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Привіт, яким хобі ти цікавишся?",
+            "en": "Hi, what hobbies are you interested in?"
+          },
+          {
+            "who": "u",
+            "n": "Мені подобається малювати у вільний час.",
+            "fb": "Appropriate use of leisure-related vocabulary."
+          },
+          {
+            "who": "p",
+            "n": "Це звучить чудово! Малюєш на природі чи вдома?",
+            "en": "Sounds wonderful! Do you paint outdoors or at home?"
+          },
+          {
+            "who": "u",
+            "n": "Люблю малювати і там, і там.",
+            "fb": "Nicely expressed preference for flexibility."
+          },
+          {
+            "who": "p",
+            "n": "Клас, цікаво почути про твоє мистецтво.",
+            "en": "Great, nice to hear about your art."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Discovering interests",
+            "body": "“Мені подобається” is the anchor for authenticating personal interest."
+          },
+          {
+            "title": "Creating connections",
+            "body": "Conversational depth and continuity evolve from genuine curiosity and response."
+          }
+        ],
+        "grammarMini": "verbs",
+        "grammarTitle": "Verbs — expressing preferences",
+        "grammarIntro": "Using “подобається” directs attention to specific interests or likes.",
+        "gTermA": "подобається",
+        "gDescA": "like/pleasure",
+        "gExA": "Живопис подобається мені.",
+        "gTermB": "вільний час",
+        "gDescB": "spare time",
+        "gExB": "У вільний час я слухаю музику."
+      },
+      {
+        "chapterTitle": "Chapter 13 · Розташування",
+        "lessonTitle": "Navigating Placement",
+        "goalTitle": "Build it: ask for directions",
+        "goalLine": "Ask for directions — accurately, in Ukrainian.",
+        "goalShort": "ask directions",
+        "scenario": "placement",
+        "partnerName": "Роман Roman",
+        "partnerInitial": "Р",
+        "partnerRole": "місцевий житель",
+        "partnerPlace": "Kharkiv Street",
+        "scenarioTitle": "Розташування · Харків",
+        "scenarioSub": "Roleplay · question & navigation",
+        "lessonPromptEn": "Could you tell me where the library is?",
+        "lessonHint": "Formulate questions with “чи могли б.”",
+        "bank": [
+          "Чи могли б",
+          "ви сказати",
+          "де",
+          "бібліотека",
+          "дорога",
+          "напрямок"
+        ],
+        "bankEn": [
+          "Could you",
+          "tell me",
+          "where",
+          "library",
+          "road",
+          "direction"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "lessonCorrectTitle": "Ви орієнтуєтеся на місцевості! 🎉",
+        "lessonCorrectBody": "Starting polite questions with “чи могли б” denotes a request delicately.",
+        "lessonWrongBody": "Begin with “чи могли б” to pose a refined question tactfully.",
+        "cultureCaption": "Navigating Kharkiv · seeking directions",
+        "cultureTitle": "Navigating Ukrainian Streets — patient precision",
+        "cultureBody": "Seeking directions, Ukrainians value clarity and patience, engaging with polite inquiries to locals.",
+        "culturePhrase": "“Чи”— could; “де”— where.",
+        "milestoneTitle": "You can now ask for directions — accurately, in Ukrainian.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Доброго дня, вам потрібна допомога?",
+            "en": "Good day, do you need help?"
+          },
+          {
+            "who": "u",
+            "n": "Чи могли б ви сказати, де бібліотека?",
+            "fb": "Politely framed question — well done!"
+          },
+          {
+            "who": "p",
+            "n": "Так, вона за двома перехрестями праворуч.",
+            "en": "Yes, it's two intersections to the right."
+          },
+          {
+            "who": "u",
+            "n": "Дякую, на цей напрямок?",
+            "fb": "Adding “thank you” boosts warmth in any request."
+          },
+          {
+            "who": "p",
+            "n": "Так, імовірно, не пропустите.",
+            "en": "Yes, you'll likely not miss it."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Probing politely",
+            "body": "“Чи могли б” enhances indirectness and civility in queries."
+          },
+          {
+            "title": "Navigational cues",
+            "body": "Denoting exact turns and landmarks is key in conveying routes."
+          }
+        ],
+        "grammarMini": "questions",
+        "grammarTitle": "Questions — posing inquiries gently",
+        "grammarIntro": "Initiate curiosity through structured politeness with “чи могли б.”",
+        "gTermA": "сказати",
+        "gDescA": "to say / tell",
+        "gExA": "Чи могли б ви сказати мені?",
+        "gTermB": "де",
+        "gDescB": "where",
+        "gExB": "Де я можу знайти кіоск?"
+      },
+      {
+        "chapterTitle": "Chapter 14 · В банку",
+        "lessonTitle": "Banking Transactions",
+        "goalTitle": "Build it: open a bank account",
+        "goalLine": "Open a bank account — proficiently, in Ukrainian.",
+        "goalShort": "open a bank account",
+        "scenario": "bank",
+        "partnerName": "Катерина Kateryna",
+        "partnerInitial": "К",
+        "partnerRole": "касир",
+        "partnerPlace": "Dnipro Bank",
+        "scenarioTitle": "В банку · Дніпро",
+        "scenarioSub": "Roleplay · account opening & currency exchange",
+        "lessonPromptEn": "I would like to open a bank account, please.",
+        "lessonHint": "Formal requests rely on “хотів/хотіла би.”",
+        "bank": [
+          "Я хотів би",
+          "відкрити",
+          "банківський",
+          "рахунок",
+          "вклад",
+          "кошти"
+        ],
+        "bankEn": [
+          "I would like",
+          "to open",
+          "bank",
+          "account",
+          "deposit",
+          "funds"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "lessonCorrectTitle": "Фінансово освічений! 🎉",
+        "lessonCorrectBody": "“хотів/хотіла би” communicates interest in formal banking processes.",
+        "lessonWrongBody": "Lead your request with “Я хотів би” and proceed with the concerned action.",
+        "cultureCaption": "Dnipro Bank · bustling transaction hub",
+        "cultureTitle": "Ukrainian Banks — reliability and cutting-edge service",
+        "cultureBody": "Ukrainian banking prides itself on rigorous efficiency, mirrored in impeccable service upheld in urban branches.",
+        "culturePhrase": "“Рахунок”— account; “відкрити”— to open.",
+        "milestoneTitle": "You can now open a bank account — proficiently, in Ukrainian.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Доброго ранку, чим можу допомогти?",
+            "en": "Good morning, how can I assist?"
+          },
+          {
+            "who": "u",
+            "n": "Я хотів би відкрити банківський рахунок, будь ласка.",
+            "fb": "Expressive formulation— using want and formality accurately."
+          },
+          {
+            "who": "p",
+            "n": "Вам потрібно пред’явити паспорт.",
+            "en": "You'll need to present your passport."
+          },
+          {
+            "who": "u",
+            "n": "Ось мій паспорт. Дякую.",
+            "fb": "Perfect — active demonstration of transactional etiquette."
+          },
+          {
+            "who": "p",
+            "n": "Процедура відкриття рахунку швидка.",
+            "en": "The account opening process is quick."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Financial fluency",
+            "body": "“хотів/хотіла би” establishes formal tone critical for transactions."
+          },
+          {
+            "title": "Banking decorum",
+            "body": "Engage with procedural insights into banking etiquette vis-a-vis documentation."
+          }
+        ],
+        "grammarMini": "requests",
+        "grammarTitle": "Requests — formal in banking scenarios",
+        "grammarIntro": "Command transactional environments furnishing formal requests through syntax.",
+        "gTermA": "рахунок",
+        "gDescA": "account",
+        "gExA": "Я відкрив рахунок.",
+        "gTermB": "відкрити",
+        "gDescB": "to open",
+        "gExB": "Ви можете відкрити депозит?"
+      },
+      {
+        "chapterTitle": "Chapter 15 · Їдучи потягом",
+        "lessonTitle": "Train Travel",
+        "goalTitle": "Build it: buy a train ticket",
+        "goalLine": "Buy a train ticket — effectively, in Ukrainian.",
+        "goalShort": "buy train ticket",
+        "scenario": "train",
+        "partnerName": "Юрій Yuriy",
+        "partnerInitial": "Ю",
+        "partnerRole": "касир",
+        "partnerPlace": "Lvіv Train Station",
+        "scenarioTitle": "Їдучи потягом · Львів",
+        "scenarioSub": "Roleplay · ticket purchase & schedule inquiry",
+        "lessonPromptEn": "I would like to buy a ticket to Kyiv.",
+        "lessonHint": "Purchase requests use “купити” effectively.",
+        "bank": [
+          "Я хотів би",
+          "купити",
+          "квиток",
+          "до",
+          "Києва",
+          "потяг"
+        ],
+        "bankEn": [
+          "I would like",
+          "to buy",
+          "ticket",
+          "to",
+          "Kyiv",
+          "train"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "lessonCorrectTitle": "На борту! 🎉",
+        "lessonCorrectBody": "“Я хотів би купити” indicates formal purchasing intent.",
+        "lessonWrongBody": "Guide your buying request with “Я хотів би” prior to the object.",
+        "cultureCaption": "Lviv Station · departure excitements",
+        "cultureTitle": "Ukraine's Rail Network — vast and vital",
+        "cultureBody": "Venerated for efficiency, railway travel connects Ukraine’s cities. Familiarize with scheduling and station terminologies to travel seamlessly.",
+        "culturePhrase": "“Квиток”— ticket; “потяг відправляється”— the train departs.",
+        "milestoneTitle": "You can now buy a train ticket — effectively, in Ukrainian.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Здрастуйте, куди вам проїзд?",
+            "en": "Hello, where are you traveling to?"
+          },
+          {
+            "who": "u",
+            "n": "Я хотів би купити квиток до Києва, будь ласка.",
+            "fb": "Spot on — look at clarity in destination."
+          },
+          {
+            "who": "p",
+            "n": "Вам квиток в один кінець чи туди й назад?",
+            "en": "One-way or round-trip ticket?"
+          },
+          {
+            "who": "u",
+            "n": "В один кінець, дякую.",
+            "fb": "Simplicity scores — succinct responses indicate clear intentions."
+          },
+          {
+            "who": "p",
+            "n": "Квиток коштує 100 гривень, дякую за покупку.",
+            "en": "The ticket costs 100 hryvnias, thank you for purchasing."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Decoding intentions",
+            "body": "Balance clarity and precision while stating buying intent."
+          },
+          {
+            "title": "Station savvy",
+            "body": "Master rail terminologies for ease in navigation and travel planning."
+          }
+        ],
+        "grammarMini": "purchase",
+        "grammarTitle": "Purchase — securing travel opportunities",
+        "grammarIntro": "Sculpt clear purchase intentions via “купити” amid transactional protocols.",
+        "gTermA": "квиток",
+        "gDescA": "ticket",
+        "gExA": "Я шукаю квиток.",
+        "gTermB": "купити",
+        "gDescB": "to buy",
+        "gExB": "Ви можете купити квиток тут?"
       }
     ]
   },
@@ -14237,6 +25530,834 @@ export const LANGS: any = {
         "gTermB": "skynda",
         "gDescB": "hurry (imperative)",
         "gExB": "Skynda dig!"
+      },
+      {
+        "chapterTitle": "Chapter 7 · På flygplatsen",
+        "lessonTitle": "Travel Essentials",
+        "goalTitle": "Build it: check in for a flight",
+        "goalLine": "Check in for a flight — and travel with ease.",
+        "goalShort": "check in for a flight",
+        "scenario": "airport",
+        "partnerName": "Johan",
+        "partnerInitial": "J",
+        "partnerRole": "check-in agent",
+        "partnerPlace": "Arlanda flygplats",
+        "scenarioTitle": "På flygplatsen · Stockholm",
+        "scenarioSub": "Roleplay · check-in & departure",
+        "lessonPromptEn": "I have a reservation under [Name].",
+        "lessonHint": "Why “har bokat”?",
+        "bank": [
+          "Jag har bokat",
+          "ett flyg",
+          "med",
+          "pass",
+          "bordskort",
+          "säkerhetskontroll"
+        ],
+        "bankEn": [
+          "I have reserved",
+          "a flight",
+          "with",
+          "passport",
+          "boarding pass",
+          "security check"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "lessonCorrectTitle": "Perfekt! ✈️",
+        "lessonCorrectBody": "“har bokat” (have reserved) is used for reservations; ensure you mention your name.",
+        "lessonWrongBody": "Begin with “I have reserved,” followed by the flight details.",
+        "cultureCaption": "Arlanda flygplats · 8am",
+        "cultureTitle": "Punctuality in Travel",
+        "cultureBody": "Swedes value punctuality, especially when traveling. Arrive early, ensure all documents are ready, and stay calm. The airport process is smooth but efficient.",
+        "culturePhrase": "“Tack” in travel is crucial — polite and useful.",
+        "milestoneTitle": "You can now check in smoothly and travel relaxed.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "God morgon! Har du bokat ett flyg?",
+            "en": "Good morning! Have you reserved a flight?"
+          },
+          {
+            "who": "u",
+            "n": "Ja, jag har bokat med mitt pass.",
+            "fb": "Great — providing your name helps immensely."
+          },
+          {
+            "who": "p",
+            "n": "Perfekt. Kan jag se ditt pass?",
+            "en": "Perfect. May I see your passport?"
+          },
+          {
+            "who": "u",
+            "n": "Självklart, här är det.",
+            "fb": "Nice — “här är det” means here it is."
+          },
+          {
+            "who": "p",
+            "n": "Tack! Här är ditt bordskort.",
+            "en": "Thank you! Here is your boarding pass."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "“har bokat” for reservations",
+            "body": "Use it confidently when you have made a booking."
+          },
+          {
+            "title": "Compound nouns",
+            "body": "Swedish forms nouns like “bordskort” (boarding pass) by combining words."
+          }
+        ],
+        "grammarMini": "en / ett",
+        "grammarTitle": "“en” vs “ett” — the two genders",
+        "grammarIntro": "Nouns are classified as “en” or “ett.” Practice helps:",
+        "gTermA": "en biljett",
+        "gDescA": "common gender",
+        "gExA": "en biljett, en väska",
+        "gTermB": "ett pass",
+        "gDescB": "neuter gender",
+        "gExB": "ett pass, ett bord"
+      },
+      {
+        "chapterTitle": "Chapter 8 · Middag på restaurang",
+        "lessonTitle": "Fine Dining",
+        "goalTitle": "Build it: order a meal",
+        "goalLine": "Order a meal with confidence.",
+        "goalShort": "order a meal",
+        "scenario": "dinner",
+        "partnerName": "Karin",
+        "partnerInitial": "K",
+        "partnerRole": "waitress",
+        "partnerPlace": "Stockholm restaurang",
+        "scenarioTitle": "Middag på restaurang · Stockholm",
+        "scenarioSub": "Roleplay · Dinner & conversation",
+        "lessonPromptEn": "I would like to order the fish, please.",
+        "lessonHint": "Why “skulle vilja beställa”?",
+        "bank": [
+          "Jag skulle vilja beställa",
+          "fisken",
+          "tack",
+          "förrätt",
+          "dessert",
+          "notan"
+        ],
+        "bankEn": [
+          "I would like to order",
+          "the fish",
+          "please",
+          "appetizer",
+          "dessert",
+          "the bill"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          4
+        ],
+        "lessonCorrectTitle": "Perfekt! 🍽️",
+        "lessonCorrectBody": "“skulle vilja beställa” is a polite way to order; place your order then “tack.”",
+        "lessonWrongBody": "Begin politely with “I would like to order,” and then mention the dish.",
+        "cultureCaption": "Stockholm restaurang · 7pm",
+        "cultureTitle": "Dining Etiquette",
+        "cultureBody": "In Sweden, dining is an experience. Meals are unrushed, and conversation flows freely. Use polite language, and enjoy the moment.",
+        "culturePhrase": "“Tack” serves you well — for ordering and expressing gratitude.",
+        "milestoneTitle": "You can now order dinner gracefully and enjoy a Swedish meal.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "God kväll! Vad får det lov att vara?",
+            "en": "Good evening! What would you like?"
+          },
+          {
+            "who": "u",
+            "n": "Jag skulle vilja beställa fisken, tack.",
+            "fb": "Well done — polite and clear."
+          },
+          {
+            "who": "p",
+            "n": "Visst. Något till förrätt?",
+            "en": "Sure. Anything for an appetizer?"
+          },
+          {
+            "who": "u",
+            "n": "Nej tack, bara desserten till slut.",
+            "fb": "Perfect — remember “dessert” for a sweet ending."
+          },
+          {
+            "who": "p",
+            "n": "Absolut, jag återkommer snart.",
+            "en": "Absolutely, I'll be right back."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "“beställa” for ordering",
+            "body": "A versatile verb for making meal choices."
+          },
+          {
+            "title": "Politeness matters",
+            "body": "In Swedish dining, being courteous enhances the experience."
+          }
+        ],
+        "grammarMini": "feminine nouns",
+        "grammarTitle": "Gender: Masculine and Feminine",
+        "grammarIntro": "Most Swedish nouns are either masculine or feminine:",
+        "gTermA": "en förrätt",
+        "gDescA": "usually for living beings",
+        "gExA": "en förrätt, en servitör",
+        "gTermB": "ett glas",
+        "gDescB": "often objects",
+        "gExB": "ett glas, ett bord"
+      },
+      {
+        "chapterTitle": "Chapter 9 · Arbetsintervju",
+        "lessonTitle": "Professional Conversations",
+        "goalTitle": "Build it: attend a job interview",
+        "goalLine": "Attend an interview and make a great impression.",
+        "goalShort": "job interview",
+        "scenario": "interview",
+        "partnerName": "Magnus",
+        "partnerInitial": "M",
+        "partnerRole": "interviewer",
+        "partnerPlace": "Stockholm kontor",
+        "scenarioTitle": "Arbetsintervju · Stockholm",
+        "scenarioSub": "Roleplay · questions & responses",
+        "lessonPromptEn": "I am interested in the position.",
+        "lessonHint": "Why “är intresserad av”?",
+        "bank": [
+          "Jag är intresserad av",
+          "positionen",
+          "och",
+          "mina styrkor",
+          "passar bra",
+          "erfarenhet"
+        ],
+        "bankEn": [
+          "I am interested in",
+          "the position",
+          "and",
+          "my strengths",
+          "fit well",
+          "experience"
+        ],
+        "correct": [
+          0,
+          2,
+          3,
+          5
+        ],
+        "lessonCorrectTitle": "Perfekt! 🏢",
+        "lessonCorrectBody": "“är intresserad av” shows genuine interest; link it with what makes you suitable.",
+        "lessonWrongBody": "Start by expressing interest, then elaborate on your qualifications.",
+        "cultureCaption": "Stockholm, företagskultur · 2pm",
+        "cultureTitle": "Professionalism meets balance",
+        "cultureBody": "In Sweden, work-life balance is key. Interviews are structured yet relaxed, focusing on both skills and cultural fit. Honesty and punctuality are valued.",
+        "culturePhrase": "“Lagom” — not too much, not too little, just right in every aspect.",
+        "milestoneTitle": "You can now attend an interview and communicate your skills effectively.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Välkommen! Vad lockar dig till denna tjänst?",
+            "en": "Welcome! What attracts you to this position?"
+          },
+          {
+            "who": "u",
+            "n": "Jag är intresserad av jobbet och mina styrkor passar bra.",
+            "fb": "Excellent — linking interest to strengths is key."
+          },
+          {
+            "who": "p",
+            "n": "Bra. Har du erfarenhet inom området?",
+            "en": "Good. Do you have experience in the field?"
+          },
+          {
+            "who": "u",
+            "n": "Ja, jag har erfarenhet från tidigare jobb.",
+            "fb": "Perfect — emphasizing relevant experience is important."
+          },
+          {
+            "who": "p",
+            "n": "Det låter lovande. Vi hör av oss snart.",
+            "en": "That sounds promising. We will get back to you soon."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Expressing interest",
+            "body": "“är intresserad av” is key in communicating eagerness."
+          },
+          {
+            "title": "Cultural fit",
+            "body": "Understand the importance of both skills and integrating into company culture."
+          }
+        ],
+        "grammarMini": "use of prepositions",
+        "grammarTitle": "Prepositions in Context",
+        "grammarIntro": "Mastery of prepositions is crucial for clear communication:",
+        "gTermA": "intresserad av",
+        "gDescA": "used to express interest",
+        "gExA": "intresserad av arbete, intresserad av kultur",
+        "gTermB": "passar för",
+        "gDescB": "fit for",
+        "gExB": "passar för jobbet, passar för laget"
+      },
+      {
+        "chapterTitle": "Chapter 10 · På apoteket",
+        "lessonTitle": "Health & Wellness",
+        "goalTitle": "Build it: ask for medication",
+        "goalLine": "Request medication accurately and politely.",
+        "goalShort": "ask for medication",
+        "scenario": "pharmacy",
+        "partnerName": "Eva",
+        "partnerInitial": "E",
+        "partnerRole": "pharmacist",
+        "partnerPlace": "Stockholm apotek",
+        "scenarioTitle": "På apoteket · Stockholm",
+        "scenarioSub": "Roleplay · Queries & clarity",
+        "lessonPromptEn": "I need pain relief, please.",
+        "lessonHint": "Why “behöver du”?",
+        "bank": [
+          "Jag behöver",
+          "smärtlindring",
+          "recept",
+          "sirap",
+          "förkylning",
+          "feber"
+        ],
+        "bankEn": [
+          "I need",
+          "pain relief",
+          "prescription",
+          "syrup",
+          "cold",
+          "fever"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "lessonCorrectTitle": "Perfekt! 💊",
+        "lessonCorrectBody": "“behöver” (need) is crucial in requests; follow it with the item and “tack.”",
+        "lessonWrongBody": "Start with “I need,” then specify the medication.",
+        "cultureCaption": "Stockholm, apotek · 11am",
+        "cultureTitle": "Healthcare and Community",
+        "cultureBody": "Apotek in Sweden are welcoming spaces. Approach with politeness and detail your needs clearly. Pharmacists offer consultations in a community-focused manner.",
+        "culturePhrase": "“Tack” is a must — even when asking for help or advice.",
+        "milestoneTitle": "You can now request medication clearly and confidently.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Hej! Behöver du hjälp med något?",
+            "en": "Hi! Do you need help with anything?"
+          },
+          {
+            "who": "u",
+            "n": "Ja, jag behöver smärtlindring, tack.",
+            "fb": "Brilliant — got your need across clearly."
+          },
+          {
+            "who": "p",
+            "n": "Har du ett recept?",
+            "en": "Do you have a prescription?"
+          },
+          {
+            "who": "u",
+            "n": "Nej, bara något receptfritt.",
+            "fb": "Perfect — clarified without the need for a prescription."
+          },
+          {
+            "who": "p",
+            "n": "Okej, har du haft feber?",
+            "en": "Okay, have you had a fever?"
+          }
+        ],
+        "debrief": [
+          {
+            "title": "“behöver” for needs",
+            "body": "A direct way to express requirements at the pharmacy."
+          },
+          {
+            "title": "Medical vocabulary",
+            "body": "Build your vocabulary for common health-related interactions."
+          }
+        ],
+        "grammarMini": "compounds",
+        "grammarTitle": "Compound Words in Medicine",
+        "grammarIntro": "Understand how Swedish compounds are formed:",
+        "gTermA": "smärtlindring",
+        "gDescA": "pain + relief",
+        "gExA": "huvudvärk (headache), febertermometer (fever thermometer)",
+        "gTermB": "feber",
+        "gDescB": "fever",
+        "gExB": "feber, influensa (flu)"
+      },
+      {
+        "chapterTitle": "Chapter 11 · Debatt",
+        "lessonTitle": "Articulate Arguments",
+        "goalTitle": "Build it: participate in a debate",
+        "goalLine": "Express your views fluently and persuasively.",
+        "goalShort": "debate participation",
+        "scenario": "debate",
+        "partnerName": "Anna",
+        "partnerInitial": "A",
+        "partnerRole": "moderator",
+        "partnerPlace": "Stockholm universitet",
+        "scenarioTitle": "Debatt · Stockholm",
+        "scenarioSub": "Roleplay · Discussion & persuasion",
+        "lessonPromptEn": "I believe we should invest more in education.",
+        "lessonHint": "Why “tror att”?",
+        "bank": [
+          "Jag tror att",
+          "vi borde",
+          "investera i",
+          "utbildning",
+          "presentera",
+          "argument"
+        ],
+        "bankEn": [
+          "I believe that",
+          "we should",
+          "invest in",
+          "education",
+          "present",
+          "argument"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "lessonCorrectTitle": "Perfekt! 🎓",
+        "lessonCorrectBody": "“tror att” is a strong opener for opinions; back it up with reasoning.",
+        "lessonWrongBody": "Start with personal belief (“I believe that”), and then lay out your argument.",
+        "cultureCaption": "Stockholm, debattsal · 3pm",
+        "cultureTitle": "The Culture of Discussion",
+        "cultureBody": "Swedes value well-reasoned arguments and respectful dialogues. Each voice is heard, fostering a culture of consensus and progress. Be clear, concise, and open to listening.",
+        "culturePhrase": "“Lagom”—seek balance in expression, neither too aggressive nor too passive.",
+        "milestoneTitle": "You can now articulate your thoughts clearly in public discussions.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Välkomna. Hur ser du på frågan om utbildning?",
+            "en": "Welcome. What's your view on the issue of education?"
+          },
+          {
+            "who": "u",
+            "n": "Jag tror att vi borde investera mer i utbildning.",
+            "fb": "Strong start — you’ve signaled an important point clearly."
+          },
+          {
+            "who": "p",
+            "n": "Intressant. Kan du utveckla det?",
+            "en": "Interesting. Can you elaborate on that?"
+          },
+          {
+            "who": "u",
+            "n": "Visst, jag har flera argument för detta.",
+            "fb": "Perfect — show you're ready to further explain."
+          },
+          {
+            "who": "p",
+            "n": "Vi ser fram emot att höra dem.",
+            "en": "We look forward to hearing them."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Formulating beliefs",
+            "body": "“tror att” opens serious discussions about personal beliefs."
+          },
+          {
+            "title": "Collaboration in discussion",
+            "body": "Sweden's culture encourages thorough discussion and shared understanding."
+          }
+        ],
+        "grammarMini": "verb constructs",
+        "grammarTitle": "Constructing Arguments in Swedish",
+        "grammarIntro": "Master linking ideas with specific verbs:",
+        "gTermA": "tror att",
+        "gDescA": "believe that",
+        "gExA": "tror att det är rätt, tror att vi kan",
+        "gTermB": "borde",
+        "gDescB": "should",
+        "gExB": "vi borde prata mer, de borde lyssna"
+      },
+      {
+        "chapterTitle": "Chapter 12 · Fri konversation",
+        "lessonTitle": "Casual Speaking",
+        "goalTitle": "Build it: engage in free talk",
+        "goalLine": "Participate in casual conversations with ease.",
+        "goalShort": "casual conversation",
+        "scenario": "freetalk",
+        "partnerName": "Lina",
+        "partnerInitial": "L",
+        "partnerRole": "friend",
+        "partnerPlace": "Stockholm park",
+        "scenarioTitle": "Fri konversation · Stockholm",
+        "scenarioSub": "Roleplay · Relaxed chat & connection",
+        "lessonPromptEn": "What do you like to do on weekends?",
+        "lessonHint": "Why “brukar du”?",
+        "bank": [
+          "Vad brukar du",
+          "göra",
+          "på helgerna",
+          "vänner",
+          "promenera",
+          "film"
+        ],
+        "bankEn": [
+          "What do you usually",
+          "do",
+          "on weekends",
+          "friends",
+          "walk",
+          "movie"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          4
+        ],
+        "lessonCorrectTitle": "Perfekt! 🌟",
+        "lessonCorrectBody": "“brukar du” elicits routines — an ideal icebreaker.",
+        "lessonWrongBody": "Ask using “What do you usually,” then mention an activity or aspect.",
+        "cultureCaption": "Stockholm, parkmiljö · 4pm",
+        "cultureTitle": "Casual Yet Engaged",
+        "cultureBody": "Casual conversations are intimate yet open. Swedes appreciate honest and lively interactions, especially in informal contexts. Be yourself but also attentive.",
+        "culturePhrase": "“Lagom” lets everyone share a stance comfortably — not overstating but staying genuine.",
+        "milestoneTitle": "You can now enjoy spontaneous and genuine Swedish chats.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Hej! Vad brukar du göra på helgerna?",
+            "en": "Hi! What do you usually do on weekends?"
+          },
+          {
+            "who": "u",
+            "n": "Jag brukar promenera med vänner.",
+            "fb": "Great — a simple and engaging response."
+          },
+          {
+            "who": "p",
+            "n": "Det låter härligt. Något speciellt ställe?",
+            "en": "That sounds lovely. Any special place?"
+          },
+          {
+            "who": "u",
+            "n": "Ja, Djurgården är min favorit.",
+            "fb": "Perfect—showed personality and preference."
+          },
+          {
+            "who": "p",
+            "n": "Perfekt ställe. Nästa gång, kanske med mig?",
+            "en": "Perfect place. Next time, perhaps with me?"
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Routine Question",
+            "body": "“brukar du” is essential for small but meaningful talks."
+          },
+          {
+            "title": "Openness in conversation",
+            "body": "True connection often comes from authentic interaction."
+          }
+        ],
+        "grammarMini": "simple questions",
+        "grammarTitle": "Building Simple Questions",
+        "grammarIntro": "Ask fluid questions to encourage ongoing chat:",
+        "gTermA": "brukar du",
+        "gDescA": "do you usually",
+        "gExA": "brukar du läsa, brukar du köra",
+        "gTermB": "var",
+        "gDescB": "where",
+        "gExB": "var gillar du att äta, var promenerar du"
+      },
+      {
+        "chapterTitle": "Chapter 13 · Kontroll vid flytt",
+        "lessonTitle": "Confirming Your Place",
+        "goalTitle": "Build it: confirm housing details",
+        "goalLine": "Confirm housing details and secure your new home.",
+        "goalShort": "confirm housing",
+        "scenario": "placement",
+        "partnerName": "Erik",
+        "partnerInitial": "E",
+        "partnerRole": "landlord",
+        "partnerPlace": "Stockholm lägenhet",
+        "scenarioTitle": "Kontroll vid flytt · Stockholm",
+        "scenarioSub": "Roleplay · Renting & reassurance",
+        "lessonPromptEn": "I would like to confirm the rent and move-in date.",
+        "lessonHint": "Why “bekräfta hyran”?",
+        "bank": [
+          "Jag vill bekräfta",
+          "hyran",
+          "inflyttningsdatum",
+          "kontrakt",
+          "el",
+          "vatten"
+        ],
+        "bankEn": [
+          "I want to confirm",
+          "the rent",
+          "move-in date",
+          "contract",
+          "electricity",
+          "water"
+        ],
+        "correct": [
+          0,
+          1,
+          3,
+          4
+        ],
+        "lessonCorrectTitle": "Perfekt! 🏡",
+        "lessonCorrectBody": "“bekräfta” (confirm) leads to securing agreements.",
+        "lessonWrongBody": "Begin with your intent (“I want to confirm”), followed by specific details.",
+        "cultureCaption": "Stockholm, lägenhet · 2pm",
+        "cultureTitle": "Renting in Sweden",
+        "cultureBody": "The rental process requires attention to terms and clarity. Conversations are direct, but the tone is always respectful. Ask questions and be sure about details.",
+        "culturePhrase": "“Tack” effortlessly keeps negotiations pleasant.",
+        "milestoneTitle": "You can now confirm your housing arrangements with clarity.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "God eftermiddag! Vill du bekräfta något?",
+            "en": "Good afternoon! Would you like to confirm something?"
+          },
+          {
+            "who": "u",
+            "n": "Ja, jag vill bekräfta hyran och inflyttningsdatumet.",
+            "fb": "Well done — covered key information."
+          },
+          {
+            "who": "p",
+            "n": "Självklart. Har du också sett kontraktet?",
+            "en": "Of course. Have you also seen the contract?"
+          },
+          {
+            "who": "u",
+            "n": "Ja, men jag har några frågor om el och vatten.",
+            "fb": "Perfect — highlighting utility concerns shows thoroughness."
+          },
+          {
+            "who": "p",
+            "n": "Inga problem, jag förklarar gärna.",
+            "en": "No problem, I'd be happy to explain."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "“bekräfta” in arranging",
+            "body": "Key to securing housing details without misunderstandings."
+          },
+          {
+            "title": "Foundation of Swedish renting",
+            "body": "Detailed communication ensures all parties are aligned."
+          }
+        ],
+        "grammarMini": "housing terms",
+        "grammarTitle": "Key Housing Vocabulary",
+        "grammarIntro": "Important terms to know when renting:",
+        "gTermA": "hyra",
+        "gDescA": "rent",
+        "gExA": "hög hyra (high rent), låg hyra (low rent)",
+        "gTermB": "el",
+        "gDescB": "electricity",
+        "gExB": "el och vatten (electricity and water)"
+      },
+      {
+        "chapterTitle": "Chapter 14 · På banken",
+        "lessonTitle": "Financial Conversations",
+        "goalTitle": "Build it: open a bank account",
+        "goalLine": "Open a bank account and manage your finances.",
+        "goalShort": "open a bank account",
+        "scenario": "bank",
+        "partnerName": "Jonas",
+        "partnerInitial": "J",
+        "partnerRole": "bank advisor",
+        "partnerPlace": "Stockholm bank",
+        "scenarioTitle": "På banken · Stockholm",
+        "scenarioSub": "Roleplay · Banking essentials",
+        "lessonPromptEn": "I would like to open a bank account.",
+        "lessonHint": "Why “öppna ett konto”?",
+        "bank": [
+          "Jag vill öppna",
+          "ett bankkonto",
+          "identitet",
+          "avgifter",
+          "besparingar",
+          "ränta"
+        ],
+        "bankEn": [
+          "I want to open",
+          "a bank account",
+          "identity",
+          "fees",
+          "savings",
+          "interest"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          5
+        ],
+        "lessonCorrectTitle": "Perfekt! 💼",
+        "lessonCorrectBody": "“öppna” (open) is essential for these initial talks.",
+        "lessonWrongBody": "Begin with your desire to start, then contextualize.",
+        "cultureCaption": "Stockholm, bankkontor · 9am",
+        "cultureTitle": "Banking the Swedish Way",
+        "cultureBody": "Swedish banks are efficient and customer-oriented. Expect clear, concise information with an emphasis on security and transparency. Feel free to ask for clarity on any point.",
+        "culturePhrase": "“Tack” — its importance is untouched even in formal banking.",
+        "milestoneTitle": "You can now handle bank setups with confidence.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Hej! Hur kan jag hjälpa dig idag?",
+            "en": "Hello! How can I help you today?"
+          },
+          {
+            "who": "u",
+            "n": "Jag vill öppna ett bankkonto, tack.",
+            "fb": "Good job — initiating request clearly."
+          },
+          {
+            "who": "p",
+            "n": "Perfekt. Har du identitetshandlingar med dig?",
+            "en": "Perfect. Do you have identification with you?"
+          },
+          {
+            "who": "u",
+            "n": "Ja, jag har mitt pass och ID-kort.",
+            "fb": "Great! Covered common requirements."
+          },
+          {
+            "who": "p",
+            "n": "Utmärkt. Vi kan börja direkt.",
+            "en": "Excellent. We can start right away."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Initiating banking tasks",
+            "body": "“öppna ett konto” begins financial setup procedures smoothly."
+          },
+          {
+            "title": "Navigating Swedish banking",
+            "body": "Equips you with the necessary vocabulary to succeed efficiently."
+          }
+        ],
+        "grammarMini": "banking terms",
+        "grammarTitle": "Essential Banking Vocabulary",
+        "grammarIntro": "Key terms to ensure successful banking interactions:",
+        "gTermA": "konto",
+        "gDescA": "account",
+        "gExA": "löpande konto (checking account)",
+        "gTermB": "ränta",
+        "gDescB": "interest",
+        "gExB": "hög ränta (high interest)"
+      },
+      {
+        "chapterTitle": "Chapter 15 · På tåget",
+        "lessonTitle": "Travel by Train",
+        "goalTitle": "Build it: take a train journey",
+        "goalLine": "Enjoy train travel like a local.",
+        "goalShort": "train journey",
+        "scenario": "train",
+        "partnerName": "Sofia",
+        "partnerInitial": "S",
+        "partnerRole": "conductor",
+        "partnerPlace": "Tågstation i Stockholm",
+        "scenarioTitle": "På tåget · Stockholm",
+        "scenarioSub": "Roleplay · Ticket & travel",
+        "lessonPromptEn": "Which platform does the train depart from?",
+        "lessonHint": "Why “vilken plattform”?",
+        "bank": [
+          "Vilken plattform",
+          "avgår tåget",
+          "biljettkontroll",
+          "spår",
+          "destination",
+          "resa"
+        ],
+        "bankEn": [
+          "Which platform",
+          "does the train depart",
+          "ticket control",
+          "track",
+          "destination",
+          "journey"
+        ],
+        "correct": [
+          0,
+          1,
+          4,
+          5
+        ],
+        "lessonCorrectTitle": "Perfekt! 🚂",
+        "lessonCorrectBody": "“plattform” specifies train directionality within your query.",
+        "lessonWrongBody": "Begin with “Which platform,” and add travel specifics.",
+        "cultureCaption": "Stockholm, tågstation · 10am",
+        "cultureTitle": "Swedish Train Travel",
+        "cultureBody": "Train travel is integral and precise in Sweden. Be punctual, enjoy the scenery, and engage in quiet, serene travel. Tickets are checked regularly and platforms clearly marked.",
+        "culturePhrase": "“Tack” remains integral, even when asking for directions.",
+        "milestoneTitle": "You can now navigate train travel throughout Sweden smoothly.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Hej! Har du en biljett idag?",
+            "en": "Hi! Do you have a ticket today?"
+          },
+          {
+            "who": "u",
+            "n": "Ja, men vilken plattform avgår tåget från?",
+            "fb": "Excellent — specific and to the point."
+          },
+          {
+            "who": "p",
+            "n": "Tåget avgår från plattform 5.",
+            "en": "The train leaves from platform 5."
+          },
+          {
+            "who": "u",
+            "n": "Tack! Spår fem, då vet jag.",
+            "fb": "Perfect! Clear acknowledgment."
+          },
+          {
+            "who": "p",
+            "n": "Ha en trevlig resa!",
+            "en": "Have a pleasant journey!"
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Asking for train details",
+            "body": "Ensure effective travel by asking key routing questions."
+          },
+          {
+            "title": "Punctual travel",
+            "body": "Understand the streamlined nature and precision in Swedish train systems."
+          }
+        ],
+        "grammarMini": "train terms",
+        "grammarTitle": "Essentials of Train Vocabulary",
+        "grammarIntro": "Key terms for successful navigation on Sweden’s trains:",
+        "gTermA": "plattform",
+        "gDescA": "platform",
+        "gExA": "plattform 5",
+        "gTermB": "spår",
+        "gDescB": "track",
+        "gExB": "spår 10, spår 15"
       }
     ]
   },
@@ -14831,6 +26952,1051 @@ export const LANGS: any = {
         "gTermB": "sunați",
         "gDescB": "“call” — imperative for immediate action",
         "gExB": "Sunați ambulanța!"
+      },
+      {
+        "chapterTitle": "Chapter 7 · Aeroport",
+        "lessonTitle": "Navigating the Airport",
+        "goalTitle": "Build it: ask for gate information",
+        "goalLine": "Ask where your gate is — politely, in Romanian.",
+        "goalShort": "ask for gate info",
+        "scenario": "airport",
+        "partnerName": "Serena",
+        "partnerInitial": "S",
+        "partnerRole": "angajată",
+        "partnerPlace": "Henri Coandă Airport",
+        "scenarioTitle": "La aeroport · Henri Coandă",
+        "scenarioSub": "Roleplay · asking for directions",
+        "lessonPromptEn": "Excuse me, where is gate B3?",
+        "lessonHint": "Why “mă scuzați”?",
+        "bank": [
+          "Mă scuzați",
+          "unde",
+          "este",
+          "poarta",
+          "B3",
+          "informații"
+        ],
+        "bankEn": [
+          "Excuse me",
+          "where",
+          "is",
+          "gate",
+          "B3",
+          "information"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "lessonCorrectTitle": "Well done! 🎉",
+        "lessonCorrectBody": "“Mă scuzați” (Excuse me) is a polite way to get attention.",
+        "lessonWrongBody": "Start with “Mă scuzați,” then ask your question politely.",
+        "cultureCaption": "A busy morning at the airport",
+        "cultureTitle": "Navigating with ease",
+        "cultureBody": "In Romania, politeness is appreciated. Use “mă scuzați” to politely ask for help or information in busy places like airports.",
+        "culturePhrase": "“Mă scuzați” — excuse me, “Mulțumesc” — thank you.",
+        "milestoneTitle": "You can now ask for gate information — politely, in Romanian.",
+        "convo": [
+          {
+            "who": "u",
+            "n": "Mă scuzați, unde este poarta B3?",
+            "fb": "Great — “Mă scuzați” starts the question politely"
+          },
+          {
+            "who": "p",
+            "n": "Poarta B3 este la capătul acestui coridor.",
+            "en": "Gate B3 is at the end of this corridor."
+          },
+          {
+            "who": "u",
+            "n": "Mulțumesc mult!",
+            "fb": "Excellent — “Mulțumesc” is a warm thank you."
+          },
+          {
+            "who": "p",
+            "n": "Cu plăcere, drum bun!",
+            "en": "You're welcome, safe travels!"
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Using 'Mă scuzați'",
+            "body": "A polite phrase to use when need to get someone's attention in a busy place."
+          },
+          {
+            "title": "Gender in travel terms",
+            "body": "“Poarta” (gate) is feminine, hence 'o poartă.'"
+          }
+        ],
+        "grammarMini": "interrogative structure",
+        "grammarTitle": "Asking questions with 'unde'",
+        "grammarIntro": "In Romanian, 'unde' is used to ask 'where' something is.",
+        "gTermA": "unde",
+        "gDescA": "means 'where'",
+        "gExA": "Unde este poarta?",
+        "gTermB": "poarta",
+        "gDescB": "means 'the gate'",
+        "gExB": "Poarta este acolo.",
+        "clip": "Îmbarcarea pasagerilor la aeroportul București",
+        "podcast": "Călătorind prin România — episodul 7",
+        "article": "Sfaturi pentru un zbor liniștit în România",
+        "reader": [
+          {
+            "t": "În România, pasagerii "
+          },
+          {
+            "w": "călătoresc",
+            "d": "travel (călători)"
+          },
+          {
+            "t": " adesea cu avionul. Aeroporturile sunt "
+          },
+          {
+            "w": "bine",
+            "d": "well (bine)"
+          },
+          {
+            "t": " organizate și oferă multe facilități."
+          }
+        ],
+        "reviewWord": "poarta",
+        "reviewSource": "from your airport visit, 2 days ago",
+        "reviewMeaning": "the gate (poarta)"
+      },
+      {
+        "chapterTitle": "Chapter 8 · Cina la restaurant",
+        "lessonTitle": "Dinner Delight",
+        "goalTitle": "Build it: order dinner",
+        "goalLine": "Order dinner and thank the waiter — politely, in Romanian.",
+        "goalShort": "order dinner",
+        "scenario": "dinner",
+        "partnerName": "Ion",
+        "partnerInitial": "I",
+        "partnerRole": "ospătar",
+        "partnerPlace": "Bucharest restaurant",
+        "scenarioTitle": "La restaurant · Cină specială",
+        "scenarioSub": "Roleplay · culinary experience",
+        "lessonPromptEn": "I would like the steak, please.",
+        "lessonHint": "“aș dori” vs. “vreau”?",
+        "bank": [
+          "Aș dori",
+          "friptura",
+          "vă rog",
+          "meniul",
+          "vin",
+          "desert"
+        ],
+        "bankEn": [
+          "I would like",
+          "the steak",
+          "please",
+          "the menu",
+          "wine",
+          "dessert"
+        ],
+        "correct": [
+          0,
+          1,
+          2
+        ],
+        "lessonCorrectTitle": "Fantastic! 🎉",
+        "lessonCorrectBody": "“Aș dori” is the polite choice and shows good manners.",
+        "lessonWrongBody": "Begin your order with “Aș dori,” followed by the item.",
+        "cultureCaption": "A cozy evening in a Bucharest restaurant",
+        "cultureTitle": "Dining with warmth",
+        "cultureBody": "Romanian dining is about enjoying both the food and the company. Meals are unhurried occasions to enjoy with friends and family.",
+        "culturePhrase": "“Friptura” — steak; “Meniul” — menu; “Îmi place” — I like.",
+        "milestoneTitle": "You can now order dinner — politely, in Romanian.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Bună seara! Ce doriți să comandați?",
+            "en": "Good evening! What would you like to order?"
+          },
+          {
+            "who": "u",
+            "n": "Aș dori friptura, vă rog.",
+            "fb": "Perfect — “Aș dori” is ideal for dining."
+          },
+          {
+            "who": "p",
+            "n": "Desigur. Doriți și vin?",
+            "en": "Of course. Would you like wine as well?"
+          },
+          {
+            "who": "u",
+            "n": "Da, vă rog un vin roșu.",
+            "fb": "Good choice — ask for “vin roșu” (red wine)."
+          },
+          {
+            "who": "p",
+            "n": "Foarte bine. Poftă bună!",
+            "en": "Very well. Enjoy your meal!"
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Politeness at the table",
+            "body": "Use “Aș dori” to order food politely, followed by “vă rog” for added courtesy."
+          },
+          {
+            "title": "Word endings and gender",
+            "body": "“Friptura” (the steak) uses the definite article suffixed."
+          }
+        ],
+        "grammarMini": "polite requests",
+        "grammarTitle": "Making requests with 'aș dori'",
+        "grammarIntro": "Romanian uses conditional to make polite requests.",
+        "gTermA": "Aș dori",
+        "gDescA": "means 'I would like'",
+        "gExA": "Aș dori friptura.",
+        "gTermB": "friptura",
+        "gDescB": "means 'the steak'",
+        "gExB": "Friptura este delicioasă.",
+        "clip": "Cină elegantă la un restaurant din București",
+        "podcast": "Mâncare și tradiții — episodul 8",
+        "article": "Tradiții culinare în România",
+        "reader": [
+          {
+            "t": "O cină plăcută la "
+          },
+          {
+            "w": "restaurant",
+            "d": "restaurant (restaurant)"
+          },
+          {
+            "t": " începe mereu cu friptura făcută perfect."
+          }
+        ],
+        "reviewWord": "friptura",
+        "reviewSource": "from your dinner, 2 days ago",
+        "reviewMeaning": "the steak (friptura)"
+      },
+      {
+        "chapterTitle": "Chapter 9 · Interviu de muncă",
+        "lessonTitle": "The Job Interview",
+        "goalTitle": "Build it: introduce yourself",
+        "goalLine": "Introduce yourself professionally — in Romanian.",
+        "goalShort": "introduce yourself",
+        "scenario": "interview",
+        "partnerName": "Mihai",
+        "partnerInitial": "M",
+        "partnerRole": "intervievator",
+        "partnerPlace": "Corporate office",
+        "scenarioTitle": "La birou · Interviu",
+        "scenarioSub": "Roleplay · professional introduction",
+        "lessonPromptEn": "Hello, my name is [name].",
+        "lessonHint": "How to start a strong introduction?",
+        "bank": [
+          "Bună ziua",
+          "Numele meu",
+          "este",
+          "sunt",
+          "experimentat",
+          "în"
+        ],
+        "bankEn": [
+          "Hello",
+          "My name",
+          "is",
+          "I am",
+          "experienced",
+          "in"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "lessonCorrectTitle": "Excellent! 🎉",
+        "lessonCorrectBody": "Using a polite introduction shows professionalism.",
+        "lessonWrongBody": "Begin with “Bună ziua” (Hello), then “Numele meu este.”",
+        "cultureCaption": "Navigating corporate culture in Romania",
+        "cultureTitle": "Formal yet friendly",
+        "cultureBody": "In professional settings, Romanians appreciate politeness and clear communication. Introductions are formal, but the atmosphere can be warm.",
+        "culturePhrase": "“Sunt experimentat” — I am experienced.",
+        "milestoneTitle": "You can now introduce yourself — professionally, in Romanian.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Bună ziua! Vă rog să vă prezentați.",
+            "en": "Hello! Please introduce yourself."
+          },
+          {
+            "who": "u",
+            "n": "Bună ziua, numele meu este [Numele].",
+            "fb": "Perfect — a formal start to any introduction."
+          },
+          {
+            "who": "p",
+            "n": "Bine ați venit. Ce experiență aveți?",
+            "en": "Welcome. What experience do you have?"
+          },
+          {
+            "who": "u",
+            "n": "Sunt experimentat în management.",
+            "fb": "Good explanation — always highlight relevant skills."
+          },
+          {
+            "who": "p",
+            "n": "Impresionant! Să începem interviul.",
+            "en": "Impressive! Let's start the interview."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Formal introductions",
+            "body": "Ensure your introduction remains polite and professional."
+          },
+          {
+            "title": "Verbs for experience",
+            "body": "Use “sunt experimentat” to discuss professional skills."
+          }
+        ],
+        "grammarMini": "present tense verbs",
+        "grammarTitle": "Using ‘sunt’ for self-description",
+        "grammarIntro": "‘Sunt’ is commonly used to describe oneself in present tense.",
+        "gTermA": "Numele meu",
+        "gDescA": "means 'my name'",
+        "gExA": "Numele meu este [Nume].",
+        "gTermB": "sunt",
+        "gDescB": "means 'I am'",
+        "gExB": "Sunt manager.",
+        "clip": "Discuții profesionale în medii românești",
+        "podcast": "Succesul în afaceri — episodul 9",
+        "article": "Cum să reușești la un interviu în România",
+        "reader": [
+          {
+            "t": "La interviu, "
+          },
+          {
+            "w": "candidatul",
+            "d": "the candidate (candidat)"
+          },
+          {
+            "t": " trebuie să fie "
+          },
+          {
+            "w": "clar",
+            "d": "clear (clar)"
+          },
+          {
+            "t": " și concis."
+          }
+        ],
+        "reviewWord": "numele",
+        "reviewSource": "from your interview, 2 days ago",
+        "reviewMeaning": "my name (numele)"
+      },
+      {
+        "chapterTitle": "Chapter 10 · Farmacie",
+        "lessonTitle": "Pharmacy Essentials",
+        "goalTitle": "Build it: ask for medicine",
+        "goalLine": "Ask for medicine at a pharmacy — politely, in Romanian.",
+        "goalShort": "ask for medicine",
+        "scenario": "pharmacy",
+        "partnerName": "Elena",
+        "partnerInitial": "E",
+        "partnerRole": "farmacist",
+        "partnerPlace": "Bucharest pharmacy",
+        "scenarioTitle": "La farmacie · Cumpărături",
+        "scenarioSub": "Roleplay · health necessity",
+        "lessonPromptEn": "I need something for a headache, please.",
+        "lessonHint": "Why “aș avea nevoie de”?",
+        "bank": [
+          "Aș avea",
+          "nevoie de",
+          "ceva pentru",
+          "dureri de cap",
+          "vă rog",
+          "prescripție"
+        ],
+        "bankEn": [
+          "I would need",
+          "something for",
+          "headache",
+          "please",
+          "prescription"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "lessonCorrectTitle": "Great job! 🎉",
+        "lessonCorrectBody": "‘Aș avea nevoie de’ is a standard polite way to express needs.",
+        "lessonWrongBody": "Use “Aș avea nevoie de,” followed by what you need.",
+        "cultureCaption": "Navigating a pharmacy with ease",
+        "cultureTitle": "Health and courtesy",
+        "cultureBody": "Romanians are very understanding about health concerns. Maintaining politeness and clarity is key when seeking help in pharmacies.",
+        "culturePhrase": "“Dureri de cap” — headaches; “Aș avea nevoie” — I would need.",
+        "milestoneTitle": "You can now ask for medicine — politely, in Romanian.",
+        "convo": [
+          {
+            "who": "u",
+            "n": "Bună ziua! Aș avea nevoie de ceva pentru dureri de cap, vă rog.",
+            "fb": "Excellent! You’ve asked politely for exactly what you need."
+          },
+          {
+            "who": "p",
+            "n": "Bună ziua! Avem câteva opțiuni. Preferi pastile sau sirop?",
+            "en": "Hello! We have a few options. Do you prefer pills or syrup?"
+          },
+          {
+            "who": "u",
+            "n": "Pastile, vă rog.",
+            "fb": "Great choice — clear and concise."
+          },
+          {
+            "who": "p",
+            "n": "Sigur, iată. Cum vă mai pot ajuta?",
+            "en": "Sure, here you go. How else may I help you?"
+          },
+          {
+            "who": "u",
+            "n": "Mulțumesc mult!",
+            "fb": "Always remember to say thank you."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Explaining needs",
+            "body": "When you describe a medical need, be direct but polite."
+          },
+          {
+            "title": "Medical vocabulary",
+            "body": "Learn key terms like “dureri de cap” for headaches."
+          }
+        ],
+        "grammarMini": "expressing needs",
+        "grammarTitle": "Using ‘aș avea nevoie de’",
+        "grammarIntro": "This phrase is essential for politely expressing needs.",
+        "gTermA": "Aș avea nevoie de",
+        "gDescA": "means 'I would need'",
+        "gExA": "Aș avea nevoie de pastile.",
+        "gTermB": "dureri de cap",
+        "gDescB": "means 'headache'",
+        "gExB": "Am dureri de cap.",
+        "clip": "Servicii farmaceutice în România",
+        "podcast": "Sănătate în România — episodul 10",
+        "article": "Accesibilitatea farmaciei românești",
+        "reader": [
+          {
+            "t": "La farmacie, "
+          },
+          {
+            "w": "tot",
+            "d": "all (tot)"
+          },
+          {
+            "t": " ce ai nevoie este ajutorul "
+          },
+          {
+            "w": "farmacistului",
+            "d": "the pharmacist (farmacist)"
+          },
+          {
+            "t": "."
+          }
+        ],
+        "reviewWord": "pastile",
+        "reviewSource": "from your pharmacy visit, 2 days ago",
+        "reviewMeaning": "pills (pastile)"
+      },
+      {
+        "chapterTitle": "Chapter 11 · Dezbatere academică",
+        "lessonTitle": "A Heated Debate",
+        "goalTitle": "Build it: express an opinion",
+        "goalLine": "Express your opinion respectfully — in Romanian.",
+        "goalShort": "express an opinion",
+        "scenario": "debate",
+        "partnerName": "Andreea",
+        "partnerInitial": "A",
+        "partnerRole": "companion de echipă",
+        "partnerPlace": "Debate club",
+        "scenarioTitle": "La clubul de dezbateri · Discurs",
+        "scenarioSub": "Roleplay · exchanging viewpoints",
+        "lessonPromptEn": "In my opinion, it is important.",
+        "lessonHint": "Why “din punctul meu de vedere”?",
+        "bank": [
+          "Din punctul meu",
+          "de vedere",
+          "este",
+          "important",
+          "dezbatere",
+          "subiect"
+        ],
+        "bankEn": [
+          "In my opinion",
+          "it is",
+          "important",
+          "debate",
+          "topic"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "lessonCorrectTitle": "Well articulated! 🎉",
+        "lessonCorrectBody": "‘Din punctul meu de vedere’ is a respectful start to an opinion.",
+        "lessonWrongBody": "Use “Din punctul meu de vedere” to share your view politely.",
+        "cultureCaption": "Engaging in Romanian debates",
+        "cultureTitle": "Argue with respect",
+        "cultureBody": "Romanians appreciate a good debate, viewing it as an exchange to broaden perspectives rather than a confrontation.",
+        "culturePhrase": "“Opinia mea” — my opinion; “important” — important.",
+        "milestoneTitle": "You can now express your opinion — respectfully, in Romanian.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Începem dezbaterea! Care este părerea ta?",
+            "en": "Let's start the debate! What's your opinion?"
+          },
+          {
+            "who": "u",
+            "n": "Din punctul meu de vedere, este important să discutăm subiectul.",
+            "fb": "Great start — clear and polite."
+          },
+          {
+            "who": "p",
+            "n": "Interesant! De ce crezi asta?",
+            "en": "Interesting! Why do you think so?"
+          },
+          {
+            "who": "u",
+            "n": "Pentru că ajută la înțelegerea diverselor puncte de vedere.",
+            "fb": "Good argument — be thorough and respectful."
+          },
+          {
+            "who": "p",
+            "n": "De acord, continuăm discutia.",
+            "en": "Agreed, let's continue the discussion."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Expressing opinions",
+            "body": "Start with ‘Din punctul meu de vedere’ to respectfully express your opinion."
+          },
+          {
+            "title": "Constructing arguments",
+            "body": "Structure your thoughts clearly to communicate effectively."
+          }
+        ],
+        "grammarMini": "connecting phrases",
+        "grammarTitle": "Using ‘din punctul meu de vedere’",
+        "grammarIntro": "This phrase connects your personal view in a discussion.",
+        "gTermA": "Din punctul meu de vedere",
+        "gDescA": "means 'in my point of view'",
+        "gExA": "Din punctul meu de vedere, este bine.",
+        "gTermB": "important",
+        "gDescB": "means 'important'",
+        "gExB": "Subiectul este important.",
+        "clip": "Dezbateri aprige la clubul studențesc",
+        "podcast": "Puncte de vedere — episodul 11",
+        "article": "Arta argumentării în cultura românească",
+        "reader": [
+          {
+            "t": "În dezbatere, fiecare "
+          },
+          {
+            "w": "voce",
+            "d": "voice (voce)"
+          },
+          {
+            "t": " contează și aduce "
+          },
+          {
+            "w": "valoare",
+            "d": "value (valoare)"
+          },
+          {
+            "t": "."
+          }
+        ],
+        "reviewWord": "opinia",
+        "reviewSource": "from your debate, 2 days ago",
+        "reviewMeaning": "opinion (opinia)"
+      },
+      {
+        "chapterTitle": "Chapter 12 · Discuții libere",
+        "lessonTitle": "Casual Conversations",
+        "goalTitle": "Build it: keep a conversation flowing",
+        "goalLine": "Keep a casual conversation going — in Romanian.",
+        "goalShort": "keep a conversation",
+        "scenario": "freetalk",
+        "partnerName": "Raluca",
+        "partnerInitial": "R",
+        "partnerRole": "prieten",
+        "partnerPlace": "Cafenea din București",
+        "scenarioTitle": "La o cafea · Discuții libere",
+        "scenarioSub": "Roleplay · engaging chat",
+        "lessonPromptEn": "How was your weekend?",
+        "lessonHint": "Easy starters to keep talk flowing?",
+        "bank": [
+          "Cum",
+          "a fost",
+          "weekendul tău",
+          "bine",
+          "interesant",
+          "călătorii"
+        ],
+        "bankEn": [
+          "How",
+          "was",
+          "your weekend",
+          "good",
+          "interesting",
+          "trips"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "lessonCorrectTitle": "Nicely done! 🎉",
+        "lessonCorrectBody": "Simple questions can lead to interesting conversations.",
+        "lessonWrongBody": "To start, use “Cum a fost” followed by the event.",
+        "cultureCaption": "Chat over coffee in Romania",
+        "cultureTitle": "The art of conversation",
+        "cultureBody": "Casual conversations in Romania often span a wide variety of topics from daily life to deep philosophy, always accompanied by good coffee.",
+        "culturePhrase": "“Cum a fost?” — How was it?; “Relaxează-te” — Relax.",
+        "milestoneTitle": "You can now keep a conversation going — in Romanian.",
+        "convo": [
+          {
+            "who": "u",
+            "n": "Cum a fost weekendul tău?",
+            "fb": "Great opener to get the conversation started."
+          },
+          {
+            "who": "p",
+            "n": "A fost foarte bine, mulțumesc! Am fost la munte.",
+            "en": "It was very good, thank you! I went to the mountains."
+          },
+          {
+            "who": "u",
+            "n": "Interesant! Ai văzut ceva special?",
+            "fb": "Good follow-up question to continue the chat."
+          },
+          {
+            "who": "p",
+            "n": "Da, am văzut câteva peisaje superbe.",
+            "en": "Yes, I saw some beautiful landscapes."
+          },
+          {
+            "who": "u",
+            "n": "Sună minunat! Trebuie să merg și eu.",
+            "fb": "Affirmative response encourages more discussion."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Keeping conversations lively",
+            "body": "Ask open questions to keep others engaged."
+          },
+          {
+            "title": "Social phrases",
+            "body": "Use simple phrases to express curiosity and encouragement."
+          }
+        ],
+        "grammarMini": "question structure",
+        "grammarTitle": "Forming simple questions",
+        "grammarIntro": "Questions like “Cum a fost...?” ask about past events.",
+        "gTermA": "Cum a fost",
+        "gDescA": "means 'how was'",
+        "gExA": "Cum a fost călătoria?",
+        "gTermB": "bine",
+        "gDescB": "means 'good'",
+        "gExB": "Călătoria a fost bine.",
+        "clip": "Discuții relaxante în cafenelele din București",
+        "podcast": "Povești de zi cu zi — episodul 12",
+        "article": "Arta discuției lejeră",
+        "reader": [
+          {
+            "t": "Pe măsură ce "
+          },
+          {
+            "w": "vorbesc",
+            "d": "talk (a vorbi)"
+          },
+          {
+            "t": ", oamenii "
+          },
+          {
+            "w": "câștigă",
+            "d": "gain (a câștiga)"
+          },
+          {
+            "t": " încredere și "
+          },
+          {
+            "w": "prieteni",
+            "d": "friends (prieten)"
+          },
+          {
+            "t": "."
+          }
+        ],
+        "reviewWord": "interesant",
+        "reviewSource": "from your chat, 2 days ago",
+        "reviewMeaning": "interesting (interesant)"
+      },
+      {
+        "chapterTitle": "Chapter 13 · Evaluare poziționare",
+        "lessonTitle": "Placement Check",
+        "goalTitle": "Build it: understand placement",
+        "goalLine": "Understand your language placement — in Romanian.",
+        "goalShort": "understand placement",
+        "scenario": "placement",
+        "partnerName": "Cristian",
+        "partnerInitial": "C",
+        "partnerRole": "profesor",
+        "partnerPlace": "Limba Română Center",
+        "scenarioTitle": "Evaluare · Poziționare",
+        "scenarioSub": "Roleplay · understanding your level",
+        "lessonPromptEn": "What is my level?",
+        "lessonHint": "How to ask about understanding?",
+        "bank": [
+          "Care",
+          "este",
+          "nivelul",
+          "meu",
+          "învață",
+          "progres"
+        ],
+        "bankEn": [
+          "What",
+          "is",
+          "level",
+          "my",
+          "learn",
+          "progress"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "lessonCorrectTitle": "Well done! 🎉",
+        "lessonCorrectBody": "Understanding where you start helps in effective learning.",
+        "lessonWrongBody": "Start with “Care este,” then be specific with your question.",
+        "cultureCaption": "Assessing language skills in Romania",
+        "cultureTitle": "Feedback and growth",
+        "cultureBody": "Language learning in Romania often involves formal assessments to ensure students are in the right class for their skill level.",
+        "culturePhrase": "“Nivel” — level, “Progres” — progress.",
+        "milestoneTitle": "You can now understand your language placement — in Romanian.",
+        "convo": [
+          {
+            "who": "u",
+            "n": "Care este nivelul meu?",
+            "fb": "Direct question to check your status."
+          },
+          {
+            "who": "p",
+            "n": "Nivelul dumneavoastră este intermediar.",
+            "en": "Your level is intermediate."
+          },
+          {
+            "who": "u",
+            "n": "Cum pot progresa mai repede?",
+            "fb": "Great follow-up to focus on growth."
+          },
+          {
+            "who": "p",
+            "n": "Practica regulată și cursuri intensive ajută mult.",
+            "en": "Regular practice and intensive courses help a lot."
+          },
+          {
+            "who": "u",
+            "n": "Mulțumesc pentru sfaturi!",
+            "fb": "Always appreciate feedback."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Understanding levels",
+            "body": "Getting a clear understanding of your level helps you learn effectively."
+          },
+          {
+            "title": "Proactive learning",
+            "body": "Ask questions to make the most of your learning opportunities."
+          }
+        ],
+        "grammarMini": "questions",
+        "grammarTitle": "Using ‘Care este’ to inquire",
+        "grammarIntro": "This phrase forms the start of many inquiry questions.",
+        "gTermA": "Care este",
+        "gDescA": "means 'what is'",
+        "gExA": "Care este nivelul tău?",
+        "gTermB": "nivelul",
+        "gDescB": "means 'level'",
+        "gExB": "Nivelul meu este avansat.",
+        "clip": "Evaluarea competențelor lingvistice",
+        "podcast": "Cum să înveți eficient — episodul 13",
+        "article": "Evaluarea la cursurile de limbi străine",
+        "reader": [
+          {
+            "t": "Învață să "
+          },
+          {
+            "w": "întrebi",
+            "d": "ask (a întreba)"
+          },
+          {
+            "t": " pentru a "
+          },
+          {
+            "w": "explora",
+            "d": "explore (explora)"
+          },
+          {
+            "t": " traseul tău educațional."
+          }
+        ],
+        "reviewWord": "nivelul",
+        "reviewSource": "from your evaluation, 2 days ago",
+        "reviewMeaning": "level (nivelul)"
+      },
+      {
+        "chapterTitle": "Chapter 14 · La bancă",
+        "lessonTitle": "Bank Business",
+        "goalTitle": "Build it: open a bank account",
+        "goalLine": "Open a bank account — in Romanian.",
+        "goalShort": "open a bank account",
+        "scenario": "bank",
+        "partnerName": "Gabriel",
+        "partnerInitial": "G",
+        "partnerRole": "bancher",
+        "partnerPlace": "Banca centrală",
+        "scenarioTitle": "La bancă · Deschiderea contului",
+        "scenarioSub": "Roleplay · personal finance",
+        "lessonPromptEn": "I would like to open an account.",
+        "lessonHint": "How is “a deschide” used?",
+        "bank": [
+          "Aș dori",
+          "să deschid",
+          "un cont",
+          "la bancă",
+          "documente",
+          "identitate"
+        ],
+        "bankEn": [
+          "I would like",
+          "to open",
+          "an account",
+          "at the bank",
+          "documents",
+          "ID"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "lessonCorrectTitle": "All set! 🎉",
+        "lessonCorrectBody": "“A deschide” means to open — an essential term in banking.",
+        "lessonWrongBody": "Begin with “Aș dori să deschid” for making polite banking requests.",
+        "cultureCaption": "Getting started with banking in Romania",
+        "cultureTitle": "Financial formality",
+        "cultureBody": "Opening a bank account in Romania requires some formality but is straightforward with the right documents. Politeness smooths the process.",
+        "culturePhrase": "“Cont” — account; “Dosar” — file.",
+        "milestoneTitle": "You can now open a bank account — in Romanian.",
+        "convo": [
+          {
+            "who": "u",
+            "n": "Bună ziua! Aș dori să deschid un cont la această bancă.",
+            "fb": "An important step for settling in."
+          },
+          {
+            "who": "p",
+            "n": "Bună ziua! Aveți documentele de identitate?",
+            "en": "Hello! Do you have your ID documents?"
+          },
+          {
+            "who": "u",
+            "n": "Da, iată-le.",
+            "fb": "Handing over documents — clear and straightforward."
+          },
+          {
+            "who": "p",
+            "n": "Mulțumesc. Acum să completăm dosarul.",
+            "en": "Thank you. Now let's complete the file."
+          },
+          {
+            "who": "u",
+            "n": "Sigur, sunt gata.",
+            "fb": "Always be ready to proceed smoothly."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Document requirements",
+            "body": "Ensure to have your ID ready when opening accounts abroad."
+          },
+          {
+            "title": "Polite banking terms",
+            "body": "Understand and use key terms like ‘a deschide’ for seamless transactions."
+          }
+        ],
+        "grammarMini": "verbs of action",
+        "grammarTitle": "Using ‘a deschide’ in context",
+        "grammarIntro": "The verb ‘a deschide’ means ‘to open’ and is crucial for formal requests.",
+        "gTermA": "a deschide",
+        "gDescA": "means 'to open'",
+        "gExA": "Vreau să deschid un dosar.",
+        "gTermB": "cont",
+        "gDescB": "means 'account'",
+        "gExB": "Am un cont la bancă.",
+        "clip": "Activități bancare în România",
+        "podcast": "Ghid de finanțe personale — episodul 14",
+        "article": "Administrarea financiilor personale",
+        "reader": [
+          {
+            "t": "La bancă, "
+          },
+          {
+            "w": "clienții",
+            "d": "customers (client)"
+          },
+          {
+            "t": " trebuie să fie "
+          },
+          {
+            "w": "atenți",
+            "d": "careful (atent)"
+          },
+          {
+            "t": " la detalii."
+          }
+        ],
+        "reviewWord": "documente",
+        "reviewSource": "from your bank visit, 2 days ago",
+        "reviewMeaning": "documents (documente)"
+      },
+      {
+        "chapterTitle": "Chapter 15 · Trenul",
+        "lessonTitle": "Taking the Train",
+        "goalTitle": "Build it: buy a train ticket",
+        "goalLine": "Buy a train ticket — in Romanian.",
+        "goalShort": "buy a train ticket",
+        "scenario": "train",
+        "partnerName": "Vlad",
+        "partnerInitial": "V",
+        "partnerRole": "agent de bilete",
+        "partnerPlace": "Gara de Nord",
+        "scenarioTitle": "La gară · Cumpără un bilet",
+        "scenarioSub": "Roleplay · travel experience",
+        "lessonPromptEn": "I would like a ticket to Cluj, please.",
+        "lessonHint": "Why “aș dori”?",
+        "bank": [
+          "Aș dori",
+          "un bilet",
+          "pentru",
+          "Cluj",
+          "dus-întors",
+          "o călătorie"
+        ],
+        "bankEn": [
+          "I would like",
+          "a ticket",
+          "for",
+          "Cluj",
+          "round trip",
+          "one way"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "lessonCorrectTitle": "On your way! 🎉",
+        "lessonCorrectBody": "Train travel in Romania offers a scenic journey. Start with ‘Aș dori’ for a polite ticket request.",
+        "lessonWrongBody": "Use “Aș dori” followed by the type of ticket and destination.",
+        "cultureCaption": "Enjoying the Romanian railway",
+        "cultureTitle": "Travel by train",
+        "cultureBody": "Train travel is a scenic and budget-friendly way to see Romania. Tickets can be purchased with a simple and polite request.",
+        "culturePhrase": "“Bilet” — ticket; “Gara” — station; “Diurn” — daily fare.",
+        "milestoneTitle": "You can now buy a train ticket — in Romanian.",
+        "convo": [
+          {
+            "who": "u",
+            "n": "Bună ziua, aș dori un bilet pentru Cluj, vă rog.",
+            "fb": "Polite start for any travel plan."
+          },
+          {
+            "who": "p",
+            "n": "Bună ziua! Vă doriți dus-întors?",
+            "en": "Hello! Would you like it round trip?"
+          },
+          {
+            "who": "u",
+            "n": "Da, vă rog.",
+            "fb": "Simple affirmation to confirm your choice."
+          },
+          {
+            "who": "p",
+            "n": "Iată biletul dumneavoastră. Drumeție plăcută!",
+            "en": "Here's your ticket. Have a nice trip!"
+          },
+          {
+            "who": "u",
+            "n": "Mulțumesc mult!",
+            "fb": "Always end with gratitude."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Train ticket requests",
+            "body": "In any travel setting, clarity and politeness ensure a smooth transaction."
+          },
+          {
+            "title": "Navigating tickets",
+            "body": "Understand key terms like ‘dus-întors’ (round trip) for effective travel."
+          }
+        ],
+        "grammarMini": "travel terms",
+        "grammarTitle": "Understanding ‘bilet’ and companions",
+        "grammarIntro": "These terms form foundational travel vocabulary in Romanian.",
+        "gTermA": "bilet",
+        "gDescA": "means 'ticket'",
+        "gExA": "Am un bilet pentru Cluj.",
+        "gTermB": "gara",
+        "gDescB": "means 'train station'",
+        "gExB": "Gara este mare.",
+        "clip": "Peisaje văzute din trenul spre Cluj",
+        "podcast": "Drumuri românești — episodul 15",
+        "article": "Călătorind cu trenul prin România",
+        "reader": [
+          {
+            "t": "Călătoriile cu trenul sunt "
+          },
+          {
+            "w": "confortabile",
+            "d": "comfortable (confortabil)"
+          },
+          {
+            "t": " și oferă peisaje "
+          },
+          {
+            "w": "minunate",
+            "d": "wonderful (minunat)"
+          },
+          {
+            "t": "."
+          }
+        ],
+        "reviewWord": "bilet",
+        "reviewSource": "from your train trip, 2 days ago",
+        "reviewMeaning": "ticket (bilet)"
       }
     ]
   },
@@ -16170,6 +29336,833 @@ export const LANGS: any = {
         "reviewWord": "segítség",
         "reviewSource": "from your emergency prep, 6 days ago",
         "reviewMeaning": "help (segítség)"
+      },
+      {
+        "chapterTitle": "Chapter 7 · A repülőtéren",
+        "lessonTitle": "Travel Talk",
+        "goalTitle": "Build it: find your gate",
+        "goalLine": "Find your boarding gate and ask for directions politely, in Hungarian.",
+        "goalShort": "find your gate",
+        "scenario": "airport",
+        "partnerName": "Balázs",
+        "partnerInitial": "B",
+        "partnerRole": "információs munkatárs",
+        "partnerPlace": "Liszt Ferenc Repülőtér",
+        "scenarioTitle": "A repülőtéren · Budapest",
+        "scenarioSub": "Roleplay · asking for directions at the airport",
+        "lessonPromptEn": "Which way to gate B10?",
+        "lessonHint": "Why “hol van”?",
+        "bank": [
+          "Hol van",
+          "a kapu",
+          "B tíz",
+          "térkép",
+          "kijárat",
+          "mosdó"
+        ],
+        "bankEn": [
+          "Where is",
+          "the gate",
+          "B ten",
+          "map",
+          "exit",
+          "restroom"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "lessonCorrectTitle": "Tökéletes! 🎉",
+        "lessonCorrectBody": "“Hol van” means “Where is”; “kapu” is gate, followed by its identifier.",
+        "lessonWrongBody": "Start your question with “Hol van” (Where is), then specify the gate.",
+        "cultureCaption": "Budapest's bustling airport",
+        "cultureTitle": "Navigating Hungarian Airports",
+        "cultureBody": "At Budapest Airport, distinct letter-number codes mark gates. Friendly staff are always ready to help with directions — a polite “köszönöm” (thank you) is appreciated.",
+        "culturePhrase": "“Köszönöm” — thank you; useful after receiving help.",
+        "milestoneTitle": "You can now find your boarding gate — politely, in Hungarian.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Jó reggelt! Miben segíthetek?",
+            "en": "Good morning! How can I help you?"
+          },
+          {
+            "who": "u",
+            "n": "Hol van a kapu B tíz, kérem?",
+            "fb": "Great — clear and polite inquiry"
+          },
+          {
+            "who": "p",
+            "n": "Menjen egyenesen, aztán balra.",
+            "en": "Go straight, then turn left."
+          },
+          {
+            "who": "u",
+            "n": "Köszönöm szépen!",
+            "fb": "Perfect — “köszönöm szépen” expresses sincere thanks"
+          },
+          {
+            "who": "p",
+            "n": "Szívesen! Jó utat!",
+            "en": "You're welcome! Have a good trip!"
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Locating features - article use",
+            "body": "Use definite articles with specific locations, like “a kapu.”"
+          },
+          {
+            "title": "Polite expression",
+            "body": "The phrase “kérem” softens requests, making them polite."
+          }
+        ],
+        "grammarMini": "article use",
+        "grammarTitle": "Definite articles in location names",
+        "grammarIntro": "Hungarian uses definite articles in front of known locations:",
+        "gTermA": "a/az",
+        "gDescA": "used based on word's starting vowel sound",
+        "gExA": "a kapu — the gate",
+        "gTermB": "a/az",
+        "gDescB": "“the” for definite objects, adjusted for vowel harmony",
+        "gExB": "az információ — the information"
+      },
+      {
+        "chapterTitle": "Chapter 8 · A vacsora az étteremben",
+        "lessonTitle": "Dining Experience",
+        "goalTitle": "Build it: order dinner",
+        "goalLine": "Order a complete dinner politely, in Hungarian.",
+        "goalShort": "order dinner",
+        "scenario": "dinner",
+        "partnerName": "Zoltán",
+        "partnerInitial": "Z",
+        "partnerRole": "felszolgáló",
+        "partnerPlace": "Budapesti étterem",
+        "scenarioTitle": "A vacsora · Budapest",
+        "scenarioSub": "Roleplay · dining experience and ordering",
+        "lessonPromptEn": "I would like a starter, main course, and dessert.",
+        "lessonHint": "Why “szeretnék”?",
+        "bank": [
+          "Szeretnék",
+          "egy előételt",
+          "főételt",
+          "és desszertet",
+          "kóstol",
+          "kér",
+          "csak"
+        ],
+        "bankEn": [
+          "I would like",
+          "a starter",
+          "main course",
+          "and dessert",
+          "taste",
+          "ask",
+          "only"
+        ],
+        "correct": [
+          0,
+          1,
+          3,
+          4
+        ],
+        "lessonCorrectTitle": "Tökéletes! 🎉",
+        "lessonCorrectBody": "“Szeretnék” expresses a polite desire; sequence your order logically.",
+        "lessonWrongBody": "Use “Szeretnék” to express a polite wish, then each dish type.",
+        "cultureCaption": "Budapest's charming dinner scenes",
+        "cultureTitle": "The Art of Dining in Hungary",
+        "cultureBody": "Dinner in Hungary often starts with a hearty soup. Dining etiquette values patience and politeness, making “szeretnék” a preferred way of ordering. Leave room for “rétes” — a delightful Hungarian strudel.",
+        "culturePhrase": "“Köszönöm” — thank you; appreciate the meticulous service.",
+        "milestoneTitle": "You can now order a complete dinner — politely, in Hungarian.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Jó estét! Mit hozhatok?",
+            "en": "Good evening! What can I bring you?"
+          },
+          {
+            "who": "u",
+            "n": "Szeretnék egy előételt, főételt, és desszertet.",
+            "fb": "Great — clear, structured order"
+          },
+          {
+            "who": "p",
+            "n": "Nagyszerű választás! Valami italt?",
+            "en": "Great choice! Any drinks?"
+          },
+          {
+            "who": "u",
+            "n": "Egy pohár bort, kérem.",
+            "fb": "Perfect — the drink adds to the meal"
+          },
+          {
+            "who": "p",
+            "n": "Rendben, máris hozom!",
+            "en": "Alright, I'll bring it right away!"
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Structuring orders",
+            "body": "In Hungarian dining, listing items expectedly follows the meal's sequence."
+          },
+          {
+            "title": "Politeness in dining",
+            "body": "Use “szeretnék” to express choices politely, as it implies a wish."
+          }
+        ],
+        "grammarMini": "dining structure",
+        "grammarTitle": "Polite expressions in dining",
+        "grammarIntro": "Hungarian etiquette prefers courteous expressions during meal orders:",
+        "gTermA": "szeretnék",
+        "gDescA": "expressing polite wish or desire",
+        "gExA": "Szeretnék ... — I would like ...",
+        "gTermB": "kér",
+        "gDescB": "ask/request",
+        "gExB": "Kérem a számlát — Please bring the check"
+      },
+      {
+        "chapterTitle": "Chapter 9 · Az állásinterjú",
+        "lessonTitle": "Interview Essentials",
+        "goalTitle": "Build it: present your skills",
+        "goalLine": "Confidently describe your skills and experience, in Hungarian.",
+        "goalShort": "skills presentation",
+        "scenario": "interview",
+        "partnerName": "Anna",
+        "partnerInitial": "A",
+        "partnerRole": "HR munkatárs",
+        "partnerPlace": "Budapesti cég",
+        "scenarioTitle": "Az állásinterjú · Budapest",
+        "scenarioSub": "Roleplay · presenting yourself",
+        "lessonPromptEn": "I have five years of experience.",
+        "lessonHint": "Why “tapasztalatom”?",
+        "bank": [
+          "Öt év",
+          "tapasztalatom",
+          "van",
+          "ebben",
+          "az iparágban",
+          "szakértelem"
+        ],
+        "bankEn": [
+          "Five years",
+          "my experience",
+          "have",
+          "in this",
+          "industry",
+          "expertise"
+        ],
+        "correct": [
+          0,
+          1,
+          3,
+          4
+        ],
+        "lessonCorrectTitle": "Tökéletes! 🎉",
+        "lessonCorrectBody": "“Tapasztalatom van” — I have experience; specify it with “öt év.”",
+        "lessonWrongBody": "Structure “(Number) év tapasztalatom van” to state experience.",
+        "cultureCaption": "Professional environments in Budapest",
+        "cultureTitle": "Navigating Hungarian Job Interviews",
+        "cultureBody": "Punctuality and clear communication are key in Hungarian interviews. Discuss your skills confidently but humbly, and use formal language. “Köszönöm” shows gratitude at the end.",
+        "culturePhrase": "“Önnek van ...” — Do you have ...; formal tone is essential.",
+        "milestoneTitle": "You can now confidently present your skills and experience — in Hungarian.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Kérem, meséljen a tapasztalatairól.",
+            "en": "Please, tell me about your experience."
+          },
+          {
+            "who": "u",
+            "n": "Öt év tapasztalatom van ebben az iparágban.",
+            "fb": "Excellent — clearly stating experience"
+          },
+          {
+            "who": "p",
+            "n": "Nagyon érdekes, mi a legnagyobb erőssége?",
+            "en": "Very interesting, what is your greatest strength?"
+          },
+          {
+            "who": "u",
+            "n": "A legnagyobb erősségem a csapatmunka.",
+            "fb": "Perfect — identifying key strength."
+          },
+          {
+            "who": "p",
+            "n": "Köszönöm, hogy elmondta!",
+            "en": "Thank you for sharing!"
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Expressing experience",
+            "body": "Use numbers next to “tapasztalatom” to define specific experience timeframes."
+          },
+          {
+            "title": "Formal language",
+            "body": "In an interview, addressing formally reinforces your professionalism."
+          }
+        ],
+        "grammarMini": "formal expressions",
+        "grammarTitle": "Formal language in professional settings",
+        "grammarIntro": "Use precise, formal structures during interview dialogue:",
+        "gTermA": "tapasztalatom van",
+        "gDescA": "I have experience",
+        "gExA": "Öt év tapasztalatom van — I have five years of experience",
+        "gTermB": "Önnek van",
+        "gDescB": "Do you have (formal)?",
+        "gExB": "Önnek van kérdése? — Do you have a question?"
+      },
+      {
+        "chapterTitle": "Chapter 10 · A gyógyszertárban",
+        "lessonTitle": "Pharmacy Necessities",
+        "goalTitle": "Build it: ask for medication",
+        "goalLine": "Ask for medication and essential health items, in Hungarian.",
+        "goalShort": "ask for medication",
+        "scenario": "pharmacy",
+        "partnerName": "Emese",
+        "partnerInitial": "E",
+        "partnerRole": "gyógyszerész",
+        "partnerPlace": "Budapesti gyógyszertár",
+        "scenarioTitle": "A gyógyszertárban · Budapest",
+        "scenarioSub": "Roleplay · acquiring health products",
+        "lessonPromptEn": "I need painkillers, please.",
+        "lessonHint": "How to use “gyógyszer”?",
+        "bank": [
+          "Fájdalomcsillapítót",
+          "szeretnék",
+          "kérem",
+          "további",
+          "segítség",
+          "időpont"
+        ],
+        "bankEn": [
+          "Painkillers",
+          "I would like",
+          "please",
+          "additional",
+          "help",
+          "appointment"
+        ],
+        "correct": [
+          1,
+          0,
+          2
+        ],
+        "lessonCorrectTitle": "Tökéletes! 🎉",
+        "lessonCorrectBody": "“Szeretnék … kérem” shows a polite request for items.",
+        "lessonWrongBody": "Express wants with “Szeretnék,” finishing requests with “kérem.”",
+        "cultureCaption": "Health care essentials in Hungary",
+        "cultureTitle": "Visiting a Hungarian Pharmacy",
+        "cultureBody": "Hungarian pharmacists are highly knowledgeable. Speak clearly about your needs — a friendly “kérem” (please) is crucial. Most medicines require prescriptions, so knowing “recept” (prescription) helps.",
+        "culturePhrase": "“Recept” — prescription; know this for getting medication.",
+        "milestoneTitle": "You can now ask for medication and essentials — in Hungarian.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Miben segíthetek?",
+            "en": "How can I assist you?"
+          },
+          {
+            "who": "u",
+            "n": "Fájdalomcsillapítót szeretnék, kérem.",
+            "fb": "Great — direct and polite request"
+          },
+          {
+            "who": "p",
+            "n": "Ezek a legerősebbek. Más valamit?",
+            "en": "These are the strongest ones. Anything else?"
+          },
+          {
+            "who": "u",
+            "n": "Nem, köszönöm. Ennyi lesz.",
+            "fb": "Perfect — concise and polite ending"
+          },
+          {
+            "who": "p",
+            "n": "Jól van, gyógyuljon meg hamar!",
+            "en": "Alright, get well soon!"
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Item requests",
+            "body": "Use specific names of medicines to clearly communicate your needs."
+          },
+          {
+            "title": "Communication etiquette",
+            "body": "Beginning and ending requests with “kérem” softens them."
+          }
+        ],
+        "grammarMini": "request formation",
+        "grammarTitle": "Forming requests in a pharmacy",
+        "grammarIntro": "Use request structures for clarity and politeness in pharmacies:",
+        "gTermA": "szeretnék",
+        "gDescA": "I would like (more polite)",
+        "gExA": "Fájdalomcsillapítót szeretnék — I would like painkillers",
+        "gTermB": "kérem",
+        "gDescB": "please",
+        "gExB": "Zsebkendőt kérem — Tissues, please"
+      },
+      {
+        "chapterTitle": "Chapter 11 · A vita",
+        "lessonTitle": "Engaging in Debate",
+        "goalTitle": "Build it: express opinions",
+        "goalLine": "Engage in a debate, expressing clear opinions, in Hungarian.",
+        "goalShort": "express opinions",
+        "scenario": "debate",
+        "partnerName": "Márk",
+        "partnerInitial": "M",
+        "partnerRole": "beszélgetőpartner",
+        "partnerPlace": "Budapesti kávézó",
+        "scenarioTitle": "A vita · Budapest",
+        "scenarioSub": "Roleplay · discussing and debating topics",
+        "lessonPromptEn": "In my opinion, this is important.",
+        "lessonHint": "Why “véleményem szerint”?",
+        "bank": [
+          "Én úgy gondolom",
+          "fontos",
+          "ez",
+          "véleményem",
+          "szerint",
+          "éppen ellenkezőleg"
+        ],
+        "bankEn": [
+          "I think",
+          "important",
+          "this",
+          "my opinion",
+          "according to",
+          "to the contrary"
+        ],
+        "correct": [
+          0,
+          3,
+          1,
+          2
+        ],
+        "lessonCorrectTitle": "Tökéletes! 🎉",
+        "lessonCorrectBody": "“Én úgy gondolom” is a popular way to introduce personal opinions.",
+        "lessonWrongBody": "Start with “Én úgy gondolom” for expressing opinions, followed by your point.",
+        "cultureCaption": "Debating in cozy Budapest settings",
+        "cultureTitle": "Hungarian Debate Culture",
+        "cultureBody": "Debates are both formal and informal in Hungary, often happening in cafés. Engage respectfully, and use phrases like “Véleményem szerint” for a formal touch.",
+        "culturePhrase": "“Szerintem” — I think; versatile for casual debates.",
+        "milestoneTitle": "You can now express opinions and engage in debates — in Hungarian.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Mit gondol a politikáról?",
+            "en": "What do you think about the politics?"
+          },
+          {
+            "who": "u",
+            "n": "Véleményem szerint nagyon fontos a szavazás.",
+            "fb": "Great — expressing a considered opinion"
+          },
+          {
+            "who": "p",
+            "n": "Érdekes. Én éppen ellenkezőleg gondolom.",
+            "en": "Interesting. I think the opposite."
+          },
+          {
+            "who": "u",
+            "n": "Értem, és mi a fő érv?",
+            "fb": "Perfect — asking for clarification"
+          },
+          {
+            "who": "p",
+            "n": "A gazdasági helyzet miatt.",
+            "en": "Because of the economic situation."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Expressive phrases",
+            "body": "Using “Én úgy gondolom” or “Szerintem” demonstrate subjective viewpoints."
+          },
+          {
+            "title": "Responding structure",
+            "body": "Use responses like “Értem” (I understand) to keep the dialogue flowing."
+          }
+        ],
+        "grammarMini": "expressions of opinion",
+        "grammarTitle": "Constructing and expressing opinions",
+        "grammarIntro": "Vary expressions to articulate thoughts in debates:",
+        "gTermA": "véleményem szerint",
+        "gDescA": "in my opinion (more formal)",
+        "gExA": "Véleményem szerint fontos. — In my opinion, it's important.",
+        "gTermB": "szerintem",
+        "gDescB": "I think (less formal)",
+        "gExB": "Szerintem jó ötlet. — I think it's a good idea."
+      },
+      {
+        "chapterTitle": "Chapter 12 · Szabad beszélgetés",
+        "lessonTitle": "Free Discussion",
+        "goalTitle": "Build it: navigate topics freely",
+        "goalLine": "Engage in free conversation, adapting to multiple topics, in Hungarian.",
+        "goalShort": "free conversation",
+        "scenario": "freetalk",
+        "partnerName": "Réka",
+        "partnerInitial": "R",
+        "partnerRole": "barát",
+        "partnerPlace": "Duna-part",
+        "scenarioTitle": "Szabad beszélgetés · Budapest",
+        "scenarioSub": "Roleplay · discussing various topics freely",
+        "lessonPromptEn": "How was your day?",
+        "lessonHint": "Using “hogy” as an opener.",
+        "bank": [
+          "Milyen",
+          "napod",
+          "van",
+          "hogy",
+          "érzed",
+          "magad"
+        ],
+        "bankEn": [
+          "How",
+          "your day",
+          "is",
+          "that",
+          "feel",
+          "yourself"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          4
+        ],
+        "lessonCorrectTitle": "Tökéletes! 🎉",
+        "lessonCorrectBody": "“Milyen napod van?” opens the door to broader conversation.",
+        "lessonWrongBody": "Start with “Milyen” to ask about qualitative aspects of someone's day.",
+        "cultureCaption": "Leisurely talks by the Danube",
+        "cultureTitle": "Hungarian Casual Conversations",
+        "cultureBody": "Hungarians enjoy lingering conversations in relaxed settings by the Danube or in cozy nooks. Casual, friendly “Hogy vagy?” puts people at ease.",
+        "culturePhrase": "“Hogy vagy?” — How are you?; common casual inquiry.",
+        "milestoneTitle": "You can now engage in free conversation — in Hungarian.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Milyen volt a napod?",
+            "en": "How was your day?"
+          },
+          {
+            "who": "u",
+            "n": "Nagyon jó, te?",
+            "fb": "Great synchronization in conversation"
+          },
+          {
+            "who": "p",
+            "n": "Pihenős. Olvastam a parkban.",
+            "en": "Relaxing. I read in the park."
+          },
+          {
+            "who": "u",
+            "n": "Ez jól hangzik! Mit olvastál?",
+            "fb": "Perfect transition to a new topic"
+          },
+          {
+            "who": "p",
+            "n": "Egy új magyar regényt.",
+            "en": "A new Hungarian novel."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Starting conversation",
+            "body": "Use openers like “Milyen...” to invite the other to share."
+          },
+          {
+            "title": "Smooth transitions",
+            "body": "Move fluidly between topics to maintain dynamism."
+          }
+        ],
+        "grammarMini": "free conversation flow",
+        "grammarTitle": "Maintaining open-ended dialogue",
+        "grammarIntro": "Craft open questions and transitions for dynamic conversations:",
+        "gTermA": "milyen",
+        "gDescA": "asking about the quality/characteristics",
+        "gExA": "Milyen napod van? — How is your day?",
+        "gTermB": "hogy érzed magad",
+        "gDescB": "how do you feel",
+        "gExB": "Hogy érzed magad ma? — How do you feel today?"
+      },
+      {
+        "chapterTitle": "Chapter 13 · Elhelyezési teszt",
+        "lessonTitle": "Placement Challenge",
+        "goalTitle": "Build it: express your level",
+        "goalLine": "Discuss your language proficiency and test results, in Hungarian.",
+        "goalShort": "express proficiency",
+        "scenario": "placement",
+        "partnerName": "Gábor",
+        "partnerInitial": "G",
+        "partnerRole": "nyelvtanár",
+        "partnerPlace": "Nyelviskola Budapesten",
+        "scenarioTitle": "Eredmény-tesztek · Budapest",
+        "scenarioSub": "Roleplay · discussing results and levels",
+        "lessonPromptEn": "I think my level is intermediate.",
+        "lessonHint": "Why “úgy érzem”?",
+        "bank": [
+          "Úgy érzem",
+          "középhaladó",
+          "szintem",
+          "könnyű",
+          "nehéz",
+          "tudom"
+        ],
+        "bankEn": [
+          "I feel",
+          "intermediate",
+          "my level",
+          "easy",
+          "difficult",
+          "I know"
+        ],
+        "correct": [
+          0,
+          2,
+          1
+        ],
+        "lessonCorrectTitle": "Tökéletes! 🎉",
+        "lessonCorrectBody": "“Úgy érzem ... szintem” is personal yet analytical.",
+        "lessonWrongBody": "Use “Úgy érzem” followed by “szintem” to phrase level assessment.",
+        "cultureCaption": "Language learning in Budapest",
+        "cultureTitle": "Hungarian Language Proficiency Tests",
+        "cultureBody": "Hungarians value language learning. Teachers often encourage honest self-assessment. Lesson ends with “Köszönöm az órát!” to express appreciation.",
+        "culturePhrase": "“Köszönöm az órát” — Thank you for the lesson; gratitude counts.",
+        "milestoneTitle": "You can now express your language proficiency — in Hungarian.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Milyen szinten érzi magát?",
+            "en": "What level do you feel you are on?"
+          },
+          {
+            "who": "u",
+            "n": "Úgy érzem, középhaladó szintem van.",
+            "fb": "Excellent — confident self-assessment"
+          },
+          {
+            "who": "p",
+            "n": "Mik voltak a kedvenceid?",
+            "en": "What were your favorites?"
+          },
+          {
+            "who": "u",
+            "n": "A beszélgetések. Nagyon sokat tanultam.",
+            "fb": "Perfect — expressing preference in learning style"
+          },
+          {
+            "who": "p",
+            "n": "Nagyszerű! Így tovább!",
+            "en": "Great! Keep it up!"
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Self-assessment language",
+            "body": "Clearly voice your perceived skills using “úgy érzem.”"
+          },
+          {
+            "title": "Expressing preferences",
+            "body": "Engage in detail about experiences for a rounded discussion."
+          }
+        ],
+        "grammarMini": "language level expression",
+        "grammarTitle": "Expressing language proficiency",
+        "grammarIntro": "Blend subjective and objective expressions for clarity:",
+        "gTermA": "úgy érzem",
+        "gDescA": "I feel that",
+        "gExA": "Úgy érzem középhaladó vagyok. — I feel I am intermediate.",
+        "gTermB": "szintem van",
+        "gDescB": "my level is",
+        "gExB": "Középhaladó szintem van. — My level is intermediate."
+      },
+      {
+        "chapterTitle": "Chapter 14 · A bankban",
+        "lessonTitle": "Banking Transactions",
+        "goalTitle": "Build it: open a bank account",
+        "goalLine": "Open a bank account and discuss services, in Hungarian.",
+        "goalShort": "open an account",
+        "scenario": "bank",
+        "partnerName": "László",
+        "partnerInitial": "L",
+        "partnerRole": "banki munkatárs",
+        "partnerPlace": "Budapest Bank",
+        "scenarioTitle": "A bankban · Budapest",
+        "scenarioSub": "Roleplay · banking services and account opening",
+        "lessonPromptEn": "I would like to open an account.",
+        "lessonHint": "Formal request structure.",
+        "bank": [
+          "Számlát",
+          "szeretnék",
+          "nyitni",
+          "zárni",
+          "betét",
+          "hitel"
+        ],
+        "bankEn": [
+          "Account",
+          "I would like",
+          "to open",
+          "to close",
+          "deposit",
+          "loan"
+        ],
+        "correct": [
+          1,
+          0,
+          2
+        ],
+        "lessonCorrectTitle": "Tökéletes! 🎉",
+        "lessonCorrectBody": "“Számlát szeretnék nyitni” is a successful structure.",
+        "lessonWrongBody": "Begin formal requests with “Szeretnék,” followed by desired action.",
+        "cultureCaption": "Banking norms in Hungary",
+        "cultureTitle": "Opening a Bank Account in Hungary",
+        "cultureBody": "Modern Hungarian banks offer personalized service. Expect formal interactions. Preferred language: “Kérem” when requesting copies of forms.",
+        "culturePhrase": "“Kérem” — please e.g., Kérem az űrlapokat — Please provide the forms.",
+        "milestoneTitle": "You can now open a bank account — in Hungarian.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Miben segíthetek ma?",
+            "en": "How can I help today?"
+          },
+          {
+            "who": "u",
+            "n": "Számlát szeretnék nyitni.",
+            "fb": "Great — straightforward and clear"
+          },
+          {
+            "who": "p",
+            "n": "Milyen típusút? Hitel vagy betét?",
+            "en": "What type? Loan or deposit?"
+          },
+          {
+            "who": "u",
+            "n": "Betét szeretnék.",
+            "fb": "Perfect — clear specification"
+          },
+          {
+            "who": "p",
+            "n": "Rendben. Kezdjük is el.",
+            "en": "Alright. Let's get started."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Structured requests",
+            "body": "Use “Szeretnék” for polite formal requests."
+          },
+          {
+            "title": "Service distinctions",
+            "body": "Refer specifically to the required service for clarity."
+          }
+        ],
+        "grammarMini": "formal request",
+        "grammarTitle": "Formulating polite banking requests",
+        "grammarIntro": "Craft clear, formal requests for various banking needs:",
+        "gTermA": "szeretnék",
+        "gDescA": "I would like",
+        "gExA": "Számlát szeretnék nyitni. — I would like to open an account.",
+        "gTermB": "kérem",
+        "gDescB": "please (formal contexts)",
+        "gExB": "Kérem a részleteket. — Please provide the details."
+      },
+      {
+        "chapterTitle": "Chapter 15 · A vonaton",
+        "lessonTitle": "Train Travel Basics",
+        "goalTitle": "Build it: buy a ticket",
+        "goalLine": "Buy a train ticket and ask for travel information, in Hungarian.",
+        "goalShort": "buy a ticket",
+        "scenario": "train",
+        "partnerName": "Gergő",
+        "partnerInitial": "G",
+        "partnerRole": "jegyeladó",
+        "partnerPlace": "Budapesti vasútállomás",
+        "scenarioTitle": "A vonaton · Budapest",
+        "scenarioSub": "Roleplay · purchasing train tickets and inquiries",
+        "lessonPromptEn": "How much is a ticket to Pécs?",
+        "lessonHint": "Using “jegy” in questions.",
+        "bank": [
+          "Mennyibe kerül",
+          "egy jegy",
+          "Pécsre",
+          "kedvezménnyel",
+          "mindkettő",
+          "vissza"
+        ],
+        "bankEn": [
+          "How much is",
+          "a ticket",
+          "to Pécs",
+          "with discount",
+          "both",
+          "return"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "lessonCorrectTitle": "Tökéletes! 🎉",
+        "lessonCorrectBody": "“Mennyibe kerül egy jegy” is a functional travel phrase.",
+        "lessonWrongBody": "Start questions with “Mennyibe kerül” when inquiring about prices.",
+        "cultureCaption": "Exploring Hungary by train",
+        "cultureTitle": "Navigating Hungarian Train Services",
+        "cultureBody": "Hungarian trains cover extensive routes. Inquire about discounts as students or seniors often receive them. Always buy tickets in advance — “vissza” (return) tickets offer better value.",
+        "culturePhrase": "“Retúr” — return ticket; known for better values.",
+        "milestoneTitle": "You can now buy a train ticket and ask for travel information — in Hungarian.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Milyen jegyet szeretne?",
+            "en": "What kind of ticket would you like?"
+          },
+          {
+            "who": "u",
+            "n": "Mennyibe kerül egy jegy Pécsre?",
+            "fb": "Excellent — clear question on pricing"
+          },
+          {
+            "who": "p",
+            "n": "Háromezer forint, kedvezménnyel kétezer.",
+            "en": "Three thousand forints, two thousand with discount."
+          },
+          {
+            "who": "u",
+            "n": "Szükségem van visszajegyre is.",
+            "fb": "Perfect — asking for additional service"
+          },
+          {
+            "who": "p",
+            "n": "A retúr huszonötszáz forint.",
+            "en": "The return ticket is two thousand five hundred forints."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Inquiring about prices",
+            "body": "Start with “Mennyibe kerül” when asking how much something is."
+          },
+          {
+            "title": "Requesting discounts",
+            "body": "Mention “kedvezmény” to optimize your purchase better."
+          }
+        ],
+        "grammarMini": "ticket inquiry",
+        "grammarTitle": "Formulating travel-related inquiries",
+        "grammarIntro": "Optimize question phrasing for efficient travel inquiries:",
+        "gTermA": "mennyibe kerül",
+        "gDescA": "how much is",
+        "gExA": "Mennyibe kerül egy jegy? — How much is a ticket?",
+        "gTermB": "kedvezmény",
+        "gDescB": "discount",
+        "gExB": "Van kedvezmény? — Is there a discount?"
       }
     ]
   },
@@ -16874,6 +30867,834 @@ export const LANGS: any = {
         "reviewWord": "ambulanssi",
         "reviewSource": "from your emergency call, 2 days ago",
         "reviewMeaning": "the ambulance (ambulanssi)"
+      },
+      {
+        "chapterTitle": "Chapter 7 · Lentokentällä",
+        "lessonTitle": "Airport Journey",
+        "goalTitle": "Build it: check-in for your flight",
+        "goalLine": "Check-in for a flight with confidence in Finnish.",
+        "goalShort": "check-in a flight",
+        "scenario": "airport",
+        "partnerName": "Jussi",
+        "partnerInitial": "J",
+        "partnerRole": "lentokenttätyöntekijä",
+        "partnerPlace": "Helsinki-Vantaan lentokenttä",
+        "scenarioTitle": "Lentokentällä · Helsinki",
+        "scenarioSub": "Roleplay · check-in & security exchange",
+        "lessonPromptEn": "I would like to check-in for my flight, please.",
+        "lessonHint": "Why “voisinko”?",
+        "bank": [
+          "Voisinko",
+          "kirjautua",
+          "lennolle",
+          "matkatavarat",
+          "passi",
+          "maihinnousukortti"
+        ],
+        "bankEn": [
+          "Could I",
+          "check-in",
+          "for the flight",
+          "luggage",
+          "passport",
+          "boarding pass"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          5
+        ],
+        "lessonCorrectTitle": "Hienoa! 🎉",
+        "lessonCorrectBody": "“Voisinko” = “could I” — polite and formal; “kirjautua lennolle” means to check-in.",
+        "lessonWrongBody": "Start with “Voisinko” (could I) and follow up with the action.",
+        "cultureCaption": "Helsinki-Vantaa Airport · morning rush",
+        "cultureTitle": "Finnish efficiency at airports",
+        "cultureBody": "Finnish airports are known for their efficiency. Most processes are automated and queues move fast. Finns appreciate punctuality, so it’s best to arrive early.",
+        "culturePhrase": "“Kiitos” — thank you (and please, in requests); it expresses gratitude elegantly.",
+        "milestoneTitle": "You can now check-in for a flight in Finnish.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Hyvää päivää! Kuinka voin auttaa?",
+            "en": "Good day! How can I assist you?"
+          },
+          {
+            "who": "u",
+            "n": "Voisinko kirjautua lennolle, kiitos.",
+            "fb": "Well done — polite and straightforward."
+          },
+          {
+            "who": "p",
+            "n": "Tottakai. Onko sinulla passi ja matkatavaroita?",
+            "en": "Of course. Do you have a passport and luggage?"
+          },
+          {
+            "who": "u",
+            "n": "Tässä on passi ja maihinnousukortti.",
+            "fb": "Great — you're ready!"
+          },
+          {
+            "who": "p",
+            "n": "Loistavaa, olet valmis lähtöön.",
+            "en": "Perfect, you're ready for departure."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Object use in requests",
+            "body": "“kirjautua” (check-in) often uses direct objects like “lennolle” (for the flight)."
+          },
+          {
+            "title": "Politeness in Finnish",
+            "body": "“Voisinko” is a more formal way to make polite requests than just “Saisinko”."
+          }
+        ],
+        "grammarMini": "polite requests",
+        "grammarTitle": "Forming polite requests",
+        "grammarIntro": "To make polite requests, Finnish often uses modal verbs with -ko endings:",
+        "gTermA": "voisinko",
+        "gDescA": "could I",
+        "gExA": "Voisinko saada kupin kahvia?",
+        "gTermB": "saisinko",
+        "gDescB": "could I have",
+        "gExB": "Saisinko omenapiirakan, kiitos."
+      },
+      {
+        "chapterTitle": "Chapter 8 · Ravintolassa Illallisella",
+        "lessonTitle": "Dinner Conversations",
+        "goalTitle": "Build it: order dinner",
+        "goalLine": "Order a dinner meal in a Finnish restaurant.",
+        "goalShort": "order dinner",
+        "scenario": "dinner",
+        "partnerName": "Pekka",
+        "partnerInitial": "P",
+        "partnerRole": "tarjoilija",
+        "partnerPlace": "Suomalainen ravintola",
+        "scenarioTitle": "Ravintolassa · Illallinen",
+        "scenarioSub": "Roleplay · ordering & enjoying the meal",
+        "lessonPromptEn": "I would like to order the salmon, please.",
+        "lessonHint": "Why “haluaisin”?",
+        "bank": [
+          "Haluaisin",
+          "tilata",
+          "lohen",
+          "aterian",
+          "keiton",
+          "leipää"
+        ],
+        "bankEn": [
+          "I would like",
+          "to order",
+          "the salmon",
+          "meal",
+          "soup",
+          "bread"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          5
+        ],
+        "lessonCorrectTitle": "Hyvin tehty! 🎉",
+        "lessonCorrectBody": "“Haluaisin” = “I would like” — expressing desire politely; “lohen” is the object form of salmon.",
+        "lessonWrongBody": "Start with “Haluaisin” (I would like) and structure the request around it.",
+        "cultureCaption": "Ravintola Helsingissä · elegantti illallinen",
+        "cultureTitle": "Dining with poise in Finland",
+        "cultureBody": "Dinner in Finland is an elegant affair. Finns prefer minimal conversation during meals but appreciate polite interactions with staff.",
+        "culturePhrase": "“Kiitos” — used frequently to thank the server after receiving your meal.",
+        "milestoneTitle": "You can now order dinner in Finnish.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Tervetuloa! Oletko valmis tilaamaan?",
+            "en": "Welcome! Are you ready to order?"
+          },
+          {
+            "who": "u",
+            "n": "Haluaisin tilata lohen, kiitos.",
+            "fb": "Excellent choice — polite and clear."
+          },
+          {
+            "who": "p",
+            "n": "Tuo vaikuttaa hyvältä valinnalta. Jotain muuta?",
+            "en": "That's a great choice. Anything else?"
+          },
+          {
+            "who": "u",
+            "n": "Ei kiitos, siinä kaikki.",
+            "fb": "Perfect — straightforward and polite."
+          },
+          {
+            "who": "p",
+            "n": "Selvä juttu, tuon sen pian.",
+            "en": "Alright, I'll bring it soon."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "The partitive case",
+            "body": "“lohi” → “lohen” — uses the partitive case for specific requests."
+          },
+          {
+            "title": "Structure in requests",
+            "body": "In Finnish, requests often include verbs first and detail after."
+          }
+        ],
+        "grammarMini": "partitive",
+        "grammarTitle": "Partitive case in Finnish",
+        "grammarIntro": "The partitive case often indicates incomplete actions or specific quantities in requests:",
+        "gTermA": "lohi",
+        "gDescA": "salmon",
+        "gExA": "Lohi on suosikki.",
+        "gTermB": "lohen",
+        "gDescB": "of the salmon",
+        "gExB": "Haluaisin tilata lohen."
+      },
+      {
+        "chapterTitle": "Chapter 9 · Työhaastattelussa",
+        "lessonTitle": "Job Interview Skills",
+        "goalTitle": "Build it: introduce yourself",
+        "goalLine": "Introduce yourself successfully in a Finnish job interview.",
+        "goalShort": "introduce yourself",
+        "scenario": "interview",
+        "partnerName": "Anna",
+        "partnerInitial": "A",
+        "partnerRole": "haastattelija",
+        "partnerPlace": "Yritys Helsingissä",
+        "scenarioTitle": "Työhaastattelussa · Helsinki",
+        "scenarioSub": "Roleplay · self-introduction & questions",
+        "lessonPromptEn": "My name is Matti, I am a dedicated worker.",
+        "lessonHint": "Why “olen”?",
+        "bank": [
+          "Nimeni",
+          "on",
+          "Matti",
+          "olen",
+          "omistautunut",
+          "työntekijä"
+        ],
+        "bankEn": [
+          "My name",
+          "is",
+          "Matti",
+          "I am",
+          "dedicated",
+          "worker"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "lessonCorrectTitle": "Mahtavaa! 🎉",
+        "lessonCorrectBody": "“Nimeni on” = “My name is” — common for introductions; use “olen” (I am) for descriptions.",
+        "lessonWrongBody": "Remember, start with your name using “Nimeni on”, then describe.",
+        "cultureCaption": "Haastattelu Helsingissä · iltapäivä",
+        "cultureTitle": "Crafting resumes and interviews in Finland",
+        "cultureBody": "Finnish interviews are straightforward, valuing clarity over flair. Show dedication, as the Finnish work ethic highly values dependability.",
+        "culturePhrase": "“Kiitos” — ending the interview with thanks goes a long way.",
+        "milestoneTitle": "You can now introduce yourself confidently.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Tervetuloa! Kerro hieman itsestäsi.",
+            "en": "Welcome! Tell me a bit about yourself."
+          },
+          {
+            "who": "u",
+            "n": "Nimeni on Matti, olen omistautunut työntekijä.",
+            "fb": "Great introduction — keeps it professional."
+          },
+          {
+            "who": "p",
+            "n": "Erinomaista. Mikä saa sinut hakemaan tähän tehtävään?",
+            "en": "Excellent. What makes you apply for this role?"
+          },
+          {
+            "who": "u",
+            "n": "Pidän uusia haasteista ja oppimisesta.",
+            "fb": "Good — highlights initiative."
+          },
+          {
+            "who": "p",
+            "n": "Hienoa kuulla, kiitos. Lähdetään eteenpäin.",
+            "en": "Good to hear, thank you. Let's proceed."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Introducing professions",
+            "body": "In Finnish, state your profession with “olen” followed by the title."
+          },
+          {
+            "title": "Descriptive language",
+            "body": "Adjectives like “omistautunut” (dedicated) add depth to introductions."
+          }
+        ],
+        "grammarMini": "introduction",
+        "grammarTitle": "Introducing in Finnish",
+        "grammarIntro": "The most common way to introduce oneself is by using 'nimeni on' followed by your name:",
+        "gTermA": "nimeni",
+        "gDescA": "my name",
+        "gExA": "Nimeni on Anna.",
+        "gTermB": "olen",
+        "gDescB": "I am",
+        "gExB": "Olen opettaja."
+      },
+      {
+        "chapterTitle": "Chapter 10 · Apteekissa",
+        "lessonTitle": "Pharmacy Assistance",
+        "goalTitle": "Build it: request medicine",
+        "goalLine": "Request medication in a Finnish pharmacy.",
+        "goalShort": "request medicine",
+        "scenario": "pharmacy",
+        "partnerName": "Kaisa",
+        "partnerInitial": "K",
+        "partnerRole": "apteekkari",
+        "partnerPlace": "Keskustan apteekki",
+        "scenarioTitle": "Apteekissa · Helsinki",
+        "scenarioSub": "Roleplay · medication inquiry & purchase",
+        "lessonPromptEn": "Do you have aspirin, please?",
+        "lessonHint": "Why “onko teillä”?",
+        "bank": [
+          "Onko",
+          "teillä",
+          "aspiriinia",
+          "särkylääkettä",
+          "resepti",
+          "annos"
+        ],
+        "bankEn": [
+          "Do you have",
+          "you (formal)",
+          "aspirin",
+          "painkiller",
+          "prescription",
+          "dose"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          5
+        ],
+        "lessonCorrectTitle": "Täydellistä! 🎉",
+        "lessonCorrectBody": "“Onko teillä” = “Do you have” — formal inquiry; use with noun in root form.",
+        "lessonWrongBody": "Begin inquiries with “Onko teillä” and continue with the noun.",
+        "cultureCaption": "Apteekki Helsingissä · aamupäivä",
+        "cultureTitle": "Seeking help at Finnish pharmacies",
+        "cultureBody": "Pharmacies in Finland are reliable and well-organized. It's common to directly ask for assistance. Prescription laws are strict, ensuring safe use.",
+        "culturePhrase": "“Kiitos” — always thank your pharmacist after help.",
+        "milestoneTitle": "You can now request medication in Finnish.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Hei! Miten voin auttaa?",
+            "en": "Hello! How can I help?"
+          },
+          {
+            "who": "u",
+            "n": "Onko teillä aspiriinia, kiitos?",
+            "fb": "Clear and polite — well done."
+          },
+          {
+            "who": "p",
+            "n": "Kyllä, löytyykö resepti?",
+            "en": "Yes, do you have a prescription?"
+          },
+          {
+            "who": "u",
+            "n": "Kyllä, tässä on resepti.",
+            "fb": "Perfect — necessary for medication."
+          },
+          {
+            "who": "p",
+            "n": "Hienoa, tuon sen heti.",
+            "en": "Great, I'll bring it right away."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Formal vs Informal",
+            "body": "“teillä” is formal—you might use “sinulla” informally with friends."
+          },
+          {
+            "title": "The role of context",
+            "body": "Understanding context helps in choosing the right formality level."
+          }
+        ],
+        "grammarMini": "formality",
+        "grammarTitle": "Formality in Questions",
+        "grammarIntro": "Using “onko teillä” shows formality, often needed in public settings.",
+        "gTermA": "onko teillä",
+        "gDescA": "do you have (formal)",
+        "gExA": "Onko teillä särkylääkettä?",
+        "gTermB": "sinulla",
+        "gDescB": "do you have (informal)",
+        "gExB": "Onko sinulla kynä?"
+      },
+      {
+        "chapterTitle": "Chapter 11 · Väitellessä",
+        "lessonTitle": "Debate Dynamics",
+        "goalTitle": "Build it: express an opinion",
+        "goalLine": "Express your opinion convincingly in a debate.",
+        "goalShort": "express opinion",
+        "scenario": "debate",
+        "partnerName": "Eero",
+        "partnerInitial": "E",
+        "partnerRole": "väittelijä",
+        "partnerPlace": "Debattikerho",
+        "scenarioTitle": "Väitellessä · Helsingin yliopisto",
+        "scenarioSub": "Roleplay · expressing views & arguments",
+        "lessonPromptEn": "In my opinion, technology is crucial.",
+        "lessonHint": "Why “mielestäni”?",
+        "bank": [
+          "Mielestäni",
+          "teknologia",
+          "on",
+          "tärkeä",
+          "tulevaisuus",
+          "koulutus"
+        ],
+        "bankEn": [
+          "In my opinion",
+          "technology",
+          "is",
+          "important",
+          "future",
+          "education"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "lessonCorrectTitle": "Loistavaa! 🎉",
+        "lessonCorrectBody": "“Mielestäni” = “In my opinion” — strong yet respectful; use “on” (is) for states.",
+        "lessonWrongBody": "Use “Mielestäni” to start your opinion, followed by the subject.",
+        "cultureCaption": "Debatti Helsingissä · ilta",
+        "cultureTitle": "Navigating Finnish debates",
+        "cultureBody": "Finns appreciate directness but also value politeness. Debates are intellectual rather than aggressive, focusing on respectful exchange.",
+        "culturePhrase": "“Kiitos” — thanking opponents is customary and shows respect.",
+        "milestoneTitle": "You can now express opinions in Finnish debates.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Mitä ajattelet tästä aiheesta?",
+            "en": "What do you think about this topic?"
+          },
+          {
+            "who": "u",
+            "n": "Mielestäni teknologia on tärkeä.",
+            "fb": "Good — confident and concise."
+          },
+          {
+            "who": "p",
+            "n": "Mielenkiintoista. Voitko perustella enemmän?",
+            "en": "Interesting. Can you elaborate further?"
+          },
+          {
+            "who": "u",
+            "n": "Se vaikuttaa jokaiseen elämän osa-alueeseen.",
+            "fb": "Compelling explanation!"
+          },
+          {
+            "who": "p",
+            "n": "Kiitos mielipiteestäsi.",
+            "en": "Thank you for your opinion."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Expressing opinions",
+            "body": "“mielestäni” (in my opinion) often precedes arguments."
+          },
+          {
+            "title": "Respect in language",
+            "body": "Politeness maintains respect and openness in debates."
+          }
+        ],
+        "grammarMini": "opinions",
+        "grammarTitle": "Expressing Opinions",
+        "grammarIntro": "To present opinions, start with “mielestäni” and follow with your argument.",
+        "gTermA": "mielestäni",
+        "gDescA": "in my opinion",
+        "gExA": "Mielestäni se on totta.",
+        "gTermB": "minun mielestäni",
+        "gDescB": "in my personal opinion",
+        "gExB": "Minun mielestäni se toimii."
+      },
+      {
+        "chapterTitle": "Chapter 12 · Vapaata Keskustelua",
+        "lessonTitle": "Free Communication",
+        "goalTitle": "Build it: engage in free talk",
+        "goalLine": "Engage in casual conversation with a friend.",
+        "goalShort": "casual conversation",
+        "scenario": "freetalk",
+        "partnerName": "Olli",
+        "partnerInitial": "O",
+        "partnerRole": "ystävä",
+        "partnerPlace": "Kahvilla",
+        "scenarioTitle": "Keskustelua · Rentoa juttelua",
+        "scenarioSub": "Roleplay · friendly chat & small talk",
+        "lessonPromptEn": "What are your plans for the weekend?",
+        "lessonHint": "Why “suunnitelmat”?",
+        "bank": [
+          "Mitkä",
+          "ovat",
+          "suunnitelmasi",
+          "viikonlopuksi",
+          "elokuviin",
+          "kesä"
+        ],
+        "bankEn": [
+          "What",
+          "are",
+          "your plans",
+          "for the weekend",
+          "to the movies",
+          "summer"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          4
+        ],
+        "lessonCorrectTitle": "Erinomaista! 🎉",
+        "lessonCorrectBody": "“Mitkä ovat suunnitelmasi” = “What are your plans” — casual yet engaging inquiry.",
+        "lessonWrongBody": "Start casual queries with “Mitkä ovat” and follow with the subject.",
+        "cultureCaption": "Ystävät kahvilla · iltapäivä",
+        "cultureTitle": "Finns and their small talk",
+        "cultureBody": "Finns embrace brevity in conversations but cherish meaningful exchanges during relaxed settings. Direct questions are appreciated among friends.",
+        "culturePhrase": "“Kiitos” — a frequent expression even among friends.",
+        "milestoneTitle": "You can now engage in free conversation.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Hei! Miten menee?",
+            "en": "Hey! How's it going?"
+          },
+          {
+            "who": "u",
+            "n": "Hyvin, kiitos. Mitkä ovat suunnitelmasi viikonlopuksi?",
+            "fb": "Good casual inquiry."
+          },
+          {
+            "who": "p",
+            "n": "Ajattelin mennä elokuviin, entä sinä?",
+            "en": "I was thinking of going to the movies, how about you?"
+          },
+          {
+            "who": "u",
+            "n": "Ehkä käyn rannalla, jos sää sallii.",
+            "fb": "Nice casual idea!"
+          },
+          {
+            "who": "p",
+            "n": "Kuulostaa hyvältä, nähdään maanantaina.",
+            "en": "Sounds good, see you on Monday."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Casual queries",
+            "body": "Using “mitkä” (what) for friendly inquiries keeps the exchange light."
+          },
+          {
+            "title": "Answering casually",
+            "body": "Keep responses open and inviting for further conversation."
+          }
+        ],
+        "grammarMini": "smalltalk",
+        "grammarTitle": "Casual Conversation Phrases",
+        "grammarIntro": "In informal settings, summarizing plans or asking about them can begin with these simple forms:",
+        "gTermA": "mitkä ovat",
+        "gDescA": "what are",
+        "gExA": "Mitkä ovat sinun suunnitelmasi?",
+        "gTermB": "suunnitelmasi",
+        "gDescB": "your plans",
+        "gExB": "Suunnitelmasi viikonlopuksi?"
+      },
+      {
+        "chapterTitle": "Chapter 13 · Sijoitusvaihtoehdot",
+        "lessonTitle": "Placement Assessment",
+        "goalTitle": "Build it: discuss skill levels",
+        "goalLine": "Assess language proficiency levels in Finnish.",
+        "goalShort": "discuss proficiency",
+        "scenario": "placement",
+        "partnerName": "Tuuli",
+        "partnerInitial": "T",
+        "partnerRole": "arvioija",
+        "partnerPlace": "Arviointikeskus",
+        "scenarioTitle": "Sijoitusvaihtoehdot · arviointi",
+        "scenarioSub": "Roleplay · skill discussion & evaluation",
+        "lessonPromptEn": "I believe my level is intermediate.",
+        "lessonHint": "Why “uskon”?",
+        "bank": [
+          "Uskon",
+          "että",
+          "taitotasoni",
+          "on",
+          "keskitaso",
+          "etämalli"
+        ],
+        "bankEn": [
+          "I believe",
+          "that",
+          "my level",
+          "is",
+          "intermediate",
+          "remote model"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "lessonCorrectTitle": "Upeaa! 🎉",
+        "lessonCorrectBody": "“Uskon, että” = “I believe that” — shows confidence; “taitotasoni” denotes proficiency level.",
+        "lessonWrongBody": "Express your belief with “Uskon, että” then provide the detail.",
+        "cultureCaption": "Kielitasoarviointi · päivä",
+        "cultureTitle": "Language assessments in Finland",
+        "cultureBody": "Finns approach evaluations methodically, focusing on skill areas like vocabulary and comprehension rather than rote memorization.",
+        "culturePhrase": "“Kiitos” — polite acknowledgment after evaluation.",
+        "milestoneTitle": "You can assess skills using Finnish.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Tervetuloa arviointiin! Miltä tasosi tuntuu?",
+            "en": "Welcome to the assessment! How does your level feel?"
+          },
+          {
+            "who": "u",
+            "n": "Uskon, että taitotasoni on keskitason.",
+            "fb": "Clear and confident — good assessment."
+          },
+          {
+            "who": "p",
+            "n": "Hienoa! Mikä alue tarvitsisi enemmän harjoittelua?",
+            "en": "Great! Which area would need more practice?"
+          },
+          {
+            "who": "u",
+            "n": "Ehkä kuullun ymmärtäminen.",
+            "fb": "Specific — shows insightfulness."
+          },
+          {
+            "who": "p",
+            "n": "Selvä, voimme auttaa siinä.",
+            "en": "Got it, we can assist with that."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Confidence in abilities",
+            "body": "“uskon, että” (I believe that) asserts assurance in levels."
+          },
+          {
+            "title": "Assessing skills",
+            "body": "Detailing areas like “kuullun ymmärtäminen” (listening comprehension) provides focus for improvement."
+          }
+        ],
+        "grammarMini": "assessment",
+        "grammarTitle": "Assessing Language Skills",
+        "grammarIntro": "When assessing, Finns often use straightforward phrases to define levels and areas:",
+        "gTermA": "uskon että",
+        "gDescA": "I believe that",
+        "gExA": "Uskon, että osaan hyvin.",
+        "gTermB": "taitotasoni",
+        "gDescB": "my skill level",
+        "gExB": "Taitotasoni on aloittelija."
+      },
+      {
+        "chapterTitle": "Chapter 14 · Pankissa",
+        "lessonTitle": "Financial Conversations",
+        "goalTitle": "Build it: access financial services",
+        "goalLine": "Request financial services in Finnish.",
+        "goalShort": "request financial services",
+        "scenario": "bank",
+        "partnerName": "Raimo",
+        "partnerInitial": "R",
+        "partnerRole": "pankkivirkailija",
+        "partnerPlace": "Yksityispankki Helsinki",
+        "scenarioTitle": "Pankissa · Helsinki",
+        "scenarioSub": "Roleplay · financial query & support",
+        "lessonPromptEn": "I would like to open an account.",
+        "lessonHint": "Why “haluaisin”?",
+        "bank": [
+          "Haluaisin",
+          "avata",
+          "tilin",
+          "luottokortti",
+          "laina",
+          "säästötili"
+        ],
+        "bankEn": [
+          "I would like",
+          "to open",
+          "an account",
+          "credit card",
+          "loan",
+          "savings account"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          5
+        ],
+        "lessonCorrectTitle": "Upea suoritus! 🎉",
+        "lessonCorrectBody": "“Haluaisin” = “I would like” makes requests polite; “tilin” is the object form for account.",
+        "lessonWrongBody": "Begin requests with “Haluaisin” and complete with the desired service.",
+        "cultureCaption": "Pankki Helsingissä · päivä",
+        "cultureTitle": "Banking in Finland",
+        "cultureBody": "Finnish banks are efficient, focusing on technological solutions. Services are straightforward, with an emphasis on security.",
+        "culturePhrase": "“Kiitos” — approvals and acknowledgments go a long way.",
+        "milestoneTitle": "You can now manage banking tasks in Finnish.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Tervetuloa pankkiin! Kuinka voin auttaa?",
+            "en": "Welcome to the bank! How can I assist you?"
+          },
+          {
+            "who": "u",
+            "n": "Haluaisin avata tilin, kiitos.",
+            "fb": "Clear and polite — good start."
+          },
+          {
+            "who": "p",
+            "n": "Toki. Onko sinulla henkilöllisyystodistusta?",
+            "en": "Sure. Do you have identification?"
+          },
+          {
+            "who": "u",
+            "n": "Kyllä, tässä se on.",
+            "fb": "Perfect — always required."
+          },
+          {
+            "who": "p",
+            "n": "Hyvä, avaan tilin heti.",
+            "en": "Great, I'll open the account immediately."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Request language",
+            "body": "Using “haluaisin” shows politeness in financial services."
+          },
+          {
+            "title": "Understanding context",
+            "body": "Banks require specific nouns to complete requests effectively."
+          }
+        ],
+        "grammarMini": "requests",
+        "grammarTitle": "Formal Financial Requests",
+        "grammarIntro": "Requesting services requires polite language, often led by 'haluaisin' (I would like):",
+        "gTermA": "tilin",
+        "gDescA": "account",
+        "gExA": "Tilini on tässä pankissa.",
+        "gTermB": "luottokortti",
+        "gDescB": "credit card",
+        "gExB": "Haluaisin luottokortin."
+      },
+      {
+        "chapterTitle": "Chapter 15 · Junaan Nouseminen",
+        "lessonTitle": "Train Travel",
+        "goalTitle": "Build it: secure a train ticket",
+        "goalLine": "Buy a train ticket efficiently in Finnish.",
+        "goalShort": "buy a train ticket",
+        "scenario": "train",
+        "partnerName": "Satu",
+        "partnerInitial": "S",
+        "partnerRole": "myyjä",
+        "partnerPlace": "Rautatieasema",
+        "scenarioTitle": "Junaan · Helsinki",
+        "scenarioSub": "Roleplay · ticket purchase & travel inquiry",
+        "lessonPromptEn": "I would like a ticket to Oulu, please.",
+        "lessonHint": "Why “haluaisin”?",
+        "bank": [
+          "Haluaisin",
+          "lipun",
+          "Ouluun",
+          "matka",
+          "juna",
+          "aikataulu"
+        ],
+        "bankEn": [
+          "I would like",
+          "a ticket",
+          "to Oulu",
+          "journey",
+          "train",
+          "schedule"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          4
+        ],
+        "lessonCorrectTitle": "Loistavaa! 🎉",
+        "lessonCorrectBody": "“Haluaisin” = “I would like” shows politeness; use the correct place form like “Ouluun” for destinations.",
+        "lessonWrongBody": "Begin with “Haluaisin” and mention the ticket detail for success.",
+        "cultureCaption": "Rautatieasema Helsinki · iltapäivä",
+        "cultureTitle": "Navigating Finnish trains",
+        "cultureBody": "Finnish trains are known for their punctuality. Travelers enjoy spacious seating and reliable schedules. It's common to pre-buy tickets for smooth travel.",
+        "culturePhrase": "“Kiitos” — expresses gratitude when receiving your ticket.",
+        "milestoneTitle": "You can now purchase train tickets in Finnish.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Hei! Mitä matkalippua etsit?",
+            "en": "Hello! What ticket are you looking for?"
+          },
+          {
+            "who": "u",
+            "n": "Haluaisin lipun Ouluun, kiitos.",
+            "fb": "Great — straightforward request."
+          },
+          {
+            "who": "p",
+            "n": "Onko sinulla alennuskorttia?",
+            "en": "Do you have a discount card?"
+          },
+          {
+            "who": "u",
+            "n": "Ei, valitettavasti ei ole.",
+            "fb": "Clear explanation."
+          },
+          {
+            "who": "p",
+            "n": "Selvä, lipun hinta on 45 euroa.",
+            "en": "Alright, the ticket costs 45 euros."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Destination endings",
+            "body": "Cities use specific endings — 'Oulu' becomes 'Ouluun' for direction."
+          },
+          {
+            "title": "Clear requests",
+            "body": "Using clear language helps in fast-paced environments like stations."
+          }
+        ],
+        "grammarMini": "directions",
+        "grammarTitle": "Formulating Travel Requests",
+        "grammarIntro": "When you request travel, use phrases that clearly outline your destination and service needed:",
+        "gTermA": "lipun",
+        "gDescA": "ticket",
+        "gExA": "Haluaisin yhden lipun, kiitos.",
+        "gTermB": "Ouluun",
+        "gDescB": "to Oulu",
+        "gExB": "Menen Ouluun junalla."
       }
     ]
   },
@@ -18290,6 +33111,1052 @@ export const LANGS: any = {
         "reviewWord": "ambulance",
         "reviewSource": "from your emergency call, 1 day ago",
         "reviewMeaning": "ambulance (ambulance)"
+      },
+      {
+        "chapterTitle": "Chapter 7 · I lufthavnen",
+        "lessonTitle": "Flying & departures",
+        "goalTitle": "Build it: check-in luggages",
+        "goalLine": "Check in your suitcase — politically, in Danish.",
+        "goalShort": "check in luggage",
+        "scenario": "airport",
+        "partnerName": "Henrik",
+        "partnerInitial": "H",
+        "partnerRole": "medarbejder",
+        "partnerPlace": "Copenhagen Airport",
+        "scenarioTitle": "I lufthavnen · Copenhagen",
+        "scenarioSub": "Roleplay · check-in & boarding pass",
+        "lessonPromptEn": "I would like to check in my luggage.",
+        "lessonHint": "Remember 'vil gerne'.",
+        "bank": [
+          "Jeg vil gerne",
+          "tjekke ind",
+          "min kuffert",
+          "boardingpas",
+          "passager",
+          "har brug for"
+        ],
+        "bankEn": [
+          "I would like",
+          "check in",
+          "my suitcase",
+          "boarding pass",
+          "passenger",
+          "need"
+        ],
+        "correct": [
+          0,
+          1,
+          2
+        ],
+        "lessonCorrectTitle": "Godt klaret! 🎉",
+        "lessonCorrectBody": "Using “Jeg vil gerne” shows politeness and intention; “kuffert” is suitcase.",
+        "lessonWrongBody": "Begin with “Jeg vil gerne” followed by the action and object.",
+        "cultureCaption": "An airport in Copenhagen · busy morning",
+        "cultureTitle": "Travel & politeness",
+        "cultureBody": "Danes are known for being punctual and organized travelers. Politeness with staff goes hand in hand with efficiency at airports.",
+        "culturePhrase": "“God rejse” is a common farewell, meaning “have a good journey.”",
+        "milestoneTitle": "You can now check in luggage — politely, in Danish.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Godmorgen! Hvad kan jeg gøre for dig?",
+            "en": "Good morning! How can I help you?"
+          },
+          {
+            "who": "u",
+            "n": "Jeg vil gerne tjekke ind min kuffert.",
+            "fb": "Right — politeness and clarity!"
+          },
+          {
+            "who": "p",
+            "n": "Selvfølgelig. Kan jeg få dit pas?",
+            "en": "Of course. Can I have your passport?"
+          },
+          {
+            "who": "u",
+            "n": "Ja, her er det. Boardingpas, tak.",
+            "fb": "Good use of ‘boardingpas’!"
+          },
+          {
+            "who": "p",
+            "n": "Her er dit boardingpas. God rejse!",
+            "en": "Here is your boarding pass. Have a good journey!"
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Keep it casual",
+            "body": "Airport interactions can be casual and friendly — don't overformalize."
+          },
+          {
+            "title": "Danish 'u'",
+            "body": "Pronounce ‘u’ softly, almost like the English ‘oo’, in words like kuffert."
+          }
+        ],
+        "grammarMini": "Medarbejder / passager",
+        "grammarTitle": "Nouns and Titles",
+        "grammarIntro": "Understand noun usage in service contexts:",
+        "gTermA": "medarbejder",
+        "gDescA": "an employee or staff member",
+        "gExA": "en medarbejder → medarbejderen",
+        "gTermB": "passager",
+        "gDescB": "a passenger",
+        "gExB": "en passager → passageren",
+        "clip": "Ankomst i København, med Henrik",
+        "podcast": "Rejse med Henrik — afsnit 3",
+        "article": "Flyv hurtigt — men vær høflig",
+        "reader": [
+          {
+            "t": "I Danmark er det vigtigt at være "
+          },
+          {
+            "w": "præcis",
+            "d": "on time / punctual"
+          },
+          {
+            "t": ". De siger altid "
+          },
+          {
+            "w": "tak",
+            "d": "thank you"
+          },
+          {
+            "t": " til lufthavnspersonalet."
+          }
+        ],
+        "reviewWord": "boardingpas",
+        "reviewSource": "heard at the airport desk, 1 day ago",
+        "reviewMeaning": "boarding pass"
+      },
+      {
+        "chapterTitle": "Chapter 8 · Middag på restaurant",
+        "lessonTitle": "Dining & etiquette",
+        "goalTitle": "Build it: order a dinner",
+        "goalLine": "Order a dinner — politely, in Danish.",
+        "goalShort": "order a dinner",
+        "scenario": "dinner",
+        "partnerName": "Lise",
+        "partnerInitial": "L",
+        "partnerRole": "servitrice",
+        "partnerPlace": "Gourmet restaurant in Aarhus",
+        "scenarioTitle": "Middag · Aarhus",
+        "scenarioSub": "Roleplay · ordering & courtesy",
+        "lessonPromptEn": "I would like the steak, please.",
+        "lessonHint": "Remember ‘gerne vil have’.",
+        "bank": [
+          "Jeg vil gerne have",
+          "bøffen",
+          "tak",
+          "menuen",
+          "dessert",
+          "vin"
+        ],
+        "bankEn": [
+          "I would like",
+          "the steak",
+          "please",
+          "the menu",
+          "dessert",
+          "wine"
+        ],
+        "correct": [
+          0,
+          1,
+          2
+        ],
+        "lessonCorrectTitle": "Fantastisk! 🎉",
+        "lessonCorrectBody": "Using “Jeg vil gerne have … tak” is formal and polite.",
+        "lessonWrongBody": "Use “Jeg vil gerne have” for polite requests.",
+        "cultureCaption": "A dinner in Aarhus · evening",
+        "cultureTitle": "Dining Danes",
+        "cultureBody": "Danish dining is as much about atmosphere as food. Talk quietly, enjoy each course and linger.",
+        "culturePhrase": "“Velbekomme” means enjoy your meal.",
+        "milestoneTitle": "You can now order dinner — politely, in Danish.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Velkommen! Har du set på menuen?",
+            "en": "Welcome! Have you looked at the menu?"
+          },
+          {
+            "who": "u",
+            "n": "Ja, jeg vil gerne have bøffen, tak.",
+            "fb": "Great choice — polite and clear!"
+          },
+          {
+            "who": "p",
+            "n": "Det lyder godt! Og noget at drikke?",
+            "en": "Sounds good! And anything to drink?"
+          },
+          {
+            "who": "u",
+            "n": "Et glas vin, tak.",
+            "fb": "Perfect — 'vin' is commonly ordered with meals."
+          },
+          {
+            "who": "p",
+            "n": "Velbekomme!",
+            "en": "Enjoy your meal!"
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Ordering etiquette",
+            "body": "Politeness is appreciated — use 'tak' generously."
+          },
+          {
+            "title": "The 'g' sound",
+            "body": "Watch the soft ‘g’ in 'vil', similar to a hint of 'h'."
+          }
+        ],
+        "grammarMini": "menu & bøf",
+        "grammarTitle": "Menu Preferences",
+        "grammarIntro": "Menu reading skills and food ordering:",
+        "gTermA": "menu",
+        "gDescA": "the general term for a menu",
+        "gExA": "menukortet",
+        "gTermB": "bøf",
+        "gDescB": "the steak",
+        "gExB": "bøffen",
+        "clip": "Aftensmad i Aarhus, med vine",
+        "podcast": "Middag med Lise — afsnit 2",
+        "article": "Udforsk Aarhus' spisekultur",
+        "reader": [
+          {
+            "t": "Danskerne elsker at nyde en "
+          },
+          {
+            "w": "middag",
+            "d": "dinner"
+          },
+          {
+            "t": " med god "
+          },
+          {
+            "w": "vin",
+            "d": "wine"
+          },
+          {
+            "t": " og hyggelig samtale."
+          }
+        ],
+        "reviewWord": "bøffen",
+        "reviewSource": "sample menu of the day, last week",
+        "reviewMeaning": "the steak"
+      },
+      {
+        "chapterTitle": "Chapter 9 · Jobsamtalen",
+        "lessonTitle": "Interviews & first impressions",
+        "goalTitle": "Build it: present my experience",
+        "goalLine": "Explain your work experience — confidently, in Danish.",
+        "goalShort": "explain experience",
+        "scenario": "interview",
+        "partnerName": "Per",
+        "partnerInitial": "P",
+        "partnerRole": "HR konsulent",
+        "partnerPlace": "IT firm in Copenhagen",
+        "scenarioTitle": "Jobsamtalen · Copenhagen",
+        "scenarioSub": "Roleplay · introduction & strengths",
+        "lessonPromptEn": "I have five years of experience in IT.",
+        "lessonHint": "Focus on ‘arbejdet med’.",
+        "bank": [
+          "Jeg har",
+          "fem års",
+          "erfaring",
+          "i IT",
+          "arbejdet med",
+          "kompetencer"
+        ],
+        "bankEn": [
+          "I have",
+          "five years",
+          "experience",
+          "in IT",
+          "worked with",
+          "skills"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "lessonCorrectTitle": "Fremragende! 🎉",
+        "lessonCorrectBody": "Articulating experience in years is straightforward — and impressive.",
+        "lessonWrongBody": "Start with “Jeg har” then add numericals and field.",
+        "cultureCaption": "An interview in Copenhagen · morning",
+        "cultureTitle": "Professional demeanor",
+        "cultureBody": "Danish job interviews are direct yet informal — be honest about your skills, focus on why you're a good fit.",
+        "culturePhrase": "“Lad os starte” means “let's start.”",
+        "milestoneTitle": "You can now present your experience confidently, in Danish.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Godmorgen, kan du fortælle lidt om din erfaring?",
+            "en": "Good morning, can you tell me a bit about your experience?"
+          },
+          {
+            "who": "u",
+            "n": "Jeg har fem års erfaring i IT.",
+            "fb": "Well articulated — concise and precise!"
+          },
+          {
+            "who": "p",
+            "n": "Det er godt. Hvilke kompetencer har du?",
+            "en": "That's good. What skills do you have?"
+          },
+          {
+            "who": "u",
+            "n": "Jeg har arbejdet med projektledelse.",
+            "fb": "'Arbejdet med' communicates involvement clearly."
+          },
+          {
+            "who": "p",
+            "n": "Det er imponerende!",
+            "en": "That's impressive!"
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Be concise",
+            "body": "Danish interviews appreciate concise answers — detail without waffle."
+          },
+          {
+            "title": "Pacing in words",
+            "body": "Pause naturally — this shows thought and respect for language."
+          }
+        ],
+        "grammarMini": "erfaring i / med",
+        "grammarTitle": "Presenting Experience",
+        "grammarIntro": "Discuss experience accurately with prepositions:",
+        "gTermA": "en erfaring",
+        "gDescA": "an experience in (i)",
+        "gExA": "erfaring med projektledelse",
+        "gTermB": "med",
+        "gDescB": "to have skills with (med)",
+        "gExB": "god til at arbejde med IT",
+        "clip": "Interview med Per, med gode udsigter",
+        "podcast": "Karriere med Per — afsnit 5",
+        "article": "Daner interviewkulturen",
+        "reader": [
+          {
+            "t": "En jobsamtale kan være meget "
+          },
+          {
+            "w": "afslappet",
+            "d": "relaxed / laid-back"
+          },
+          {
+            "t": ". Det er vigtigt at være "
+          },
+          {
+            "w": "ærlig",
+            "d": "honest"
+          },
+          {
+            "t": " om sine erfaringer."
+          }
+        ],
+        "reviewWord": "erfaring",
+        "reviewSource": "your job interview notes, 3 days ago",
+        "reviewMeaning": "experience"
+      },
+      {
+        "chapterTitle": "Chapter 10 · På apoteket",
+        "lessonTitle": "Healthcare & assistance",
+        "goalTitle": "Build it: get medication",
+        "goalLine": "Ask for medication — accurately, in Danish.",
+        "goalShort": "buy medication",
+        "scenario": "pharmacy",
+        "partnerName": "Christina",
+        "partnerInitial": "C",
+        "partnerRole": "apoteker",
+        "partnerPlace": "Copenhagen Pharmacy",
+        "scenarioTitle": "På apoteket · Copenhagen",
+        "scenarioSub": "Roleplay · inquiry & receipt",
+        "lessonPromptEn": "I need something for a headache.",
+        "lessonHint": "Why 'har brug for'?",
+        "bank": [
+          "Jeg har brug for",
+          "noget til",
+          "hovedpine",
+          "tabletter",
+          "smertestillende",
+          "opskrift"
+        ],
+        "bankEn": [
+          "I need",
+          "something for",
+          "headache",
+          "tablets",
+          "pain reliever",
+          "prescription"
+        ],
+        "correct": [
+          0,
+          1,
+          2
+        ],
+        "lessonCorrectTitle": "Fint! 🎉",
+        "lessonCorrectBody": "Expressing needs is refreshingly simple — 'har brug for'.",
+        "lessonWrongBody": "Structure it with 'Jeg har brug for', followed by your need.",
+        "cultureCaption": "A pharmacy in Copenhagen · efficient service",
+        "cultureTitle": "Efficient pharmacy visits",
+        "cultureBody": "Danish pharmacies are known for efficiency and the clear communication of needs. Don’t hesitate to ask for anything.",
+        "culturePhrase": "“Tak for hjælpen” — thanks for the help.",
+        "milestoneTitle": "You can now get medication — accurately, in Danish.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Hej! Hvad kan jeg hjælpe med?",
+            "en": "Hello! How can I help you?"
+          },
+          {
+            "who": "u",
+            "n": "Jeg har brug for noget til hovedpine.",
+            "fb": "Succinct and effective!"
+          },
+          {
+            "who": "p",
+            "n": "Okay, vi har smertestillende tabletter.",
+            "en": "Okay, we have pain relief tablets."
+          },
+          {
+            "who": "u",
+            "n": "Det ville være godt. Tak!",
+            "fb": "'Tak' solidifies gratitude."
+          },
+          {
+            "who": "p",
+            "n": "Her er de. God bedring!",
+            "en": "Here they are. Get well soon!"
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Ease of access",
+            "body": "Discuss queries openly for best service."
+          },
+          {
+            "title": "The subtle 'd' sound",
+            "body": "Focus on the 'd' in 'brug' — subtly pronounced."
+          }
+        ],
+        "grammarMini": "verbs of need",
+        "grammarTitle": "Expressing Needs",
+        "grammarIntro": "Using verbs to indicate necessity:",
+        "gTermA": "brug for",
+        "gDescA": "to need",
+        "gExA": "har brug for hjælp",
+        "gTermB": "noget til",
+        "gDescB": "something for",
+        "gExB": "noget til hovedpine",
+        "clip": "En dag på apoteket, med hurtige beslutninger",
+        "podcast": "Sundhed med Christina — afsnit 1",
+        "article": "Hvordan apoteker betjener dig",
+        "reader": [
+          {
+            "t": "Når man besøger et "
+          },
+          {
+            "w": "apotek",
+            "d": "pharmacy"
+          },
+          {
+            "t": ", er det vigtigt at forklare sine "
+          },
+          {
+            "w": "behov",
+            "d": "needs"
+          },
+          {
+            "t": " klart og tydeligt."
+          }
+        ],
+        "reviewWord": "hovedpine",
+        "reviewSource": "discussed at last visit, last Thursday",
+        "reviewMeaning": "headache"
+      },
+      {
+        "chapterTitle": "Chapter 11 · Debatten",
+        "lessonTitle": "Argument and expression",
+        "goalTitle": "Build it: argue your point",
+        "goalLine": "Discuss your opinion — articulately, in Danish.",
+        "goalShort": "argue opinion",
+        "scenario": "debate",
+        "partnerName": "Tobias",
+        "partnerInitial": "T",
+        "partnerRole": "debattør",
+        "partnerPlace": "Debate club in Aalborg",
+        "scenarioTitle": "Debatten · Aalborg",
+        "scenarioSub": "Roleplay · argument & reasoning",
+        "lessonPromptEn": "I believe we need new policies.",
+        "lessonHint": "Focus on 'mener, vi skal'.",
+        "bank": [
+          "Jeg mener",
+          "vi har brug for",
+          "nye politikker",
+          "debat",
+          "ændringer",
+          "forbedre"
+        ],
+        "bankEn": [
+          "I believe",
+          "we need",
+          "new policies",
+          "debate",
+          "changes",
+          "improve"
+        ],
+        "correct": [
+          0,
+          1,
+          2
+        ],
+        "lessonCorrectTitle": "Spektakulært! 🎉",
+        "lessonCorrectBody": "Formulating beliefs helps clearly frame debates.",
+        "lessonWrongBody": "Start with “Jeg mener”, and follow with the necessity.",
+        "cultureCaption": "A debate in Aalborg · evening",
+        "cultureTitle": "The art of Danish debate",
+        "cultureBody": "Constructive debate is prized; audiences welcome diverse views shared confidently.",
+        "culturePhrase": "“Lad os diskutere” means “let’s discuss.”",
+        "milestoneTitle": "You can now discuss your opinion — articulately, in Danish.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Velkommen til debatten! Hvad mener du?",
+            "en": "Welcome to the debate! What do you believe?"
+          },
+          {
+            "who": "u",
+            "n": "Jeg mener, vi har brug for nye politikker.",
+            "fb": "Concise belief presentation!"
+          },
+          {
+            "who": "p",
+            "n": "Interessant. Hvorfor det?",
+            "en": "Interesting. Why is that?"
+          },
+          {
+            "who": "u",
+            "n": "For at forbedre samfundet.",
+            "fb": "Great justification — why counts!"
+          },
+          {
+            "who": "p",
+            "n": "Lad os diskutere det videre.",
+            "en": "Let’s discuss it further."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Keep it clear",
+            "body": "Precision in language mirrors thought clarity."
+          },
+          {
+            "title": "Master the diphthong",
+            "body": "'Mener' requires smooth merging of 'e-i' sounds."
+          }
+        ],
+        "grammarMini": "mener / synes",
+        "grammarTitle": "Personal Beliefs",
+        "grammarIntro": "Express varied degrees of belief and opinion:",
+        "gTermA": "mener",
+        "gDescA": "to believe deeply (often used in debates)",
+        "gExA": "jeg mener, at",
+        "gTermB": "synes",
+        "gDescB": "I think (opinion)",
+        "gExB": "jeg synes, det er korrekt",
+        "clip": "Aften i Aalborgs debatklub",
+        "podcast": "Diskutér med Tobias — afsnit 7",
+        "article": "Kunst af diskussion: danske traditioner",
+        "reader": [
+          {
+            "t": "Danskerne elsker at "
+          },
+          {
+            "w": "diskutere",
+            "d": "discuss"
+          },
+          {
+            "t": " med åbenhed og "
+          },
+          {
+            "w": "respekt",
+            "d": "respect"
+          },
+          {
+            "t": " for hinandens meninger."
+          }
+        ],
+        "reviewWord": "politik",
+        "reviewSource": "debate notes, conversation taken last night",
+        "reviewMeaning": "policy"
+      },
+      {
+        "chapterTitle": "Chapter 12 · Fritale",
+        "lessonTitle": "Conversational fluency",
+        "goalTitle": "Build it: talk about hobbies",
+        "goalLine": "Discuss your hobbies — fluently, in Danish.",
+        "goalShort": "talk about hobbies",
+        "scenario": "freetalk",
+        "partnerName": "Sofia",
+        "partnerInitial": "S",
+        "partnerRole": "ven",
+        "partnerPlace": "Cafeteria in Odense",
+        "scenarioTitle": "Fritale · Odense",
+        "scenarioSub": "Roleplay · hobbies & interests",
+        "lessonPromptEn": "I like reading and hiking.",
+        "lessonHint": "The role of 'kan lide'.",
+        "bank": [
+          "Jeg kan lide",
+          "at læse",
+          "og vandre",
+          "hobbyer",
+          "interesser",
+          "nyder"
+        ],
+        "bankEn": [
+          "I like",
+          "reading",
+          "and hiking",
+          "hobbies",
+          "interests",
+          "enjoy"
+        ],
+        "correct": [
+          0,
+          1,
+          2
+        ],
+        "lessonCorrectTitle": "Underholdende! 🎉",
+        "lessonCorrectBody": "Stating likes plainly opens more discussions fluidly in Danish.",
+        "lessonWrongBody": "Start with 'Jeg kan lide', and pair it with activities.",
+        "cultureCaption": "A cafeteria in Odense · relaxed afternoon",
+        "cultureTitle": "Hygge chats: the essence",
+        "cultureBody": "Chit-chat, especially about personal interests, is a key Danish interaction — it fosters 'hygge'.",
+        "culturePhrase": "“Hvad er dine interesser?” asks about interests.",
+        "milestoneTitle": "You can now discuss your hobbies — fluently, in Danish.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Hej! Hvad kan du lide at lave i din fritid?",
+            "en": "Hi! What do you like to do in your spare time?"
+          },
+          {
+            "who": "u",
+            "n": "Jeg kan lide at læse og vandre.",
+            "fb": "Strong start for any casual chat!"
+          },
+          {
+            "who": "p",
+            "n": "Det lyder dejligt. Hvorfor vandre?",
+            "en": "That sounds lovely. Why hiking?"
+          },
+          {
+            "who": "u",
+            "n": "Jeg nyder naturen meget.",
+            "fb": "Nice — shows depth of preference!"
+          },
+          {
+            "who": "p",
+            "n": "Fedt! Fortæl mere om dine læsevalg.",
+            "en": "Cool! Tell me more about your reading choices."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Hobbies are home",
+            "body": "Discuss hobbies and connect with people easily."
+          },
+          {
+            "title": "Pronouncing affection",
+            "body": "'Lide' is softly pronounced like a light touch of 'i'."
+          }
+        ],
+        "grammarMini": "verbs of liking",
+        "grammarTitle": "Liking and Enjoyment",
+        "grammarIntro": "Indicating what you like using verbs:",
+        "gTermA": "kan lide",
+        "gDescA": "to like, as an expression of enjoyment",
+        "gExA": "jeg kan lide at læse bøger",
+        "gTermB": "nyder",
+        "gDescB": "I enjoy, for emphasizing deep likes",
+        "gExB": "jeg nyder at vandre",
+        "clip": "Fri tale i Odense, med Sofia",
+        "podcast": "Samtale med Sofia — afsnit 11",
+        "article": "Hvordan man deler interesser",
+        "reader": [
+          {
+            "t": "Det er sjovt at tale om sine "
+          },
+          {
+            "w": "hobbyer",
+            "d": "hobbies"
+          },
+          {
+            "t": " og "
+          },
+          {
+            "w": "interesser",
+            "d": "interests"
+          },
+          {
+            "t": " med venner og familie!"
+          }
+        ],
+        "reviewWord": "vandre",
+        "reviewSource": "from previous weekend activity, recently",
+        "reviewMeaning": "hiking"
+      },
+      {
+        "chapterTitle": "Chapter 13 · Placeringstest",
+        "lessonTitle": "Knowledge assessment",
+        "goalTitle": "Build it: give directions",
+        "goalLine": "Help someone reach a destination — confidently, in Danish.",
+        "goalShort": "give directions",
+        "scenario": "placement",
+        "partnerName": "Karen",
+        "partnerInitial": "K",
+        "partnerRole": "studievejleder",
+        "partnerPlace": "Language school in Roskilde",
+        "scenarioTitle": "Placeringstest · Roskilde",
+        "scenarioSub": "Roleplay · directions & landmarks",
+        "lessonPromptEn": "Go straight and turn right at the light.",
+        "lessonHint": "Structural use of 'ligeud'.",
+        "bank": [
+          "Gå ligeud",
+          "drej til højre",
+          "ved lyset",
+          "venstre",
+          "gadehjørne",
+          "retninger"
+        ],
+        "bankEn": [
+          "Go straight",
+          "turn right",
+          "at the light",
+          "left",
+          "street corner",
+          "directions"
+        ],
+        "correct": [
+          0,
+          1,
+          2
+        ],
+        "lessonCorrectTitle": "Udmærket! 🎉",
+        "lessonCorrectBody": "Guiding using landmarks is clear — 'ved lyset'.",
+        "lessonWrongBody": "Stack directions as actions follow — guide simply.",
+        "cultureCaption": "A school in Roskilde · studious atmosphere",
+        "cultureTitle": "Schooling and directionality",
+        "cultureBody": "Helping others with clear directions showcases a caring culture.",
+        "culturePhrase": "“Kan du hjælpe?” opens you to assisting requests.",
+        "milestoneTitle": "You can now give directions— confidently, in Danish.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Hej, kan du hjælpe mig med retninger?",
+            "en": "Hi, can you help me with directions?"
+          },
+          {
+            "who": "u",
+            "n": "Gå ligeud og drej til højre ved lyset.",
+            "fb": "Perfectly laid-out directions!"
+          },
+          {
+            "who": "p",
+            "n": "Okay, og derefter?",
+            "en": "Okay, and then?"
+          },
+          {
+            "who": "u",
+            "n": "Så vil du se biblioteket til venstre.",
+            "fb": "Landmark confirmation — good guide."
+          },
+          {
+            "who": "p",
+            "n": "Tak for din hjælp!",
+            "en": "Thank you for your help!"
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Clear visuals",
+            "body": "Utilize visual aids like pictures when giving directions."
+          },
+          {
+            "title": "Expressive stress",
+            "body": "Stress essential verbs, especially 'gå' and 'drej'."
+          }
+        ],
+        "grammarMini": "directional commands",
+        "grammarTitle": "Expressing Directions",
+        "grammarIntro": "Using directional terms for navigation:",
+        "gTermA": "ligeud",
+        "gDescA": "commands to go straight ahead",
+        "gExA": "gå ligeud til t-kryds",
+        "gTermB": "drej til",
+        "gDescB": "turn toward",
+        "gExB": "drej til højre ved hjørnet",
+        "clip": "Fra klassen i retninger, med Karen",
+        "podcast": "Retningsråd med Karen — afsnit 8",
+        "article": "Sådan navigeres på dansk",
+        "reader": [
+          {
+            "t": "At give "
+          },
+          {
+            "w": "retninger",
+            "d": "directions"
+          },
+          {
+            "t": " korrekt er en nyttig færdighed i enhver "
+          },
+          {
+            "w": "by",
+            "d": "city"
+          },
+          {
+            "t": "."
+          }
+        ],
+        "reviewWord": "lyset",
+        "reviewSource": "from street signs, lately",
+        "reviewMeaning": "the light"
+      },
+      {
+        "chapterTitle": "Chapter 14 · I banken",
+        "lessonTitle": "Financial affairs",
+        "goalTitle": "Build it: open an account",
+        "goalLine": "Open a new bank account — securely, in Danish.",
+        "goalShort": "open an account",
+        "scenario": "bank",
+        "partnerName": "Morten",
+        "partnerInitial": "M",
+        "partnerRole": "bankrådgiver",
+        "partnerPlace": "Main bank office in Aalborg",
+        "scenarioTitle": "I banken · Aalborg",
+        "scenarioSub": "Roleplay · procedures & paperwork",
+        "lessonPromptEn": "I want to open a new bank account.",
+        "lessonHint": "Use of 'oprette'.",
+        "bank": [
+          "Jeg vil gerne",
+          "oprette",
+          "en ny",
+          "bankkonto",
+          "personlig",
+          "gebyrer"
+        ],
+        "bankEn": [
+          "I would like",
+          "to open",
+          "a new",
+          "bank account",
+          "personal",
+          "fees"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "lessonCorrectTitle": "God job! 🎉",
+        "lessonCorrectBody": "Formal requests are warmly received — 'oprette' is key.",
+        "lessonWrongBody": "Begin securely with 'Jeg vil gerne' and follow with the request.",
+        "cultureCaption": "A bank in Aalborg · structured environment",
+        "cultureTitle": "Banking the Danish way",
+        "cultureBody": "Precision and formality underpin Danish banking — appointments streamline services.",
+        "culturePhrase": "“Hvordan opretter jeg en konto?” — How do I open an account?",
+        "milestoneTitle": "Open a new bank account — securely, in Danish.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Velkommen til banken! Hvad kan jeg hjælpe dig med?",
+            "en": "Welcome to the bank! How can I assist you?"
+          },
+          {
+            "who": "u",
+            "n": "Jeg vil gerne oprette en ny bankkonto.",
+            "fb": "Clear intent with service request!"
+          },
+          {
+            "who": "p",
+            "n": "Okay. Har du dit ID med dig?",
+            "en": "Okay. Do you have your ID with you?"
+          },
+          {
+            "who": "u",
+            "n": "Ja, det har jeg. Kan du også forklare gebyrerne?",
+            "fb": "ID confirmation is essential; 'gebyrer' shows familiarity!"
+          },
+          {
+            "who": "p",
+            "n": "Selvfølgelig, lad os kigge på dem sammen.",
+            "en": "Certainly, let's look at them together."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Concise inquiries",
+            "body": "Focus on concise, clear questions during formal settings."
+          },
+          {
+            "title": "Formal pronunciation",
+            "body": "Stress clarity in a formal voice, avoid casual slang."
+          }
+        ],
+        "grammarMini": "financial verbs",
+        "grammarTitle": "Account Transactions",
+        "grammarIntro": "Understanding verbs relevant to finance:",
+        "gTermA": "oprette",
+        "gDescA": "to create or open (usually formally)",
+        "gExA": "oprette en konto",
+        "gTermB": "gebyrer",
+        "gDescB": "fees related to services",
+        "gExB": "hvilke gebyrer gælder her?",
+        "clip": "En dag i banken, med klare mål",
+        "podcast": "Finans med Morten — afsnit 10",
+        "article": "Bankverdenen forklaret",
+        "reader": [
+          {
+            "t": "En bank er et sted, hvor man kan "
+          },
+          {
+            "w": "oprette",
+            "d": "create / open"
+          },
+          {
+            "t": " konti og tale om "
+          },
+          {
+            "w": "økonomi",
+            "d": "economy / finance"
+          },
+          {
+            "t": "."
+          }
+        ],
+        "reviewWord": "bankkonto",
+        "reviewSource": "discussed in finance course, month earlier",
+        "reviewMeaning": "bank account"
+      },
+      {
+        "chapterTitle": "Chapter 15 · Togtur",
+        "lessonTitle": "Public transit proficiency",
+        "goalTitle": "Build it: book a train ticket",
+        "goalLine": "Purchase a train ticket — efficiently, in Danish.",
+        "goalShort": "book a train ticket",
+        "scenario": "train",
+        "partnerName": "Niels",
+        "partnerInitial": "N",
+        "partnerRole": "stationsmester",
+        "partnerPlace": "Train station in Esbjerg",
+        "scenarioTitle": "Togtur · Esbjerg",
+        "scenarioSub": "Roleplay · booking & schedules",
+        "lessonPromptEn": "I would like to buy a ticket to Aarhus.",
+        "lessonHint": "Effective use of 'en billet'.",
+        "bank": [
+          "Jeg vil gerne købe",
+          "en billet",
+          "til Aarhus",
+          "retur",
+          "plads",
+          "tidspunkt"
+        ],
+        "bankEn": [
+          "I would like to buy",
+          "a ticket",
+          "to Aarhus",
+          "return",
+          "seat",
+          "time"
+        ],
+        "correct": [
+          0,
+          1,
+          2
+        ],
+        "lessonCorrectTitle": "Superbt! 🎉",
+        "lessonCorrectBody": "Efficient exchange starts with clarity — 'vil gerne'.",
+        "lessonWrongBody": "Ask explicitly, using 'Jeg vil gerne købe' upfront.",
+        "cultureCaption": "Esbjerg Train Station · busy transition",
+        "cultureTitle": "The Danish rail experience",
+        "cultureBody": "Punctual, well-connected, trains represent a vital Danish network, ensuring comfortable travel.",
+        "culturePhrase": "“Hvornår går toget?” — When does the train leave?",
+        "milestoneTitle": "You can now purchase a train ticket — efficiently, in Danish.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "Goddag! Hvad kunne du tænke dig?",
+            "en": "Good day! What would you like?"
+          },
+          {
+            "who": "u",
+            "n": "Jeg vil gerne købe en billet til Aarhus.",
+            "fb": "Clear purchase intent!"
+          },
+          {
+            "who": "p",
+            "n": "Vil du have en enkeltbillet eller retur?",
+            "en": "Would you like a one-way or return ticket?"
+          },
+          {
+            "who": "u",
+            "n": "En enkelt, tak. Hvad er afgange?",
+            "fb": "Choice clarity; check timings."
+          },
+          {
+            "who": "p",
+            "n": "Næsten hver time, er der et tog.",
+            "en": "Almost every hour, there is a train."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Timeliness",
+            "body": "Ensure scheduled knowledge for smoother bookings."
+          },
+          {
+            "title": "Pronunciation focus",
+            "body": "When announcing destinations, tread on precision."
+          }
+        ],
+        "grammarMini": "ticket-related vocabulary",
+        "grammarTitle": "Travel Expressions",
+        "grammarIntro": "Exploring vocabulary related to train travel:",
+        "gTermA": "billet",
+        "gDescA": "ticket (for trains)",
+        "gExA": "en billet til",
+        "gTermB": "retur",
+        "gDescB": "return (trip type)",
+        "gExB": "en returbillet til Aarhus",
+        "clip": "En rejse med toget til Aarhus",
+        "podcast": "Rejs med Niels — afsnit 6",
+        "article": "Sådan rejser du komfortabelt med tog",
+        "reader": [
+          {
+            "t": "At rejse med "
+          },
+          {
+            "w": "tog",
+            "d": "train"
+          },
+          {
+            "t": " kræver køb af en "
+          },
+          {
+            "w": "billet",
+            "d": "ticket"
+          },
+          {
+            "t": "."
+          }
+        ],
+        "reviewWord": "afgange",
+        "reviewSource": "monitoring boards, often queried",
+        "reviewMeaning": "departures"
       }
     ]
   },
@@ -19791,6 +35658,175 @@ export const LANGS: any = {
         "reviewWord": "জরুরি",
         "reviewSource": "from your emergency practice, 3 days ago",
         "reviewMeaning": "emergency (zoruri)"
+      },
+      {
+        "chapterTitle": "Chapter 7 · বিমানবন্দর Airport",
+        "lessonTitle": "Arrival and Directions",
+        "goalTitle": "Navigate it: airport",
+        "goalLine": "Learn to find your way and get assistance at the airport.",
+        "goalShort": "airport navigation",
+        "scenario": "airport",
+        "partnerName": "সাগর Sagar",
+        "partnerInitial": "S",
+        "partnerRole": "airport staff",
+        "partnerPlace": "Dhaka Airport",
+        "scenarioTitle": "বিমানবন্দর · Dhaka",
+        "scenarioSub": "Roleplay · finding way & help",
+        "lessonPromptEn": "Where is the baggage claim?",
+        "lessonHint": "Why “সামান”?",
+        "bank": [
+          "বিমানবন্দর",
+          "কোথায়",
+          "সামান",
+          "পেতে",
+          "আমি",
+          "চাই"
+        ],
+        "bankEn": [
+          "airport",
+          "where",
+          "baggage",
+          "claim",
+          "I",
+          "want"
+        ],
+        "correct": [
+          4,
+          1,
+          2,
+          3
+        ],
+        "lessonCorrectTitle": "বাহবা! (Congrats!) 🎉",
+        "lessonCorrectBody": "“আমি … চাই” = “I want”; “সামান পেতে আমার” = “my baggage claim”",
+        "lessonWrongBody": "Start with “আমি” (I), then “কোথায়” (where), then “সামান” (baggage), then “পেতে চাই” (I want to claim).",
+        "cultureCaption": "A busy Dhaka Airport terminal",
+        "cultureTitle": "Air Travel in Bangladesh",
+        "cultureBody": "Air travel through Dhaka is bustling and lively. Being direct and polite is key. Most locals are happy to help international travelers with directions or advice.",
+        "culturePhrase": "“আপনি কি ইংরেজী বলতে পারেন? (Apni ki Ingraji bolte paren?)” — Do you speak English?",
+        "milestoneTitle": "You can now navigate the airport with ease.",
+        "convo": [
+          {
+            "who": "p",
+            "n": "আপনার গন্তব্য কোথায়?",
+            "en": "Where is your destination?"
+          },
+          {
+            "who": "u",
+            "n": "আমি সামান পেতে চাই।",
+            "fb": "Correct usage of the phrase for directions."
+          },
+          {
+            "who": "p",
+            "n": "সামানের এলাকা এই দিক, চলুন।",
+            "en": "The baggage claim area is this way, come with me."
+          },
+          {
+            "who": "u",
+            "n": "ধন্যবাদ, আমি ঠিক রাস্তা খুঁজছি।",
+            "fb": "Good use of polite expression and gratitude."
+          },
+          {
+            "who": "p",
+            "n": "আপনার যাত্রা সুখময় হোক।",
+            "en": "Have a pleasant journey."
+          }
+        ],
+        "debrief": [
+          {
+            "title": "Positional Phrase",
+            "body": "Using 'কোথায়' (where) at the right place helps in inquiries."
+          },
+          {
+            "title": "Politeness Matters",
+            "body": "“ধন্যবাদ” (thank you) is a versatile and useful phrase."
+          }
+        ],
+        "grammarMini": "আমি … চাই",
+        "grammarTitle": "“আমি … চাই” — forming polite requests",
+        "grammarIntro": "Order of words in Bengali ensures clarity in context; the verb comes last:",
+        "gTermA": "আমি (ami)",
+        "gDescA": "“I” — starts your request",
+        "gExA": "আমি সাহায্য চাই।",
+        "gTermB": "চাই (chai)",
+        "gDescB": "“want” — expressing a request",
+        "gExB": "আমি টিকিট চাই।",
+        "clip": "ঢাকার বিমানবন্দরের বিশৃঙ্খলা",
+        "podcast": "সাগরের সঙ্গে আড্ডা — পর্ব ৭",
+        "article": "বাংলায় বিমানভ্রমণের টিপস",
+        "reader": [
+          {
+            "t": "বাংলাদেশে বিমানবন্দরে পৌঁছানোর পর, সাধারণত তাদের প্রথম কাজ "
+          },
+          {
+            "w": "হয়",
+            "d": "be / become (is)"
+          },
+          {
+            "t": " সামান খুঁজে "
+          },
+          {
+            "w": "পাওয়া",
+            "d": "getting / receiving"
+          },
+          {
+            "t": "। মানুষ খুবই মনোযোগী হয়ে দেখে "
+          },
+          {
+            "w": "কোথায়",
+            "d": "where"
+          },
+          {
+            "t": "গন্তব্য।"
+          }
+        ],
+        "reviewWord": "কোথায়",
+        "reviewSource": "from the airport scenario, 5 days ago",
+        "reviewMeaning": "where (kothay)"
+      },
+      {
+        "chapterTitle": "Chapter 8 · রেস্তোরাঁ ডিনার Restaurant Dinner",
+        "lessonTitle": "Ordering dinner",
+        "goalTitle": "Order it: dinner",
+        "goalLine": "Learn to order a full meal at a Bengali restaurant.",
+        "goalShort": "order dinner",
+        "scenario": "dinner",
+        "partnerName": "সোহেল Sohel",
+        "partnerInitial": "S",
+        "partnerRole": "waiter",
+        "partnerPlace": "Traditional Bengali Restaurant",
+        "scenarioTitle": "রেস্তোরাঁ · Dhaka",
+        "scenarioSub": "Roleplay · ordering dinner & enjoying",
+        "lessonPromptEn": "I would like to order a fish curry.",
+        "lessonHint": "Using “মাছের তরকারি”",
+        "bank": [
+          "আমি",
+          "অর্ডার",
+          "মাছের",
+          "তরকারি",
+          "গ্রহণ",
+          "করি"
+        ],
+        "bankEn": [
+          "I",
+          "order",
+          "fish",
+          "curry",
+          "accept",
+          "do"
+        ],
+        "correct": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "lessonCorrectTitle": "দারুণ! (Fantastic!) 🎉",
+        "lessonCorrectBody": "“আমি … অর্ডার করি” = “I order”; “মাছের তরকারি” is “fish curry”",
+        "lessonWrongBody": "Start with “আমি” (I), then “অর্ডার” (order), then “মাছের তরকারি” (fish curry).",
+        "cultureCaption": "A cozy Bengali restaurant",
+        "cultureTitle": "Dining Culture in Bengal",
+        "cultureBody": "Bengali dinners are elaborate and enjoyed without haste. Meals often begin with sweets and end with betel leaves. Hospitality is shown through generous servings.",
+        "culturePhrase": "“আর কিছু?"
       }
     ]
   }

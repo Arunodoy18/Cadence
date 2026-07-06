@@ -13,7 +13,9 @@ export function scenarioMeta(L: Record<string, string>, key: string) {
     interview: { partnerName: "Hiring manager", partnerInitial: "💼", partnerRole: "job interview", partnerPlace: "a job interview", persona: "a professional but warm hiring manager asking about the candidate's background and strengths", level: "B1", scripted: false },
     directions: { partnerName: "A passer-by", partnerInitial: "🧭", partnerRole: "asking directions", partnerPlace: "a street corner", persona: "a helpful local giving simple walking directions to a nearby place", level: "A1", scripted: false },
     pharmacy: { partnerName: "Pharmacist", partnerInitial: "✚", partnerRole: "at the pharmacy", partnerPlace: "a pharmacy", persona: "a calm pharmacist helping with a minor ailment and explaining how to take medicine", level: "A2", scripted: false },
-    placement: { partnerName: "Mateo", partnerInitial: "M", partnerRole: "placement tutor", partnerPlace: "a quick placement chat", persona: "a friendly language tutor running a short spoken placement check; start very simple, then make each question a little harder, to gauge the learner's level", level: "A2", scripted: false }
+    placement: { partnerName: "Mateo", partnerInitial: "M", partnerRole: "placement tutor", partnerPlace: "a quick placement chat", persona: "a friendly language tutor running a short spoken placement check; start very simple, then make each question a little harder, to gauge the learner's level", level: "A2", scripted: false },
+    bank: { partnerName: "Bank Teller", partnerInitial: "🏦", partnerRole: "at the bank", partnerPlace: "a bank branch", persona: "a professional bank teller helping with an account issue or money exchange", level: "A2", scripted: false },
+    train: { partnerName: "Ticket Inspector", partnerInitial: "🎫", partnerRole: "on the train", partnerPlace: "a moving train", persona: "a busy train conductor asking for tickets and explaining the train's route", level: "A2", scripted: false }
   };
   return m[key] || m.cafe;
 }

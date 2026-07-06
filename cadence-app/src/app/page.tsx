@@ -1180,7 +1180,8 @@ export default function App() {
                     <div style={{ width: '48px', height: '6px', background: '#E0D5C1', borderRadius: '99px', margin: '0 auto 16px' }}></div>
                     {(() => {
                       const i = activeChapter;
-                      const ch = chapters[i];
+                      const chaptersTyped: any[] = chapters;
+                      const ch = chaptersTyped[i];
                       const ch1BuildDone = earnedMilestones.includes(`ch${i}_build`);
                       const ch1PronDone = earnedMilestones.includes(`ch${i}_pronounce`);
                       const ch1LiveDone = earnedMilestones.includes(`ch${i}_regular`);
