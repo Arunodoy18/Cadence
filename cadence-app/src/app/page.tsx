@@ -498,6 +498,13 @@ export default function App() {
         body: formData,
       });
       const data = await res.json();
+
+      if (!res.ok || data.error) {
+        alert(data.error || "Failed to convert speech to text. Please try again.");
+        setConvo((prev) => ({ ...prev, listening: false }));
+        return;
+      }
+
       const transcript = data.transcript || '';
       
       if (transcript) {
@@ -543,11 +550,19 @@ export default function App() {
 
       const data = await res.json();
       
+      if (!res.ok || data.error) {
+        alert(data.error || "Failed to connect to the conversation AI. Please try again.");
+        setConvo((prev) => ({ ...prev, thinking: false }));
+        return;
+      }
+      
       // Update with feedback tip
       const msgs2 = updatedMsgs.map((m, i) =>
         i === updatedMsgs.length - 1 && data.tip ? { ...m, fb: data.tip } : m
       );
-      msgs2.push({ who: 'p', n: data.reply, en: data.english || '' });
+      if (data.reply) {
+        msgs2.push({ who: 'p', n: data.reply, en: data.english || '' });
+      }
 
       setConvo((prev) => ({
         ...prev,
