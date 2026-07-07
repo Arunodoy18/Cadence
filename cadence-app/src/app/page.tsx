@@ -2254,7 +2254,7 @@ export default function App() {
                   </span>
                 </div>
                 <div style={{ textAlign: 'center', fontSize: '10.5px', color: '#B5A99E', marginTop: '14px', lineHeight: 1.5 }}>
-                  By continuing you agree to our Terms & Privacy. We never sell your data — see the Data charter.
+                  By continuing you agree to our <a href="/terms" target="_blank" style={{ color: '#DB5338', textDecoration: 'none' }}>Terms</a> & <a href="/privacy" target="_blank" style={{ color: '#DB5338', textDecoration: 'none' }}>Privacy</a>. We never sell your data.
                 </div>
               </div>
             </div>
