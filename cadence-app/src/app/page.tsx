@@ -421,7 +421,7 @@ export default function App() {
     
     const _L = LANGS[lang] || LANGS.es;
     const L = { ..._L, ...(_L.chapters?.[playingChapter || 0] || {}) };
-    const refText = L.bank.filter((_: any, i: number) => L.correct.includes(i)).join(' ');
+    const refText = L.correct ? L.correct.map((i: number) => L.bank[i]).join(' ') : 'Hello';
 
     try {
       const audioBlob = await wavRecorderRef.current.stop();
@@ -441,6 +441,11 @@ export default function App() {
       if (data.score !== undefined) {
         setPronScore(Math.round(data.score));
         setPronResult(data);
+      } else {
+        setPronScore(0);
+        console.error("Pronunciation API Error:", data.error);
+        alert(data.error || "Failed to analyze pronunciation.");
+      }
 
         // Log to database
         if (authStatus === 'authenticated') {
@@ -456,7 +461,6 @@ export default function App() {
             }),
           });
         }
-      }
     } catch (e) {
       console.error('Pronunciation API error', e);
     }
@@ -1395,7 +1399,7 @@ export default function App() {
 
                 <div style={{ fontSize: '12px', color: '#8A7E73', marginBottom: '8px', textTransform: 'uppercase' }}>Target phrase</div>
                 <div style={{ fontSize: '22px', fontWeight: 600, marginBottom: '20px', lineHeight: 1.3 }} className={L.font}>
-                  {L.bank.filter((_: any, i: number) => L.correct.includes(i)).join(' ')}
+                  {L.correct ? L.correct.map((i: number) => L.bank[i]).join(' ') : 'Hello'}
                 </div>
 
                 {/* Word assessing chips */}
@@ -1424,7 +1428,7 @@ export default function App() {
                   </div>
                 )}
 
-                <div onClick={() => speak(L.bank.filter((_: any, i: number) => L.correct.includes(i)).join(' '), L.locale)} style={{ fontSize: '13px', color: '#DB5338', cursor: 'pointer', marginBottom: '24px' }}>
+                <div onClick={() => speak(L.correct ? L.correct.map((i: number) => L.bank[i]).join(' ') : 'Hello', L.locale)} style={{ fontSize: '13px', color: '#DB5338', cursor: 'pointer', marginBottom: '24px' }}>
                   🔊 Hear correct native speed
                 </div>
                 
