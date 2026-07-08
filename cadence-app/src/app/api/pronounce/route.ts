@@ -64,7 +64,7 @@ export async function POST(req: NextRequest) {
     const audioBuffer = Buffer.from(await audioFile.arrayBuffer());
 
     // Azure Speech to Text REST API endpoint for short audio
-    const url = `https://${azureRegion}.stt.speech.microsoft.com/speech/recognition/conversation/cognitiveservices/v1?language=${locale}`;
+    const url = `https://${azureRegion}.stt.speech.microsoft.com/speech/recognition/conversation/cognitiveservices/v1?language=${locale}&format=detailed`;
 
     const response = await fetch(url, {
       method: 'POST',
