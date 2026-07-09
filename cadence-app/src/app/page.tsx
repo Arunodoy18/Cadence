@@ -1478,11 +1478,24 @@ export default function App() {
               </div>
               <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: '0 24px', textAlign: 'center' }}>
                 
-                {/* Score Ring */}
-                <div style={{ width: '130px', height: '130px', borderRadius: '50%', border: '6px solid #EDE4D6', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '24px' }}>
-                  <div style={{ textAlign: 'center' }}>
-                    <div style={{ fontSize: '11px', color: '#9A8E84', textTransform: 'uppercase' }}>Accuracy</div>
-                    <div style={{ fontSize: '36px', fontWeight: 700, color: '#DB5338' }}>{pronScore !== null ? `${pronScore}%` : '--'}</div>
+                {/* Animated Score Ring */}
+                <div style={{ position: 'relative', width: '130px', height: '130px', marginBottom: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <svg width="130" height="130" viewBox="0 0 36 36" style={{ position: 'absolute', inset: 0, transform: 'rotate(-90deg)' }}>
+                    {/* Background Ring */}
+                    <circle cx="18" cy="18" r="15.915" fill="none" stroke="#EDE4D6" strokeWidth="3" />
+                    {/* Foreground Animated Ring */}
+                    {pronScore !== null && (
+                      <circle cx="18" cy="18" r="15.915" fill="none" stroke="#DB5338" strokeWidth="3" strokeLinecap="round" 
+                        style={{ 
+                          '--score': pronScore, 
+                          animation: 'fillRing 1s ease-out forwards' 
+                        } as React.CSSProperties} 
+                      />
+                    )}
+                  </svg>
+                  <div style={{ textAlign: 'center', zIndex: 1, animation: pronScore !== null ? 'popIn 0.5s ease-out forwards' : 'none' }}>
+                    <div style={{ fontSize: '11px', color: '#9A8E84', textTransform: 'uppercase', letterSpacing: '.05em' }}>Accuracy</div>
+                    <div style={{ fontSize: '38px', fontWeight: 700, color: '#DB5338', lineHeight: 1 }}>{pronScore !== null ? `${pronScore}%` : '--'}</div>
                   </div>
                 </div>
 
@@ -1505,9 +1518,11 @@ export default function App() {
                             color: isGood ? '#2F8F83' : '#C2703A',
                             border: isGood ? '1px solid #BFE0DA' : '1px solid #F2D9CF',
                             borderRadius: '9px',
-                            padding: '6px 10px',
-                            fontSize: '14px',
-                            fontWeight: 600
+                            padding: '6px 12px',
+                            fontSize: '14.5px',
+                            fontWeight: 600,
+                            opacity: 0,
+                            animation: `popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards ${0.2 + idx * 0.08}s`
                           }}
                         >
                           {w.word} ({w.accuracyScore}%)
@@ -1517,12 +1532,12 @@ export default function App() {
                   </div>
                 )}
 
-                <div onClick={() => speak(L.correct ? L.correct.map((i: number) => L.bank[i]).join(' ') : 'Hello', L.locale)} style={{ fontSize: '13px', color: '#DB5338', cursor: 'pointer', marginBottom: '24px' }}>
-                  🔊 Hear correct native speed
+                <div onClick={() => speak(L.correct ? L.correct.map((i: number) => L.bank[i]).join(' ') : 'Hello', L.locale)} style={{ fontSize: '13px', color: '#DB5338', cursor: 'pointer', marginBottom: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', opacity: 0, animation: 'popIn 0.5s ease forwards 1s' }}>
+                  <span style={{ fontSize: '16px' }}>🔊</span> Hear correct native speed
                 </div>
                 
                 {pronResult && pronScore !== null && pronScore >= 60 && (
-                  <div onClick={() => completeMilestone(`ch${playingChapter}_pronounce`)} style={{ width: '100%', background: '#2F8F83', color: '#FBF6EE', borderRadius: '16px', padding: '16px', textAlign: 'center', fontSize: '16px', fontWeight: 600, cursor: 'pointer' }}>
+                  <div onClick={() => completeMilestone(`ch${playingChapter}_pronounce`)} style={{ width: '100%', background: '#2F8F83', color: '#FBF6EE', borderRadius: '16px', padding: '16px', textAlign: 'center', fontSize: '16px', fontWeight: 600, cursor: 'pointer', opacity: 0, animation: 'popIn 0.4s ease-out forwards 1.2s' }}>
                     Continue to Dashboard →
                   </div>
                 )}
