@@ -550,6 +550,54 @@ export default function App() {
     }
   };
 
+  const startScenario = async (scKey: string, customFirstMsg?: any) => {
+    handleReset();
+    setScenario(scKey);
+    setView('convo');
+    
+    const _L = LANGS[lang] || LANGS.es;
+    const L = { ..._L, ...(_L.chapters?.[playingChapter || 0] || {}) };
+    const meta = scenarioMeta(L, scKey);
+
+    if (customFirstMsg) {
+      setConvo({ msgs: [customFirstMsg], draft: '', thinking: false, listening: false, live: false });
+      speak(customFirstMsg.n, L.locale);
+      return;
+    }
+
+    setConvo({ msgs: [], draft: '', thinking: true, listening: false, live: false });
+
+    try {
+      const res = await fetch('/api/conversation', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messages: [],
+          lang: L.name,
+          scenario: scKey,
+          partnerName: meta.partnerName,
+          persona: meta.persona,
+          level: meta.level,
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok || data.error) {
+        setConvo((prev) => ({ ...prev, thinking: false, msgs: [{ who: 'p', n: "Error starting conversation.", en: "Error" }] }));
+        return;
+      }
+      
+      setConvo((prev) => ({
+        ...prev,
+        thinking: false,
+        msgs: [{ who: 'p', n: data.reply, en: data.english || '' }]
+      }));
+      speak(data.reply, L.locale);
+    } catch (e) {
+      setConvo((prev) => ({ ...prev, thinking: false, msgs: [{ who: 'p', n: "Error starting conversation.", en: "Error" }] }));
+    }
+  };
+
   const submitConvo = async (text: string) => {
     const trimmed = text.trim();
     if (!trimmed) return;
@@ -1301,15 +1349,7 @@ export default function App() {
                               if (ch1PronDone) {
                                 setPlayingChapter(i);
                                 setActiveChapter(null);
-                                handleReset(); 
-                                setView('convo'); 
-                                setScenario(ch.scenario); 
-                                if (ch.firstMsg) {
-                                  setConvo({ msgs: [ch.firstMsg], draft: '', thinking: false, listening: false, live: false }); 
-                                  speak(ch.firstMsg.n, L.locale); 
-                                } else {
-                                  setConvo({ msgs: [], draft: '', thinking: false, listening: false, live: false });
-                                }
+                                startScenario(ch.scenario, ch.firstMsg);
                               }
                             }} style={{ display: 'flex', gap: '16px', alignItems: 'center', cursor: ch1PronDone ? 'pointer' : 'default', opacity: ch1PronDone ? 1 : 0.5 }}>
                               <div style={{ width: '44px', height: '44px', borderRadius: '16px', background: ch1LiveDone ? '#2F8F83' : '#fff', border: (!ch1LiveDone && ch1PronDone) ? '2px solid #2F8F83' : ch1LiveDone ? 'none' : '2px solid #D1C8BB', display: 'flex', alignItems: 'center', justifyContent: 'center', color: ch1LiveDone ? '#fff' : ch1PronDone ? '#2F8F83' : '#D1C8BB', fontSize: '16px', flexShrink: 0, zIndex: 2, boxShadow: ch1LiveDone ? '0 4px 12px rgba(47,143,131,0.2)' : (!ch1LiveDone && ch1PronDone) ? '0 4px 12px rgba(47,143,131,0.1)' : 'none' }}>
@@ -1602,7 +1642,7 @@ export default function App() {
                 <div style={{ fontSize: '12.5px', color: '#8A7E73', marginTop: '3px' }}>Real scenarios · speaks at your level · always free</div>
               </div>
               <div style={{ padding: '16px 18px 0' }}>
-                <div onClick={() => { handleReset(); setView('convo'); setScenario('cafe'); setConvo({ msgs: [{ who: 'p', n: L.convo[0].n, en: L.convo[0].en }], draft: '', thinking: false, listening: false, live: false }); speak(L.convo[0].n, L.locale); }} style={{ background: 'linear-gradient(140deg,#DB5338,#B23E27)', borderRadius: '18px', padding: '16px', color: '#FBF6EE', marginBottom: '14px', cursor: 'pointer' }}>
+                <div onClick={() => startScenario('cafe')} style={{ background: 'linear-gradient(140deg,#DB5338,#B23E27)', borderRadius: '18px', padding: '16px', color: '#FBF6EE', marginBottom: '14px', cursor: 'pointer' }}>
                   <div style={{ fontSize: '10.5px', letterSpacing: '.08em', textTransform: 'uppercase', opacity: .85, marginBottom: '6px' }}>Recommended for your goal</div>
                   <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: '21px', lineHeight: 1.1, marginBottom: '4px' }} className={L.font}>{L.scenarioTitle}</div>
                   <div style={{ fontSize: '12.5px', opacity: .9 }}>{L.scenarioSub}</div>
@@ -1622,14 +1662,7 @@ export default function App() {
                   ].map((sc) => (
                     <div 
                       key={sc.key} 
-                      onClick={() => {
-                        handleReset();
-                        setScenario(sc.key);
-                        setView('convo');
-                        const meta = scenarioMeta(L, sc.key);
-                        setConvo({ msgs: [{ who: 'p', n: L.convo[0].n, en: L.convo[0].en }], draft: '', thinking: false, listening: false, live: false });
-                        speak(L.convo[0].n, L.locale);
-                      }}
+                      onClick={() => startScenario(sc.key)}
                       style={{ width: 'calc(50% - 6px)', background: '#fff', border: '1px solid #EDE4D6', borderRadius: '15px', padding: '13px', cursor: 'pointer', boxSizing: 'border-box' }}
                     >
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '6px' }}>
@@ -1690,9 +1723,9 @@ export default function App() {
                       {m.who === 'p' && <span style={{ fontSize: '13px', color: '#7E7488', paddingBottom: '6px' }}>🔊</span>}
                     </div>
                     {m.who === 'u' && m.fb && (
-                      <div style={{ display: 'flex', gap: '7px', alignItems: 'center', background: '#2F8F83', borderRadius: '99px', padding: '6px 11px', width: 'max-content', marginBottom: '10px', marginLeft: 'auto' }}>
-                        <span style={{ fontSize: '11px' }}>✦</span>
-                        <span style={{ fontSize: '11.5px', fontWeight: 600 }}>{m.fb}</span>
+                      <div style={{ display: 'flex', gap: '7px', alignItems: 'center', background: 'rgba(225,162,58,0.15)', border: '1px solid rgba(225,162,58,0.4)', color: '#F3ECE2', borderRadius: '12px', padding: '8px 12px', width: 'fit-content', maxWidth: '85%', marginBottom: '10px', marginLeft: 'auto', alignSelf: 'flex-end' }}>
+                        <span style={{ fontSize: '14px', flex: 'none' }}>💡</span>
+                        <span style={{ fontSize: '11.5px', fontWeight: 500, lineHeight: 1.3 }}>{m.fb}</span>
                       </div>
                     )}
                   </div>
