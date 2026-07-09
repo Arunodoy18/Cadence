@@ -1,0 +1,54 @@
+{
+  "es": [
+    {
+      "type": "Article",
+      "title": "Un fin de semana en Madrid",
+      "duration": "3 min",
+      "level": "A2",
+      "text": "Madrid es la capital de España. Es una ciudad muy grande y hermosa. El fin de semana pasado, fui a visitar el Museo del Prado y el Parque del Retiro. Hacía mucho sol, así que alquilé una bicicleta para pasear por el parque. Después, comí tapas en un pequeño restaurante cerca de la Plaza Mayor. Las croquetas y el jamón ibérico estaban deliciosos. Me encanta la vida nocturna aquí, la gente siempre está feliz y hay música en todas partes. ¡Qué viaje tan maravilloso!",
+      "englishTitle": "A Weekend in Madrid"
+    },
+    {
+      "type": "Podcast",
+      "title": "Comprar ropa en el mercado",
+      "duration": "5 min",
+      "level": "A2",
+      "text": "A: ¡Hola! ¿Cuánto cuesta esta camisa azul?\nB: Hola. Cuesta veinte euros.\nA: Es un poco cara. ¿Tiene un descuento?\nB: Puedo dejarla en quince euros si compra también estos pantalones.\nA: Me parece bien. ¿Dónde está el probador?\nB: Está al fondo a la derecha. ¿Qué talla busca?\nA: Necesito una talla mediana.\nB: Aquí tiene. ¡Espero que le quede bien!",
+      "englishTitle": "Buying Clothes at the Market"
+    },
+    {
+      "type": "Culture",
+      "title": "La siesta española",
+      "duration": "2 min",
+      "level": "A2",
+      "text": "La siesta es una tradición muy famosa en España. Ocurre después del almuerzo, generalmente entre las dos y las cinco de la tarde. En el pasado, los trabajadores del campo necesitaban descansar porque hacía demasiado calor. Hoy en día, muchas tiendas pequeñas todavía cierran a esa hora, pero en las ciudades grandes la gente trabaja en oficinas y la costumbre está cambiando.",
+      "englishTitle": "The Spanish Siesta"
+    }
+  ],
+  "fr": [
+    {
+      "type": "Article",
+      "title": "Ma journée à Paris",
+      "duration": "3 min",
+      "level": "A2",
+      "text": "Aujourd'hui, je suis allé à Paris. C'est une ville magnifique. Le matin, j'ai pris un café et un croissant dans une petite boulangerie. Ensuite, j'ai marché le long de la Seine jusqu'à la Tour Eiffel. Il y avait beaucoup de touristes, mais la vue était incroyable. À midi, j'ai mangé dans un bistrot typique. J'ai commandé une soupe à l'oignon et un verre de vin rouge. J'aime beaucoup la France.",
+      "englishTitle": "My Day in Paris"
+    },
+    {
+      "type": "Podcast",
+      "title": "Au supermarché",
+      "duration": "5 min",
+      "level": "A2",
+      "text": "A: Bonjour, où sont les fruits s'il vous plaît ?\nB: Ils sont au rayon frais, à droite.\nA: Merci. Avez-vous des pommes rouges ?\nB: Oui, elles sont juste ici. Elles coûtent deux euros le kilo.\nA: Parfait. Je vais en prendre un kilo. Et je cherche aussi du pain.\nB: La boulangerie est à côté de l'entrée du magasin.\nA: Merci beaucoup pour votre aide.\nB: De rien, bonne journée !",
+      "englishTitle": "At the Supermarket"
+    },
+    {
+      "type": "Culture",
+      "title": "La bise",
+      "duration": "2 min",
+      "level": "A2",
+      "text": "En France, on se dit souvent bonjour en faisant \"la bise\". C'est un bisou sur les joues. Le nombre de bisous dépend de la région. À Paris, on en fait généralement deux, mais dans le sud, ça peut être trois ou quatre. On fait la bise à sa famille, à ses amis et parfois à ses collègues. C'est une tradition très importante pour montrer l'affection.",
+      "englishTitle": "The Cheek Kiss"
+    }
+  ]
+}

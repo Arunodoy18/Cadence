@@ -128,7 +128,7 @@ async function migrate() {
   // Verify tables
   const tables = await sql`SELECT table_name FROM information_schema.tables WHERE table_schema = 'public' ORDER BY table_name`;
   console.log('\nTables in database:');
-  tables.forEach((t: { table_name: string }) => console.log(`  • ${t.table_name}`));
+  tables.forEach((t: any) => console.log(`  • ${t.table_name}`));
 }
 
 migrate().catch(console.error);

@@ -3,8 +3,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useSession, signIn, signOut } from 'next-auth/react';
 import { LANGS } from '@/lib/languages';
+import immerseDataRaw from '@/lib/immerse.json';
 import { scenarioMeta } from '@/lib/scenarios';
 import { useRouter } from 'next/navigation';
+
+const immerseData: Record<string, any[]> = immerseDataRaw;
 import { WavRecorder } from '@/lib/WavRecorder';
 import { AudioVisualizer } from '@/components/AudioVisualizer';
 
@@ -71,6 +74,7 @@ export default function App() {
   const [isAiSpeaking, setIsAiSpeaking] = useState(false);
 
   // Reader state
+  const [activeImmerseItem, setActiveImmerseItem] = useState<any>(null);
   const [pop, setPop] = useState<{ term: string; def: string } | null>(null);
 
   // Settings / Profile states
@@ -89,6 +93,9 @@ export default function App() {
   });
   const [level, setLevel] = useState('A1');
   const [backTo, setBackTo] = useState('you');
+  
+  // Vocabulary tracking state
+  const [knownWords, setKnownWords] = useState<Set<string>>(new Set());
 
   // Auth states
   const [authMode, setAuthMode] = useState<'signup' | 'login'>('signup');
@@ -137,6 +144,23 @@ export default function App() {
     };
   }, []);
 
+  const calculateKnownPercentage = (text: string) => {
+    if (!text) return '0%';
+    const words = text.toLowerCase().match(/\b[\wáéíóúüñàâçèéêëîïôùûü]+\b/g) || [];
+    if (words.length === 0) return '0%';
+    const knownCount = words.filter(w => knownWords.has(w)).length;
+    return Math.round((knownCount / words.length) * 100) + '%';
+  };
+
+  const markAsKnown = (term: string) => {
+    setKnownWords(prev => {
+      const next = new Set(prev);
+      next.add(term.toLowerCase());
+      return next;
+    });
+    setPop(null);
+  };
+
   // Greet timer
   useEffect(() => {
     const timer = setInterval(() => {
@@ -149,14 +173,24 @@ export default function App() {
   useEffect(() => {
     const savedView = localStorage.getItem('cadence_view');
     const savedLang = localStorage.getItem('cadence_lang');
+    const savedKnownWords = localStorage.getItem('cadence_known_words');
     if (savedView && savedView !== 'auth' && savedView !== 'welcome') setView(savedView);
     if (savedLang) setLang(savedLang);
+    if (savedKnownWords) {
+      try {
+        setKnownWords(new Set(JSON.parse(savedKnownWords)));
+      } catch (e) {}
+    }
   }, []);
 
   useEffect(() => {
     localStorage.setItem('cadence_view', view);
     localStorage.setItem('cadence_lang', lang);
   }, [view, lang]);
+
+  useEffect(() => {
+    localStorage.setItem('cadence_known_words', JSON.stringify(Array.from(knownWords)));
+  }, [knownWords]);
 
   // Fetch smart plan when language changes or home loads
   useEffect(() => {
@@ -1778,50 +1812,56 @@ export default function App() {
                 <div style={{ fontSize: '12px', fontWeight: 600, color: '#2F8F83', border: '1px solid #BFE0DA', background: '#E6F0EE', borderRadius: '99px', padding: '4px 11px' }}>Matched to A2</div>
               </div>
               <div style={{ padding: '12px 18px 0' }}>
-                {[
-                  { icon: '❖', kind: 'Article', dur: '3 min', title: L.article, lvl: 'A2', known: '91%', bg: '#E1A23A' },
-                  { icon: '🎧', kind: 'Podcast', dur: '8 min', title: L.podcast, lvl: 'A2', known: '88%', bg: '#241C2A' },
-                  { icon: '☕', kind: 'Culture', dur: '2 min', title: L.cultureTitle, lvl: 'A1', known: '97%', bg: '#5B3A56' },
-                ].map((it, idx) => (
-                  <div key={idx} onClick={() => setView('reader')} style={{ background: '#fff', border: '1px solid #EDE4D6', borderRadius: '16px', padding: '13px 14px', display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '11px', cursor: 'pointer' }}>
-                    <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: it.bg, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '19px', color: '#fff' }}>{it.icon}</div>
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '7px', marginBottom: '2px' }}>
-                        <span style={{ fontSize: '9.5px', letterSpacing: '.05em', textTransform: 'uppercase', color: '#BFA38C' }}>{it.kind} · {it.dur}</span>
-                        <span style={{ fontSize: '9px', fontWeight: 700, color: '#2F8F83', border: '1px solid #BFE0DA', borderRadius: '99px', padding: '1px 6px' }}>{it.lvl}</span>
-                      </div>
-                      <div style={{ fontSize: '14px', fontWeight: 600, lineHeight: 1.25 }} className={L.font}>{it.title}</div>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '7px', marginTop: '5px' }}>
-                        <div style={{ flex: 1, height: '4px', background: '#EDE4D6', borderRadius: '99px', overflow: 'hidden' }}>
-                          <div style={{ width: it.known, height: '100%', background: '#2F8F83' }}></div>
+                {(immerseData[lang] || []).map((it, idx) => {
+                  const bg = it.type === 'Article' ? '#E1A23A' : it.type === 'Podcast' ? '#241C2A' : '#5B3A56';
+                  const icon = it.type === 'Article' ? '❖' : it.type === 'Podcast' ? '🎧' : '☕';
+                  const knownPerc = calculateKnownPercentage(it.text);
+                  return (
+                    <div key={idx} onClick={() => { setActiveImmerseItem(it); setView('reader'); }} style={{ background: '#fff', border: '1px solid #EDE4D6', borderRadius: '16px', padding: '13px 14px', display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '11px', cursor: 'pointer' }}>
+                      <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: bg, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '19px', color: '#fff' }}>{icon}</div>
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '7px', marginBottom: '2px' }}>
+                          <span style={{ fontSize: '9.5px', letterSpacing: '.05em', textTransform: 'uppercase', color: '#BFA38C' }}>{it.type} · {it.duration}</span>
+                          <span style={{ fontSize: '9px', fontWeight: 700, color: '#2F8F83', border: '1px solid #BFE0DA', borderRadius: '99px', padding: '1px 6px' }}>{it.level}</span>
                         </div>
-                        <span style={{ fontSize: '10px', color: '#2F8F83', fontWeight: 600 }}>{it.known} known</span>
+                        <div style={{ fontSize: '14px', fontWeight: 600, lineHeight: 1.25 }} className={L.font}>{it.title}</div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '7px', marginTop: '5px' }}>
+                          <div style={{ flex: 1, height: '4px', background: '#EDE4D6', borderRadius: '99px', overflow: 'hidden' }}>
+                            <div style={{ width: knownPerc, height: '100%', background: '#2F8F83' }}></div>
+                          </div>
+                          <span style={{ fontSize: '10px', color: '#2F8F83', fontWeight: 600 }}>{knownPerc} known</span>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           )}
 
           {/* ===== READER SCREEN ===== */}
-          {view === 'reader' && (
+          {view === 'reader' && activeImmerseItem && (
             <div className="cd-screen" style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 20px 12px', borderBottom: '1px solid #EDE4D6', flex: 'none' }}>
-                <span onClick={() => setView('immerse')} style={{ fontSize: '18px', color: '#B5A99E', cursor: 'pointer' }}>‹</span>
-                <span style={{ fontSize: '12.5px', fontWeight: 600, color: '#8A7E73' }}>Article · 3 min · A2</span>
-                <span style={{ fontSize: '15px', color: '#B5A99E' }}>Aa</span>
+                <span onClick={() => { setView('immerse'); setActiveImmerseItem(null); setPop(null); }} style={{ fontSize: '18px', color: '#B5A99E', cursor: 'pointer' }}>‹</span>
+                <span style={{ fontSize: '12.5px', fontWeight: 600, color: '#8A7E73' }}>{activeImmerseItem.type} · {activeImmerseItem.duration} · {activeImmerseItem.level}</span>
+                <span onClick={() => speak(activeImmerseItem.text, L.locale)} style={{ fontSize: '15px', color: '#B5A99E', cursor: 'pointer' }}>🔊 Play</span>
               </div>
               <div className="cd-scroll" style={{ flex: 1, overflowY: 'auto', padding: '18px 24px 0' }}>
-                <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: '25px', lineHeight: 1.12, marginBottom: '14px' }} className={L.font}>{L.article}</div>
-                <div style={{ fontSize: '15.5px', lineHeight: 1.85, color: '#33291F' }} className={L.font}>
-                  {L.reader.map((seg: any, idx: number) => seg.w ? (
-                    <span key={idx} onClick={() => setPop({ term: seg.w, def: seg.d })} style={{ background: '#FBE3D9', borderBottom: '2px solid #DB5338', borderRadius: '3px', padding: '0 2px', cursor: 'pointer' }}>
-                      {seg.w}
-                    </span>
-                  ) : (
-                    <span key={idx}>{seg.t}</span>
-                  ))}
+                <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: '25px', lineHeight: 1.12, marginBottom: '4px' }} className={L.font}>{activeImmerseItem.title}</div>
+                <div style={{ fontSize: '14px', color: '#B5A99E', marginBottom: '16px' }}>{activeImmerseItem.englishTitle}</div>
+                <div style={{ fontSize: '16.5px', lineHeight: 1.85, color: '#33291F', whiteSpace: 'pre-wrap' }} className={L.font}>
+                  {activeImmerseItem.text.split(/([ \n,.]+)/).map((seg: string, idx: number) => {
+                    const isWord = /^[\\p{L}]+$/u.test(seg);
+                    const isKnown = knownWords.has(seg.toLowerCase());
+                    return isWord ? (
+                      <span key={idx} onClick={() => setPop({ term: seg, def: 'Translate or mark known' })} style={{ background: isKnown ? 'transparent' : '#FBE3D9', borderBottom: isKnown ? 'none' : '2px solid #DB5338', borderRadius: '3px', padding: '0 2px', cursor: 'pointer' }}>
+                        {seg}
+                      </span>
+                    ) : (
+                      <span key={idx}>{seg}</span>
+                    )
+                  })}
                 </div>
               </div>
               {pop && (
@@ -1832,16 +1872,7 @@ export default function App() {
                   </div>
                   <div style={{ fontSize: '13px', color: '#C9BFB4', marginBottom: '9px' }}>{pop.def}</div>
                   <div style={{ display: 'flex', gap: '8px' }}>
-                    <div onClick={async () => {
-                      if (authStatus === 'authenticated') {
-                        await fetch('/api/attempt', {
-                          method: 'POST',
-                          headers: { 'Content-Type': 'application/json' },
-                          body: JSON.stringify({ lang, term: pop.term, definition: pop.def, activity: 'review', correct: true }),
-                        });
-                      }
-                      setPop(null);
-                    }} style={{ flex: 1, background: '#DB5338', borderRadius: '9px', padding: '8px', textAlign: 'center', fontSize: '12.5px', fontWeight: 600, cursor: 'pointer' }}>+ Save word</div>
+                    <div onClick={() => markAsKnown(pop.term)} style={{ flex: 1, background: '#DB5338', borderRadius: '9px', padding: '8px', textAlign: 'center', fontSize: '12.5px', fontWeight: 600, cursor: 'pointer' }}>+ Save word</div>
                     <div onClick={() => setPop(null)} style={{ background: 'rgba(255,255,255,.12)', borderRadius: '9px', padding: '8px 12px', fontSize: '12.5px', cursor: 'pointer' }}>Close</div>
                   </div>
                 </div>
