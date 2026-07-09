@@ -174,7 +174,7 @@ export default function App() {
     const savedView = localStorage.getItem('cadence_view');
     const savedLang = localStorage.getItem('cadence_lang');
     const savedKnownWords = localStorage.getItem('cadence_known_words');
-    if (savedView && savedView !== 'auth' && savedView !== 'welcome') setView(savedView);
+    if (savedView && savedView !== 'auth' && savedView !== 'welcome') setView('path');
     if (savedLang) setLang(savedLang);
     if (savedKnownWords) {
       try {
