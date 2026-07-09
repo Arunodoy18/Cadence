@@ -877,7 +877,7 @@ export default function App() {
   const userDiamonds = earnedMilestones.length * 20;
 
   const currentChapter = chapters[currentLevel] || { title: '' };
-  const chapterMilestones = [`ch${currentLevel}_regular`, `ch${currentLevel}_pronounce`, `ch${currentLevel}_convo`];
+  const chapterMilestones = [`ch${currentLevel}_build`, `ch${currentLevel}_pronounce`, `ch${currentLevel}_regular`];
   const completedInCurrentChapter = chapterMilestones.filter(m => earnedMilestones.includes(m)).length;
   const chapterProgressPct = Math.max(0, Math.min(100, (completedInCurrentChapter / 3) * 100));
 
@@ -1247,9 +1247,9 @@ export default function App() {
                       {/* Dynamic Golden Stars */}
                       {isUnlocked && (
                         <div style={{ position: 'absolute', bottom: '-15px', left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: '2px', zIndex: 2 }}>
-                          {earnedMilestones.includes(`ch${i}_regular`) && <span style={{ fontSize: '18px', filter: 'drop-shadow(0 2px 2px rgba(0,0,0,0.3))', transform: 'rotate(-15deg)' }}>⭐</span>}
+                          {earnedMilestones.includes(`ch${i}_build`) && <span style={{ fontSize: '18px', filter: 'drop-shadow(0 2px 2px rgba(0,0,0,0.3))', transform: 'rotate(-15deg)' }}>⭐</span>}
                           {earnedMilestones.includes(`ch${i}_pronounce`) && <span style={{ fontSize: '22px', filter: 'drop-shadow(0 2px 2px rgba(0,0,0,0.3))', transform: 'translateY(-4px)' }}>⭐</span>}
-                          {earnedMilestones.includes(`ch${i}_convo`) && <span style={{ fontSize: '18px', filter: 'drop-shadow(0 2px 2px rgba(0,0,0,0.3))', transform: 'rotate(15deg)' }}>⭐</span>}
+                          {earnedMilestones.includes(`ch${i}_regular`) && <span style={{ fontSize: '18px', filter: 'drop-shadow(0 2px 2px rgba(0,0,0,0.3))', transform: 'rotate(15deg)' }}>⭐</span>}
                         </div>
                       )}
 
