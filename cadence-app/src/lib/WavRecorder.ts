@@ -61,12 +61,39 @@ export class WavRecorder {
         offset += chunk.length;
       }
 
+      // Downsample to 16kHz if necessary
+      const actualSampleRate = this.audioContext ? this.audioContext.sampleRate : 16000;
+      const downsampledResult = this.downsampleBuffer(result, actualSampleRate, 16000);
+
       // Convert Float32 to 16-bit PCM
-      const pcmData = this.floatTo16BitPCM(result);
+      const pcmData = this.floatTo16BitPCM(downsampledResult);
       const wavData = this.encodeWAV(pcmData, 16000); // 16kHz
 
       resolve(new Blob([wavData], { type: 'audio/wav' }));
     });
+  }
+
+  private downsampleBuffer(buffer: Float32Array, sampleRate: number, outSampleRate: number): Float32Array {
+    if (outSampleRate >= sampleRate) {
+      return buffer;
+    }
+    const sampleRateRatio = sampleRate / outSampleRate;
+    const newLength = Math.round(buffer.length / sampleRateRatio);
+    const result = new Float32Array(newLength);
+    let offsetResult = 0;
+    let offsetBuffer = 0;
+    while (offsetResult < result.length) {
+      const nextOffsetBuffer = Math.round((offsetResult + 1) * sampleRateRatio);
+      let accum = 0, count = 0;
+      for (let i = offsetBuffer; i < nextOffsetBuffer && i < buffer.length; i++) {
+        accum += buffer[i];
+        count++;
+      }
+      result[offsetResult] = accum / count;
+      offsetResult++;
+      offsetBuffer = nextOffsetBuffer;
+    }
+    return result;
   }
 
   private floatTo16BitPCM(input: Float32Array): Int16Array {
