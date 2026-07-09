@@ -94,25 +94,26 @@ export async function POST(req: NextRequest) {
     }
 
     const nBest = data.NBest?.[0];
-    const pronAssessment = nBest?.PronunciationAssessment;
 
-    if (!pronAssessment) {
+    // The REST API flattens the PronunciationAssessment metrics directly into the NBest object, 
+    // unlike the Websocket SDK which nests it inside a PronunciationAssessment property.
+    if (!nBest || typeof nBest.PronScore === 'undefined') {
       return NextResponse.json({ error: 'Pronunciation assessment data missing in response' }, { status: 500 });
     }
 
     // Map response to clean structure matching the spec
     const result = {
-      score: pronAssessment.PronScore || 0,
-      accuracyScore: pronAssessment.AccuracyScore || 0,
-      fluencyScore: pronAssessment.FluencyScore || 0,
-      completenessScore: pronAssessment.CompletenessScore || 0,
-      words: (nBest.Words || []).map((w: { Word: string; PronunciationAssessment: any; Phonemes: any[] }) => ({
+      score: nBest.PronScore || 0,
+      accuracyScore: nBest.AccuracyScore || 0,
+      fluencyScore: nBest.FluencyScore || 0,
+      completenessScore: nBest.CompletenessScore || 0,
+      words: (nBest.Words || []).map((w: any) => ({
         word: w.Word,
-        accuracyScore: w.PronunciationAssessment?.AccuracyScore || 0,
-        errorType: w.PronunciationAssessment?.ErrorType || 'None',
-        phonemes: (w.Phonemes || []).map((p: { Phoneme: string; PronunciationAssessment: any }) => ({
+        accuracyScore: w.AccuracyScore || 0,
+        errorType: w.ErrorType || 'None',
+        phonemes: (w.Phonemes || []).map((p: any) => ({
           phoneme: p.Phoneme,
-          accuracyScore: p.PronunciationAssessment?.AccuracyScore || 0,
+          accuracyScore: p.AccuracyScore || 0,
         })),
       })),
     };
