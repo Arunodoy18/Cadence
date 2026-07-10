@@ -23,6 +23,12 @@ export default function App() {
   const [scenario, setScenario] = useState('cafe');
   const [picker, setPicker] = useState(false);
   const [pickerNext, setPickerNext] = useState<string | null>(null);
+  const [toast, setToast] = useState<string | null>(null);
+
+  const showToast = (msg: string) => {
+    setToast(msg);
+    setTimeout(() => setToast(null), 3500);
+  };
 
   // Rotating greeting state
   const [greetIdx, setGreetIdx] = useState(0);
@@ -234,12 +240,12 @@ export default function App() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ lang }),
       });
-      if (res.ok) {
-        const data = await res.json();
-        setEarnedMilestones(data.milestones.map((m: any) => m.key));
-      }
+      if (!res.ok) throw new Error(`API Error: ${res.status}`);
+      const data = await res.json();
+      setEarnedMilestones(data.milestones.map((m: any) => m.key));
     } catch (e) {
       console.error('Milestones fetch error:', e);
+      showToast('Failed to load progress. Please check your connection.');
     }
   };
 
@@ -250,12 +256,14 @@ export default function App() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ lang }),
       });
+      if (!res.ok) throw new Error(`API Error: ${res.status}`);
       const data = await res.json();
       if (data.plan) {
         setPlanItems(data.plan);
       }
     } catch (e) {
       console.error('Failed to load plan', e);
+      showToast('Failed to load personalized plan.');
     }
   };
 
@@ -275,18 +283,20 @@ export default function App() {
       audio.onended = () => setIsAiSpeaking(false);
       audio.play();
     } catch (e) {
+      console.error('TTS error:', e);
+      showToast('Audio generation failed. Falling back to device speech.');
       // Fallback to local browser SpeechSynthesis
       try {
         if (!window.speechSynthesis) return;
         const u = new SpeechSynthesisUtterance(text);
         u.lang = locale;
-        u.rate = 0.92;
+        u.rate = 0.9;
         u.onstart = () => setIsAiSpeaking(true);
         u.onend = () => setIsAiSpeaking(false);
-        u.onerror = () => setIsAiSpeaking(false);
-        window.speechSynthesis.cancel();
-        window.speechSynthesis.speak(u);
-      } catch (err) {}
+        speechSynthesis.speak(u);
+      } catch (fallbackErr) {
+        console.error('Local TTS also failed:', fallbackErr);
+      }
     }
   };
 
@@ -471,6 +481,11 @@ export default function App() {
         method: 'POST',
         body: formData,
       });
+      if (!res.ok) {
+        showToast('API Error: Failed to analyze pronunciation.');
+        setPronScore(0);
+        return;
+      }
       const data = await res.json();
       if (data.score !== undefined) {
         setPronScore(Math.round(data.score));
@@ -478,7 +493,7 @@ export default function App() {
       } else {
         setPronScore(0);
         console.error("Pronunciation API Error:", data.error);
-        alert(data.error || "Failed to analyze pronunciation.");
+        showToast(data.error || "Failed to analyze pronunciation.");
       }
 
         // Log to database
@@ -497,6 +512,7 @@ export default function App() {
         }
     } catch (e) {
       console.error('Pronunciation API error', e);
+      showToast('Network error while assessing pronunciation.');
     }
   };
 
@@ -531,10 +547,15 @@ export default function App() {
         method: 'POST',
         body: formData,
       });
+      if (!res.ok) {
+        showToast('API Error: Failed to convert speech to text.');
+        setConvo((prev) => ({ ...prev, listening: false }));
+        return;
+      }
       const data = await res.json();
 
-      if (!res.ok || data.error) {
-        alert(data.error || "Failed to convert speech to text. Please try again.");
+      if (data.error) {
+        showToast(data.error || "Failed to convert speech to text. Please try again.");
         setConvo((prev) => ({ ...prev, listening: false }));
         return;
       }
@@ -583,6 +604,7 @@ export default function App() {
 
       const data = await res.json();
       if (!res.ok || data.error) {
+        showToast("Error starting conversation.");
         setConvo((prev) => ({ ...prev, thinking: false, msgs: [{ who: 'p', n: "Error starting conversation.", en: "Error" }] }));
         return;
       }
@@ -594,6 +616,7 @@ export default function App() {
       }));
       speak(data.reply, L.locale);
     } catch (e) {
+      showToast("Error connecting to conversation AI.");
       setConvo((prev) => ({ ...prev, thinking: false, msgs: [{ who: 'p', n: "Error starting conversation.", en: "Error" }] }));
     }
   };
@@ -630,10 +653,16 @@ export default function App() {
         }),
       });
 
+      if (!res.ok) {
+        showToast("API Error: Failed to connect to the conversation AI.");
+        setConvo((prev) => ({ ...prev, thinking: false }));
+        return;
+      }
+      
       const data = await res.json();
       
-      if (!res.ok || data.error) {
-        alert(data.error || "Failed to connect to the conversation AI. Please try again.");
+      if (data.error) {
+        showToast(data.error || "Failed to connect to the conversation AI. Please try again.");
         setConvo((prev) => ({ ...prev, thinking: false }));
         return;
       }
@@ -670,7 +699,8 @@ export default function App() {
         });
       }
     } catch (e) {
-      console.error(e);
+      console.error('Conversation submission error:', e);
+      showToast("Network error. Could not send message.");
       setConvo((prev) => ({ ...prev, thinking: false }));
     }
   };
@@ -716,12 +746,14 @@ export default function App() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ provider: 'stripe' }), // default to Stripe
       });
+      if (!res.ok) throw new Error('Checkout API failed');
       const data = await res.json();
       if (data.url) {
         window.location.href = data.url;
       }
     } catch (e) {
       console.error('Checkout failed', e);
+      showToast('Failed to start checkout process.');
     }
   };
 
@@ -2949,6 +2981,13 @@ export default function App() {
                   })}
                 </div>
               </div>
+            </div>
+          )}
+
+          {/* Toast Notification UI */}
+          {toast && (
+            <div style={{ position: 'absolute', bottom: '80px', left: '50%', transform: 'translateX(-50%)', background: '#DB5338', color: '#fff', padding: '12px 20px', borderRadius: '12px', fontSize: '14px', fontWeight: 600, zIndex: 9999, boxShadow: '0 8px 16px rgba(219,83,56,0.3)', animation: 'popIn 0.3s ease-out forwards', whiteSpace: 'nowrap', maxWidth: '90%' }}>
+              {toast}
             </div>
           )}
 
