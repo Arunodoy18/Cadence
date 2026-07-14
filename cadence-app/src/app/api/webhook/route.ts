@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { sql } from '@/lib/db';
+import { requireAuth } from '@/lib/auth';
 import Stripe from 'stripe';
 import crypto from 'crypto';
 import { v4 as uuidv4 } from 'uuid';
@@ -8,28 +9,37 @@ export async function POST(req: NextRequest) {
   const bodyText = await req.text();
   const signature = req.headers.get('stripe-signature') || req.headers.get('x-razorpay-signature');
 
-  // 1. Check if it's a test/mock webhook (no signatures, or explicitly marked mock)
-  // This allows the mock checkout flow to upgrade the user
+  // 1. Mock checkout flow (only used as a fallback when no real Stripe/Razorpay
+  // keys are configured — see /api/checkout). Requires a real session and can only
+  // ever act on the caller's own account, so it can't be used to upgrade other users.
+  const realProviderConfigured = Boolean(process.env.STRIPE_SECRET_KEY || process.env.RAZORPAY_KEY_ID);
   try {
     const jsonBody = JSON.parse(bodyText);
-    if (jsonBody.isMock && jsonBody.userId) {
-      console.log(`Mock webhook received for user: ${jsonBody.userId}, action: ${jsonBody.action}`);
+    if (jsonBody.isMock) {
+      if (realProviderConfigured) {
+        return NextResponse.json({ error: 'Mock checkout is disabled once a real payment provider is configured' }, { status: 403 });
+      }
+
+      const auth = await requireAuth();
+      if (auth.error) return auth.error;
+      const user = auth.user!;
+
       const plan = jsonBody.action === 'upgrade' ? 'plus' : 'free';
-      
+
       await sql`
-        UPDATE users 
-        SET plan = ${plan} 
-        WHERE id = ${jsonBody.userId}
+        UPDATE users
+        SET plan = ${plan}
+        WHERE id = ${user.id}
       `;
 
       await sql`
         INSERT INTO subscriptions (id, user_id, provider, status, trial_ends_at, current_period_end)
         VALUES (
-          ${uuidv4()}, 
-          ${jsonBody.userId}, 
-          ${jsonBody.provider || 'mock'}, 
-          ${plan === 'plus' ? 'active' : 'cancelled'}, 
-          ${new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()}, 
+          ${uuidv4()},
+          ${user.id},
+          ${jsonBody.provider || 'mock'},
+          ${plan === 'plus' ? 'active' : 'cancelled'},
+          ${new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()},
           ${new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()}
         )
         ON CONFLICT DO NOTHING
@@ -81,17 +91,15 @@ export async function POST(req: NextRequest) {
         }
       } else if (event.type === 'customer.subscription.deleted') {
         const subscription = event.data.object as Stripe.Subscription;
-        // Search subscription in DB to find userId
-        const subs = await sql`
-          SELECT user_id FROM subscriptions 
-          WHERE id = ${subscription.id} OR user_id IN (
-            SELECT id FROM users WHERE email = ${subscription.customer as string}
-          )
-        `;
-        if (subs.length > 0) {
-          const userId = subs[0].user_id;
+        // The subscription itself carries userId in its metadata (set at creation
+        // time in /api/checkout) — subscriptions.id in our DB is a locally-generated
+        // uuid, not the Stripe subscription id, so it can never be matched directly.
+        const userId = subscription.metadata?.userId;
+        if (userId) {
           await sql`UPDATE users SET plan = 'free' WHERE id = ${userId}`;
           await sql`UPDATE subscriptions SET status = 'cancelled' WHERE user_id = ${userId}`;
+        } else {
+          console.error('Stripe subscription.deleted event missing metadata.userId', subscription.id);
         }
       }
       

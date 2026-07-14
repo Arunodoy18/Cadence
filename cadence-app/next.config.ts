@@ -2,20 +2,21 @@ import type { NextConfig } from "next";
 import withSerwistInit from "@serwist/next";
 
 const nextConfig: NextConfig = {
-  typescript: {
-    ignoreBuildErrors: true,
-  },
   turbopack: {},
   async headers() {
     return [
       {
-        // Match all API routes
-        source: "/api/:path*",
+        // Frontend and API are served from the same Netlify origin, so no
+        // cross-origin CORS headers are needed for /api — a wildcard
+        // Access-Control-Allow-Origin there would let any other website call
+        // these (auth-gated, metered) endpoints directly from the browser.
+        source: "/:path*",
         headers: [
-          { key: "Access-Control-Allow-Credentials", value: "true" },
-          { key: "Access-Control-Allow-Origin", value: "*" }, // Allow requests from any origin (e.g. Netlify frontend)
-          { key: "Access-Control-Allow-Methods", value: "GET,OPTIONS,PATCH,DELETE,POST,PUT" },
-          { key: "Access-Control-Allow-Headers", value: "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization" },
+          { key: "X-Content-Type-Options", value: "nosniff" },
+          { key: "X-Frame-Options", value: "DENY" },
+          { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+          { key: "Permissions-Policy", value: "microphone=(self), camera=(), geolocation=()" },
+          { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
         ]
       }
     ];

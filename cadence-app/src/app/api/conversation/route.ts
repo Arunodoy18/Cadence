@@ -1,8 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
 import OpenAI from 'openai';
+import { requirePlus } from '@/lib/auth';
+import { rateLimit } from '@/lib/rateLimit';
 
 export async function POST(req: NextRequest) {
   try {
+    const auth = await requirePlus();
+    if (auth.error) return auth.error;
+
+    if (!rateLimit(`conversation:${auth.user!.id}`, 20, 60_000)) {
+      return NextResponse.json({ error: 'Too many requests — please slow down.' }, { status: 429 });
+    }
+
     const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || process.env.OPEN_AI_API || 'dummy-key' });
 
     const { messages, lang, scenario, partnerName, persona, level } = await req.json();

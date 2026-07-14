@@ -13,3 +13,12 @@ export async function requireAuth() {
   }
   return { error: null, user: session.user as { id: string; email: string; name: string; plan: string } };
 }
+
+export async function requirePlus() {
+  const auth = await requireAuth();
+  if (auth.error) return auth;
+  if (auth.user!.plan !== 'plus') {
+    return { error: NextResponse.json({ error: 'This feature requires Cadence Plus' }, { status: 403 }), user: null };
+  }
+  return auth;
+}

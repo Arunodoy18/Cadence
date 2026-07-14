@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { useSession, signIn, signOut } from 'next-auth/react';
+import { useSession, signIn, signOut, getProviders } from 'next-auth/react';
 import { LANGS } from '@/lib/languages';
 import immerseDataRaw from '@/lib/immerse.json';
 import { scenarioMeta } from '@/lib/scenarios';
@@ -29,6 +29,15 @@ export default function App() {
     setToast(msg);
     setTimeout(() => setToast(null), 3500);
   };
+
+  // Google sign-in only works if GOOGLE_CLIENT_ID/SECRET are configured server-side —
+  // check via NextAuth's own providers list instead of hardcoding that assumption here.
+  const [googleEnabled, setGoogleEnabled] = useState(false);
+  useEffect(() => {
+    getProviders()
+      .then((providers) => setGoogleEnabled(!!providers?.google))
+      .catch(() => setGoogleEnabled(false));
+  }, []);
 
   // Rotating greeting state
   const [greetIdx, setGreetIdx] = useState(0);
@@ -177,10 +186,21 @@ export default function App() {
 
   // Persist state across refreshes
   useEffect(() => {
-    const savedView = localStorage.getItem('cadence_view');
+    // A checkout redirect (real Stripe, or the mock sandbox) lands here via
+    // /paid or /plans, which forward to /?view=... — honor that over whatever
+    // was previously saved in localStorage, then scrub it from the URL.
+    const params = new URLSearchParams(window.location.search);
+    const redirectView = params.get('view');
+    if (redirectView === 'paid' || redirectView === 'plans') {
+      setView(redirectView);
+      window.history.replaceState({}, '', window.location.pathname);
+    } else {
+      const savedView = localStorage.getItem('cadence_view');
+      if (savedView && savedView !== 'auth' && savedView !== 'welcome') setView('path');
+    }
+
     const savedLang = localStorage.getItem('cadence_lang');
     const savedKnownWords = localStorage.getItem('cadence_known_words');
-    if (savedView && savedView !== 'auth' && savedView !== 'welcome') setView('path');
     if (savedLang) setLang(savedLang);
     if (savedKnownWords) {
       try {
@@ -216,14 +236,11 @@ export default function App() {
 
   // Premium Gating Interception
   useEffect(() => {
-    // TEMPORARILY DISABLED: Allow testing all features until Stripe is implemented
-    /*
     const premiumViews = ['convo', 'pronounce', 'immerse', 'reader'];
     const isPro = (session?.user as any)?.plan === 'plus';
     if (premiumViews.includes(view) && !isPro) {
       setView('plans'); // Redirect free users to the upsell screen
     }
-    */
   }, [view, session]);
 
   // Fetch milestones when visiting gamification screens
@@ -2293,7 +2310,7 @@ export default function App() {
 
                 {/* OAuth buttons */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '18px' }}>
-                  <div onClick={() => signIn('google')} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', background: '#fff', border: '1px solid #E1D6C4', borderRadius: '13px', padding: '13px', fontSize: '14px', fontWeight: 600, cursor: 'pointer' }}>
+                  <div onClick={() => googleEnabled ? signIn('google') : showToast('Google sign-in is not configured yet.')} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', background: '#fff', border: '1px solid #E1D6C4', borderRadius: '13px', padding: '13px', fontSize: '14px', fontWeight: 600, cursor: 'pointer', opacity: googleEnabled ? 1 : 0.6 }}>
                     <span style={{ fontSize: '16px' }}>🇬</span> Continue with Google
                   </div>
                   <div onClick={() => alert('Apple Sign-In coming soon!')} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', background: '#2A2320', color: '#FBF6EE', borderRadius: '13px', padding: '13px', fontSize: '14px', fontWeight: 600, cursor: 'pointer' }}>

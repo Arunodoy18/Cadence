@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { requirePlus } from '@/lib/auth';
+import { rateLimit } from '@/lib/rateLimit';
 
 const localeMap: { [key: string]: string } = {
   en: 'en-US',
@@ -35,6 +37,13 @@ const localeMap: { [key: string]: string } = {
 
 export async function POST(req: NextRequest) {
   try {
+    const auth = await requirePlus();
+    if (auth.error) return auth.error;
+
+    if (!rateLimit(`pronounce:${auth.user!.id}`, 30, 60_000)) {
+      return NextResponse.json({ error: 'Too many requests — please slow down.' }, { status: 429 });
+    }
+
     const formData = await req.formData();
     const audioFile = formData.get('file') as File;
     const refText = formData.get('refText') as string;

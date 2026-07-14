@@ -4,6 +4,7 @@ import GoogleProvider from 'next-auth/providers/google';
 import { sql } from '@/lib/db';
 import bcrypt from 'bcryptjs';
 import { v4 as uuidv4 } from 'uuid';
+import { rateLimit } from '@/lib/rateLimit';
 
 export const authOptions: NextAuthOptions = {
   session: {
@@ -39,6 +40,10 @@ export const authOptions: NextAuthOptions = {
         }
 
         const { email, password, name, action } = credentials;
+
+        if (!rateLimit(`auth:${email.toLowerCase()}`, 10, 60_000)) {
+          throw new Error('Too many attempts. Please wait a minute and try again.');
+        }
 
         if (action === 'signup') {
           // Check if user already exists

@@ -45,6 +45,7 @@ export async function POST(req: NextRequest) {
         }],
         subscription_data: {
           trial_period_days: 7,
+          metadata: { userId: user.id },
         },
         mode: 'subscription',
         success_url: `${origin}/paid?provider=stripe&session_id={CHECKOUT_SESSION_ID}`,

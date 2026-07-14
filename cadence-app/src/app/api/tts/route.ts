@@ -1,7 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { requireAuth } from '@/lib/auth';
+import { rateLimit } from '@/lib/rateLimit';
 
 export async function POST(req: NextRequest) {
   try {
+    const auth = await requireAuth();
+    if (auth.error) return auth.error;
+
+    if (!rateLimit(`tts:${auth.user!.id}`, 40, 60_000)) {
+      return NextResponse.json({ error: 'Too many requests — please slow down.' }, { status: 429 });
+    }
+
     const { text, lang } = await req.json();
     if (!text || !lang) {
       return NextResponse.json({ error: 'Text and language are required' }, { status: 400 });
