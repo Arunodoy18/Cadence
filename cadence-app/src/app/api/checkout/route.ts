@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireAuth } from '@/lib/auth';
+import { rateLimit } from '@/lib/rateLimit';
 import Stripe from 'stripe';
 import Razorpay from 'razorpay';
 
@@ -8,6 +9,10 @@ export async function POST(req: NextRequest) {
     const auth = await requireAuth();
     if (auth.error) return auth.error;
     const user = auth.user!;
+
+    if (!rateLimit(`checkout:${user.id}`, 10, 60_000)) {
+      return NextResponse.json({ error: 'Too many requests — please slow down.' }, { status: 429 });
+    }
 
     const { provider } = await req.json();
 

@@ -118,7 +118,11 @@ export async function POST(req: NextRequest) {
       .update(bodyText)
       .digest('hex');
 
-    if (expectedSig !== signature) {
+    const expectedBuf = Buffer.from(expectedSig, 'utf8');
+    const actualBuf = Buffer.from(signature || '', 'utf8');
+    const signatureValid = expectedBuf.length === actualBuf.length && crypto.timingSafeEqual(expectedBuf, actualBuf);
+
+    if (!signatureValid) {
       console.error('Razorpay signature verification failed');
       return NextResponse.json({ error: 'Signature verification failed' }, { status: 400 });
     }

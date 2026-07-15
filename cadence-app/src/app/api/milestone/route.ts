@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { sql } from '@/lib/db';
 import { requireAuth } from '@/lib/auth';
+import { rateLimit } from '@/lib/rateLimit';
 import { v4 as uuidv4 } from 'uuid';
 
 export async function POST(req: NextRequest) {
@@ -8,6 +9,10 @@ export async function POST(req: NextRequest) {
     const auth = await requireAuth();
     if (auth.error) return auth.error;
     const user = auth.user!;
+
+    if (!rateLimit(`milestone:${user.id}`, 30, 60_000)) {
+      return NextResponse.json({ error: 'Too many requests — please slow down.' }, { status: 429 });
+    }
 
     const { lang, milestone } = await req.json();
 
