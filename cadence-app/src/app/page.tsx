@@ -196,7 +196,7 @@ export default function App() {
       window.history.replaceState({}, '', window.location.pathname);
     } else {
       const savedView = localStorage.getItem('cadence_view');
-      if (savedView && savedView !== 'auth' && savedView !== 'welcome') setView('path');
+      if (savedView && savedView !== 'auth' && savedView !== 'welcome') setView('home');
     }
 
     const savedLang = localStorage.getItem('cadence_lang');
