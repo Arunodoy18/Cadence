@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useSession, signIn, signOut, getProviders } from 'next-auth/react';
 import { LANGS } from '@/lib/languages';
 import immerseDataRaw from '@/lib/immerse.json';
@@ -16,8 +16,38 @@ export default function App() {
   const router = useRouter();
   const userPlan = (session?.user as any)?.plan || 'free';
 
-  // Core navigation state
-  const [view, setView] = useState('welcome');
+  // Core navigation state.
+  // Every screen change also pushes a history entry, so the Android hardware/
+  // gesture back button (and desktop browser back) steps through in-app
+  // screens instead of just exiting — without this, wrapping the app for the
+  // Play Store means the back button quits the app from any screen, which
+  // reads as a crash to users on the very first back-press.
+  const [view, setViewRaw] = useState('welcome');
+  const setView = useCallback((v: string) => {
+    setViewRaw(v);
+    if (typeof window !== 'undefined') {
+      window.history.pushState({ cadenceView: v }, '', '');
+    }
+  }, []);
+
+  useEffect(() => {
+    // Tag the entry that was already here on load with the starting screen —
+    // otherwise the very first setView() push has nothing valid to go back
+    // to, and the back button does nothing on the first press instead of
+    // returning to the welcome screen.
+    window.history.replaceState({ cadenceView: 'welcome' }, '', '');
+
+    const onPopState = (e: PopStateEvent) => {
+      if (e.state?.cadenceView) {
+        setViewRaw(e.state.cadenceView);
+      }
+      // If there's no recorded view (back past our own history), leave the
+      // current screen as-is rather than guessing — the next back-press will
+      // exit the app/WebView normally, which is the correct behavior there.
+    };
+    window.addEventListener('popstate', onPopState);
+    return () => window.removeEventListener('popstate', onPopState);
+  }, []);
   const [lang, setLang] = useState('es');
   const [earnedMilestones, setEarnedMilestones] = useState<string[]>([]);
   const [scenario, setScenario] = useState('cafe');
@@ -193,7 +223,10 @@ export default function App() {
     const redirectView = params.get('view');
     if (redirectView === 'paid' || redirectView === 'plans') {
       setView(redirectView);
-      window.history.replaceState({}, '', window.location.pathname);
+      // Keep the cadenceView tag on this entry (just clean the URL) — an
+      // empty state object here would erase the back-button target we just
+      // pushed via setView above.
+      window.history.replaceState({ cadenceView: redirectView }, '', window.location.pathname);
     } else {
       const savedView = localStorage.getItem('cadence_view');
       if (savedView && savedView !== 'auth' && savedView !== 'welcome') setView('home');
