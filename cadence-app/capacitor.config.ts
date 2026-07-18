@@ -18,6 +18,22 @@ const config: CapacitorConfig = {
   android: {
     allowMixedContent: false,
   },
+  plugins: {
+    SplashScreen: {
+      // Hidden manually (see NativeChrome) once the remote page has actually
+      // rendered — this app loads over the network, so the plugin's own
+      // auto-hide timer can easily fire before that, leaving a blank flash
+      // between the splash disappearing and content appearing.
+      launchAutoHide: false,
+      backgroundColor: '#FBF6EEFF',
+      showSpinner: false,
+    },
+    StatusBar: {
+      // Translucent, drawn over the WebView rather than pushing it down —
+      // the app's CSS already reserves space for it via env(safe-area-inset-top).
+      overlaysWebView: true,
+    },
+  },
 };
 
 export default config;

@@ -48,6 +48,47 @@ export default function App() {
     window.addEventListener('popstate', onPopState);
     return () => window.removeEventListener('popstate', onPopState);
   }, []);
+
+  // Native chrome: no-ops entirely on web/PWA (dynamic import + isNativePlatform
+  // check, same pattern as PushNotificationSetup). This app loads over the
+  // network (see capacitor.config.ts), so the splash screen's own auto-hide
+  // timer can easily fire before the page has actually rendered — hide it
+  // manually once this component has mounted instead, closing that gap.
+  useEffect(() => {
+    (async () => {
+      try {
+        const { Capacitor } = await import('@capacitor/core');
+        if (!Capacitor.isNativePlatform()) return;
+        const { SplashScreen } = await import('@capacitor/splash-screen');
+        await SplashScreen.hide();
+      } catch {
+        // Not running inside the native shell — nothing to do.
+      }
+    })();
+  }, []);
+
+  // Status bar style follows the same light/dark split already used for the
+  // in-app status bar row above (complete/convo/review use a dark background
+  // with light text, everything else is the cream background with dark text).
+  useEffect(() => {
+    (async () => {
+      try {
+        const { Capacitor } = await import('@capacitor/core');
+        if (!Capacitor.isNativePlatform()) return;
+        const { StatusBar, Style } = await import('@capacitor/status-bar');
+        const isDarkScreen = view === 'complete' || view === 'convo' || view === 'review';
+        await StatusBar.setStyle({ style: isDarkScreen ? Style.Dark : Style.Light });
+        if (Capacitor.getPlatform() === 'android') {
+          // Matches .cd-phone-inner's own background exactly per screen.
+          const bg = view === 'complete' ? '#2F8F83' : view === 'convo' || view === 'review' ? '#241C2A' : '#FBF6EE';
+          await StatusBar.setBackgroundColor({ color: bg });
+        }
+      } catch {
+        // Not running inside the native shell — nothing to do.
+      }
+    })();
+  }, [view]);
+
   const [lang, setLang] = useState('es');
   const [earnedMilestones, setEarnedMilestones] = useState<string[]>([]);
   const [scenario, setScenario] = useState('cafe');
