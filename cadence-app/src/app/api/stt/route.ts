@@ -16,6 +16,7 @@ export async function POST(req: NextRequest) {
 
     const formData = await req.formData();
     const audioFile = formData.get('file') as File;
+    const lang = formData.get('lang') as string;
     if (!audioFile) {
       return NextResponse.json({ error: 'No audio file provided' }, { status: 400 });
     }
@@ -23,10 +24,17 @@ export async function POST(req: NextRequest) {
     const buffer = Buffer.from(await audioFile.arrayBuffer());
     const file = await toFile(buffer, 'audio.wav', { type: 'audio/wav' });
 
-    const response = await openai.audio.transcriptions.create({
+    const requestParams: any = {
       file: file,
       model: 'whisper-1',
-    });
+    };
+
+    if (lang) {
+      // Whisper expects ISO-639-1 format (e.g. 'en', 'es', 'fr')
+      requestParams.language = lang.split('-')[0];
+    }
+
+    const response = await openai.audio.transcriptions.create(requestParams);
 
     return NextResponse.json({ transcript: response.text });
   } catch (error) {

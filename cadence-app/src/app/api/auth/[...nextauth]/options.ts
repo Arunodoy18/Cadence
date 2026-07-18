@@ -105,10 +105,19 @@ export const authOptions: NextAuthOptions = {
       return true;
     },
 
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger }) {
       if (user) {
         token.userId = (user as any).id;
         token.plan = (user as any).plan || 'free';
+      }
+      // Manual session refresh (e.g. right after checkout, so the client sees
+      // Plus without needing to log out/in). Never trust a client-supplied
+      // plan value here — always re-read the real plan from the database, or
+      // any signed-in user could grant themselves Plus by calling
+      // session.update() with an arbitrary payload from the browser.
+      if (trigger === 'update' && token.userId) {
+        const rows = await sql`SELECT plan FROM users WHERE id = ${token.userId}`;
+        if (rows.length > 0) token.plan = rows[0].plan;
       }
       return token;
     },

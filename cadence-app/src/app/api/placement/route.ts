@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import OpenAI from 'openai';
 import { requireAuth } from '@/lib/auth';
 import { rateLimit } from '@/lib/rateLimit';
+import { sql } from '@/lib/db';
+import { v4 as uuidv4 } from 'uuid';
 
 export async function POST(req: NextRequest) {
   try {
@@ -14,7 +16,7 @@ export async function POST(req: NextRequest) {
 
     const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || process.env.OPEN_AI_API || 'dummy-key' });
 
-    const { messages, lang, finish } = await req.json();
+    const { messages, lang, langCode, finish } = await req.json();
 
     // Mateo persona prompts from the prototype
     const history = messages
@@ -47,6 +49,26 @@ export async function POST(req: NextRequest) {
         data = JSON.parse(raw.slice(a, b + 1));
       } else {
         data = { reply: raw, english: '', level: 'A2' };
+      }
+    }
+
+    // Save CEFR level to database if this is the final turn. Enrollments are
+    // keyed by the short language code everywhere else (attempts, plan) — use
+    // that here too, not the full display name used in the AI prompt above.
+    if (finish && data.level) {
+      const enrollmentLang = langCode || lang;
+      const enrollments = await sql`
+        SELECT id FROM enrollments WHERE user_id = ${auth.user!.id} AND lang = ${enrollmentLang}
+      `;
+      if (enrollments.length > 0) {
+        await sql`
+          UPDATE enrollments SET cefr_level = ${data.level} WHERE id = ${enrollments[0].id}
+        `;
+      } else {
+        await sql`
+          INSERT INTO enrollments (id, user_id, lang, cefr_level, goal)
+          VALUES (${uuidv4()}, ${auth.user!.id}, ${enrollmentLang}, ${data.level}, 'travel')
+        `;
       }
     }
 

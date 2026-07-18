@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { sql } from '@/lib/db';
 import { requireAuth } from '@/lib/auth';
 import { rateLimit } from '@/lib/rateLimit';
+import { v4 as uuidv4 } from 'uuid';
 
 export async function POST(req: NextRequest) {
   try {
@@ -18,17 +19,23 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Language is required' }, { status: 400 });
     }
 
-    // Get enrollment for this user and language
-    const enrollments = await sql`
+    // Get or create enrollment for this user and language
+    let enrollments = await sql`
       SELECT id, goal, cefr_level FROM enrollments 
       WHERE user_id = ${user.id} AND lang = ${lang}
     `;
 
+    let enrollment;
     if (enrollments.length === 0) {
-      return NextResponse.json({ error: 'Not enrolled in this language' }, { status: 400 });
+      const newId = uuidv4();
+      await sql`
+        INSERT INTO enrollments (id, user_id, lang, cefr_level, goal)
+        VALUES (${newId}, ${user.id}, ${lang}, 'A1', 'travel')
+      `;
+      enrollment = { id: newId, cefr_level: 'A1', goal: 'travel' };
+    } else {
+      enrollment = enrollments[0];
     }
-
-    const enrollment = enrollments[0];
     const planItems = [];
 
     // 1. Check for due review items (SRS)

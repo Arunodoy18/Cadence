@@ -96,15 +96,15 @@ export default function App() {
   const [dailyGoal, setDailyGoal] = useState(10);
   const [notif, setNotif] = useState<{ [key: string]: boolean }>({
     daily: true,
-    quiet: true,
-    streak: true,
-    picks: false,
     friends: true,
+    feedback: true,
+    corrections: false,
+    content: true,
   });
   const [charter, setCharter] = useState<{ [key: string]: boolean }>({
-    improve: true,
-    aiTrain: false,
-    share: true,
+    usage: true,
+    ai: false,
+    voice: false,
   });
   const [level, setLevel] = useState('A1');
   const [backTo, setBackTo] = useState('you');
@@ -354,6 +354,8 @@ export default function App() {
         // Call /api/stt
         const formData = new FormData();
         formData.append('file', audioBlob);
+        const _L = LANGS[lang] || LANGS.es;
+        formData.append('lang', _L.locale);
 
         try {
           const res = await fetch('/api/stt', {
@@ -412,6 +414,7 @@ export default function App() {
         body: JSON.stringify({
           messages: updatedMsgs,
           lang: L.name,
+          langCode: lang,
           finish,
         }),
       });
@@ -559,6 +562,8 @@ export default function App() {
       // Call /api/stt
       const formData = new FormData();
       formData.append('file', audioBlob);
+      const _L = LANGS[lang] || LANGS.es;
+      formData.append('lang', _L.locale);
 
       const res = await fetch('/api/stt', {
         method: 'POST',
@@ -738,7 +743,9 @@ export default function App() {
       if (res?.error) {
         setAuthError(res.error);
       } else {
-        setView('home');
+        // New account — send them through goal-setting + the placement chat
+        // instead of dropping them straight on home with zero onboarding.
+        setView('goals');
       }
     } else {
       const res = await signIn('credentials', {
@@ -774,6 +781,61 @@ export default function App() {
     }
   };
 
+  // Invite a friend — real Web Share API where available, clipboard-copy fallback otherwise
+  const handleInvite = async () => {
+    const shareData = {
+      title: 'Cadence',
+      text: `I'm learning ${L.name} on Cadence — come practice with me.`,
+      url: typeof window !== 'undefined' ? window.location.origin : 'https://cadence.buildc3.tech',
+    };
+    try {
+      if (typeof navigator !== 'undefined' && navigator.share) {
+        await navigator.share(shareData);
+      } else if (typeof navigator !== 'undefined' && navigator.clipboard) {
+        await navigator.clipboard.writeText(`${shareData.text} ${shareData.url}`);
+        showToast('Invite link copied to clipboard.');
+      }
+    } catch (e) {
+      // User cancelled the native share sheet — not an error
+    }
+  };
+
+  // Data charter: export a copy of everything stored for this account
+  const handleExportData = async () => {
+    try {
+      const res = await fetch('/api/account');
+      if (!res.ok) throw new Error('Export failed');
+      const data = await res.json();
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'cadence-data-export.json';
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch (e) {
+      console.error('Data export failed', e);
+      showToast('Failed to export your data. Please try again.');
+    }
+  };
+
+  // Data charter: permanently delete the account and all associated data
+  const handleDeleteAccount = async () => {
+    if (!window.confirm('Delete your account and all associated data? This cannot be undone.')) return;
+    try {
+      const res = await fetch('/api/account', { method: 'DELETE' });
+      if (!res.ok) throw new Error('Delete failed');
+      localStorage.removeItem('cadence_view');
+      localStorage.removeItem('cadence_lang');
+      localStorage.removeItem('cadence_known_words');
+      await signOut({ redirect: false });
+      setView('welcome');
+    } catch (e) {
+      console.error('Account deletion failed', e);
+      showToast('Failed to delete your account. Please try again.');
+    }
+  };
+
   // Reset helper
   const handleReset = () => {
     setAnswer([]);
@@ -784,6 +846,10 @@ export default function App() {
   };
 
   const completeMilestone = async (milestoneKey: string) => {
+    // Show the culture note + celebration screen on the way back — these were
+    // fully built (culture facts, milestone stats, share flow) but nothing
+    // was routing into them, so every chapter finish silently dumped straight
+    // back to home with no payoff.
     try {
       await fetch('/api/milestone', {
         method: 'POST',
@@ -791,13 +857,11 @@ export default function App() {
         body: JSON.stringify({ lang, milestone: milestoneKey }),
       });
       await fetchMilestones();
-      handleReset();
-      setView('home');
     } catch (e) {
       console.error('Failed to save milestone', e);
-      handleReset();
-      setView('home');
     }
+    handleReset();
+    setView('culture');
   };
 
   const _L = LANGS[lang] || LANGS.es;
@@ -851,24 +915,21 @@ export default function App() {
     { label: "Pronunciation", val: "A1+", pct: "20%" },
     { label: "Fluency", val: "B1", pct: "80%" }
   ];
-  const qrCells = Array.from({ length: 16 }, (_, i) => ({ c: Math.random() > 0.5 ? '#2A2320' : 'transparent' }));
-  
-  // Share data
+  // Share data — real per-platform share links, no dead buttons
+  const shareMessage = `I just reached ${level} in ${L.name} on Cadence!`;
+  const shareUrl = typeof window !== 'undefined' ? window.location.origin : 'https://cadence.buildc3.tech';
   const shareTargets = [
-    { bg: "#25D366", icon: "💬", label: "WhatsApp" },
-    { bg: "#000000", icon: "𝕏", label: "X (Twitter)" },
-    { bg: "#E1306C", icon: "📷", label: "Instagram" },
-    { bg: "#0077B5", icon: "in", label: "LinkedIn" },
-    { bg: "#0A7CFF", icon: "✉", label: "Messages" }
+    { bg: "#25D366", icon: "💬", label: "WhatsApp", href: `https://wa.me/?text=${encodeURIComponent(`${shareMessage} ${shareUrl}`)}` },
+    { bg: "#000000", icon: "𝕏", label: "X (Twitter)", href: `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareMessage)}&url=${encodeURIComponent(shareUrl)}` },
+    { bg: "#E1306C", icon: "📷", label: "Instagram", href: null }, // no web share-intent for Instagram; falls back to clipboard copy
+    { bg: "#0077B5", icon: "in", label: "LinkedIn", href: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}` },
+    { bg: "#0A7CFF", icon: "✉", label: "Messages", href: `sms:?body=${encodeURIComponent(`${shareMessage} ${shareUrl}`)}` }
   ];
 
-  // Social data
+  // Social data — no friends system yet, so this only ever shows the
+  // signed-in user themselves. No fabricated names/activity/rankings.
   const circle = [
-    { bg: "#2A2320", bd: "1px solid #433833", rank: 1, avatar: "#DB5338", initial: (session?.user?.name || "Y")[0].toUpperCase(), name: `${session?.user?.name || "You"} (You)`, mins: 142, move: "▲2" },
-    { bg: "transparent", bd: "1px solid #EDE4D6", rank: 2, avatar: "#5B3A56", initial: "S", name: "Sarah K.", mins: 128, move: "▼1" },
-    { bg: "transparent", bd: "1px solid #EDE4D6", rank: 3, avatar: "#2F8F83", initial: "D", name: "David L.", mins: 94, move: "—" },
-    { bg: "transparent", bd: "1px solid #EDE4D6", rank: 4, avatar: "#A99FB0", initial: "T", name: "Tommaso", mins: 62, move: "—" },
-    { bg: "transparent", bd: "1px dashed #D8CDBB", rank: 5, avatar: "#D8CDBB", initial: "A", name: "Alex B.", mins: 15, move: "—" }
+    { bg: "#2A2320", bd: "1px solid #433833", avatar: "#DB5338", initial: (session?.user?.name || "Y")[0].toUpperCase(), name: `${session?.user?.name || "You"} (You)` },
   ];
 
   // Notifications data
@@ -1180,9 +1241,9 @@ export default function App() {
               </div>
 
               {/* ===== FLOATING CHAPTER CARD ===== */}
-              <div style={{ position: 'sticky', top: '90px', zIndex: 90, margin: '16px', background: '#FAF1E4', borderRadius: '16px', padding: '16px', boxShadow: '0 6px 16px rgba(0,0,0,0.15)', border: '2px solid #F3E5D0', width: '220px' }}>
+              <div onClick={() => setView('smartplan')} style={{ position: 'sticky', top: '90px', zIndex: 90, margin: '16px', background: '#FAF1E4', borderRadius: '16px', padding: '16px', boxShadow: '0 6px 16px rgba(0,0,0,0.15)', border: '2px solid #F3E5D0', width: '220px', cursor: 'pointer' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
-                  <span style={{ fontSize: '12px', color: '#8A7A66', fontWeight: 600 }}>Chapter {userLevel}</span>
+                  <span style={{ fontSize: '12px', color: '#8A7A66', fontWeight: 600 }}>Chapter {userLevel} · Today's plan</span>
                   <span style={{ color: '#8A7A66' }}>›</span>
                 </div>
                 <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: '24px', color: '#3A3229', lineHeight: 1.1, marginBottom: '12px' }}>
@@ -2067,7 +2128,7 @@ export default function App() {
                     <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: '34px', lineHeight: 1 }}>{placeLevel}<span style={{ fontSize: '16px', color: '#A99C90' }}> → {placeLevel === 'A1' ? 'A2' : 'B1'}</span></div>
                   </div>
                   <div style={{ textAlign: 'right' }}>
-                    <div style={{ fontSize: '11px', color: '#A99C90' }}>verified proof ›</div>
+                    <div style={{ fontSize: '11px', color: '#A99C90' }}>progress snapshot ›</div>
                     <div style={{ fontSize: '18px', fontWeight: 700, color: '#E1A23A' }}>12%</div>
                   </div>
                 </div>
@@ -2251,35 +2312,26 @@ export default function App() {
                   </div>
                 </div>
 
+                <div style={{ marginBottom: '24px' }}>
+                  <div style={{ fontSize: '11px', letterSpacing: '.08em', textTransform: 'uppercase', color: '#BFA38C', marginBottom: '12px' }}>Notifications</div>
+                  <div onClick={() => setView('notifications')} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#fff', border: '1px solid #EDE4D6', borderRadius: '14px', padding: '14px 16px', cursor: 'pointer' }}>
+                    <div>
+                      <div style={{ fontSize: '13.5px', fontWeight: 600 }}>What alerts you</div>
+                      <div style={{ fontSize: '11px', color: '#9A8E84', marginTop: '2px' }}>Reminders, friend updates, feedback alerts</div>
+                    </div>
+                    <span style={{ fontSize: '16px', color: '#C9AE97' }}>›</span>
+                  </div>
+                </div>
+
                 <div>
                   <div style={{ fontSize: '11px', letterSpacing: '.08em', textTransform: 'uppercase', color: '#BFA38C', marginBottom: '12px' }}>Data privacy</div>
-                  {[
-                    { key: 'improve', label: 'Use progress to improve lessons', caption: 'Stays securely on our Neon database.' },
-                    { key: 'aiTrain', label: 'Help improve Cadence\'s AI models', caption: 'Anonymized context, off by default.' }
-                  ].map((c) => (
-                    <div key={c.key} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
-                      <div style={{ flex: 1, marginRight: '16px' }}>
-                        <div style={{ fontSize: '13.5px', fontWeight: 600 }}>{c.label}</div>
-                        <div style={{ fontSize: '11px', color: '#9A8E84', marginTop: '2px' }}>{c.caption}</div>
-                      </div>
-                      <div 
-                        onClick={() => setCharter(prev => ({ ...prev, [c.key]: !charter[c.key] }))}
-                        style={{ 
-                          width: '40px', 
-                          height: '24px', 
-                          borderRadius: '99px', 
-                          background: charter[c.key] ? '#2F8F83' : '#D8CDBB', 
-                          display: 'flex', 
-                          alignItems: 'center', 
-                          padding: '2px', 
-                          cursor: 'pointer',
-                          justifyContent: charter[c.key] ? 'flex-end' : 'flex-start'
-                        }}
-                      >
-                        <div style={{ width: '20px', height: '20px', borderRadius: '50%', background: '#fff' }}></div>
-                      </div>
+                  <div onClick={() => setView('charter')} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#fff', border: '1px solid #EDE4D6', borderRadius: '14px', padding: '14px 16px', cursor: 'pointer' }}>
+                    <div>
+                      <div style={{ fontSize: '13.5px', fontWeight: 600 }}>Data charter</div>
+                      <div style={{ fontSize: '11px', color: '#9A8E84', marginTop: '2px' }}>Privacy toggles, export your data, delete your account</div>
                     </div>
-                  ))}
+                    <span style={{ fontSize: '16px', color: '#C9AE97' }}>›</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -2313,7 +2365,7 @@ export default function App() {
                   <div onClick={() => googleEnabled ? signIn('google') : showToast('Google sign-in is not configured yet.')} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', background: '#fff', border: '1px solid #E1D6C4', borderRadius: '13px', padding: '13px', fontSize: '14px', fontWeight: 600, cursor: 'pointer', opacity: googleEnabled ? 1 : 0.6 }}>
                     <span style={{ fontSize: '16px' }}>🇬</span> Continue with Google
                   </div>
-                  <div onClick={() => alert('Apple Sign-In coming soon!')} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', background: '#2A2320', color: '#FBF6EE', borderRadius: '13px', padding: '13px', fontSize: '14px', fontWeight: 600, cursor: 'pointer' }}>
+                  <div onClick={() => showToast('Apple Sign-In is coming soon.')} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', background: '#2A2320', color: '#FBF6EE', borderRadius: '13px', padding: '13px', fontSize: '14px', fontWeight: 600, cursor: 'pointer', opacity: 0.6 }}>
                     <span style={{ fontSize: '15px' }}></span> Continue with Apple
                   </div>
                 </div>
@@ -2407,12 +2459,12 @@ export default function App() {
                       </div>
                       <span style={{ fontSize: '13px', fontWeight: 600 }}>Cadence</span>
                     </div>
-                    <span style={{ fontSize: '10px', color: '#A99C90', letterSpacing: '.08em' }}>VERIFIED · {L.locale.toUpperCase()}</span>
+                    <span style={{ fontSize: '10px', color: '#A99C90', letterSpacing: '.08em' }}>PROGRESS SNAPSHOT</span>
                   </div>
                   <div style={{ fontSize: '11px', color: '#A99C90', letterSpacing: '.06em', textTransform: 'uppercase', marginBottom: '4px' }}>{L.name} fluency</div>
                   <div style={{ display: 'flex', alignItems: 'flex-end', gap: '10px', marginBottom: '18px' }}>
-                    <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: '54px', lineHeight: 0.9 }}>B1</div>
-                    <div style={{ fontSize: '13px', color: '#C9BFB4', paddingBottom: '10px' }}>CEFR · intermediate</div>
+                    <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: '54px', lineHeight: 0.9 }}>{level}</div>
+                    <div style={{ fontSize: '13px', color: '#C9BFB4', paddingBottom: '10px' }}>CEFR · estimated from your placement chat</div>
                   </div>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '9px', marginBottom: '18px' }}>
                     {scoreSkills.map((sk, i) => (
@@ -2427,22 +2479,13 @@ export default function App() {
                       </div>
                     ))}
                   </div>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid rgba(255,255,255,.12)', paddingTop: '14px' }}>
-                    <div>
-                      <div style={{ fontSize: '11px', color: '#A99C90' }}>Verified by 14 live conversations</div>
-                      <div style={{ fontSize: '11px', color: '#A99C90' }}>cadence.app/v/MAYA-{L.locale.toUpperCase()}-2A9F</div>
-                    </div>
-                    <div style={{ width: '42px', height: '42px', borderRadius: '8px', background: '#FBF6EE', display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gridTemplateRows: 'repeat(4,1fr)', gap: '1px', padding: '4px' }}>
-                      {qrCells.map((q, i) => <div key={i} style={{ background: q.c }}></div>)}
-                    </div>
-                  </div>
                 </div>
-                
+
                 <div style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
                   <div onClick={() => setView('share')} style={{ flex: 1, background: '#DB5338', color: '#FBF6EE', borderRadius: '13px', padding: '13px', textAlign: 'center', fontSize: '14px', fontWeight: 600, cursor: 'pointer' }}>Share proof</div>
-                  <div style={{ flex: 1, background: '#fff', border: '1px solid #EDE4D6', borderRadius: '13px', padding: '13px', textAlign: 'center', fontSize: '14px', fontWeight: 600, cursor: 'pointer' }}>Export PDF</div>
+                  <div onClick={() => window.print()} style={{ flex: 1, background: '#fff', border: '1px solid #EDE4D6', borderRadius: '13px', padding: '13px', textAlign: 'center', fontSize: '14px', fontWeight: 600, cursor: 'pointer' }}>Export PDF</div>
                 </div>
-                <div style={{ textAlign: 'center', fontSize: '11.5px', color: '#9A8E84', lineHeight: 1.5 }}>Backed by a public verification page — anyone can confirm it's real. No locked-tier paywall.</div>
+                <div style={{ textAlign: 'center', fontSize: '11.5px', color: '#9A8E84', lineHeight: 1.5 }}>A personal snapshot of your progress — not a third-party certification.</div>
               </div>
             </div>
           )}
@@ -2473,7 +2516,18 @@ export default function App() {
               <div style={{ padding: '8px 26px 30px', flex: 'none' }}>
                 <div style={{ display: 'flex', justifyContent: 'center', gap: '14px', marginBottom: '18px' }}>
                   {shareTargets.map((t, i) => (
-                    <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px', cursor: 'pointer' }}>
+                    <div
+                      key={i}
+                      onClick={async () => {
+                        if (t.href) {
+                          window.open(t.href, '_blank', 'noopener,noreferrer');
+                        } else if (navigator.clipboard) {
+                          await navigator.clipboard.writeText(`${shareMessage} ${shareUrl}`);
+                          showToast(`Copied — paste it into ${t.label}.`);
+                        }
+                      }}
+                      style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px', cursor: 'pointer' }}
+                    >
                       <div style={{ width: '50px', height: '50px', borderRadius: '50%', background: t.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px', color: '#fff' }}>{t.icon}</div>
                       <span style={{ fontSize: '10.5px', color: '#9A8E84' }}>{t.label}</span>
                     </div>
@@ -2665,27 +2719,23 @@ export default function App() {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                   {circle.map((c, i) => (
                     <div key={i} style={{ display: 'flex', alignItems: 'center', background: c.bg, border: c.bd, borderRadius: '14px', padding: '12px 14px' }}>
-                      <div style={{ width: '18px', fontSize: '11px', color: '#9A8E84', fontWeight: 600 }}>{c.rank}</div>
                       <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: c.avatar, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: '16px', fontWeight: 600, margin: '0 12px 0 8px', flex: 'none' }}>{c.initial}</div>
                       <div style={{ flex: 1 }}>
-                        <div style={{ fontSize: '14px', fontWeight: 600, color: c.rank === 1 ? '#F3ECE2' : '#2A2320' }}>{c.name}</div>
-                        <div style={{ fontSize: '12px', color: c.rank === 1 ? '#A99C90' : '#8A7E73', marginTop: '2px' }}>{c.mins} mins spoken</div>
+                        <div style={{ fontSize: '14px', fontWeight: 600, color: '#F3ECE2' }}>{c.name}</div>
                       </div>
-                      <div style={{ fontSize: '11px', color: c.move.includes('▲') ? '#46C46E' : (c.move.includes('▼') ? '#DB5338' : '#B5A99E'), fontWeight: 600 }}>{c.move}</div>
                     </div>
                   ))}
                 </div>
+                <div style={{ marginTop: '10px', background: '#fff', border: '1px dashed #D8CDBB', borderRadius: '14px', padding: '18px', textAlign: 'center' }}>
+                  <div style={{ fontSize: '13px', color: '#5C5048', marginBottom: '12px', lineHeight: 1.4 }}>No one here yet — invite friends to compare progress and keep each other honest.</div>
+                  <div onClick={handleInvite} style={{ background: '#DB5338', color: '#FBF6EE', borderRadius: '12px', padding: '10px 20px', textAlign: 'center', fontSize: '13.5px', fontWeight: 600, cursor: 'pointer', display: 'inline-block' }}>
+                    Invite friends →
+                  </div>
+                </div>
                 <div style={{ marginTop: '22px', borderTop: '1px solid #EDE4D6', paddingTop: '22px' }}>
                   <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: '22px', marginBottom: '14px' }}>Native corrections</div>
-                  <div style={{ background: '#fff', border: '1px solid #EDE4D6', borderRadius: '16px', padding: '16px' }}>
-                    <div style={{ display: 'flex', gap: '14px', marginBottom: '12px' }}>
-                      <div style={{ width: '38px', height: '38px', borderRadius: '50%', background: '#E1A23A', flex: 'none' }}></div>
-                      <div>
-                        <div style={{ fontSize: '13px', fontWeight: 600, color: '#2A2320' }}>Elena corrected you</div>
-                        <div style={{ fontSize: '11.5px', color: '#8A7E73', marginTop: '2px', lineHeight: 1.4 }}>"In Spain we usually say 'zumo' instead of 'jugo' for juice."</div>
-                      </div>
-                    </div>
-                    <div style={{ background: '#F4ECDF', borderRadius: '10px', padding: '10px', fontSize: '13px', color: '#6B5F58', fontStyle: 'italic' }}>Quiero un jugo de naranja.</div>
+                  <div style={{ background: '#fff', border: '1px solid #EDE4D6', borderRadius: '16px', padding: '18px', textAlign: 'center' }}>
+                    <div style={{ fontSize: '13px', color: '#8A7E73', lineHeight: 1.4 }}>No corrections yet. When a native speaker reviews one of your recordings, it'll show up here.</div>
                   </div>
                 </div>
               </div>
@@ -2703,30 +2753,11 @@ export default function App() {
               <div className="cd-scroll" style={{ flex: 1, overflowY: 'auto', padding: '8px 20px 24px', display: 'flex', flexDirection: 'column' }}>
                 <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: '26px', lineHeight: 1.05, marginBottom: '6px' }}>Listen & correct</div>
                 <div style={{ fontSize: '13px', color: '#8A7E73', marginBottom: '20px' }}>Help someone learning your native language (English). They'll help you in return.</div>
-                
-                <div style={{ background: '#fff', border: '1px solid #EDE4D6', borderRadius: '20px', padding: '20px', marginBottom: '20px', flex: 1 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
-                    <div style={{ width: '42px', height: '42px', borderRadius: '50%', background: '#5B3A56', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: '18px', fontWeight: 600 }}>T</div>
-                    <div>
-                      <div style={{ fontSize: '14px', fontWeight: 600 }}>Tommaso</div>
-                      <div style={{ fontSize: '11.5px', color: '#8A7E73' }}>Learning English · A2</div>
-                    </div>
-                  </div>
-                  <div style={{ fontSize: '12px', color: '#A8927C', textTransform: 'uppercase', letterSpacing: '.05em', marginBottom: '8px' }}>They said:</div>
-                  <div style={{ background: '#F4ECDF', borderRadius: '12px', padding: '14px', display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
-                    <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: '#DB5338', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: '16px' }}>▶</div>
-                    <div style={{ flex: 1, height: '4px', background: '#D8CDBB', borderRadius: '2px' }}>
-                      <div style={{ width: '0%', height: '100%', background: '#DB5338', borderRadius: '2px' }}></div>
-                    </div>
-                    <div style={{ fontSize: '11px', color: '#8A7E73' }}>0:04</div>
-                  </div>
-                  <div style={{ fontSize: '12px', color: '#A8927C', textTransform: 'uppercase', letterSpacing: '.05em', marginBottom: '8px' }}>Transcription:</div>
-                  <div style={{ fontSize: '16px', lineHeight: 1.4, color: '#5C5048' }}>&quot;I am go to the store for buy some milks.&quot;</div>
-                </div>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                  <div style={{ background: '#DB5338', color: '#FBF6EE', borderRadius: '14px', padding: '15px', textAlign: 'center', fontSize: '15px', fontWeight: 600, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', cursor: 'pointer' }}><span>🎙</span><span>Record correction</span></div>
-                  <div style={{ background: '#fff', border: '1px solid #EDE4D6', color: '#2A2320', borderRadius: '14px', padding: '15px', textAlign: 'center', fontSize: '15px', fontWeight: 600, cursor: 'pointer' }}>Type correction</div>
+                <div style={{ background: '#fff', border: '1px dashed #D8CDBB', borderRadius: '20px', padding: '28px 20px', textAlign: 'center', flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                  <div style={{ fontSize: '32px', marginBottom: '12px' }}>🎧</div>
+                  <div style={{ fontSize: '14px', fontWeight: 600, color: '#2A2320', marginBottom: '6px' }}>No one needs help right now</div>
+                  <div style={{ fontSize: '12.5px', color: '#8A7E73', lineHeight: 1.4 }}>Check back soon — learners asking for a native-speaker correction will show up here.</div>
                 </div>
               </div>
             </div>
@@ -2736,7 +2767,7 @@ export default function App() {
           {view === 'notifications' && (
             <div className="cd-screen" style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 22px 6px', flex: 'none' }}>
-                <span onClick={() => setView('you')} style={{ fontSize: '18px', color: '#B5A99E', cursor: 'pointer' }}>‹</span>
+                <span onClick={() => setView('settings')} style={{ fontSize: '18px', color: '#B5A99E', cursor: 'pointer' }}>‹</span>
                 <span style={{ fontSize: '12.5px', fontWeight: 600, color: '#8A7E73' }}>Notifications</span>
                 <span style={{ width: '18px' }}></span>
               </div>
@@ -2763,7 +2794,7 @@ export default function App() {
           {view === 'charter' && (
             <div className="cd-screen" style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 22px 6px', flex: 'none' }}>
-                <span onClick={() => setView('you')} style={{ fontSize: '18px', color: '#B5A99E', cursor: 'pointer' }}>‹</span>
+                <span onClick={() => setView('settings')} style={{ fontSize: '18px', color: '#B5A99E', cursor: 'pointer' }}>‹</span>
                 <span style={{ fontSize: '12.5px', fontWeight: 600, color: '#8A7E73' }}>Data charter</span>
                 <span style={{ width: '18px' }}></span>
               </div>
@@ -2786,8 +2817,8 @@ export default function App() {
                 </div>
 
                 <div style={{ borderTop: '1px solid #EDE4D6', paddingTop: '20px' }}>
-                  <div style={{ color: '#DB5338', fontSize: '14px', fontWeight: 600, marginBottom: '8px', cursor: 'pointer' }}>Export my data (JSON)</div>
-                  <div style={{ color: '#B23E27', fontSize: '14px', fontWeight: 600, cursor: 'pointer', marginBottom: '20px' }}>Delete account & data</div>
+                  <div onClick={handleExportData} style={{ color: '#DB5338', fontSize: '14px', fontWeight: 600, marginBottom: '8px', cursor: 'pointer' }}>Export my data (JSON)</div>
+                  <div onClick={handleDeleteAccount} style={{ color: '#B23E27', fontSize: '14px', fontWeight: 600, cursor: 'pointer', marginBottom: '20px' }}>Delete account & data</div>
                   <div style={{ borderTop: '1px solid #EDE4D6', paddingTop: '20px', display: 'flex', gap: '15px' }}>
                     <a href="/privacy" style={{ color: '#8A7E73', fontSize: '12px', textDecoration: 'none' }}>Privacy Policy</a>
                     <a href="/terms" style={{ color: '#8A7E73', fontSize: '12px', textDecoration: 'none' }}>Terms of Service</a>
