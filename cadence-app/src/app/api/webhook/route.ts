@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { sql } from '@/lib/db';
 import { requireAuth } from '@/lib/auth';
+import { sendPushNotification } from '@/lib/push';
 import Stripe from 'stripe';
 import crypto from 'crypto';
 import { v4 as uuidv4 } from 'uuid';
@@ -80,14 +81,19 @@ export async function POST(req: NextRequest) {
           await sql`
             INSERT INTO subscriptions (id, user_id, provider, status, trial_ends_at, current_period_end)
             VALUES (
-              ${uuidv4()}, 
-              ${userId}, 
-              'stripe', 
-              'active', 
-              ${new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()}, 
+              ${uuidv4()},
+              ${userId},
+              'stripe',
+              'active',
+              ${new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()},
               ${new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()}
             )
           `;
+          // The user is often looking at Stripe's hosted page, not the app,
+          // when this webhook actually fires — a push is the only way they
+          // find out the upgrade went through without switching back.
+          sendPushNotification(userId, 'Welcome to Cadence Plus 🎉', 'Real voice AI and pronunciation scoring are now unlocked.')
+            .catch((e) => console.error('Failed to send Plus-activated push', e));
         }
       } else if (event.type === 'customer.subscription.deleted') {
         const subscription = event.data.object as Stripe.Subscription;
@@ -140,14 +146,16 @@ export async function POST(req: NextRequest) {
           await sql`
             INSERT INTO subscriptions (id, user_id, provider, status, trial_ends_at, current_period_end)
             VALUES (
-              ${uuidv4()}, 
-              ${userId}, 
-              'razorpay', 
-              'active', 
-              ${subscription.charge_at ? new Date(subscription.charge_at * 1000).toISOString() : null}, 
+              ${uuidv4()},
+              ${userId},
+              'razorpay',
+              'active',
+              ${subscription.charge_at ? new Date(subscription.charge_at * 1000).toISOString() : null},
               ${subscription.current_end ? new Date(subscription.current_end * 1000).toISOString() : null}
             )
           `;
+          sendPushNotification(userId, 'Welcome to Cadence Plus 🎉', 'Real voice AI and pronunciation scoring are now unlocked.')
+            .catch((e) => console.error('Failed to send Plus-activated push', e));
         }
       } else if (event === 'subscription.cancelled' || event === 'subscription.halted') {
         const subscription = payload.payload.subscription.entity;

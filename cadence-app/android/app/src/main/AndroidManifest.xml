@@ -35,4 +35,6 @@
     <!-- Required for the pronunciation lab / live conversation mic recording (WavRecorder, getUserMedia) -->
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <!-- Android 13+ requires this runtime permission before notifications can show at all -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 </manifest>

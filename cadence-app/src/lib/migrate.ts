@@ -107,6 +107,19 @@ async function migrate() {
     console.log('  ✓ subscriptions table');
   } catch (error) { const e = error as Error; console.error('  ✗ subscriptions:', e.message); }
 
+  try {
+    await sql`
+      CREATE TABLE IF NOT EXISTS push_tokens (
+        id            uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+        user_id       uuid REFERENCES users(id) ON DELETE CASCADE,
+        token         text UNIQUE NOT NULL,
+        platform      text,
+        created_at    timestamptz DEFAULT now()
+      )
+    `;
+    console.log('  ✓ push_tokens table');
+  } catch (error) { const e = error as Error; console.error('  ✗ push_tokens:', e.message); }
+
   // Indexes
   const indexes = [
     'CREATE INDEX IF NOT EXISTS idx_enrollments_user ON enrollments(user_id)',
@@ -116,6 +129,7 @@ async function migrate() {
     'CREATE INDEX IF NOT EXISTS idx_attempts_item ON attempts(item_id)',
     'CREATE INDEX IF NOT EXISTS idx_milestones_enrollment ON milestones(enrollment_id)',
     'CREATE INDEX IF NOT EXISTS idx_subscriptions_user ON subscriptions(user_id)',
+    'CREATE INDEX IF NOT EXISTS idx_push_tokens_user ON push_tokens(user_id)',
   ];
 
   for (const idx of indexes) {
