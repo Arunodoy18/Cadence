@@ -3,6 +3,7 @@ import './globals.css';
 import { Providers } from '@/components/Providers';
 import { PwaUpdater } from '@/components/PwaUpdater';
 import { PushNotificationSetup } from '@/components/PushNotificationSetup';
+import { RevenueCatSetup } from '@/components/RevenueCatSetup';
 
 export const metadata: Metadata = {
   title: 'Cadence — language learning app',
@@ -35,6 +36,7 @@ export default function RootLayout({
         <Providers>
           {children}
           <PushNotificationSetup />
+          <RevenueCatSetup />
         </Providers>
         <PwaUpdater />
       </body>

@@ -12,7 +12,7 @@ import { WavRecorder } from '@/lib/WavRecorder';
 import { AudioVisualizer } from '@/components/AudioVisualizer';
 
 export default function App() {
-  const { data: session, status: authStatus } = useSession();
+  const { data: session, status: authStatus, update: updateSession } = useSession();
   const router = useRouter();
   const userPlan = (session?.user as any)?.plan || 'free';
 
@@ -836,8 +836,50 @@ export default function App() {
     }
   };
 
+  // Native (Android/iOS) purchase via RevenueCat — Play/App Store billing,
+  // required for a digital subscription bought from inside the app shell.
+  // Web keeps the existing Stripe/Razorpay checkout below since store billing
+  // policy only applies to purchases made from within the native app.
+  const handleNativePurchase = async () => {
+    try {
+      const { Purchases } = await import('@revenuecat/purchases-capacitor');
+      const offerings = await Purchases.getOfferings();
+      const pkg = offerings.current?.monthly ?? offerings.current?.availablePackages?.[0];
+      if (!pkg) {
+        showToast('Plus is not available right now — please try again shortly.');
+        return;
+      }
+
+      const { customerInfo } = await Purchases.purchasePackage({ aPackage: pkg });
+      if (!customerInfo.entitlements.active['plus']) {
+        showToast('Purchase did not activate Plus — please contact support.');
+        return;
+      }
+
+      // RevenueCat is the source of truth, not the client — re-verify server
+      // side before unlocking, then pull the refreshed plan into the session.
+      await fetch('/api/revenuecat/verify', { method: 'POST' });
+      await updateSession();
+      setView('paid');
+    } catch (e: any) {
+      if (e?.userCancelled) return; // user backed out of the native billing sheet
+      console.error('Native purchase failed', e);
+      showToast('Purchase failed — please try again.');
+    }
+  };
+
   // Checkout Upgrade
   const handleGoCheckout = async () => {
+    try {
+      const { Capacitor } = await import('@capacitor/core');
+      if (Capacitor.isNativePlatform()) {
+        await handleNativePurchase();
+        return;
+      }
+    } catch {
+      // Not running inside the Capacitor shell — fall through to the web checkout below.
+    }
+
     try {
       const res = await fetch('/api/checkout', {
         method: 'POST',
@@ -853,6 +895,21 @@ export default function App() {
       console.error('Checkout failed', e);
       showToast('Failed to start checkout process.');
     }
+  };
+
+  // "Try Plus" entry point on the plans screen — on native, skip straight to
+  // the store billing sheet instead of showing the web-only fake-card screen.
+  const handleUpgradeClick = async () => {
+    try {
+      const { Capacitor } = await import('@capacitor/core');
+      if (Capacitor.isNativePlatform()) {
+        await handleNativePurchase();
+        return;
+      }
+    } catch {
+      // Not running inside the Capacitor shell — fall through to the web flow.
+    }
+    setView('checkout');
   };
 
   // Invite a friend — real Web Share API where available, clipboard-copy fallback otherwise
@@ -2705,7 +2762,7 @@ export default function App() {
                 </div>
               </div>
               <div style={{ padding: '14px 22px 26px', flex: 'none' }}>
-                <div onClick={() => setView('checkout')} style={{ background: '#DB5338', color: '#FBF6EE', borderRadius: '14px', padding: '15px', textAlign: 'center', fontSize: '15px', fontWeight: 600, cursor: 'pointer' }}>Try Plus free for 7 days</div>
+                <div onClick={handleUpgradeClick} style={{ background: '#DB5338', color: '#FBF6EE', borderRadius: '14px', padding: '15px', textAlign: 'center', fontSize: '15px', fontWeight: 600, cursor: 'pointer' }}>Try Plus free for 7 days</div>
               </div>
             </div>
           )}

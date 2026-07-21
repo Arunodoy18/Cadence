@@ -17,6 +17,7 @@
     "@capacitor/splash-screen": "^8.0.2",
     "@capacitor/status-bar": "^8.0.3",
     "@neondatabase/serverless": "^1.1.0",
+    "@revenuecat/purchases-capacitor": "^13.2.3",
     "@serwist/next": "^9.5.11",
     "bcryptjs": "^3.0.3",
     "crypto-js": "^4.2.0",
