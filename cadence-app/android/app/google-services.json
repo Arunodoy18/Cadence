@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "237186517063",
+    "project_id": "cadence-e84a6",
+    "storage_bucket": "cadence-e84a6.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:237186517063:android:62eb850ca5959317d78962",
+        "android_client_info": {
+          "package_name": "tech.buildc3.cadence"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBHXWEeCz0OkgRiyXW_3G8TSKzGXdRRXMo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
