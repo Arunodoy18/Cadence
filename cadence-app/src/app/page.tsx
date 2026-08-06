@@ -11,6 +11,13 @@ const immerseData: Record<string, any[]> = immerseDataRaw;
 import { WavRecorder } from '@/lib/WavRecorder';
 import { AudioVisualizer } from '@/components/AudioVisualizer';
 
+// Off until a real payment provider (Stripe/Razorpay/RevenueCat) is actually
+// configured in production — without this, users would hit either the
+// "Cadence Sandbox" mock checkout (grants Plus for free, looks unfinished)
+// or a native purchase call that errors because no store product exists yet.
+// Flip to 'true' via env once the Play merchant account/RevenueCat setup is done.
+const PLUS_PURCHASES_ENABLED = process.env.NEXT_PUBLIC_PLUS_PURCHASES_ENABLED === 'true';
+
 export default function App() {
   const { data: session, status: authStatus, update: updateSession } = useSession();
   const router = useRouter();
@@ -870,6 +877,10 @@ export default function App() {
 
   // Checkout Upgrade
   const handleGoCheckout = async () => {
+    if (!PLUS_PURCHASES_ENABLED) {
+      showToast('Cadence Plus is coming soon — stay tuned!');
+      return;
+    }
     try {
       const { Capacitor } = await import('@capacitor/core');
       if (Capacitor.isNativePlatform()) {
@@ -900,6 +911,10 @@ export default function App() {
   // "Try Plus" entry point on the plans screen — on native, skip straight to
   // the store billing sheet instead of showing the web-only fake-card screen.
   const handleUpgradeClick = async () => {
+    if (!PLUS_PURCHASES_ENABLED) {
+      showToast('Cadence Plus is coming soon — stay tuned!');
+      return;
+    }
     try {
       const { Capacitor } = await import('@capacitor/core');
       if (Capacitor.isNativePlatform()) {

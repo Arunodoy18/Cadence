@@ -1,1 +1,1 @@
-export default [{ ignores: [".next/**", ".netlify/**"] }];
+export default [{ ignores: [".next/**", ".netlify/**", "android/**", "ios/**"] }];
