@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import OpenAI from 'openai';
+import { chatJSON } from '@/lib/llm';
 import { requireAuth } from '@/lib/auth';
 import { rateLimit } from '@/lib/rateLimit';
 import { sql } from '@/lib/db';
@@ -13,8 +13,6 @@ export async function POST(req: NextRequest) {
     if (!rateLimit(`placement:${auth.user!.id}`, 20, 60_000)) {
       return NextResponse.json({ error: 'Too many requests — please slow down.' }, { status: 429 });
     }
-
-    const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || process.env.OPEN_AI_API || 'dummy-key' });
 
     const { messages, lang, langCode, finish } = await req.json();
 
@@ -31,26 +29,8 @@ export async function POST(req: NextRequest) {
       { role: 'system' as const, content: systemPrompt },
     ];
 
-    const completion = await openai.chat.completions.create({
-      model: 'gpt-4o',
-      messages: chatMessages,
-      max_tokens: 250,
-      temperature: 0.7,
-      response_format: { type: 'json_object' },
-    });
-
-    const raw = completion.choices[0]?.message?.content || '{}';
-    let data;
-    try {
-      data = JSON.parse(raw);
-    } catch {
-      const a = raw.indexOf('{'), b = raw.lastIndexOf('}');
-      if (a >= 0 && b >= 0) {
-        data = JSON.parse(raw.slice(a, b + 1));
-      } else {
-        data = { reply: raw, english: '', level: 'A2' };
-      }
-    }
+    const data = (await chatJSON(chatMessages, { maxTokens: 250, temperature: 0.7 })) ?? { reply: '', english: '', level: 'A2' };
+    if (finish && !['A1', 'A2', 'B1', 'B2', 'C1', 'C2'].includes(data.level)) data.level = 'A2';
 
     // Save CEFR level to database if this is the final turn. Enrollments are
     // keyed by the short language code everywhere else (attempts, plan) — use

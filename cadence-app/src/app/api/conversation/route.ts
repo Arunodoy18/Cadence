@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import OpenAI from 'openai';
+import { chatJSON } from '@/lib/llm';
 import { requirePlus } from '@/lib/auth';
 import { rateLimit } from '@/lib/rateLimit';
 
@@ -11,8 +11,6 @@ export async function POST(req: NextRequest) {
     if (!rateLimit(`conversation:${auth.user!.id}`, 20, 60_000)) {
       return NextResponse.json({ error: 'Too many requests — please slow down.' }, { status: 429 });
     }
-
-    const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || process.env.OPEN_AI_API || 'dummy-key' });
 
     const { messages, lang, scenario, partnerName, persona, level } = await req.json();
 
@@ -29,27 +27,7 @@ ${messages.length === 0 ? "IMPORTANT: The user has just entered the scenario. Yo
       })),
     ];
 
-    const completion = await openai.chat.completions.create({
-      model: 'gpt-4o',
-      messages: chatMessages,
-      max_tokens: 200,
-      temperature: 0.8,
-      response_format: { type: 'json_object' },
-    });
-
-    const raw = completion.choices[0]?.message?.content || '{}';
-    let data;
-    try {
-      data = JSON.parse(raw);
-    } catch {
-      // Try to extract JSON from response
-      const a = raw.indexOf('{'), b = raw.lastIndexOf('}');
-      if (a >= 0 && b >= 0) {
-        data = JSON.parse(raw.slice(a, b + 1));
-      } else {
-        data = { reply: raw, english: '', tip: '' };
-      }
-    }
+    const data = (await chatJSON(chatMessages, { maxTokens: 200, temperature: 0.8 })) ?? {};
 
     return NextResponse.json({
       reply: data.reply || '',
