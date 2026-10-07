@@ -29,9 +29,12 @@ const config: CapacitorConfig = {
       showSpinner: false,
     },
     StatusBar: {
-      // Translucent, drawn over the WebView rather than pushing it down —
-      // the app's CSS already reserves space for it via env(safe-area-inset-top).
-      overlaysWebView: true,
+      // Not overlaid: the WebView starts below the status bar. Android's
+      // WebView reports env(safe-area-inset-top) as 0, so with an overlay the
+      // top ~32dp of every screen (the HUD bar, headers) sat hidden under the
+      // status bar and could never be scrolled into view.
+      overlaysWebView: false,
+      backgroundColor: '#FBF6EE',
     },
   },
 };
