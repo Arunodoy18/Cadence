@@ -7,11 +7,12 @@ import { APP_DOWNLOAD_URL } from '@/lib/legal';
 import { applyReminder, loadReminder, type Reminder } from '@/lib/reminders';
 import { PrivacyContent } from '@/components/PrivacyContent';
 import { TermsContent } from '@/components/TermsContent';
-import { LANGS } from '@/lib/languages';
+import { LANGS } from '@/lib/allLanguages';
 import immerseDataRaw from '@/lib/immerse.json';
+import { INDIC_IMMERSE } from '@/lib/indic/immerse';
 import { scenarioMeta } from '@/lib/scenarios';
 
-const immerseData: Record<string, any[]> = immerseDataRaw;
+const immerseData: Record<string, any[]> = { ...immerseDataRaw, ...INDIC_IMMERSE };
 import { WavRecorder } from '@/lib/WavRecorder';
 import { AudioVisualizer } from '@/components/AudioVisualizer';
 
@@ -258,7 +259,8 @@ export default function App() {
 
   const calculateKnownPercentage = (text: string) => {
     if (!text) return '0%';
-    const words = text.toLowerCase().match(/\b[\wáéíóúüñàâçèéêëîïôùûü]+\b/g) || [];
+    // Unicode-aware so Devanagari, Gujarati, Kannada, Malayalam, Bengali/Assamese etc. count too.
+    const words = text.toLowerCase().match(/[\p{L}\p{M}\u200c\u200d]+/gu) || [];
     if (words.length === 0) return '0%';
     const knownCount = words.filter(w => knownWords.has(w)).length;
     return Math.round((knownCount / words.length) * 100) + '%';
@@ -2071,8 +2073,8 @@ export default function App() {
                 <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: '25px', lineHeight: 1.12, marginBottom: '4px' }} className={L.font}>{activeImmerseItem.title}</div>
                 <div style={{ fontSize: '14px', color: '#B5A99E', marginBottom: '16px' }}>{activeImmerseItem.englishTitle}</div>
                 <div style={{ fontSize: '16.5px', lineHeight: 1.85, color: '#33291F', whiteSpace: 'pre-wrap' }} className={L.font}>
-                  {activeImmerseItem.text.split(/([^\p{L}\p{M}]+)/u).map((seg: string, idx: number) => {
-                    const isWord = /^[\p{L}\p{M}]+$/u.test(seg);
+                  {activeImmerseItem.text.split(/([^\p{L}\p{M}\u200c\u200d]+)/u).map((seg: string, idx: number) => {
+                    const isWord = /^[\p{L}\p{M}\u200c\u200d]+$/u.test(seg);
                     const isKnown = knownWords.has(seg.toLowerCase());
                     return isWord ? (
                       <span key={idx} onClick={() => setPop({ term: seg, def: 'Tap 🔊 to hear it, or save it to your words.' })} style={{ background: isKnown ? 'transparent' : '#FBE3D9', borderBottom: isKnown ? 'none' : '2px solid #DB5338', borderRadius: '3px', padding: '0 2px', cursor: 'pointer' }}>
@@ -2934,7 +2936,7 @@ export default function App() {
                   {Object.keys(LANGS).map((code) => {
                     const lg = LANGS[code];
                     const sel = code === lang;
-                    const tags: { [key: string]: string } = { es: 'Romance · the easiest start', fr: 'Romance · greet first, always', it: 'Romance · coffee, standing up', pt: 'Romance · Brazilian warmth', ro: 'Romance · Latin warmth, Slavic home', de: 'Germanic · three genders', sv: 'Germanic · the art of fika', no: 'Germanic · kos & equality', da: 'Germanic · hygge by candlelight', ru: 'Cyrillic · cases & warmth', uk: 'Cyrillic · Lviv coffee culture', el: 'Greek script · linger for hours', hu: 'Uralic · vowel harmony', fi: 'Uralic · top coffee drinkers', hi: 'Devanagari · 600M+ speakers', bn: 'Bengali script · cha & adda', ar: 'Right-to-left · hospitality', he: 'Hebrew script · direct & warm', tr: 'Vowel harmony · verb-last', th: 'Thai script · politeness particles', vi: 'Tonal · slow & sweet', id: 'Austronesian · warm & simple', tl: 'Austronesian · respectful “po”', sw: 'Bantu · greet, always greet', zh: 'Tonal · measure words', ja: 'Non-Latin script · deep course', ko: 'Hangul · politeness built in' };
+                    const tags: { [key: string]: string } = { es: 'Romance · the easiest start', fr: 'Romance · greet first, always', it: 'Romance · coffee, standing up', pt: 'Romance · Brazilian warmth', ro: 'Romance · Latin warmth, Slavic home', de: 'Germanic · three genders', sv: 'Germanic · the art of fika', no: 'Germanic · kos & equality', da: 'Germanic · hygge by candlelight', ru: 'Cyrillic · cases & warmth', uk: 'Cyrillic · Lviv coffee culture', el: 'Greek script · linger for hours', hu: 'Uralic · vowel harmony', fi: 'Uralic · top coffee drinkers', hi: 'Devanagari · 600M+ speakers', mr: 'Devanagari · Maharashtra\'s own', gu: 'Gujarati script · chai & farsan', as: 'Assamese script · the land of tea', ml: 'Dravidian · chaya & kadala', kn: 'Dravidian · filter coffee', bn: 'Bengali script · cha & adda', ar: 'Right-to-left · hospitality', he: 'Hebrew script · direct & warm', tr: 'Vowel harmony · verb-last', th: 'Thai script · politeness particles', vi: 'Tonal · slow & sweet', id: 'Austronesian · warm & simple', tl: 'Austronesian · respectful “po”', sw: 'Bantu · greet, always greet', zh: 'Tonal · measure words', ja: 'Non-Latin script · deep course', ko: 'Hangul · politeness built in' };
                     return (
                       <div 
                         key={code}

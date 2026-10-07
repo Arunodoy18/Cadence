@@ -32,4 +32,9 @@ export const azureVoices: Record<string, { locale: string; voice: string }> = {
   ro: { locale: 'ro-RO', voice: 'ro-RO-AlinaNeural' },
   hu: { locale: 'hu-HU', voice: 'hu-HU-NoemiNeural' },
   bn: { locale: 'bn-IN', voice: 'bn-IN-TanishaaNeural' },
+  mr: { locale: 'mr-IN', voice: 'mr-IN-AarohiNeural' },
+  gu: { locale: 'gu-IN', voice: 'gu-IN-DhwaniNeural' },
+  as: { locale: 'as-IN', voice: 'as-IN-YashicaNeural' },
+  ml: { locale: 'ml-IN', voice: 'ml-IN-SobhanaNeural' },
+  kn: { locale: 'kn-IN', voice: 'kn-IN-SapnaNeural' },
 };

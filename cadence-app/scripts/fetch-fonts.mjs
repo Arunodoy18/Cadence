@@ -15,6 +15,9 @@ const families = [
   'Noto+Sans+Thai:wght@400..700',
   'Noto+Sans+Hebrew:wght@400..700',
   'Noto+Sans+Bengali:wght@400..700',
+  'Noto+Sans+Gujarati:wght@400..700',
+  'Noto+Sans+Kannada:wght@400..700',
+  'Noto+Sans+Malayalam:wght@400..700',
 ];
 const url = 'https://fonts.googleapis.com/css2?' + families.map((f) => 'family=' + f).join('&') + '&display=swap';
 const css = await (await fetch(url, { headers: { 'User-Agent': UA } })).text();

@@ -87,6 +87,18 @@ body {
   font-family: 'Noto Sans Bengali', 'Hanken Grotesk', sans-serif;
 }
 
+.gu {
+  font-family: 'Noto Sans Gujarati', 'Hanken Grotesk', sans-serif;
+}
+
+.kn {
+  font-family: 'Noto Sans Kannada', 'Hanken Grotesk', sans-serif;
+}
+
+.ml {
+  font-family: 'Noto Sans Malayalam', 'Hanken Grotesk', sans-serif;
+}
+
 @keyframes cdIn {
   from {
     transform: translateY(10px);

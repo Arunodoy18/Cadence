@@ -54,13 +54,15 @@ export async function POST(req: NextRequest) {
       body: audioBuffer,
     });
 
-    if (!response.ok) {
-      const errText = await response.text();
-      console.error('Azure API response error:', errText);
-      throw new Error(`Azure Speech API returned ${response.status}: ${errText}`);
+    // Azure's phoneme-level scoring only exists for some locales (e.g. not
+    // Malayalam, Kannada or Assamese). For those, fall back to a simpler but
+    // honest score: how many of the reference words were recognised, in order.
+    let data: any = null;
+    if (response.ok) data = await response.json();
+    const nBest0 = data?.NBest?.[0];
+    if (!response.ok || (data?.RecognitionStatus === 'Success' && typeof nBest0?.PronScore === 'undefined')) {
+      return NextResponse.json(await recognitionMatchScore(audioBuffer, locale, refText, azureKey, azureRegion));
     }
-
-    const data = await response.json();
 
     if (data.RecognitionStatus !== 'Success') {
       return NextResponse.json({
@@ -70,13 +72,7 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    const nBest = data.NBest?.[0];
-
-    // The REST API flattens the PronunciationAssessment metrics directly into the NBest object, 
-    // unlike the Websocket SDK which nests it inside a PronunciationAssessment property.
-    if (!nBest || typeof nBest.PronScore === 'undefined') {
-      return NextResponse.json({ error: 'Pronunciation assessment data missing in response' }, { status: 500 });
-    }
+    const nBest = nBest0;
 
     // Map response to clean structure matching the spec
     const result = {
@@ -101,4 +97,55 @@ export async function POST(req: NextRequest) {
     console.error('Pronounce API error:', e);
     return NextResponse.json({ error: e.message }, { status: 500 });
   }
+}
+
+const normalize = (t: string) =>
+  t.toLowerCase().replace(/[^\p{L}\p{M}\p{N}\s]/gu, ' ').split(/\s+/).filter(Boolean);
+
+async function recognitionMatchScore(audio: Buffer, locale: string, refText: string, key: string, region: string) {
+  const res = await fetch(
+    `https://${region}.stt.speech.microsoft.com/speech/recognition/conversation/cognitiveservices/v1?language=${locale}&format=simple`,
+    {
+      method: 'POST',
+      headers: {
+        'Ocp-Apim-Subscription-Key': key,
+        'Content-Type': 'audio/wav; codecs=audio/pcm; samplerate=16000',
+        Accept: 'application/json',
+      },
+      body: new Uint8Array(audio),
+    }
+  );
+  if (!res.ok) throw new Error(`Speech recognition failed (${res.status})`);
+  const data = await res.json();
+  if (data.RecognitionStatus !== 'Success') {
+    return { error: `Speech recognition status: ${data.RecognitionStatus}`, score: 0, words: [] };
+  }
+
+  const ref = normalize(refText);
+  const hyp = normalize(data.DisplayText || '');
+  // Longest common subsequence: words said in the right order.
+  const dp = Array.from({ length: ref.length + 1 }, () => new Array(hyp.length + 1).fill(0));
+  for (let i = 1; i <= ref.length; i++)
+    for (let j = 1; j <= hyp.length; j++)
+      dp[i][j] = ref[i - 1] === hyp[j - 1] ? dp[i - 1][j - 1] + 1 : Math.max(dp[i - 1][j], dp[i][j - 1]);
+  const matched = new Set<number>();
+  for (let i = ref.length, j = hyp.length; i > 0 && j > 0; ) {
+    if (ref[i - 1] === hyp[j - 1]) { matched.add(i - 1); i--; j--; }
+    else if (dp[i - 1][j] >= dp[i][j - 1]) i--;
+    else j--;
+  }
+  const score = ref.length ? Math.round((matched.size / ref.length) * 100) : 0;
+  return {
+    score,
+    accuracyScore: score,
+    fluencyScore: score,
+    completenessScore: score,
+    basic: true,
+    words: ref.map((w, i) => ({
+      word: w,
+      accuracyScore: matched.has(i) ? 100 : 0,
+      errorType: matched.has(i) ? 'None' : 'Omission',
+      phonemes: [],
+    })),
+  };
 }
