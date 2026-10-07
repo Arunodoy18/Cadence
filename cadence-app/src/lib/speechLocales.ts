@@ -30,6 +30,8 @@ export const localeMap: { [key: string]: string } = {
   ro: 'ro-RO',
   hu: 'hu-HU',
   bn: 'bn-IN',
+  sw: 'sw-KE',
+  tl: 'fil-PH',
   mr: 'mr-IN',
   gu: 'gu-IN',
   as: 'as-IN',

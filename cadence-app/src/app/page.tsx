@@ -2866,6 +2866,7 @@ export default function App() {
                   </div>
                 </div>
 
+                {L.gTermB && (
                 <div style={{ background: '#fff', border: '1px solid #EDE4D6', borderRadius: '16px', padding: '16px' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
                     <span style={{ fontWeight: 700, fontSize: '15px' }} className={L.font}>{L.gTermB}</span>
@@ -2876,6 +2877,7 @@ export default function App() {
                     Example: {L.gExB}
                   </div>
                 </div>
+                )}
               </div>
             </div>
           )}
