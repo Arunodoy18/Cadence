@@ -18,7 +18,7 @@ export const localeMap: { [key: string]: string } = {
   pl: 'pl-PL',
   nl: 'nl-NL',
   sv: 'sv-SE',
-  no: 'no-NO',
+  no: 'nb-NO',
   da: 'da-DK',
   fi: 'fi-FI',
   el: 'el-GR',
