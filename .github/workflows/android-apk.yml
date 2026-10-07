@@ -101,9 +101,13 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh release delete latest-apk --repo "$GITHUB_REPOSITORY" --cleanup-tag --yes || true
+          # Create the tag explicitly: letting `gh release create` make it lazily
+          # sometimes leaves the release "untagged", which breaks the stable download URL.
+          git tag -f latest-apk "$GITHUB_SHA"
+          git push -f origin latest-apk
           gh release create latest-apk Cadence-latest.apk $(ls Cadence-play-store.aab 2>/dev/null) \
             --repo "$GITHUB_REPOSITORY" \
-            --target "$GITHUB_SHA" \
+            --verify-tag \
             --title "Cadence APK (latest)" \
             --notes "Auto-built from ${GITHUB_SHA::7} on every push to main. Signed with: ${{ steps.build.outputs.signed }}. Sideload onto an Android phone." \
             --prerelease
