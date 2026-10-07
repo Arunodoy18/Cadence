@@ -42,10 +42,18 @@ export function hasToken() {
 
 export const UNAUTHORIZED_EVENT = 'cadence:unauthorized';
 
+// A hung request should fail fast with a clear message, not leave the user
+// staring at a spinner. Generous enough for AI replies and speech uploads.
+const REQUEST_TIMEOUT_MS = 30_000;
+
 export async function apiFetch(path: string, init: RequestInit = {}): Promise<Response> {
   const headers = new Headers(init.headers);
   if (memoryToken) headers.set('Authorization', `Bearer ${memoryToken}`);
-  const res = await fetch(`${API_BASE}${path}`, { ...init, headers });
+  const res = await fetch(`${API_BASE}${path}`, {
+    ...init,
+    headers,
+    signal: init.signal ?? (typeof AbortSignal.timeout === 'function' ? AbortSignal.timeout(REQUEST_TIMEOUT_MS) : undefined),
+  });
   if (res.status === 401 && memoryToken && typeof window !== 'undefined') {
     window.dispatchEvent(new Event(UNAUTHORIZED_EVENT));
   }

@@ -5,6 +5,8 @@ import { useAuth } from '@/components/Providers';
 import { apiFetch } from '@/lib/api';
 import { APP_DOWNLOAD_URL } from '@/lib/legal';
 import { applyReminder, loadReminder, type Reminder } from '@/lib/reminders';
+import { PrivacyContent } from '@/components/PrivacyContent';
+import { TermsContent } from '@/components/TermsContent';
 import { LANGS } from '@/lib/languages';
 import immerseDataRaw from '@/lib/immerse.json';
 import { scenarioMeta } from '@/lib/scenarios';
@@ -52,7 +54,7 @@ export default function App() {
   // Android hardware/gesture back button. Behaves like a native app: close any
   // open sheet first, back from a tab returns to Story, back from Story exits.
   // Everything else steps back through the screens the user actually visited.
-  const backState = useRef({ view: 'welcome', picker: false, activeChapter: null as number | null });
+  const backState = useRef({ view: 'welcome', picker: false, activeChapter: null as number | null, legalBack: 'charter' });
   useEffect(() => {
     let handle: { remove: () => Promise<void> } | undefined;
     let cancelled = false;
@@ -68,6 +70,12 @@ export default function App() {
           if (v === 'home' || v === 'welcome') return void App.exitApp();
           if (['speakHub', 'immerse', 'social', 'you'].includes(v)) return setView('home');
           if (v === 'auth') return setView('welcome');
+          const parent: Record<string, string> = {
+            reader: 'immerse', convo: 'speakHub', pronounce: 'speakHub', settings: 'you', charter: 'settings',
+            notifications: 'settings', achievements: 'you', deck: 'you', score: 'you', share: 'you',
+            privacy: backState.current.legalBack, terms: backState.current.legalBack,
+          };
+          if (parent[v]) return setView(parent[v]);
           if (window.history.length > 1) window.history.back();
           else setView('home');
         });
@@ -160,7 +168,8 @@ export default function App() {
   const [lessonResult, setLessonResult] = useState<string>(''); // 'correct', 'wrong', or ''
   const [showHints, setShowHints] = useState<boolean>(false);
   const [activeChapter, setActiveChapter] = useState<number | null>(null);
-  useEffect(() => { backState.current = { view, picker, activeChapter }; }, [view, picker, activeChapter]);
+  const [legalBack, setLegalBack] = useState('charter');
+  useEffect(() => { backState.current = { view, picker, activeChapter, legalBack }; }, [view, picker, activeChapter, legalBack]);
   const [playingChapter, setPlayingChapter] = useState<number>(0);
   const [lockedToast, setLockedToast] = useState<string>('');
 
@@ -190,11 +199,21 @@ export default function App() {
   const [pop, setPop] = useState<{ term: string; def: string } | null>(null);
 
   // Settings / Profile states
-  const [dailyGoal, setDailyGoal] = useState(10);
+  const [dailyGoal, setDailyGoalRaw] = useState(10);
+  useEffect(() => {
+    const saved = Number(localStorage.getItem('cadence_daily_goal'));
+    if ([5, 10, 15].includes(saved)) setDailyGoalRaw(saved);
+  }, []);
+  const setDailyGoal = (m: number) => {
+    setDailyGoalRaw(m);
+    try { localStorage.setItem('cadence_daily_goal', String(m)); } catch {}
+    // Keep a scheduled reminder's wording in step with the new target.
+    if (loadReminder().on) applyReminder(loadReminder(), L.name, m);
+  };
   const [reminder, setReminder] = useState<Reminder>({ on: false, hour: 18 });
   useEffect(() => { setReminder(loadReminder()); }, []);
   const changeReminder = async (next: Reminder) => {
-    const applied = await applyReminder(next, L.name);
+    const applied = await applyReminder(next, L.name, dailyGoal);
     setReminder(applied);
     if (next.on && !applied.on) showToast('Notifications are blocked — allow them in your phone settings to get reminders.');
   };
@@ -265,7 +284,7 @@ export default function App() {
   // Persist state across refreshes
   useEffect(() => {
     const savedView = localStorage.getItem('cadence_view');
-    if (savedView && savedView !== 'auth' && savedView !== 'welcome') setView('home');
+    if (savedView && !['auth', 'welcome', 'privacy', 'terms'].includes(savedView)) setView('home');
 
     const savedLang = localStorage.getItem('cadence_lang');
     const savedKnownWords = localStorage.getItem('cadence_known_words');
@@ -297,7 +316,7 @@ export default function App() {
   useEffect(() => {
     if (authStatus === 'authenticated' && (view === 'welcome' || view === 'auth')) {
       setView('home');
-    } else if (authStatus === 'unauthenticated' && view !== 'welcome' && view !== 'auth') {
+    } else if (authStatus === 'unauthenticated' && !['welcome', 'auth', 'privacy', 'terms'].includes(view)) {
       setView('welcome');
     }
   }, [authStatus, view]);
@@ -881,6 +900,7 @@ export default function App() {
     try {
       const res = await apiFetch('/api/account', { method: 'DELETE' });
       if (!res.ok) throw new Error('Delete failed');
+      await applyReminder({ ...loadReminder(), on: false }, L.name).catch(() => {});
       localStorage.clear();
       await logout();
       setView('welcome');
@@ -2314,7 +2334,7 @@ export default function App() {
                     <div style={{ background: '#fff', border: '1px solid #EDE4D6', borderRadius: '14px', padding: '16px' }}>
                       <div style={{ fontSize: '15px', fontWeight: 600 }}>{user.name}</div>
                       <div style={{ fontSize: '12.5px', color: '#8A7E73' }}>{user.email}</div>
-                      <div onClick={async () => { await logout(); setView('welcome'); }} style={{ color: '#DB5338', fontSize: '13px', marginTop: '12px', cursor: 'pointer', fontWeight: 600 }}>Log out</div>
+                      <div onClick={async () => { await applyReminder({ ...loadReminder(), on: false }, L.name).catch(() => {}); await logout(); setView('welcome'); }} style={{ color: '#DB5338', fontSize: '13px', marginTop: '12px', cursor: 'pointer', fontWeight: 600 }}>Log out</div>
                     </div>
                   ) : (
                     <div onClick={() => setView('auth')} style={{ background: '#DB5338', color: '#FBF6EE', borderRadius: '12px', padding: '12px', textAlign: 'center', fontSize: '14px', fontWeight: 600, cursor: 'pointer' }}>
@@ -2352,8 +2372,8 @@ export default function App() {
                   <div style={{ fontSize: '11px', letterSpacing: '.08em', textTransform: 'uppercase', color: '#BFA38C', marginBottom: '12px' }}>Notifications</div>
                   <div onClick={() => setView('notifications')} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#fff', border: '1px solid #EDE4D6', borderRadius: '14px', padding: '14px 16px', cursor: 'pointer' }}>
                     <div>
-                      <div style={{ fontSize: '13.5px', fontWeight: 600 }}>What alerts you</div>
-                      <div style={{ fontSize: '11px', color: '#9A8E84', marginTop: '2px' }}>Reminders, friend updates, feedback alerts</div>
+                      <div style={{ fontSize: '13.5px', fontWeight: 600 }}>Practice reminder</div>
+                      <div style={{ fontSize: '11px', color: '#9A8E84', marginTop: '2px' }}>A daily nudge on your phone</div>
                     </div>
                     <span style={{ fontSize: '16px', color: '#C9AE97' }}>›</span>
                   </div>
@@ -2364,7 +2384,7 @@ export default function App() {
                   <div onClick={() => setView('charter')} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#fff', border: '1px solid #EDE4D6', borderRadius: '14px', padding: '14px 16px', cursor: 'pointer' }}>
                     <div>
                       <div style={{ fontSize: '13.5px', fontWeight: 600 }}>Data charter</div>
-                      <div style={{ fontSize: '11px', color: '#9A8E84', marginTop: '2px' }}>Privacy toggles, export your data, delete your account</div>
+                      <div style={{ fontSize: '11px', color: '#9A8E84', marginTop: '2px' }}>Export or correct your data, delete your account</div>
                     </div>
                     <span style={{ fontSize: '16px', color: '#C9AE97' }}>›</span>
                   </div>
@@ -2442,7 +2462,7 @@ export default function App() {
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '4px' }}>
                   <div onClick={() => setAuthConsent(!authConsent)} role="checkbox" aria-checked={authConsent} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', cursor: 'pointer', padding: '4px 2px' }}>
                     <div style={{ width: '22px', height: '22px', flex: 'none', borderRadius: '7px', border: authConsent ? 'none' : '1.5px solid #CBBBA6', background: authConsent ? '#DB5338' : '#fff', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px', marginTop: '1px' }}>{authConsent ? '✓' : ''}</div>
-                    <div style={{ fontSize: '12.5px', color: '#5C5048', lineHeight: 1.45 }}>I agree to the processing of my personal data, including my voice recordings, as described in the <a href="/privacy/" onClick={(e) => e.stopPropagation()} style={{ color: '#DB5338', fontWeight: 600 }}>Privacy Notice</a>, and to the <a href="/terms/" onClick={(e) => e.stopPropagation()} style={{ color: '#DB5338', fontWeight: 600 }}>Terms</a>.</div>
+                    <div style={{ fontSize: '12.5px', color: '#5C5048', lineHeight: 1.45 }}>I agree to the processing of my personal data, including my voice recordings, as described in the <span onClick={(e) => { e.stopPropagation(); setLegalBack('auth'); setView('privacy'); }} style={{ color: '#DB5338', fontWeight: 600, textDecoration: 'underline' }}>Privacy Notice</span>, and to the <span onClick={(e) => { e.stopPropagation(); setLegalBack('auth'); setView('terms'); }} style={{ color: '#DB5338', fontWeight: 600, textDecoration: 'underline' }}>Terms</span>.</div>
                   </div>
                   <div onClick={() => setAuthAge(!authAge)} role="checkbox" aria-checked={authAge} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', cursor: 'pointer', padding: '4px 2px' }}>
                     <div style={{ width: '22px', height: '22px', flex: 'none', borderRadius: '7px', border: authAge ? 'none' : '1.5px solid #CBBBA6', background: authAge ? '#DB5338' : '#fff', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px', marginTop: '1px' }}>{authAge ? '✓' : ''}</div>
@@ -2691,7 +2711,7 @@ export default function App() {
                 </div>
                 {reminder.on && (
                   <div style={{ display: 'flex', gap: '8px' }}>
-                    {[{ h: 8, l: 'Morning · 8:00' }, { h: 13, l: 'Lunch · 1:00' }, { h: 18, l: 'Evening · 6:00' }, { h: 21, l: 'Night · 9:00' }].map((o) => (
+                    {[{ h: 8, l: '8 AM' }, { h: 13, l: '1 PM' }, { h: 18, l: '6 PM' }, { h: 21, l: '9 PM' }].map((o) => (
                       <div key={o.h} onClick={() => changeReminder({ ...reminder, hour: o.h })} style={{ flex: 1, textAlign: 'center', padding: '10px 4px', borderRadius: '12px', fontSize: '11.5px', fontWeight: 600, cursor: 'pointer', background: reminder.hour === o.h ? '#DB5338' : '#fff', color: reminder.hour === o.h ? '#FBF6EE' : '#5C5048', border: '1px solid ' + (reminder.hour === o.h ? '#DB5338' : '#E1D6C4') }}>{o.l}</div>
                     ))}
                   </div>
@@ -2710,7 +2730,7 @@ export default function App() {
               </div>
               <div className="cd-scroll" style={{ flex: 1, overflowY: 'auto', padding: '8px 20px 24px' }}>
                 <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: '27px', lineHeight: 1.05, marginBottom: '12px' }}>Your data is yours</div>
-                <div style={{ fontSize: '13px', color: '#5C5048', lineHeight: 1.5, marginBottom: '24px' }}>We don&apos;t sell your data to brokers, and we don&apos;t train underlying LLMs on your personal chats without explicit opt-in. You can delete your account and all associated data at any time.</div>
+                <div style={{ fontSize: '13px', color: '#5C5048', lineHeight: 1.5, marginBottom: '24px' }}>We don&apos;t sell your data, and we don&apos;t train AI models on your chats or recordings. You can export, correct or delete your data at any time.</div>
                 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '26px' }}>
                   {[
@@ -2737,8 +2757,8 @@ export default function App() {
                   <div onClick={handleExportData} style={{ color: '#DB5338', fontSize: '14px', fontWeight: 600, marginBottom: '8px', cursor: 'pointer' }}>Export my data (JSON)</div>
                   <div onClick={handleDeleteAccount} style={{ color: '#B23E27', fontSize: '14px', fontWeight: 600, cursor: 'pointer', marginBottom: '20px' }}>Delete account & data</div>
                   <div style={{ borderTop: '1px solid #EDE4D6', paddingTop: '20px', display: 'flex', gap: '15px' }}>
-                    <a href="/privacy/" style={{ color: '#8A7E73', fontSize: '12px', textDecoration: 'none' }}>Privacy Notice</a>
-                    <a href="/terms/" style={{ color: '#8A7E73', fontSize: '12px', textDecoration: 'none' }}>Terms of Service</a>
+                    <span onClick={() => { setLegalBack('charter'); setView('privacy'); }} style={{ color: '#8A7E73', fontSize: '13px', padding: '10px 0', cursor: 'pointer' }}>Privacy Notice</span>
+                    <span onClick={() => { setLegalBack('charter'); setView('terms'); }} style={{ color: '#8A7E73', fontSize: '13px', padding: '10px 0', cursor: 'pointer' }}>Terms of Service</span>
                   </div>
                 </div>
               </div>
@@ -2854,6 +2874,18 @@ export default function App() {
                     Example: {L.gExB}
                   </div>
                 </div>
+              </div>
+            </div>
+          )}
+
+          {/* ===== PRIVACY NOTICE / TERMS (in-app, so they work offline) ===== */}
+          {(view === 'privacy' || view === 'terms') && (
+            <div className="cd-screen" style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
+              <div style={{ display: 'flex', alignItems: 'center', padding: '12px 22px 6px', flex: 'none' }}>
+                <span onClick={() => setView(legalBack)} style={{ fontSize: '18px', color: '#B5A99E', cursor: 'pointer', padding: '14px 18px', margin: '-14px -18px' }}>‹</span>
+              </div>
+              <div className="cd-scroll" style={{ flex: 1, overflowY: 'auto', padding: '8px 22px 40px', fontFamily: 'system-ui, -apple-system, sans-serif', lineHeight: 1.6, color: '#333', fontSize: '14.5px' }}>
+                {view === 'privacy' ? <PrivacyContent /> : <TermsContent />}
               </div>
             </div>
           )}

@@ -29,7 +29,7 @@ async function plugin() {
 }
 
 // Returns the reminder that is actually in effect (off if permission was refused).
-export async function applyReminder(next: Reminder, langName: string): Promise<Reminder> {
+export async function applyReminder(next: Reminder, langName: string, minutes = 10): Promise<Reminder> {
   const p = await plugin();
   if (!p) return next;
   const { LN } = p;
@@ -50,7 +50,7 @@ export async function applyReminder(next: Reminder, langName: string): Promise<R
       {
         id: NOTIFICATION_ID,
         title: 'Time for your Cadence',
-        body: `A few minutes of ${langName} today keeps it flowing.`,
+        body: `Your ${minutes}-minute ${langName} practice is waiting.`,
         schedule: { on: { hour: next.hour, minute: 0 }, allowWhileIdle: true },
       },
     ],
