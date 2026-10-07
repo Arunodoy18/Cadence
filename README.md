@@ -1,6 +1,52 @@
 # Cadence — language learning app
 
 > "Duolingo builds a habit. Cadence builds a speaker."
+
+## Get the app (Android)
+
+**[Download the latest APK](https://github.com/Arunodoy18/Cadence/releases/download/latest-apk/Cadence-latest.apk)** — rebuilt automatically on every push to `main`
+([all builds](https://github.com/Arunodoy18/Cadence/releases/tag/latest-apk)).
+
+1. Open the link on your Android phone and download `Cadence-latest.apk`.
+2. Tap it to install (allow *Install unknown apps* for your browser when asked).
+3. Open **Cadence**, create an account and start talking.
+
+The app is a native Android app (Capacitor): the screens are bundled inside the APK and open instantly; only
+sign-in, AI conversation, speech and progress sync use the network.
+
+## How it's put together
+
+| Part | Where | Notes |
+|------|-------|-------|
+| App UI | `cadence-app/src` → static export → APK | `npm run build:native` |
+| API | Next.js on Netlify (`cadence.buildc3.tech`) | auth, AI, speech, database |
+| Voice (TTS) | Azure neural voices (free tier) | ElevenLabs optional fallback |
+| Speech → text | OpenAI Whisper, falls back to Azure | |
+| Pronunciation | Azure Pronunciation Assessment | |
+| AI conversation | any OpenAI-compatible provider | see below |
+| Database | Neon Postgres | |
+
+### Server environment variables (Netlify → Site settings → Environment variables)
+
+Required: `DATABASE_URL`, `NEXTAUTH_SECRET`, `NEXTAUTH_URL`, `AZURE_API_KEY`, `AZURE_REGION`.
+
+AI conversation + placement need **one** of these (free options first; the first that works is used):
+
+| Variable | Provider | Cost |
+|----------|----------|------|
+| `GROQ_API_KEY` | [Groq](https://console.groq.com/keys) — Llama 3.3 70B | free tier, no card |
+| `GEMINI_API_KEY` | [Google AI Studio](https://aistudio.google.com/apikey) — Gemini 2.0 Flash | free tier |
+| `OPENAI_API_KEY` | OpenAI | paid |
+| `LLM_API_KEY` + `LLM_BASE_URL` + `LLM_MODEL` | any OpenAI-compatible service | varies |
+
+### Privacy (India's DPDP Act, 2023)
+
+Consent + age confirmation at sign-up, in-app Privacy Notice, data export, name correction and account
+deletion (Settings → Data charter), on-device reminders only. Grievance contact: see `cadence-app/src/lib/legal.ts`.
+
+---
+
+## Original prototype & spec
 > Free AI conversation from day one, real immersion, culture in every lesson,
 > calm motivation, and a path to actual fluency across 30 languages.
 
