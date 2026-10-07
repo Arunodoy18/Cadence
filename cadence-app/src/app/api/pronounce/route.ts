@@ -1,39 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requirePlus } from '@/lib/auth';
 import { rateLimit } from '@/lib/rateLimit';
-
-const localeMap: { [key: string]: string } = {
-  en: 'en-US',
-  es: 'es-ES',
-  fr: 'fr-FR',
-  de: 'de-DE',
-  it: 'it-IT',
-  ja: 'ja-JP',
-  ko: 'ko-KR',
-  zh: 'zh-CN',
-  hi: 'hi-IN',
-  ar: 'ar-EG',
-  he: 'he-IL',
-  ru: 'ru-RU',
-  pt: 'pt-BR',
-  tr: 'tr-TR',
-  vi: 'vi-VN',
-  pl: 'pl-PL',
-  nl: 'nl-NL',
-  sv: 'sv-SE',
-  no: 'no-NO',
-  da: 'da-DK',
-  fi: 'fi-FI',
-  el: 'el-GR',
-  th: 'th-TH',
-  id: 'id-ID',
-  ms: 'ms-MY',
-  uk: 'uk-UA',
-  cs: 'cs-CZ',
-  ro: 'ro-RO',
-  hu: 'hu-HU',
-  bn: 'bn-IN',
-};
+import { localeMap } from '@/lib/speechLocales';
 
 export async function POST(req: NextRequest) {
   try {

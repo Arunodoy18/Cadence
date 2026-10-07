@@ -1,13 +1,20 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import { Providers } from '@/components/Providers';
-import { PwaUpdater } from '@/components/PwaUpdater';
 import { PushNotificationSetup } from '@/components/PushNotificationSetup';
-import { RevenueCatSetup } from '@/components/RevenueCatSetup';
 
 export const metadata: Metadata = {
   title: 'Cadence — language learning app',
   description: 'Duolingo builds a habit. Cadence builds a speaker.',
+};
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  viewportFit: 'cover',
+  themeColor: '#FBF6EE',
 };
 
 export default function RootLayout({
@@ -18,27 +25,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
-        <link rel="manifest" href="/manifest.json" />
-        <link rel="apple-touch-icon" href="/icon.svg" />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-        <meta name="apple-mobile-web-app-title" content="Cadence" />
-        <meta name="theme-color" content="#FBF6EE" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Hanken+Grotesk:ital,wght@0,300..800;1,400..600&family=Noto+Sans:wght@400..700&family=Noto+Sans+JP:wght@400..700&family=Noto+Sans+KR:wght@400..700&family=Noto+Sans+Devanagari:wght@400..700&family=Noto+Sans+Arabic:wght@400..700&family=Noto+Sans+SC:wght@400..700&family=Noto+Sans+Thai:wght@400..700&family=Noto+Sans+Hebrew:wght@400..700&family=Noto+Sans+Bengali:wght@400..700&display=swap"
-          rel="stylesheet"
-        />
+        {/* Fonts ship inside the app (see scripts/fetch-fonts.mjs) — no runtime request to Google. */}
+        <link rel="stylesheet" href="/fonts/fonts.css" />
       </head>
       <body>
         <Providers>
           {children}
           <PushNotificationSetup />
-          <RevenueCatSetup />
         </Providers>
-        <PwaUpdater />
       </body>
     </html>
   );

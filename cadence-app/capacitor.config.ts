@@ -3,27 +3,23 @@ import type { CapacitorConfig } from '@capacitor/cli';
 const config: CapacitorConfig = {
   appId: 'tech.buildc3.cadence',
   appName: 'Cadence',
-  // Cadence is a server-backed app (NextAuth sessions, Stripe/Razorpay
-  // checkout, OpenAI/Azure/ElevenLabs calls, Neon Postgres) — it can't be
-  // exported as a static bundle. The native shell loads the live production
-  // site directly, the same way Safari/Chrome would, and gets full native
-  // API access (mic, share sheet, push) layered on top via Capacitor plugins.
-  server: {
-    url: 'https://cadence.buildc3.tech',
-    cleartext: false,
+  // The UI is a static bundle (built by `npm run build:native` into ./out) that
+  // is packed inside the APK and served from the device — the app opens
+  // instantly and its screens work offline. Only data calls (sign-in, AI
+  // conversation, speech, progress) go to the Cadence API over HTTPS.
+  webDir: 'out',
+  android: {
+    // Only for local testing against a dev API over `adb reverse` (plain http).
+    // Release/CI builds never set CADENCE_DEV_API, so this stays false.
+    allowMixedContent: !!process.env.CADENCE_DEV_API,
   },
   ios: {
     contentInset: 'always',
   },
-  android: {
-    allowMixedContent: false,
-  },
   plugins: {
     SplashScreen: {
-      // Hidden manually (see NativeChrome) once the remote page has actually
-      // rendered — this app loads over the network, so the plugin's own
-      // auto-hide timer can easily fire before that, leaving a blank flash
-      // between the splash disappearing and content appearing.
+      // Hidden manually once the first screen has rendered, so there's no
+      // blank flash between the splash disappearing and content appearing.
       launchAutoHide: false,
       backgroundColor: '#FBF6EEFF',
       showSpinner: false,

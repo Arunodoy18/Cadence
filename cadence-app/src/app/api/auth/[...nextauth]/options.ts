@@ -2,9 +2,8 @@ import type { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
 import { sql } from '@/lib/db';
-import bcrypt from 'bcryptjs';
 import { v4 as uuidv4 } from 'uuid';
-import { rateLimit } from '@/lib/rateLimit';
+import { authorizeCredentials, type CredentialsInput } from '@/lib/credentials';
 
 export const authOptions: NextAuthOptions = {
   session: {
@@ -33,53 +32,11 @@ export const authOptions: NextAuthOptions = {
         password: { label: 'Password', type: 'password' },
         name: { label: 'Name', type: 'text' },
         action: { label: 'Action', type: 'text' }, // 'signup' or 'login'
+        consent: { label: 'Consent', type: 'text' },
+        ageConfirmed: { label: 'Age confirmed', type: 'text' },
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) {
-          throw new Error('Email and password are required');
-        }
-
-        const { email, password, name, action } = credentials;
-
-        if (!rateLimit(`auth:${email.toLowerCase()}`, 10, 60_000)) {
-          throw new Error('Too many attempts. Please wait a minute and try again.');
-        }
-
-        if (action === 'signup') {
-          // Check if user already exists
-          const existing = await sql`SELECT id FROM users WHERE email = ${email}`;
-          if (existing.length > 0) {
-            throw new Error('An account with this email already exists');
-          }
-
-          // Create new user
-          const passwordHash = await bcrypt.hash(password, 12);
-          const id = uuidv4();
-          await sql`
-            INSERT INTO users (id, email, name, password_hash, auth_provider, plan)
-            VALUES (${id}, ${email}, ${name || email.split('@')[0]}, ${passwordHash}, 'email', 'free')
-          `;
-
-          return { id, email, name: name || email.split('@')[0], plan: 'free' };
-        } else {
-          // Login
-          const users = await sql`SELECT id, email, name, password_hash, plan FROM users WHERE email = ${email}`;
-          if (users.length === 0) {
-            throw new Error('No account found with this email');
-          }
-
-          const user = users[0];
-          if (!user.password_hash) {
-            throw new Error('This account uses social login');
-          }
-
-          const isValid = await bcrypt.compare(password, user.password_hash);
-          if (!isValid) {
-            throw new Error('Invalid password');
-          }
-
-          return { id: user.id, email: user.email, name: user.name, plan: user.plan };
-        }
+        return authorizeCredentials((credentials ?? {}) as CredentialsInput);
       },
     }),
   ],

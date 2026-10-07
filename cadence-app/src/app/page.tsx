@@ -1,27 +1,20 @@
 'use client';
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { useSession, signIn, signOut, getProviders } from 'next-auth/react';
+import { useAuth } from '@/components/Providers';
+import { apiFetch } from '@/lib/api';
+import { APP_DOWNLOAD_URL } from '@/lib/legal';
+import { applyReminder, loadReminder, type Reminder } from '@/lib/reminders';
 import { LANGS } from '@/lib/languages';
 import immerseDataRaw from '@/lib/immerse.json';
 import { scenarioMeta } from '@/lib/scenarios';
-import { useRouter } from 'next/navigation';
 
 const immerseData: Record<string, any[]> = immerseDataRaw;
 import { WavRecorder } from '@/lib/WavRecorder';
 import { AudioVisualizer } from '@/components/AudioVisualizer';
 
-// Off until a real payment provider (Stripe/Razorpay/RevenueCat) is actually
-// configured in production — without this, users would hit either the
-// "Cadence Sandbox" mock checkout (grants Plus for free, looks unfinished)
-// or a native purchase call that errors because no store product exists yet.
-// Flip to 'true' via env once the Play merchant account/RevenueCat setup is done.
-const PLUS_PURCHASES_ENABLED = process.env.NEXT_PUBLIC_PLUS_PURCHASES_ENABLED === 'true';
-
 export default function App() {
-  const { data: session, status: authStatus, update: updateSession } = useSession();
-  const router = useRouter();
-  const userPlan = (session?.user as any)?.plan || 'free';
+  const { user, status: authStatus, login, signup, logout, setUserName } = useAuth();
 
   // Core navigation state.
   // Every screen change also pushes a history entry, so the Android hardware/
@@ -54,6 +47,40 @@ export default function App() {
     };
     window.addEventListener('popstate', onPopState);
     return () => window.removeEventListener('popstate', onPopState);
+  }, []);
+
+  // Android hardware/gesture back button. Behaves like a native app: close any
+  // open sheet first, back from a tab returns to Story, back from Story exits.
+  // Everything else steps back through the screens the user actually visited.
+  const backState = useRef({ view: 'welcome', picker: false, activeChapter: null as number | null });
+  useEffect(() => {
+    let handle: { remove: () => Promise<void> } | undefined;
+    let cancelled = false;
+    (async () => {
+      try {
+        const { Capacitor } = await import('@capacitor/core');
+        if (!Capacitor.isNativePlatform()) return;
+        const { App } = await import('@capacitor/app');
+        const h = await App.addListener('backButton', () => {
+          const { view: v, picker: pk, activeChapter: ac } = backState.current;
+          if (pk) return setPicker(false);
+          if (ac !== null) return setActiveChapter(null);
+          if (v === 'home' || v === 'welcome') return void App.exitApp();
+          if (['speakHub', 'immerse', 'social', 'you'].includes(v)) return setView('home');
+          if (v === 'auth') return setView('welcome');
+          if (window.history.length > 1) window.history.back();
+          else setView('home');
+        });
+        if (cancelled) h.remove();
+        else handle = h;
+      } catch {
+        // Not in the native shell.
+      }
+    })();
+    return () => {
+      cancelled = true;
+      handle?.remove();
+    };
   }, []);
 
   // Native chrome: no-ops entirely on web/PWA (dynamic import + isNativePlatform
@@ -108,15 +135,6 @@ export default function App() {
     setTimeout(() => setToast(null), 3500);
   };
 
-  // Google sign-in only works if GOOGLE_CLIENT_ID/SECRET are configured server-side —
-  // check via NextAuth's own providers list instead of hardcoding that assumption here.
-  const [googleEnabled, setGoogleEnabled] = useState(false);
-  useEffect(() => {
-    getProviders()
-      .then((providers) => setGoogleEnabled(!!providers?.google))
-      .catch(() => setGoogleEnabled(false));
-  }, []);
-
   // Rotating greeting state
   const [greetIdx, setGreetIdx] = useState(0);
 
@@ -142,6 +160,7 @@ export default function App() {
   const [lessonResult, setLessonResult] = useState<string>(''); // 'correct', 'wrong', or ''
   const [showHints, setShowHints] = useState<boolean>(false);
   const [activeChapter, setActiveChapter] = useState<number | null>(null);
+  useEffect(() => { backState.current = { view, picker, activeChapter }; }, [view, picker, activeChapter]);
   const [playingChapter, setPlayingChapter] = useState<number>(0);
   const [lockedToast, setLockedToast] = useState<string>('');
 
@@ -172,18 +191,30 @@ export default function App() {
 
   // Settings / Profile states
   const [dailyGoal, setDailyGoal] = useState(10);
-  const [notif, setNotif] = useState<{ [key: string]: boolean }>({
-    daily: true,
-    friends: true,
-    feedback: true,
-    corrections: false,
-    content: true,
-  });
-  const [charter, setCharter] = useState<{ [key: string]: boolean }>({
-    usage: true,
-    ai: false,
-    voice: false,
-  });
+  const [reminder, setReminder] = useState<Reminder>({ on: false, hour: 18 });
+  useEffect(() => { setReminder(loadReminder()); }, []);
+  const changeReminder = async (next: Reminder) => {
+    const applied = await applyReminder(next, L.name);
+    setReminder(applied);
+    if (next.on && !applied.on) showToast('Notifications are blocked — allow them in your phone settings to get reminders.');
+  };
+  const [nameDraft, setNameDraft] = useState('');
+  const saveName = async () => {
+    const name = nameDraft.trim();
+    if (!name || name === user?.name) return;
+    try {
+      const res = await apiFetch('/api/account', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name }),
+      });
+      if (!res.ok) throw new Error('update failed');
+      setUserName(name);
+      showToast('Name updated.');
+    } catch {
+      showToast('Could not update your name. Please try again.');
+    }
+  };
   const [level, setLevel] = useState('A1');
   const [backTo, setBackTo] = useState('you');
   
@@ -196,46 +227,15 @@ export default function App() {
   const [authPassword, setAuthPassword] = useState('');
   const [authName, setAuthName] = useState('');
   const [authError, setAuthError] = useState('');
+  const [authConsent, setAuthConsent] = useState(false);
+  const [authAge, setAuthAge] = useState(false);
 
   // Audio shadowing states
   const [audioPlaying, setAudioPlaying] = useState(false);
-  const [payMethod, setPayMethod] = useState<'card' | 'upi'>('card');
   // MediaRecorder for STT
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const wavRecorderRef = useRef<WavRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
-
-  // PWA Install Prompt state
-  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
-  const [showInstallPrompt, setShowInstallPrompt] = useState(false);
-  const [isIosStandalone, setIsIosStandalone] = useState(true);
-
-  useEffect(() => {
-    const hasDismissed = localStorage.getItem('cadence_install_dismissed');
-    
-    // Check iOS standalone status
-    const isIos = /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
-    const isStandalone = ('standalone' in window.navigator) && (window.navigator as any).standalone;
-    
-    if (isIos && !isStandalone) {
-      setIsIosStandalone(false);
-      if (!hasDismissed) setShowInstallPrompt(true);
-    }
-
-    const handleBeforeInstallPrompt = (e: any) => {
-      e.preventDefault();
-      setDeferredPrompt(e);
-      if (!hasDismissed) {
-        setShowInstallPrompt(true);
-      }
-    };
-
-    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-
-    return () => {
-      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-    };
-  }, []);
 
   const calculateKnownPercentage = (text: string) => {
     if (!text) return '0%';
@@ -264,21 +264,8 @@ export default function App() {
 
   // Persist state across refreshes
   useEffect(() => {
-    // A checkout redirect (real Stripe, or the mock sandbox) lands here via
-    // /paid or /plans, which forward to /?view=... — honor that over whatever
-    // was previously saved in localStorage, then scrub it from the URL.
-    const params = new URLSearchParams(window.location.search);
-    const redirectView = params.get('view');
-    if (redirectView === 'paid' || redirectView === 'plans') {
-      setView(redirectView);
-      // Keep the cadenceView tag on this entry (just clean the URL) — an
-      // empty state object here would erase the back-button target we just
-      // pushed via setView above.
-      window.history.replaceState({ cadenceView: redirectView }, '', window.location.pathname);
-    } else {
-      const savedView = localStorage.getItem('cadence_view');
-      if (savedView && savedView !== 'auth' && savedView !== 'welcome') setView('home');
-    }
+    const savedView = localStorage.getItem('cadence_view');
+    if (savedView && savedView !== 'auth' && savedView !== 'welcome') setView('home');
 
     const savedLang = localStorage.getItem('cadence_lang');
     const savedKnownWords = localStorage.getItem('cadence_known_words');
@@ -315,15 +302,6 @@ export default function App() {
     }
   }, [authStatus, view]);
 
-  // Premium Gating Interception
-  useEffect(() => {
-    const premiumViews = ['convo', 'pronounce', 'immerse', 'reader'];
-    const isPro = (session?.user as any)?.plan === 'plus';
-    if (premiumViews.includes(view) && !isPro) {
-      setView('plans'); // Redirect free users to the upsell screen
-    }
-  }, [view, session]);
-
   // Fetch milestones when visiting gamification screens
   useEffect(() => {
     if (authStatus === 'authenticated' && (view === 'you' || view === 'achievements')) {
@@ -333,7 +311,7 @@ export default function App() {
 
   const fetchMilestones = async () => {
     try {
-      const res = await fetch('/api/milestones', {
+      const res = await apiFetch('/api/milestones', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ lang }),
@@ -349,7 +327,7 @@ export default function App() {
 
   const fetchPlan = async () => {
     try {
-      const res = await fetch('/api/plan', {
+      const res = await apiFetch('/api/plan', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ lang }),
@@ -366,34 +344,52 @@ export default function App() {
   };
 
   // Text-To-Speech function
-  const speak = async (text: string, locale: string) => {
+  const cloudTtsDownUntil = useRef(0);
+  const currentAudio = useRef<HTMLAudioElement | null>(null);
+  const stopSpeaking = () => {
+    try { currentAudio.current?.pause(); } catch {}
+    currentAudio.current = null;
+    import('@capacitor-community/text-to-speech').then(({ TextToSpeech }) => TextToSpeech.stop()).catch(() => {});
+    setIsAiSpeaking(false);
+  };
+  // Resolves when the speech has finished (or failed), so callers can queue lines.
+  const speak = async (text: string, locale: string): Promise<void> => {
+    stopSpeaking();
     try {
-      const res = await fetch('/api/tts', {
+      // After a failure, go straight to the device voice for a few minutes
+      // instead of paying a failed round-trip before every sentence.
+      if (Date.now() < cloudTtsDownUntil.current) throw new Error('cloud TTS recently failed');
+      const res = await apiFetch('/api/tts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text, lang }),
       });
-      if (!res.ok) throw new Error('TTS API failed');
+      if (!res.ok) {
+        cloudTtsDownUntil.current = Date.now() + 5 * 60_000;
+        throw new Error('TTS API failed');
+      }
       const audioBlob = await res.blob();
-      const audioUrl = URL.createObjectURL(audioBlob);
-      const audio = new Audio(audioUrl);
-      audio.onplay = () => setIsAiSpeaking(true);
-      audio.onended = () => setIsAiSpeaking(false);
-      audio.play();
+      const audio = new Audio(URL.createObjectURL(audioBlob));
+      currentAudio.current = audio;
+      await new Promise<void>((resolve) => {
+        audio.onplay = () => setIsAiSpeaking(true);
+        audio.onended = () => { setIsAiSpeaking(false); resolve(); };
+        audio.onerror = () => { setIsAiSpeaking(false); resolve(); };
+        audio.play().catch(() => resolve());
+      });
     } catch (e) {
       console.error('TTS error:', e);
-      showToast('Audio generation failed. Falling back to device speech.');
-      // Fallback to local browser SpeechSynthesis
+      // The cloud voice is unavailable — quietly use the phone's own text-to-speech
+      // engine instead (Android WebViews have no window.speechSynthesis, so this
+      // goes through the native plugin).
       try {
-        if (!window.speechSynthesis) return;
-        const u = new SpeechSynthesisUtterance(text);
-        u.lang = locale;
-        u.rate = 0.9;
-        u.onstart = () => setIsAiSpeaking(true);
-        u.onend = () => setIsAiSpeaking(false);
-        speechSynthesis.speak(u);
+        const { TextToSpeech } = await import('@capacitor-community/text-to-speech');
+        setIsAiSpeaking(true);
+        await TextToSpeech.speak({ text, lang: locale, rate: 0.9, pitch: 1.0, volume: 1.0, category: 'playback' });
       } catch (fallbackErr) {
         console.error('Local TTS also failed:', fallbackErr);
+      } finally {
+        setIsAiSpeaking(false);
       }
     }
   };
@@ -439,7 +435,7 @@ export default function App() {
         formData.append('lang', _L.locale);
 
         try {
-          const res = await fetch('/api/stt', {
+          const res = await apiFetch('/api/stt', {
             method: 'POST',
             body: formData,
           });
@@ -489,7 +485,7 @@ export default function App() {
     const finish = userTurns >= 3;
 
     try {
-      const res = await fetch('/api/placement', {
+      const res = await apiFetch('/api/placement', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -532,7 +528,7 @@ export default function App() {
       const term = L.reviewWord || L.bank[L.correct[0]];
       const definition = L.reviewMeaning || 'Lesson term';
       
-      await fetch('/api/attempt', {
+      await apiFetch('/api/attempt', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -578,7 +574,7 @@ export default function App() {
       formData.append('refText', refText);
       formData.append('lang', lang);
 
-      const res = await fetch('/api/pronounce', {
+      const res = await apiFetch('/api/pronounce', {
         method: 'POST',
         body: formData,
       });
@@ -599,7 +595,7 @@ export default function App() {
 
         // Log to database
         if (authStatus === 'authenticated') {
-          await fetch('/api/attempt', {
+          await apiFetch('/api/attempt', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -646,7 +642,7 @@ export default function App() {
       const _L = LANGS[lang] || LANGS.es;
       formData.append('lang', _L.locale);
 
-      const res = await fetch('/api/stt', {
+      const res = await apiFetch('/api/stt', {
         method: 'POST',
         body: formData,
       });
@@ -692,7 +688,7 @@ export default function App() {
     setConvo({ msgs: [], draft: '', thinking: true, listening: false, live: false });
 
     try {
-      const res = await fetch('/api/conversation', {
+      const res = await apiFetch('/api/conversation', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -707,8 +703,8 @@ export default function App() {
 
       const data = await res.json();
       if (!res.ok || data.error) {
-        showToast("Error starting conversation.");
-        setConvo((prev) => ({ ...prev, thinking: false, msgs: [{ who: 'p', n: "Error starting conversation.", en: "Error" }] }));
+        showToast("The AI partner is unavailable right now. Please try again in a bit.");
+        setConvo((prev) => ({ ...prev, thinking: false, msgs: [{ who: 'p', n: "The AI partner is unavailable right now — please go back and try again in a bit.", en: "Sorry!" }] }));
         return;
       }
       
@@ -720,7 +716,7 @@ export default function App() {
       speak(data.reply, L.locale);
     } catch (e) {
       showToast("Error connecting to conversation AI.");
-      setConvo((prev) => ({ ...prev, thinking: false, msgs: [{ who: 'p', n: "Error starting conversation.", en: "Error" }] }));
+      setConvo((prev) => ({ ...prev, thinking: false, msgs: [{ who: 'p', n: "The AI partner is unavailable right now — please go back and try again in a bit.", en: "Sorry!" }] }));
     }
   };
 
@@ -743,7 +739,7 @@ export default function App() {
     }));
 
     try {
-      const res = await fetch('/api/conversation', {
+      const res = await apiFetch('/api/conversation', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -789,7 +785,7 @@ export default function App() {
 
       // Log attempt to database
       if (authStatus === 'authenticated') {
-        await fetch('/api/attempt', {
+        await apiFetch('/api/attempt', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -809,172 +805,84 @@ export default function App() {
   };
 
   // Auth Submit
+  const [authBusy, setAuthBusy] = useState(false);
   const handleAuthSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (authBusy) return;
     setAuthError('');
-
-    if (authMode === 'signup') {
-      const res = await signIn('credentials', {
-        email: authEmail,
-        password: authPassword,
-        name: authName,
-        action: 'signup',
-        redirect: false,
-      });
-      if (res?.error) {
-        setAuthError(res.error);
-      } else {
+    setAuthBusy(true);
+    try {
+      if (authMode === 'signup') {
+        const err = await signup({
+          email: authEmail,
+          password: authPassword,
+          name: authName,
+          consent: authConsent,
+          ageConfirmed: authAge,
+        });
+        if (err) setAuthError(err);
         // New account — send them through goal-setting + the placement chat
         // instead of dropping them straight on home with zero onboarding.
-        setView('goals');
-      }
-    } else {
-      const res = await signIn('credentials', {
-        email: authEmail,
-        password: authPassword,
-        action: 'login',
-        redirect: false,
-      });
-      if (res?.error) {
-        setAuthError(res.error);
+        else setView('goals');
       } else {
-        setView('home');
+        const err = await login({ email: authEmail, password: authPassword });
+        if (err) setAuthError(err);
+        else setView('home');
       }
+    } finally {
+      setAuthBusy(false);
     }
   };
 
-  // Native (Android/iOS) purchase via RevenueCat — Play/App Store billing,
-  // required for a digital subscription bought from inside the app shell.
-  // Web keeps the existing Stripe/Razorpay checkout below since store billing
-  // policy only applies to purchases made from within the native app.
-  const handleNativePurchase = async () => {
-    try {
-      const { Purchases } = await import('@revenuecat/purchases-capacitor');
-      const offerings = await Purchases.getOfferings();
-      const pkg = offerings.current?.monthly ?? offerings.current?.availablePackages?.[0];
-      if (!pkg) {
-        showToast('Plus is not available right now — please try again shortly.');
-        return;
-      }
-
-      const { customerInfo } = await Purchases.purchasePackage({ aPackage: pkg });
-      if (!customerInfo.entitlements.active['plus']) {
-        showToast('Purchase did not activate Plus — please contact support.');
-        return;
-      }
-
-      // RevenueCat is the source of truth, not the client — re-verify server
-      // side before unlocking, then pull the refreshed plan into the session.
-      await fetch('/api/revenuecat/verify', { method: 'POST' });
-      await updateSession();
-      setView('paid');
-    } catch (e: any) {
-      if (e?.userCancelled) return; // user backed out of the native billing sheet
-      console.error('Native purchase failed', e);
-      showToast('Purchase failed — please try again.');
-    }
-  };
-
-  // Checkout Upgrade
-  const handleGoCheckout = async () => {
-    if (!PLUS_PURCHASES_ENABLED) {
-      showToast('Cadence Plus is coming soon — stay tuned!');
-      return;
-    }
-    try {
-      const { Capacitor } = await import('@capacitor/core');
-      if (Capacitor.isNativePlatform()) {
-        await handleNativePurchase();
-        return;
-      }
-    } catch {
-      // Not running inside the Capacitor shell — fall through to the web checkout below.
-    }
-
-    try {
-      const res = await fetch('/api/checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ provider: 'stripe' }), // default to Stripe
-      });
-      if (!res.ok) throw new Error('Checkout API failed');
-      const data = await res.json();
-      if (data.url) {
-        window.location.href = data.url;
-      }
-    } catch (e) {
-      console.error('Checkout failed', e);
-      showToast('Failed to start checkout process.');
-    }
-  };
-
-  // "Try Plus" entry point on the plans screen — on native, skip straight to
-  // the store billing sheet instead of showing the web-only fake-card screen.
-  const handleUpgradeClick = async () => {
-    if (!PLUS_PURCHASES_ENABLED) {
-      showToast('Cadence Plus is coming soon — stay tuned!');
-      return;
-    }
-    try {
-      const { Capacitor } = await import('@capacitor/core');
-      if (Capacitor.isNativePlatform()) {
-        await handleNativePurchase();
-        return;
-      }
-    } catch {
-      // Not running inside the Capacitor shell — fall through to the web flow.
-    }
-    setView('checkout');
-  };
-
-  // Invite a friend — real Web Share API where available, clipboard-copy fallback otherwise
+  // Invite a friend — native share sheet, with a clipboard fallback
   const handleInvite = async () => {
-    const shareData = {
-      title: 'Cadence',
-      text: `I'm learning ${L.name} on Cadence — come practice with me.`,
-      url: typeof window !== 'undefined' ? window.location.origin : 'https://cadence.buildc3.tech',
-    };
+    const text = `I'm learning ${L.name} on Cadence — come practice with me.`;
     try {
-      if (typeof navigator !== 'undefined' && navigator.share) {
-        await navigator.share(shareData);
-      } else if (typeof navigator !== 'undefined' && navigator.clipboard) {
-        await navigator.clipboard.writeText(`${shareData.text} ${shareData.url}`);
-        showToast('Invite link copied to clipboard.');
-      }
-    } catch (e) {
-      // User cancelled the native share sheet — not an error
+      const { Share } = await import('@capacitor/share');
+      await Share.share({ title: 'Cadence', text, url: APP_DOWNLOAD_URL, dialogTitle: 'Invite a friend' });
+    } catch {
+      // Share sheet cancelled, or unavailable — copy the invite instead.
+      try {
+        await navigator.clipboard.writeText(`${text} ${APP_DOWNLOAD_URL}`);
+        showToast('Invite link copied.');
+      } catch {}
     }
   };
 
-  // Data charter: export a copy of everything stored for this account
+  // DPDP right of access: hand the user a copy of everything stored for this
+  // account. Android WebViews can't download blobs, so the file is written to
+  // app storage and offered through the native share sheet (save to Files,
+  // Drive, email, …).
   const handleExportData = async () => {
     try {
-      const res = await fetch('/api/account');
+      const res = await apiFetch('/api/account');
       if (!res.ok) throw new Error('Export failed');
-      const data = await res.json();
-      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'cadence-data-export.json';
-      a.click();
-      URL.revokeObjectURL(url);
-    } catch (e) {
+      const json = JSON.stringify(await res.json(), null, 2);
+      const { Filesystem, Directory, Encoding } = await import('@capacitor/filesystem');
+      const { Share } = await import('@capacitor/share');
+      const file = await Filesystem.writeFile({
+        path: 'cadence-data-export.json',
+        data: json,
+        directory: Directory.Cache,
+        encoding: Encoding.UTF8,
+      });
+      await Share.share({ title: 'My Cadence data', files: [file.uri], dialogTitle: 'Save your data' });
+    } catch (e: any) {
+      if (String(e?.message || e).toLowerCase().includes('cancel')) return;
       console.error('Data export failed', e);
       showToast('Failed to export your data. Please try again.');
     }
   };
 
-  // Data charter: permanently delete the account and all associated data
+  // DPDP right to erasure (and withdrawal of consent): permanently delete the
+  // account and everything tied to it, and wipe what's stored on this device.
   const handleDeleteAccount = async () => {
     if (!window.confirm('Delete your account and all associated data? This cannot be undone.')) return;
     try {
-      const res = await fetch('/api/account', { method: 'DELETE' });
+      const res = await apiFetch('/api/account', { method: 'DELETE' });
       if (!res.ok) throw new Error('Delete failed');
-      localStorage.removeItem('cadence_view');
-      localStorage.removeItem('cadence_lang');
-      localStorage.removeItem('cadence_known_words');
-      await signOut({ redirect: false });
+      localStorage.clear();
+      await logout();
       setView('welcome');
     } catch (e) {
       console.error('Account deletion failed', e);
@@ -997,7 +905,7 @@ export default function App() {
     // was routing into them, so every chapter finish silently dumped straight
     // back to home with no payoff.
     try {
-      await fetch('/api/milestone', {
+      await apiFetch('/api/milestone', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ lang, milestone: milestoneKey }),
@@ -1055,43 +963,30 @@ export default function App() {
   });
 
   // Score data
+  const cefrOrder = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
   const scoreSkills = [
-    { label: "Vocabulary", val: "A1", pct: "15%" },
-    { label: "Grammar", val: "A1", pct: "10%" },
-    { label: "Pronunciation", val: "A1+", pct: "20%" },
-    { label: "Fluency", val: "B1", pct: "80%" }
+    { label: "Words saved", val: `${knownWords.size}`, pct: `${Math.min(100, knownWords.size)}%` },
+    { label: "Milestones earned", val: `${earnedMilestones.length}`, pct: `${Math.min(100, Math.round((earnedMilestones.length / 12) * 100))}%` },
+    { label: "CEFR progress", val: level, pct: `${Math.round(((Math.max(0, cefrOrder.indexOf(level.replace('+', ''))) + 1) / cefrOrder.length) * 100)}%` },
   ];
-  // Share data — real per-platform share links, no dead buttons
+  // Share data — opens the phone's own share sheet (WhatsApp, Messages, etc.)
   const shareMessage = `I just reached ${level} in ${L.name} on Cadence!`;
-  const shareUrl = typeof window !== 'undefined' ? window.location.origin : 'https://cadence.buildc3.tech';
-  const shareTargets = [
-    { bg: "#25D366", icon: "💬", label: "WhatsApp", href: `https://wa.me/?text=${encodeURIComponent(`${shareMessage} ${shareUrl}`)}` },
-    { bg: "#000000", icon: "𝕏", label: "X (Twitter)", href: `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareMessage)}&url=${encodeURIComponent(shareUrl)}` },
-    { bg: "#E1306C", icon: "📷", label: "Instagram", href: null }, // no web share-intent for Instagram; falls back to clipboard copy
-    { bg: "#0077B5", icon: "in", label: "LinkedIn", href: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}` },
-    { bg: "#0A7CFF", icon: "✉", label: "Messages", href: `sms:?body=${encodeURIComponent(`${shareMessage} ${shareUrl}`)}` }
-  ];
+  const handleShareWin = async () => {
+    try {
+      const { Share } = await import('@capacitor/share');
+      await Share.share({ title: 'Cadence', text: shareMessage, url: APP_DOWNLOAD_URL, dialogTitle: 'Share your win' });
+    } catch {
+      try {
+        await navigator.clipboard.writeText(`${shareMessage} ${APP_DOWNLOAD_URL}`);
+        showToast('Copied to clipboard.');
+      } catch {}
+    }
+  };
 
   // Social data — no friends system yet, so this only ever shows the
   // signed-in user themselves. No fabricated names/activity/rankings.
   const circle = [
-    { bg: "#2A2320", bd: "1px solid #433833", avatar: "#DB5338", initial: (session?.user?.name || "Y")[0].toUpperCase(), name: `${session?.user?.name || "You"} (You)` },
-  ];
-
-  // Notifications data
-  const notifList = [
-    { label: "Daily study reminder", caption: "A gentle nudge at your preferred time", track: notif.daily ? "#46C46E" : "#E1D6C4", justify: notif.daily ? "flex-end" : "flex-start", toggle: () => setNotif({ ...notif, daily: !notif.daily }) },
-    { label: "Friend updates", caption: "When someone in your circle levels up", track: notif.friends ? "#46C46E" : "#E1D6C4", justify: notif.friends ? "flex-end" : "flex-start", toggle: () => setNotif({ ...notif, friends: !notif.friends }) },
-    { label: "AI feedback ready", caption: "When an assessment completes in background", track: notif.feedback ? "#46C46E" : "#E1D6C4", justify: notif.feedback ? "flex-end" : "flex-start", toggle: () => setNotif({ ...notif, feedback: !notif.feedback }) },
-    { label: "Native corrections", caption: "When a human tutor reviews your audio", track: notif.corrections ? "#46C46E" : "#E1D6C4", justify: notif.corrections ? "flex-end" : "flex-start", toggle: () => setNotif({ ...notif, corrections: !notif.corrections }) },
-    { label: "New content", caption: "New podcast episodes or stories added", track: notif.content ? "#46C46E" : "#E1D6C4", justify: notif.content ? "flex-end" : "flex-start", toggle: () => setNotif({ ...notif, content: !notif.content }) }
-  ];
-
-  // Charter data
-  const charterToggles = [
-    { label: "Share usage data", caption: "Help us improve Cadence anonymously", track: charter.usage ? "#2F8F83" : "#E1D6C4", justify: charter.usage ? "flex-end" : "flex-start", toggle: () => setCharter({ ...charter, usage: !charter.usage }) },
-    { label: "Personalize AI with my history", caption: "Let the AI reference past chats", track: charter.ai ? "#2F8F83" : "#E1D6C4", justify: charter.ai ? "flex-end" : "flex-start", toggle: () => setCharter({ ...charter, ai: !charter.ai }) },
-    { label: "Opt-in to voice model training", caption: "Use my clips to improve speech recognition", track: charter.voice ? "#2F8F83" : "#E1D6C4", justify: charter.voice ? "flex-end" : "flex-start", toggle: () => setCharter({ ...charter, voice: !charter.voice }) }
+    { bg: "#2A2320", bd: "1px solid #433833", avatar: "#DB5338", initial: (user?.name || "Y")[0].toUpperCase(), name: `${user?.name || "You"} (You)` },
   ];
 
   // LevelDetail data
@@ -1104,12 +999,42 @@ export default function App() {
   ];
 
   // Audio lines data
-  const audioLines = [
-    { native: "¿Qué vas a pedir?", en: "What are you going to order?", isPartner: "#DB5338", say: () => {} },
-    { native: "Creo que quiero un café.", en: "I think I want a coffee.", isPartner: "rgba(255,255,255,.15)", say: () => {} },
-    { native: "¿Y para comer?", en: "And to eat?", isPartner: "#DB5338", say: () => {} },
-    { native: "Un cruasán, por favor.", en: "A croissant, please.", isPartner: "rgba(255,255,255,.15)", say: () => {} }
-  ];
+  // Shadowing lines come from the selected language's own sample conversation.
+  const audioLines = ((LANGS[lang] || LANGS.es).chapters?.[0]?.convo || []).map((c: any) => ({
+    native: c.n as string,
+    en: (c.en || c.fb || '') as string,
+    isPartner: c.who === 'p' ? '#DB5338' : 'rgba(255,255,255,.15)',
+  }));
+  const [audioIdx, setAudioIdx] = useState(-1);
+  const audioRun = useRef(0);
+  const toggleShadowing = async () => {
+    if (audioPlaying) {
+      audioRun.current++;
+      stopSpeaking();
+      setAudioPlaying(false);
+      return;
+    }
+    const run = ++audioRun.current;
+    setAudioPlaying(true);
+    for (let i = audioIdx >= audioLines.length - 1 ? 0 : Math.max(0, audioIdx); i < audioLines.length; i++) {
+      if (audioRun.current !== run) return;
+      setAudioIdx(i);
+      await speak(audioLines[i].native, LANGS[lang]?.locale || 'es-ES');
+    }
+    if (audioRun.current === run) {
+      setAudioPlaying(false);
+      setAudioIdx(-1);
+    }
+  };
+  // Never keep talking after the user leaves the screen.
+  useEffect(() => {
+    if (view !== 'audio' && view !== 'reader' && view !== 'convo') {
+      audioRun.current++;
+      stopSpeaking();
+      setAudioPlaying(false);
+      setAudioIdx(-1);
+    }
+  }, [view]);
 
   // Curriculum Chapters Array
   const defaultIcons = ['☕', '🗺', '❤', '🏨', '🛒', '🚨'];
@@ -1155,35 +1080,6 @@ export default function App() {
         <div className="cd-phone-shell" style={{ position: 'absolute', inset: 0, background: '#1c1714', borderRadius: '46px', padding: '12px', boxShadow: '0 36px 70px -24px rgba(40,30,20,.55)' }}></div>
         <div className="cd-phone-inner" style={{ position: 'absolute', top: '12px', left: '12px', right: '12px', bottom: '12px', background: view === 'complete' ? '#2F8F83' : (view === 'convo' || view === 'review' ? '#241C2A' : '#FBF6EE'), borderRadius: '34px', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
 
-          {/* PWA Install Prompt */}
-          {showInstallPrompt && (
-            <div style={{ position: 'absolute', bottom: (view === 'welcome' || view === 'auth' || view === 'plans' || view === 'lesson' || view === 'convo') ? '24px' : '90px', left: '12px', right: '12px', zIndex: 9999, background: '#fff', borderRadius: '20px', padding: '16px', boxShadow: '0 12px 40px rgba(42,35,32,0.18)', display: 'flex', alignItems: 'center', gap: '12px', border: '1px solid #EDE4D6' }}>
-              <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: 'linear-gradient(140deg,#DB5338,#B23E27)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: '24px', flexShrink: 0, fontFamily: "'Instrument Serif', serif", fontStyle: 'italic', paddingRight: '2px' }}>C</div>
-              <div style={{ flex: 1 }}>
-                <div style={{ fontSize: '14.5px', fontWeight: 600, color: '#2A2320' }}>Install Cadence</div>
-                <div style={{ fontSize: '11px', color: '#8A7E73', marginTop: '2px', lineHeight: 1.25 }}>Get the full, fast native experience on your home screen.</div>
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                <div onClick={async () => {
-                  if (deferredPrompt) {
-                    deferredPrompt.prompt();
-                    const { outcome } = await deferredPrompt.userChoice;
-                    if (outcome === 'accepted') {
-                      setDeferredPrompt(null);
-                      setShowInstallPrompt(false);
-                    }
-                  } else if (!isIosStandalone) {
-                    alert('To install on iOS: Tap the Share button below, then select "Add to Home Screen".');
-                  }
-                }} style={{ background: '#2F8F83', color: '#fff', padding: '6px 14px', borderRadius: '99px', fontSize: '12px', fontWeight: 600, cursor: 'pointer', textAlign: 'center' }}>Install</div>
-                <div onClick={() => {
-                  localStorage.setItem('cadence_install_dismissed', 'true');
-                  setShowInstallPrompt(false);
-                }} style={{ color: '#9A8E84', padding: '4px 14px', fontSize: '11px', cursor: 'pointer', textAlign: 'center' }}>Not now</div>
-              </div>
-            </div>
-          )}
-
           {/* STATUS BAR */}
           <div className="cd-status-bar" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 24px 0', fontSize: '12px', fontWeight: 600, flex: 'none', zIndex: 5, color: (view === 'complete' || view === 'convo' || view === 'review') ? '#F3ECE2' : '#2A2320' }}>
             <span>9:41</span><span>●●● ◔</span>
@@ -1211,7 +1107,7 @@ export default function App() {
                   Choose your language
                 </div>
                 <div onClick={() => { setView('auth'); setAuthMode('login'); }} style={{ textAlign: 'center', fontSize: '14px', color: '#8A7E73', cursor: 'pointer' }}>
-                  I already have an account {session ? '(Welcome back!)' : ''}
+                  I already have an account
                 </div>
               </div>
             </div>
@@ -1632,7 +1528,7 @@ export default function App() {
           {view === 'lesson' && (
             <div className="cd-screen" style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 22px 0', flex: 'none' }}>
-                <span onClick={() => setView('home')} style={{ fontSize: '18px', color: '#B5A99E', cursor: 'pointer' }}>✕</span>
+                <span onClick={() => setView('home')} style={{ fontSize: '18px', color: '#B5A99E', cursor: 'pointer', padding: '14px 18px', margin: '-14px -18px' }}>✕</span>
                 <div style={{ flex: 1, height: '7px', background: '#EDE4D6', borderRadius: '99px', overflow: 'hidden' }}>
                   <div style={{ width: '45%', height: '100%', background: '#2F8F83', borderRadius: '99px' }}></div>
                 </div>
@@ -1729,7 +1625,7 @@ export default function App() {
           {view === 'pronounce' && (
             <div className="cd-screen" style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 22px 0', flex: 'none' }}>
-                <span onClick={() => setView('lesson')} style={{ fontSize: '18px', color: '#B5A99E', cursor: 'pointer' }}>✕</span>
+                <span onClick={() => setView('lesson')} style={{ fontSize: '18px', color: '#B5A99E', cursor: 'pointer', padding: '14px 18px', margin: '-14px -18px' }}>✕</span>
                 <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: '20px' }}>Pronunciation Lab</div>
               </div>
               <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: '0 24px', textAlign: 'center' }}>
@@ -1832,7 +1728,7 @@ export default function App() {
           {view === 'culture' && (
             <div className="cd-screen" style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 22px 0', flex: 'none' }}>
-                <span onClick={() => setView('home')} style={{ fontSize: '18px', color: '#B5A99E', cursor: 'pointer' }}>✕</span>
+                <span onClick={() => setView('home')} style={{ fontSize: '18px', color: '#B5A99E', cursor: 'pointer', padding: '14px 18px', margin: '-14px -18px' }}>✕</span>
                 <div style={{ flex: 1, height: '7px', background: '#EDE4D6', borderRadius: '99px', overflow: 'hidden' }}>
                   <div style={{ width: '75%', height: '100%', background: '#2F8F83', borderRadius: '99px' }}></div>
                 </div>
@@ -1872,16 +1768,16 @@ export default function App() {
               </div>
               <div style={{ padding: '0 26px', display: 'flex', gap: '10px', marginBottom: '20px' }}>
                 <div style={{ flex: 1, background: 'rgba(255,255,255,.13)', borderRadius: '14px', padding: '13px', textAlign: 'center' }}>
-                  <div style={{ fontSize: '21px', fontWeight: 700 }}>8</div>
-                  <div style={{ fontSize: '11px', opacity: .8 }}>new words</div>
+                  <div style={{ fontSize: '21px', fontWeight: 700 }}>{knownWords.size}</div>
+                  <div style={{ fontSize: '11px', opacity: .8 }}>words saved</div>
                 </div>
                 <div style={{ flex: 1, background: 'rgba(255,255,255,.13)', borderRadius: '14px', padding: '13px', textAlign: 'center' }}>
-                  <div style={{ fontSize: '21px', fontWeight: 700 }}>92%</div>
-                  <div style={{ fontSize: '11px', opacity: .8 }}>pronunciation</div>
+                  <div style={{ fontSize: '21px', fontWeight: 700 }}>{earnedMilestones.length}</div>
+                  <div style={{ fontSize: '11px', opacity: .8 }}>milestones</div>
                 </div>
                 <div style={{ flex: 1, background: 'rgba(255,255,255,.13)', borderRadius: '14px', padding: '13px', textAlign: 'center' }}>
-                  <div style={{ fontSize: '21px', fontWeight: 700 }}>4m</div>
-                  <div style={{ fontSize: '11px', opacity: .8 }}>today</div>
+                  <div style={{ fontSize: '21px', fontWeight: 700 }}>{level}</div>
+                  <div style={{ fontSize: '11px', opacity: .8 }}>level</div>
                 </div>
               </div>
               <div style={{ padding: '0 26px 30px' }}>
@@ -2147,7 +2043,7 @@ export default function App() {
           {view === 'reader' && activeImmerseItem && (
             <div className="cd-screen" style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 20px 12px', borderBottom: '1px solid #EDE4D6', flex: 'none' }}>
-                <span onClick={() => { setView('immerse'); setActiveImmerseItem(null); setPop(null); }} style={{ fontSize: '18px', color: '#B5A99E', cursor: 'pointer' }}>‹</span>
+                <span onClick={() => { setView('immerse'); setActiveImmerseItem(null); setPop(null); }} style={{ fontSize: '18px', color: '#B5A99E', cursor: 'pointer', padding: '14px 18px', margin: '-14px -18px' }}>‹</span>
                 <span style={{ fontSize: '12.5px', fontWeight: 600, color: '#8A7E73' }}>{activeImmerseItem.type} · {activeImmerseItem.duration} · {activeImmerseItem.level}</span>
                 <span onClick={() => speak(activeImmerseItem.text, L.locale)} style={{ fontSize: '15px', color: '#B5A99E', cursor: 'pointer' }}>🔊 Play</span>
               </div>
@@ -2155,11 +2051,11 @@ export default function App() {
                 <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: '25px', lineHeight: 1.12, marginBottom: '4px' }} className={L.font}>{activeImmerseItem.title}</div>
                 <div style={{ fontSize: '14px', color: '#B5A99E', marginBottom: '16px' }}>{activeImmerseItem.englishTitle}</div>
                 <div style={{ fontSize: '16.5px', lineHeight: 1.85, color: '#33291F', whiteSpace: 'pre-wrap' }} className={L.font}>
-                  {activeImmerseItem.text.split(/([ \n,.]+)/).map((seg: string, idx: number) => {
-                    const isWord = /^[\\p{L}]+$/u.test(seg);
+                  {activeImmerseItem.text.split(/([^\p{L}\p{M}]+)/u).map((seg: string, idx: number) => {
+                    const isWord = /^[\p{L}\p{M}]+$/u.test(seg);
                     const isKnown = knownWords.has(seg.toLowerCase());
                     return isWord ? (
-                      <span key={idx} onClick={() => setPop({ term: seg, def: 'Translate or mark known' })} style={{ background: isKnown ? 'transparent' : '#FBE3D9', borderBottom: isKnown ? 'none' : '2px solid #DB5338', borderRadius: '3px', padding: '0 2px', cursor: 'pointer' }}>
+                      <span key={idx} onClick={() => setPop({ term: seg, def: 'Tap 🔊 to hear it, or save it to your words.' })} style={{ background: isKnown ? 'transparent' : '#FBE3D9', borderBottom: isKnown ? 'none' : '2px solid #DB5338', borderRadius: '3px', padding: '0 2px', cursor: 'pointer' }}>
                         {seg}
                       </span>
                     ) : (
@@ -2182,13 +2078,7 @@ export default function App() {
                 </div>
               )}
               <div style={{ padding: '14px 22px 24px', flex: 'none', display: 'flex', alignItems: 'center', gap: '11px' }}>
-                <div style={{ width: '46px', height: '46px', borderRadius: '50%', background: '#2F8F83', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: '16px', flexShrink: 0 }}>▶</div>
-                <div style={{ flex: 1 }}>
-                  <div style={{ height: '5px', background: '#EDE4D6', borderRadius: '99px', overflow: 'hidden' }}>
-                    <div style={{ width: '38%', height: '100%', background: '#2F8F83' }}></div>
-                  </div>
-                  <div style={{ fontSize: '11px', color: '#9A8E84', marginTop: '5px' }}>Listen along · 0:42 / 1:50</div>
-                </div>
+                <div onClick={() => speak(activeImmerseItem.text, L.locale)} style={{ flex: 1, background: '#2F8F83', color: '#fff', borderRadius: '14px', padding: '14px', textAlign: 'center', fontSize: '15px', fontWeight: 600, cursor: 'pointer' }}>▶ Listen along</div>
               </div>
             </div>
           )}
@@ -2197,7 +2087,7 @@ export default function App() {
           {view === 'smartplan' && (
             <div className="cd-screen" style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 20px', borderBottom: '1px solid #EDE4D6', flex: 'none' }}>
-                <span onClick={() => setView('home')} style={{ fontSize: '18px', color: '#B5A99E', cursor: 'pointer' }}>‹</span>
+                <span onClick={() => setView('home')} style={{ fontSize: '18px', color: '#B5A99E', cursor: 'pointer', padding: '14px 18px', margin: '-14px -18px' }}>‹</span>
                 <span style={{ fontSize: '14px', fontWeight: 600 }}>Adaptive Smart Plan</span>
                 <span style={{ fontSize: '15px', color: 'transparent' }}>Aa</span>
               </div>
@@ -2320,10 +2210,10 @@ export default function App() {
                   <div style={{ fontSize: '13px', fontWeight: 600 }}>My words</div>
                   <div style={{ fontSize: '11px', opacity: 0.7 }}>SRS card deck</div>
                 </div>
-                <div onClick={handleGoCheckout} style={{ flex: 1, background: userPlan === 'plus' ? '#2F8F83' : '#DB5338', color: '#FBF6EE', borderRadius: '14px', padding: '13px 14px', cursor: 'pointer' }}>
+                <div onClick={() => setView('achievements')} style={{ flex: 1, background: '#2F8F83', color: '#FBF6EE', borderRadius: '14px', padding: '13px 14px', cursor: 'pointer' }}>
                   <div style={{ fontSize: '20px', marginBottom: '6px' }}>★</div>
-                  <div style={{ fontSize: '13px', fontWeight: 600 }}>{userPlan === 'plus' ? 'Plus Active' : 'Get Plus'}</div>
-                  <div style={{ fontSize: '11px', opacity: 0.7 }}>{userPlan === 'plus' ? 'All features unlocked' : 'Real voice AI & scoring'}</div>
+                  <div style={{ fontSize: '13px', fontWeight: 600 }}>Milestones</div>
+                  <div style={{ fontSize: '11px', opacity: 0.7 }}>Your real-world badges</div>
                 </div>
               </div>
             </div>
@@ -2333,7 +2223,7 @@ export default function App() {
           {view === 'deck' && (
             <div className="cd-screen" style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 20px', borderBottom: '1px solid #EDE4D6', flex: 'none' }}>
-                <span onClick={() => setView('you')} style={{ fontSize: '18px', color: '#B5A99E', cursor: 'pointer' }}>‹</span>
+                <span onClick={() => setView('you')} style={{ fontSize: '18px', color: '#B5A99E', cursor: 'pointer', padding: '14px 18px', margin: '-14px -18px' }}>‹</span>
                 <span style={{ fontSize: '14px', fontWeight: 600 }}>Vocabulary Deck (FSRS)</span>
                 <span style={{ fontSize: '15px', color: 'transparent' }}>Aa</span>
               </div>
@@ -2363,7 +2253,7 @@ export default function App() {
           {view === 'journey' && (
             <div className="cd-screen" style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 20px', borderBottom: '1px solid #EDE4D6', flex: 'none' }}>
-                <span onClick={() => setView('you')} style={{ fontSize: '18px', color: '#B5A99E', cursor: 'pointer' }}>‹</span>
+                <span onClick={() => setView('you')} style={{ fontSize: '18px', color: '#B5A99E', cursor: 'pointer', padding: '14px 18px', margin: '-14px -18px' }}>‹</span>
                 <span style={{ fontSize: '14px', fontWeight: 600 }}>CEFR Fluency Climb</span>
                 <span style={{ fontSize: '15px', color: 'transparent' }}>Aa</span>
               </div>
@@ -2413,18 +2303,18 @@ export default function App() {
           {view === 'settings' && (
             <div className="cd-screen" style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 20px', borderBottom: '1px solid #EDE4D6', flex: 'none' }}>
-                <span onClick={() => setView('you')} style={{ fontSize: '18px', color: '#B5A99E', cursor: 'pointer' }}>‹</span>
+                <span onClick={() => setView('you')} style={{ fontSize: '18px', color: '#B5A99E', cursor: 'pointer', padding: '14px 18px', margin: '-14px -18px' }}>‹</span>
                 <span style={{ fontSize: '14px', fontWeight: 600 }}>Settings</span>
                 <span style={{ fontSize: '15px', color: 'transparent' }}>Aa</span>
               </div>
               <div className="cd-scroll" style={{ flex: 1, overflowY: 'auto', padding: '18px 24px' }}>
                 <div style={{ marginBottom: '24px' }}>
                   <div style={{ fontSize: '11px', letterSpacing: '.08em', textTransform: 'uppercase', color: '#BFA38C', marginBottom: '12px' }}>Profile</div>
-                  {session ? (
+                  {user ? (
                     <div style={{ background: '#fff', border: '1px solid #EDE4D6', borderRadius: '14px', padding: '16px' }}>
-                      <div style={{ fontSize: '15px', fontWeight: 600 }}>{session.user?.name}</div>
-                      <div style={{ fontSize: '12.5px', color: '#8A7E73' }}>{session.user?.email}</div>
-                      <div onClick={() => signOut()} style={{ color: '#DB5338', fontSize: '13px', marginTop: '12px', cursor: 'pointer', fontWeight: 600 }}>Log out</div>
+                      <div style={{ fontSize: '15px', fontWeight: 600 }}>{user.name}</div>
+                      <div style={{ fontSize: '12.5px', color: '#8A7E73' }}>{user.email}</div>
+                      <div onClick={async () => { await logout(); setView('welcome'); }} style={{ color: '#DB5338', fontSize: '13px', marginTop: '12px', cursor: 'pointer', fontWeight: 600 }}>Log out</div>
                     </div>
                   ) : (
                     <div onClick={() => setView('auth')} style={{ background: '#DB5338', color: '#FBF6EE', borderRadius: '12px', padding: '12px', textAlign: 'center', fontSize: '14px', fontWeight: 600, cursor: 'pointer' }}>
@@ -2488,7 +2378,7 @@ export default function App() {
             <div className="cd-screen" style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
               {/* Back arrow */}
               <div style={{ display: 'flex', alignItems: 'center', padding: '12px 22px 0', flex: 'none' }}>
-                <span onClick={() => setView('welcome')} style={{ fontSize: '18px', color: '#B5A99E', cursor: 'pointer' }}>‹</span>
+                <span onClick={() => setView('welcome')} style={{ fontSize: '18px', color: '#B5A99E', cursor: 'pointer', padding: '14px 18px', margin: '-14px -18px' }}>‹</span>
               </div>
 
               {/* Scrollable body */}
@@ -2504,23 +2394,6 @@ export default function App() {
                 </div>
                 <div style={{ fontSize: '13.5px', color: '#8A7E73', marginBottom: '22px' }}>
                   {authMode === 'signup' ? 'Save your progress across every device.' : 'Pick up right where you left off.'}
-                </div>
-
-                {/* OAuth buttons */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '18px' }}>
-                  <div onClick={() => googleEnabled ? signIn('google') : showToast('Google sign-in is not configured yet.')} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', background: '#fff', border: '1px solid #E1D6C4', borderRadius: '13px', padding: '13px', fontSize: '14px', fontWeight: 600, cursor: 'pointer', opacity: googleEnabled ? 1 : 0.6 }}>
-                    <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.8 2.4 30.3 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.9 6.1C12.4 13.6 17.7 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.7c-.6 3-2.3 5.4-4.8 7.1l7.6 5.9c4.4-4.1 7-10.1 7-17.5z"/><path fill="#FBBC05" d="M10.5 28.7c-.5-1.5-.8-3-.8-4.7s.3-3.2.8-4.7l-7.9-6.1C.9 16.5 0 20.1 0 24s.9 7.5 2.6 10.8l7.9-6.1z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.6-5.9c-2.1 1.4-4.9 2.3-8.3 2.3-6.3 0-11.6-4.1-13.5-9.8l-7.9 6.1C6.5 42.6 14.6 48 24 48z"/></svg> Continue with Google
-                  </div>
-                  <div onClick={() => showToast('Apple Sign-In is coming soon.')} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', background: '#2A2320', color: '#FBF6EE', borderRadius: '13px', padding: '13px', fontSize: '14px', fontWeight: 600, cursor: 'pointer', opacity: 0.6 }}>
-                    <svg width="16" height="18" viewBox="0 0 384 512" aria-hidden="true" fill="currentColor"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/></svg> Continue with Apple
-                  </div>
-                </div>
-
-                {/* Divider */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '18px' }}>
-                  <div style={{ flex: 1, height: '1px', background: '#E7DECF' }}></div>
-                  <span style={{ fontSize: '11.5px', color: '#A8927C' }}>or with email</span>
-                  <div style={{ flex: 1, height: '1px', background: '#E7DECF' }}></div>
                 </div>
 
                 {/* Email form fields */}
@@ -2564,23 +2437,34 @@ export default function App() {
                     />
                   </div>
 
+
+                  {authMode === 'signup' && (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '4px' }}>
+                  <div onClick={() => setAuthConsent(!authConsent)} role="checkbox" aria-checked={authConsent} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', cursor: 'pointer', padding: '4px 2px' }}>
+                    <div style={{ width: '22px', height: '22px', flex: 'none', borderRadius: '7px', border: authConsent ? 'none' : '1.5px solid #CBBBA6', background: authConsent ? '#DB5338' : '#fff', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px', marginTop: '1px' }}>{authConsent ? '✓' : ''}</div>
+                    <div style={{ fontSize: '12.5px', color: '#5C5048', lineHeight: 1.45 }}>I agree to the processing of my personal data, including my voice recordings, as described in the <a href="/privacy/" onClick={(e) => e.stopPropagation()} style={{ color: '#DB5338', fontWeight: 600 }}>Privacy Notice</a>, and to the <a href="/terms/" onClick={(e) => e.stopPropagation()} style={{ color: '#DB5338', fontWeight: 600 }}>Terms</a>.</div>
+                  </div>
+                  <div onClick={() => setAuthAge(!authAge)} role="checkbox" aria-checked={authAge} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', cursor: 'pointer', padding: '4px 2px' }}>
+                    <div style={{ width: '22px', height: '22px', flex: 'none', borderRadius: '7px', border: authAge ? 'none' : '1.5px solid #CBBBA6', background: authAge ? '#DB5338' : '#fff', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px', marginTop: '1px' }}>{authAge ? '✓' : ''}</div>
+                    <div style={{ fontSize: '12.5px', color: '#5C5048', lineHeight: 1.45 }}>I am 18 or older, or I have my parent or guardian's consent to use Cadence.</div>
+                  </div>
+                    </div>
+                  )}
+
                   {authError && <div style={{ color: '#B23E27', fontSize: '12.5px' }}>{authError}</div>}
                 </form>
               </div>
 
               {/* Fixed bottom CTA area */}
               <div style={{ padding: '16px 28px 22px', flex: 'none' }}>
-                <button type="submit" form="auth-form" style={{ width: '100%', background: '#DB5338', color: '#FBF6EE', border: 'none', borderRadius: '14px', padding: '15px', textAlign: 'center', fontSize: '15px', fontWeight: 600, cursor: 'pointer', marginBottom: '12px' }}>
-                  {authMode === 'signup' ? 'Create account' : 'Log in'}
+                <button type="submit" form="auth-form" disabled={authBusy || (authMode === 'signup' && !(authConsent && authAge))} style={{ width: '100%', opacity: authBusy || (authMode === 'signup' && !(authConsent && authAge)) ? 0.5 : 1, background: '#DB5338', color: '#FBF6EE', border: 'none', borderRadius: '14px', padding: '15px', textAlign: 'center', fontSize: '15px', fontWeight: 600, cursor: 'pointer', marginBottom: '12px' }}>
+                  {authBusy ? 'Please wait…' : authMode === 'signup' ? 'Create account' : 'Log in'}
                 </button>
                 <div style={{ textAlign: 'center', fontSize: '13px', color: '#8A7E73' }}>
                   {authMode === 'signup' ? 'Already learning with us? ' : 'New to Cadence? '}
                   <span onClick={() => setAuthMode(authMode === 'signup' ? 'login' : 'signup')} style={{ color: '#DB5338', fontWeight: 600, cursor: 'pointer' }}>
                     {authMode === 'signup' ? 'Log in' : 'Sign up'}
                   </span>
-                </div>
-                <div style={{ textAlign: 'center', fontSize: '10.5px', color: '#B5A99E', marginTop: '14px', lineHeight: 1.5 }}>
-                  By continuing you agree to our <a href="/terms" target="_blank" style={{ color: '#DB5338', textDecoration: 'none' }}>Terms</a> & <a href="/privacy" target="_blank" style={{ color: '#DB5338', textDecoration: 'none' }}>Privacy</a>. We never sell your data.
                 </div>
               </div>
             </div>
@@ -2590,7 +2474,7 @@ export default function App() {
           {view === 'score' && (
             <div className="cd-screen" style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 22px 6px', flex: 'none' }}>
-                <span onClick={() => setView('you')} style={{ fontSize: '18px', color: '#B5A99E', cursor: 'pointer' }}>‹</span>
+                <span onClick={() => setView('you')} style={{ fontSize: '18px', color: '#B5A99E', cursor: 'pointer', padding: '14px 18px', margin: '-14px -18px' }}>‹</span>
                 <span style={{ fontSize: '12.5px', fontWeight: 600, color: '#8A7E73' }}>Fluency proof</span>
                 <span style={{ width: '18px' }}></span>
               </div>
@@ -2653,33 +2537,15 @@ export default function App() {
                     <span style={{ fontSize: '14px', fontWeight: 600 }}>Cadence</span>
                   </div>
                   <div style={{ fontSize: '11px', letterSpacing: '.1em', textTransform: 'uppercase', opacity: .8, marginBottom: '12px' }}>New milestone · {L.name}</div>
-                  <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: '32px', lineHeight: 1.08, marginBottom: '20px' }}>Reached B1 Fluency</div>
+                  <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: '32px', lineHeight: 1.08, marginBottom: '20px' }}>{level} in {L.name}</div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', opacity: .9 }}><span style={{ fontSize: '16px' }}>☕</span><span>A real thing I can do now — not a streak number.</span></div>
-                  <div style={{ marginTop: '22px', display: 'flex', gap: '14px', fontSize: '12px', opacity: .85 }}><span>🌱 12-day rhythm</span><span>◇ 14 conversations</span></div>
+                  <div style={{ marginTop: '22px', display: 'flex', gap: '14px', fontSize: '12px', opacity: .85 }}><span>★ {earnedMilestones.length} milestones</span><span>◇ {knownWords.size} words</span></div>
                 </div>
                 <div style={{ textAlign: 'center', fontSize: '12px', color: '#9A8E84', marginTop: '14px' }}>Brag about a <em style={{ fontFamily: "'Instrument Serif', serif", color: '#E1A23A' }}>skill</em>, not a streak.</div>
               </div>
               <div style={{ padding: '8px 26px 30px', flex: 'none' }}>
-                <div style={{ display: 'flex', justifyContent: 'center', gap: '14px', marginBottom: '18px' }}>
-                  {shareTargets.map((t, i) => (
-                    <div
-                      key={i}
-                      onClick={async () => {
-                        if (t.href) {
-                          window.open(t.href, '_blank', 'noopener,noreferrer');
-                        } else if (navigator.clipboard) {
-                          await navigator.clipboard.writeText(`${shareMessage} ${shareUrl}`);
-                          showToast(`Copied — paste it into ${t.label}.`);
-                        }
-                      }}
-                      style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px', cursor: 'pointer' }}
-                    >
-                      <div style={{ width: '50px', height: '50px', borderRadius: '50%', background: t.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px', color: '#fff' }}>{t.icon}</div>
-                      <span style={{ fontSize: '10.5px', color: '#9A8E84' }}>{t.label}</span>
-                    </div>
-                  ))}
-                </div>
-                <div onClick={() => setView('you')} style={{ background: '#FBF6EE', color: '#2A2320', borderRadius: '14px', padding: '14px', textAlign: 'center', fontSize: '15px', fontWeight: 600, cursor: 'pointer' }}>Save image to share later</div>
+                <div onClick={handleShareWin} style={{ background: '#DB5338', color: '#FBF6EE', borderRadius: '14px', padding: '14px', textAlign: 'center', fontSize: '15px', fontWeight: 600, cursor: 'pointer', marginBottom: '12px' }}>Share…</div>
+                <div onClick={() => setView('you')} style={{ background: '#FBF6EE', color: '#2A2320', borderRadius: '14px', padding: '14px', textAlign: 'center', fontSize: '15px', fontWeight: 600, cursor: 'pointer' }}>Done</div>
               </div>
             </div>
           )}
@@ -2688,7 +2554,7 @@ export default function App() {
           {view === 'achievements' && (
             <div className="cd-screen" style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 22px 6px', flex: 'none' }}>
-                <span onClick={() => setView('you')} style={{ fontSize: '18px', color: '#B5A99E', cursor: 'pointer' }}>‹</span>
+                <span onClick={() => setView('you')} style={{ fontSize: '18px', color: '#B5A99E', cursor: 'pointer', padding: '14px 18px', margin: '-14px -18px' }}>‹</span>
                 <span style={{ fontSize: '12.5px', fontWeight: 600, color: '#8A7E73' }}>Achievements</span>
                 <span style={{ width: '18px' }}></span>
               </div>
@@ -2714,7 +2580,7 @@ export default function App() {
           {view === 'levelDetail' && (
             <div className="cd-screen" style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 22px 6px', flex: 'none' }}>
-                <span onClick={() => setView('journey')} style={{ fontSize: '18px', color: '#B5A99E', cursor: 'pointer' }}>‹</span>
+                <span onClick={() => setView('journey')} style={{ fontSize: '18px', color: '#B5A99E', cursor: 'pointer', padding: '14px 18px', margin: '-14px -18px' }}>‹</span>
                 <span style={{ fontSize: '12.5px', fontWeight: 600, color: '#8A7E73' }}>A1 · Everyday life</span>
                 <span style={{ width: '18px' }}></span>
               </div>
@@ -2745,109 +2611,6 @@ export default function App() {
                     ))}
                   </div>
                 ))}
-              </div>
-            </div>
-          )}
-
-          {/* ===== PLANS ===== */}
-          {view === 'plans' && (
-            <div className="cd-screen" style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 22px 0', flex: 'none' }}>
-                <span onClick={() => setView('you')} style={{ fontSize: '18px', color: '#B5A99E', cursor: 'pointer' }}>✕</span>
-              </div>
-              <div className="cd-scroll" style={{ flex: 1, overflowY: 'auto', padding: '8px 18px 0' }}>
-                <div style={{ textAlign: 'center', padding: '6px 6px 0' }}>
-                  <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: '28px', lineHeight: 1.05 }}>Conversation is free.<br /><span style={{ fontStyle: 'italic', color: '#DB5338' }}>Always.</span></div>
-                  <div style={{ fontSize: '13px', color: '#8A7E73', marginTop: '6px' }}>Plus adds depth — never the basics.</div>
-                </div>
-                <div style={{ padding: '18px 0 0' }}>
-                  <div style={{ background: '#fff', border: '1px solid #EDE4D6', borderRadius: '16px', padding: '15px 16px', marginBottom: '12px' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-                      <div style={{ fontSize: '15px', fontWeight: 700 }}>Free</div>
-                      <div style={{ fontSize: '12px', color: '#2F8F83', fontWeight: 600 }}>Your plan</div>
-                    </div>
-                    <div style={{ fontSize: '13px', lineHeight: 1.9, color: '#5C5048' }}>✓ Daily lessons & culture<br />✓ AI conversation, any scenario<br />✓ Placement & milestones</div>
-                  </div>
-                  <div style={{ background: '#2A2320', borderRadius: '16px', padding: '15px 16px', color: '#F3ECE2', position: 'relative', overflow: 'hidden' }}>
-                    <div style={{ position: 'absolute', right: '-20px', top: '14px', background: '#E1A23A', color: '#3A2417', fontSize: '10px', fontWeight: 700, letterSpacing: '.05em', padding: '3px 26px', transform: 'rotate(38deg)' }}>DEPTH</div>
-                    <div style={{ fontSize: '15px', fontWeight: 700, marginBottom: '2px' }}>Cadence Plus</div>
-                    <div style={{ fontSize: '12px', color: '#A99C90', marginBottom: '10px' }}>$9 / mo · 7-day free trial</div>
-                    <div style={{ fontSize: '13px', lineHeight: 1.9, color: '#E8DFD4' }}>✦ Unlimited immersion library<br />✦ Offline & download<br />✦ Personalized exam prep<br />✦ Deep grammar deep-dives</div>
-                  </div>
-                </div>
-              </div>
-              <div style={{ padding: '14px 22px 26px', flex: 'none' }}>
-                <div onClick={handleUpgradeClick} style={{ background: '#DB5338', color: '#FBF6EE', borderRadius: '14px', padding: '15px', textAlign: 'center', fontSize: '15px', fontWeight: 600, cursor: 'pointer' }}>Try Plus free for 7 days</div>
-              </div>
-            </div>
-          )}
-
-          {/* ===== CHECKOUT ===== */}
-          {view === 'checkout' && (
-            <div className="cd-screen" style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 22px 6px', flex: 'none' }}>
-                <span onClick={() => setView('plans')} style={{ fontSize: '18px', color: '#B5A99E', cursor: 'pointer' }}>‹</span>
-                <span style={{ fontSize: '12.5px', fontWeight: 600, color: '#8A7E73' }}>Checkout</span>
-                <span style={{ fontSize: '11px', color: '#9A8E84' }}>🔒 Secure</span>
-              </div>
-              <div className="cd-scroll" style={{ flex: 1, overflowY: 'auto', padding: '8px 22px 0' }}>
-                <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: '27px', lineHeight: 1.05, marginBottom: '4px' }}>Start your free week</div>
-                <div style={{ fontSize: '13px', color: '#8A7E73', marginBottom: '16px' }}>Free for 7 days, then $9/mo. Cancel anytime — we'll remind you 2 days before.</div>
-                
-                <div style={{ background: '#2A2320', borderRadius: '16px', padding: '16px', color: '#F3ECE2', marginBottom: '16px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-                    <div style={{ fontSize: '15px', fontWeight: 700 }}>Cadence Plus</div>
-                    <div style={{ fontSize: '13px', color: '#A99C90' }}>$9 / mo</div>
-                  </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12.5px', color: '#C9BFB4', padding: '6px 0', borderTop: '1px solid rgba(255,255,255,.12)' }}>
-                    <span>Today</span>
-                    <span style={{ color: '#46C46E', fontWeight: 600 }}>$0.00 — trial</span>
-                  </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12.5px', color: '#C9BFB4', padding: '6px 0' }}>
-                    <span>On {new Date(Date.now() + 7 * 86400000).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
-                    <span>$9.00</span>
-                  </div>
-                </div>
-
-                <div style={{ display: 'flex', gap: '8px', marginBottom: '14px' }}>
-                  <div onClick={() => setPayMethod('card')} style={{ flex: 1, textAlign: 'center', fontSize: '12.5px', fontWeight: 600, borderRadius: '11px', padding: '11px', background: payMethod === 'card' ? '#E6F0EE' : '#fff', color: payMethod === 'card' ? '#2F8F83' : '#8A7E73', border: payMethod === 'card' ? '1px solid #BFE0DA' : '1px solid #EDE4D6', cursor: 'pointer' }}>💳 Card</div>
-                  <div onClick={() => setPayMethod('upi')} style={{ flex: 1, textAlign: 'center', fontSize: '12.5px', fontWeight: 600, borderRadius: '11px', padding: '11px', background: payMethod === 'upi' ? '#E6F0EE' : '#fff', color: payMethod === 'upi' ? '#2F8F83' : '#8A7E73', border: payMethod === 'upi' ? '1px solid #BFE0DA' : '1px solid #EDE4D6', cursor: 'pointer' }}>UPI / Razorpay</div>
-                </div>
-
-                {payMethod === 'card' && (
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '11px' }}>
-                    <div style={{ background: '#fff', border: '1px solid #E1D6C4', borderRadius: '13px', padding: '13px 15px' }}>
-                      <div style={{ fontSize: '10.5px', color: '#A8927C', marginBottom: '2px' }}>Card number</div>
-                      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                        <input className="cd-input-l" style={{ fontSize: '14px', flex: 1, border: 'none', outline: 'none' }} placeholder="1234 5678 9012 3456" />
-                        <span style={{ fontSize: '13px' }}>💳</span>
-                      </div>
-                    </div>
-                    <div style={{ display: 'flex', gap: '11px' }}>
-                      <div style={{ flex: 1, background: '#fff', border: '1px solid #E1D6C4', borderRadius: '13px', padding: '13px 15px' }}>
-                        <div style={{ fontSize: '10.5px', color: '#A8927C', marginBottom: '2px' }}>Expiry</div>
-                        <input className="cd-input-l" style={{ fontSize: '14px', width: '100%', border: 'none', outline: 'none' }} placeholder="MM / YY" />
-                      </div>
-                      <div style={{ flex: 1, background: '#fff', border: '1px solid #E1D6C4', borderRadius: '13px', padding: '13px 15px' }}>
-                        <div style={{ fontSize: '10.5px', color: '#A8927C', marginBottom: '2px' }}>CVC</div>
-                        <input className="cd-input-l" style={{ fontSize: '14px', width: '100%', border: 'none', outline: 'none' }} placeholder="123" />
-                      </div>
-                    </div>
-                  </div>
-                )}
-                {payMethod === 'upi' && (
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '11px' }}>
-                    <div style={{ background: '#fff', border: '1px solid #E1D6C4', borderRadius: '13px', padding: '13px 15px' }}>
-                      <div style={{ fontSize: '10.5px', color: '#A8927C', marginBottom: '2px' }}>UPI ID</div>
-                      <input className="cd-input-l" style={{ fontSize: '14px', width: '100%', border: 'none', outline: 'none' }} placeholder="name@bank" />
-                    </div>
-                    <div style={{ fontSize: '12px', color: '#8A7E73', marginTop: '10px', textAlign: 'center' }}>You'll approve the payment in your UPI app.</div>
-                  </div>
-                )}
-              </div>
-              <div style={{ padding: '14px 22px 22px', flex: 'none' }}>
-                <div onClick={handleGoCheckout} style={{ background: '#DB5338', color: '#FBF6EE', borderRadius: '14px', padding: '15px', textAlign: 'center', fontSize: '15px', fontWeight: 600, cursor: 'pointer' }}>Start free trial</div>
-                <div style={{ textAlign: 'center', fontSize: '10.5px', color: '#B5A99E', marginTop: '10px' }}>Powered by Stripe · 256-bit encrypted · no charge today</div>
               </div>
             </div>
           )}
@@ -2892,7 +2655,7 @@ export default function App() {
           {view === 'correct' && (
             <div className="cd-screen" style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 22px 6px', flex: 'none' }}>
-                <span onClick={() => setView('social')} style={{ fontSize: '18px', color: '#B5A99E', cursor: 'pointer' }}>‹</span>
+                <span onClick={() => setView('social')} style={{ fontSize: '18px', color: '#B5A99E', cursor: 'pointer', padding: '14px 18px', margin: '-14px -18px' }}>‹</span>
                 <span style={{ fontSize: '12.5px', fontWeight: 600, color: '#8A7E73' }}>Help a learner</span>
                 <span style={{ width: '18px' }}></span>
               </div>
@@ -2913,25 +2676,26 @@ export default function App() {
           {view === 'notifications' && (
             <div className="cd-screen" style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 22px 6px', flex: 'none' }}>
-                <span onClick={() => setView('settings')} style={{ fontSize: '18px', color: '#B5A99E', cursor: 'pointer' }}>‹</span>
+                <span onClick={() => setView('settings')} style={{ fontSize: '18px', color: '#B5A99E', cursor: 'pointer', padding: '14px 18px', margin: '-14px -18px' }}>‹</span>
                 <span style={{ fontSize: '12.5px', fontWeight: 600, color: '#8A7E73' }}>Notifications</span>
                 <span style={{ width: '18px' }}></span>
               </div>
               <div className="cd-scroll" style={{ flex: 1, overflowY: 'auto', padding: '8px 20px 24px' }}>
-                <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: '27px', lineHeight: 1.05, marginBottom: '20px' }}>What alerts you</div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                  {notifList.map((n, i) => (
-                    <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <div style={{ paddingRight: '16px' }}>
-                        <div style={{ fontSize: '14px', fontWeight: 600, color: '#2A2320' }}>{n.label}</div>
-                        <div style={{ fontSize: '12px', color: '#8A7E73', marginTop: '2px', lineHeight: 1.4 }}>{n.caption}</div>
-                      </div>
-                      <div onClick={n.toggle} style={{ width: '46px', height: '26px', borderRadius: '13px', background: n.track, display: 'flex', alignItems: 'center', padding: '3px', flex: 'none', justifyContent: n.justify, transition: 'all .2s ease', cursor: 'pointer' }}>
-                        <div style={{ width: '20px', height: '20px', borderRadius: '50%', background: '#fff', boxShadow: '0 2px 4px rgba(0,0,0,.1)' }}></div>
-                      </div>
-                    </div>
-                  ))}
+                <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: '27px', lineHeight: 1.05, marginBottom: '20px' }}>Practice reminder</div>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px' }}>
+                  <div style={{ paddingRight: '16px' }}>
+                    <div style={{ fontSize: '14px', fontWeight: 600, color: '#2A2320' }}>Daily reminder</div>
+                    <div style={{ fontSize: '12px', color: '#8A7E73', marginTop: '2px', lineHeight: 1.4 }}>A gentle nudge once a day. Scheduled on your phone — nothing is sent to our servers.</div>
+                  </div>
+                  <div onClick={() => changeReminder({ ...reminder, on: !reminder.on })} style={{ width: '46px', height: '26px', borderRadius: '13px', background: reminder.on ? '#46C46E' : '#E1D6C4', display: 'flex', alignItems: 'center', padding: '3px', flex: 'none', justifyContent: reminder.on ? 'flex-end' : 'flex-start', transition: 'all .2s ease' }}><div style={{ width: '20px', height: '20px', borderRadius: '50%', background: '#fff', boxShadow: '0 2px 4px rgba(0,0,0,.1)' }}></div></div>
                 </div>
+                {reminder.on && (
+                  <div style={{ display: 'flex', gap: '8px' }}>
+                    {[{ h: 8, l: 'Morning · 8:00' }, { h: 13, l: 'Lunch · 1:00' }, { h: 18, l: 'Evening · 6:00' }, { h: 21, l: 'Night · 9:00' }].map((o) => (
+                      <div key={o.h} onClick={() => changeReminder({ ...reminder, hour: o.h })} style={{ flex: 1, textAlign: 'center', padding: '10px 4px', borderRadius: '12px', fontSize: '11.5px', fontWeight: 600, cursor: 'pointer', background: reminder.hour === o.h ? '#DB5338' : '#fff', color: reminder.hour === o.h ? '#FBF6EE' : '#5C5048', border: '1px solid ' + (reminder.hour === o.h ? '#DB5338' : '#E1D6C4') }}>{o.l}</div>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           )}
@@ -2940,7 +2704,7 @@ export default function App() {
           {view === 'charter' && (
             <div className="cd-screen" style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 22px 6px', flex: 'none' }}>
-                <span onClick={() => setView('settings')} style={{ fontSize: '18px', color: '#B5A99E', cursor: 'pointer' }}>‹</span>
+                <span onClick={() => setView('settings')} style={{ fontSize: '18px', color: '#B5A99E', cursor: 'pointer', padding: '14px 18px', margin: '-14px -18px' }}>‹</span>
                 <span style={{ fontSize: '12.5px', fontWeight: 600, color: '#8A7E73' }}>Data charter</span>
                 <span style={{ width: '18px' }}></span>
               </div>
@@ -2948,26 +2712,33 @@ export default function App() {
                 <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: '27px', lineHeight: 1.05, marginBottom: '12px' }}>Your data is yours</div>
                 <div style={{ fontSize: '13px', color: '#5C5048', lineHeight: 1.5, marginBottom: '24px' }}>We don&apos;t sell your data to brokers, and we don&apos;t train underlying LLMs on your personal chats without explicit opt-in. You can delete your account and all associated data at any time.</div>
                 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '30px' }}>
-                  {charterToggles.map((c, i) => (
-                    <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <div style={{ paddingRight: '16px' }}>
-                        <div style={{ fontSize: '14px', fontWeight: 600, color: '#2A2320' }}>{c.label}</div>
-                        <div style={{ fontSize: '12px', color: '#8A7E73', marginTop: '2px', lineHeight: 1.4 }}>{c.caption}</div>
-                      </div>
-                      <div onClick={c.toggle} style={{ width: '46px', height: '26px', borderRadius: '13px', background: c.track, display: 'flex', alignItems: 'center', padding: '3px', flex: 'none', justifyContent: c.justify, transition: 'all .2s ease', cursor: 'pointer' }}>
-                        <div style={{ width: '20px', height: '20px', borderRadius: '50%', background: '#fff', boxShadow: '0 2px 4px rgba(0,0,0,.1)' }}></div>
-                      </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '26px' }}>
+                  {[
+                    ['What we hold', 'Your name, email, hashed password, learning progress, saved words and practice attempts.'],
+                    ['Your voice', 'Recorded only while you hold the mic, sent to our speech providers to transcribe and score you, and never stored by us.'],
+                    ['Training & ads', 'We do not use your data or recordings to train models, and we do not show ads or sell data.'],
+                  ].map(([t, d]) => (
+                    <div key={t} style={{ background: '#fff', border: '1px solid #EDE4D6', borderRadius: '14px', padding: '12px 14px' }}>
+                      <div style={{ fontSize: '13.5px', fontWeight: 600, color: '#2A2320' }}>{t}</div>
+                      <div style={{ fontSize: '12px', color: '#8A7E73', marginTop: '3px', lineHeight: 1.45 }}>{d}</div>
                     </div>
                   ))}
+                </div>
+
+                <div style={{ marginBottom: '22px' }}>
+                  <div style={{ fontSize: '12px', color: '#8A7E73', marginBottom: '6px' }}>Correct your name</div>
+                  <div style={{ display: 'flex', gap: '8px' }}>
+                    <input className="cd-input-l" value={nameDraft} placeholder={user?.name || 'Your name'} onChange={(e) => setNameDraft(e.target.value)} maxLength={80} style={{ flex: 1, background: '#fff', border: '1px solid #E1D6C4', borderRadius: '12px', padding: '11px 13px', fontSize: '14px' }} />
+                    <div onClick={saveName} style={{ background: '#DB5338', color: '#FBF6EE', borderRadius: '12px', padding: '11px 16px', fontSize: '13.5px', fontWeight: 600, cursor: 'pointer' }}>Save</div>
+                  </div>
                 </div>
 
                 <div style={{ borderTop: '1px solid #EDE4D6', paddingTop: '20px' }}>
                   <div onClick={handleExportData} style={{ color: '#DB5338', fontSize: '14px', fontWeight: 600, marginBottom: '8px', cursor: 'pointer' }}>Export my data (JSON)</div>
                   <div onClick={handleDeleteAccount} style={{ color: '#B23E27', fontSize: '14px', fontWeight: 600, cursor: 'pointer', marginBottom: '20px' }}>Delete account & data</div>
                   <div style={{ borderTop: '1px solid #EDE4D6', paddingTop: '20px', display: 'flex', gap: '15px' }}>
-                    <a href="/privacy" style={{ color: '#8A7E73', fontSize: '12px', textDecoration: 'none' }}>Privacy Policy</a>
-                    <a href="/terms" style={{ color: '#8A7E73', fontSize: '12px', textDecoration: 'none' }}>Terms of Service</a>
+                    <a href="/privacy/" style={{ color: '#8A7E73', fontSize: '12px', textDecoration: 'none' }}>Privacy Notice</a>
+                    <a href="/terms/" style={{ color: '#8A7E73', fontSize: '12px', textDecoration: 'none' }}>Terms of Service</a>
                   </div>
                 </div>
               </div>
@@ -2979,14 +2750,14 @@ export default function App() {
             <div className="cd-screen" style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0, background: '#1C1714', color: '#FBF6EE' }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 22px 6px', flex: 'none' }}>
                 <span onClick={() => setView('levelDetail')} style={{ fontSize: '18px', color: '#9A8E84', cursor: 'pointer' }}>‹</span>
-                <span style={{ fontSize: '12.5px', fontWeight: 600, color: '#C9BFB4' }}>At the market</span>
+                <span style={{ fontSize: '12.5px', fontWeight: 600, color: '#C9BFB4' }}>{(LANGS[lang] || LANGS.es).chapters?.[0]?.scenarioTitle || 'Listen & shadow'}</span>
                 <span style={{ width: '18px' }}></span>
               </div>
               
               <div style={{ flex: 1, display: 'flex', flexDirection: 'column', padding: '20px 24px' }}>
                 <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '16px', overflowY: 'auto', marginBottom: '20px' }}>
-                  {audioLines.map((line, i) => (
-                    <div key={i} style={{ display: 'flex', gap: '12px', opacity: audioPlaying ? 1 : 0.6 }}>
+                  {audioLines.map((line: { native: string; en: string; isPartner: string }, i: number) => (
+                    <div key={i} onClick={() => { audioRun.current++; setAudioPlaying(false); setAudioIdx(i); speak(line.native, LANGS[lang]?.locale || 'es-ES'); }} style={{ display: 'flex', gap: '12px', cursor: 'pointer', opacity: audioIdx === -1 || audioIdx === i ? 1 : 0.45, transition: 'opacity .2s' }}>
                       <div style={{ width: '4px', background: line.isPartner, borderRadius: '2px', flex: 'none' }}></div>
                       <div>
                         <div style={{ fontSize: '16px', fontWeight: 600, lineHeight: 1.3, marginBottom: '2px' }}>{line.native}</div>
@@ -2998,16 +2769,16 @@ export default function App() {
                 
                 <div style={{ background: '#2A2320', borderRadius: '20px', padding: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px', flex: 'none' }}>
                   <div style={{ width: '100%', height: '4px', background: 'rgba(255,255,255,.1)', borderRadius: '2px' }}>
-                    <div style={{ width: '30%', height: '100%', background: '#DB5338', borderRadius: '2px' }}></div>
+                    <div style={{ width: `${audioLines.length ? Math.max(0, audioIdx + (audioPlaying ? 1 : 0)) / audioLines.length * 100 : 0}%`, height: '100%', background: '#DB5338', borderRadius: '2px', transition: 'width .3s' }}></div>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '30px' }}>
-                    <span style={{ fontSize: '20px', color: '#9A8E84' }}>⏮</span>
-                    <div onClick={() => setAudioPlaying(!audioPlaying)} style={{ width: '56px', height: '56px', borderRadius: '50%', background: '#FBF6EE', color: '#2A2320', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '22px', cursor: 'pointer' }}>
+                    <span onClick={() => { audioRun.current++; stopSpeaking(); setAudioPlaying(false); setAudioIdx(Math.max(-1, audioIdx - 1)); }} style={{ fontSize: '20px', color: '#9A8E84', padding: '10px' }}>⏮</span>
+                    <div onClick={toggleShadowing} style={{ width: '56px', height: '56px', borderRadius: '50%', background: '#FBF6EE', color: '#2A2320', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '22px', cursor: 'pointer' }}>
                       {audioPlaying ? '⏸' : '▶'}
                     </div>
-                    <span style={{ fontSize: '20px', color: '#9A8E84' }}>⏭</span>
+                    <span onClick={() => { audioRun.current++; stopSpeaking(); setAudioPlaying(false); setAudioIdx(Math.min(audioLines.length - 1, audioIdx + 1)); }} style={{ fontSize: '20px', color: '#9A8E84', padding: '10px' }}>⏭</span>
                   </div>
-                  <div style={{ fontSize: '12px', color: '#9A8E84', letterSpacing: '.05em', textTransform: 'uppercase' }}>Shadowing enabled</div>
+                  <div style={{ fontSize: '12px', color: '#9A8E84', letterSpacing: '.05em', textTransform: 'uppercase' }}>{audioPlaying ? 'Listen, then repeat aloud' : 'Tap play · tap any line to hear it'}</div>
                 </div>
               </div>
             </div>
@@ -3049,7 +2820,7 @@ export default function App() {
           {view === 'grammar' && (
             <div className="cd-screen" style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 20px', borderBottom: '1px solid #EDE4D6', flex: 'none' }}>
-                <span onClick={() => setView(backTo)} style={{ fontSize: '18px', color: '#B5A99E', cursor: 'pointer' }}>‹ Back</span>
+                <span onClick={() => setView(backTo)} style={{ fontSize: '18px', color: '#B5A99E', cursor: 'pointer', padding: '14px 18px', margin: '-14px -18px' }}>‹ Back</span>
                 <span style={{ fontSize: '14px', fontWeight: 600 }}>Grammar Hub</span>
                 <span style={{ fontSize: '15px', color: 'transparent' }}>Aa</span>
               </div>
@@ -3087,24 +2858,8 @@ export default function App() {
             </div>
           )}
 
-          {/* ===== PAID CONFIRMATION SCREEN ===== */}
-          {view === 'paid' && (
-            <div className="cd-screen" style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '0 30px', textAlign: 'center' }}>
-              <div style={{ width: '80px', height: '80px', borderRadius: '50%', background: '#E6F0EE', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '36px', margin: '0 auto 22px' }}>★</div>
-              <h1 style={{ fontFamily: "'Instrument Serif', serif", fontSize: '36px', marginBottom: '12px', fontWeight: 400 }}>
-                Welcome to Plus!
-              </h1>
-              <p style={{ fontSize: '15px', color: '#5C5048', lineHeight: 1.5, marginBottom: '32px' }}>
-                Your subscription has been successfully activated. Real voice assessments and pronunciation assessments are now fully enabled.
-              </p>
-              <div onClick={() => setView('home')} style={{ background: '#2F8F83', color: '#FBF6EE', borderRadius: '14px', padding: '15px', textAlign: 'center', fontSize: '15px', fontWeight: 600, cursor: 'pointer' }}>
-                Start Learning
-              </div>
-            </div>
-          )}
-
           {/* ===== BOTTOM NAVIGATION TABS ===== */}
-          {!picker && ['home', 'speakHub', 'immerse', 'social', 'you'].includes(view) && (
+          {!picker && !(view === 'home' && activeChapter !== null) && ['home', 'speakHub', 'immerse', 'social', 'you'].includes(view) && (
             <div style={{ height: '70px', background: '#FAF1E4', display: 'flex', position: 'absolute', bottom: '16px', left: '16px', right: '16px', zIndex: 10, padding: '0 10px', borderRadius: '35px', boxShadow: '0 8px 24px rgba(0,0,0,0.15)', border: '2px solid #F3E5D0' }}>
               <div onClick={() => setView('home')} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: view === 'home' ? '#C44738' : '#B5A99E', position: 'relative' }}>
                 {view === 'home' && <div style={{ position: 'absolute', top: '10px', width: '40px', height: '3px', background: '#C44738', borderRadius: '2px' }}></div>}
@@ -3180,8 +2935,13 @@ export default function App() {
 
           {/* Toast Notification UI */}
           {toast && (
-            <div style={{ position: 'absolute', bottom: '80px', left: '50%', transform: 'translateX(-50%)', background: '#DB5338', color: '#fff', padding: '12px 20px', borderRadius: '12px', fontSize: '14px', fontWeight: 600, zIndex: 9999, boxShadow: '0 8px 16px rgba(219,83,56,0.3)', animation: 'popIn 0.3s ease-out forwards', whiteSpace: 'nowrap', maxWidth: '90%' }}>
-              {toast}
+            // Outer box does the centering; the inner one animates. (popIn sets
+            // `transform`, which used to override translateX(-50%) and shove the
+            // toast off the right edge of the screen.)
+            <div style={{ position: 'absolute', bottom: '96px', left: 0, right: 0, display: 'flex', justifyContent: 'center', zIndex: 9999, pointerEvents: 'none', padding: '0 16px' }}>
+              <div style={{ background: '#DB5338', color: '#fff', padding: '12px 20px', borderRadius: '12px', fontSize: '14px', fontWeight: 600, boxShadow: '0 8px 16px rgba(219,83,56,0.3)', animation: 'popIn 0.3s ease-out forwards', textAlign: 'center', maxWidth: '100%' }}>
+                {toast}
+              </div>
             </div>
           )}
 

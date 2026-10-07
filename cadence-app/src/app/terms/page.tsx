@@ -3,13 +3,13 @@ import Link from 'next/link';
 
 export default function TermsOfService() {
   return (
-    <div style={{ maxWidth: '800px', margin: '0 auto', padding: '40px 20px', fontFamily: 'system-ui, -apple-system, sans-serif', lineHeight: '1.6', color: '#333' }}>
+    <div style={{ maxWidth: '800px', margin: '0 auto', padding: '40px 20px 80px', fontFamily: 'system-ui, -apple-system, sans-serif', lineHeight: '1.6', color: '#333', background: '#FBF6EE', position: 'fixed', inset: 0, overflowY: 'auto' }}>
       <Link href="/" style={{ color: '#C44738', textDecoration: 'none', fontWeight: 'bold', display: 'inline-block', marginBottom: '20px' }}>
         ← Back to App
       </Link>
       
       <h1 style={{ fontSize: '2.5rem', marginBottom: '10px' }}>Terms of Service</h1>
-      <p style={{ color: '#666', marginBottom: '40px' }}><strong>Effective Date:</strong> July 6, 2026</p>
+      <p style={{ color: '#666', marginBottom: '40px' }}><strong>Effective Date:</strong> October 7, 2026</p>
 
       <p>Welcome to Cadence. These Terms of Service ("Terms") govern your use of the Cadence mobile application (the "App") and related services. By accessing or using the App, you agree to be bound by these Terms.</p>
 
