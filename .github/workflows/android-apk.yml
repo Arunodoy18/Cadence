@@ -64,6 +64,7 @@ jobs:
         id: build
         working-directory: cadence-app/android
         env:
+          VERSION_CODE: ${{ github.run_number }}
           KS_B64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
           KS_PASS: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
           KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
@@ -73,7 +74,8 @@ jobs:
           if [ -n "$KS_B64" ]; then
             echo "$KS_B64" | base64 --decode > ci-release.jks
             printf 'storeFile=ci-release.jks\nstorePassword=%s\nkeyAlias=%s\nkeyPassword=%s\n' "$KS_PASS" "$KEY_ALIAS" "$KEY_PASS" > keystore.properties
-            ./gradlew assembleRelease --no-daemon
+            ./gradlew assembleRelease bundleRelease --no-daemon
+            echo "aab=app/build/outputs/bundle/release/app-release.aab" >> "$GITHUB_OUTPUT"
             echo "apk=app/build/outputs/apk/release/app-release.apk" >> "$GITHUB_OUTPUT"
             echo "signed=stable release key" >> "$GITHUB_OUTPUT"
           else
@@ -86,6 +88,7 @@ jobs:
         run: |
           cp "android/${{ steps.build.outputs.apk }}" "Cadence-${GITHUB_SHA::7}.apk"
           cp "android/${{ steps.build.outputs.apk }}" Cadence-latest.apk
+          if [ -n "${{ steps.build.outputs.aab }}" ]; then cp "android/${{ steps.build.outputs.aab }}" Cadence-play-store.aab; fi
 
       - uses: actions/upload-artifact@v4
         with:
@@ -98,7 +101,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh release delete latest-apk --repo "$GITHUB_REPOSITORY" --cleanup-tag --yes || true
-          gh release create latest-apk Cadence-latest.apk \
+          gh release create latest-apk Cadence-latest.apk $(ls Cadence-play-store.aab 2>/dev/null) \
             --repo "$GITHUB_REPOSITORY" \
             --target "$GITHUB_SHA" \
             --title "Cadence APK (latest)" \

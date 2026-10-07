@@ -63,7 +63,9 @@ body {
 
 .ar {
   font-family: 'Noto Sans Arabic', 'Hanken Grotesk', sans-serif;
-  direction: rtl;
+  /* Each line picks its direction from its first letter, so English hints that
+     contain a Hebrew/Arabic word stay left-to-right while native text is RTL. */
+  unicode-bidi: plaintext;
 }
 
 .zh {
@@ -76,7 +78,9 @@ body {
 
 .he {
   font-family: 'Noto Sans Hebrew', 'Hanken Grotesk', sans-serif;
-  direction: rtl;
+  /* Each line picks its direction from its first letter, so English hints that
+     contain a Hebrew/Arabic word stay left-to-right while native text is RTL. */
+  unicode-bidi: plaintext;
 }
 
 .noto {

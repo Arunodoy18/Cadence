@@ -388,6 +388,16 @@ export default function App() {
 
   const fetchMilestones = async () => {
     try {
+      // Retry any milestones that couldn't be saved earlier (offline).
+      try {
+        const q: { lang: string; milestone: string }[] = JSON.parse(localStorage.getItem('cadence_pending_milestones') || '[]');
+        const left: typeof q = [];
+        for (const item of q) {
+          const r = await apiFetch('/api/milestone', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(item) }).catch(() => null);
+          if (!r || !r.ok) left.push(item);
+        }
+        localStorage.setItem('cadence_pending_milestones', JSON.stringify(left));
+      } catch {}
       const res = await apiFetch('/api/milestones', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -404,7 +414,7 @@ export default function App() {
       console.error('Milestones fetch error:', e);
       try {
         const cached = JSON.parse(localStorage.getItem(`cadence_progress_${lang}`) || 'null');
-        if (cached) { setEarnedMilestones(cached.keys); setLevel(cached.level || 'A1'); }
+        if (cached) { setEarnedMilestones((prev) => Array.from(new Set([...cached.keys, ...prev]))); setLevel(cached.level || 'A1'); }
       } catch {}
       showToast("You're offline — showing your last saved progress.");
     }
@@ -992,10 +1002,11 @@ export default function App() {
     // The culture note is shown once per chapter; the later finish points
     // (pronounce, live conversation) go straight to the milestone screen.
     const firstFinishInChapter = !earnedMilestones.some((k) => k.startsWith(`ch${playingChapter}_`));
-    // Show the culture note + celebration screen on the way back — these were
-    // fully built (culture facts, milestone stats, share flow) but nothing
-    // was routing into them, so every chapter finish silently dumped straight
-    // back to home with no payoff.
+    // Move on immediately and save in the background — waiting on the network
+    // here made every "Continue" feel frozen on slow connections.
+    setEarnedMilestones((prev) => (prev.includes(milestoneKey) ? prev : [...prev, milestoneKey]));
+    handleReset();
+    setView(firstFinishInChapter ? 'culture' : 'complete');
     try {
       await apiFetch('/api/milestone', {
         method: 'POST',
@@ -1005,9 +1016,14 @@ export default function App() {
       await fetchMilestones();
     } catch (e) {
       console.error('Failed to save milestone', e);
+      // Remember it and retry the next time progress is loaded.
+      try {
+        const q = JSON.parse(localStorage.getItem('cadence_pending_milestones') || '[]');
+        q.push({ lang, milestone: milestoneKey });
+        localStorage.setItem('cadence_pending_milestones', JSON.stringify(q));
+      } catch {}
+      showToast("Couldn't save your progress yet — it will sync when you're back online.");
     }
-    handleReset();
-    setView(firstFinishInChapter ? 'culture' : 'complete');
   };
 
   const _L = LANGS[lang] || LANGS.es;
@@ -1635,7 +1651,7 @@ export default function App() {
                 </div>
                 <div style={{ fontSize: '19px', fontWeight: 600, lineHeight: 1.3, marginBottom: '8px' }}>“{L.lessonPromptEn}”</div>
                 <div onClick={() => { setBackTo('lesson'); setView('grammar'); }} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '12.5px', color: '#DB5338', border: '1px solid #F2D9CF', background: '#FBF1E9', borderRadius: '99px', padding: '4px 11px', cursor: 'pointer' }}>
-                  <span className={L.font}>{L.lessonHint}</span> <span style={{ opacity: .6 }}>tap for grammar</span>
+                  <span dir="ltr" style={{ unicodeBidi: 'isolate' }}>{L.lessonHint}</span> <span style={{ opacity: .6 }}>tap for grammar</span>
                 </div>
               </div>
               <div style={{ margin: '20px 22px 0', minHeight: '88px', borderBottom: '2px dashed #DDD2C0', display: 'flex', flexWrap: 'wrap', gap: '8px', alignContent: 'flex-start', paddingBottom: '14px', flex: 'none' }}>
@@ -1839,7 +1855,7 @@ export default function App() {
                 <div style={{ fontSize: '14px', lineHeight: 1.55, color: '#5C5048', marginBottom: '14px' }}>{L.cultureBody}</div>
                 <div style={{ background: '#fff', border: '1px solid #EDE4D6', borderRadius: '13px', padding: '12px 14px', display: 'flex', gap: '11px', alignItems: 'center' }}>
                   <span style={{ fontSize: '18px' }}>💬</span>
-                  <div style={{ fontSize: '13px', lineHeight: 1.4 }} className={L.font}>{L.culturePhrase}</div>
+                  <div dir="ltr" style={{ fontSize: '13px', lineHeight: 1.4, unicodeBidi: 'isolate' }}>{L.culturePhrase}</div>
                 </div>
               </div>
               <div style={{ padding: '16px 24px 26px', flex: 'none' }}>
