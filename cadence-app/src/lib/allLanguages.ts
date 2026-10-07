@@ -4,6 +4,10 @@ import { gujarati } from './indic/gujarati';
 import { assamese } from './indic/assamese';
 import { malayalam } from './indic/malayalam';
 import { kannada } from './indic/kannada';
+import { chapter } from './indic/build';
+import { portugueseExtra } from './extra/portuguese';
+import { dutchExtra } from './extra/dutch';
+import { hebrewExtra } from './extra/hebrew';
 
 // The generated courses live in languages.ts; the hand-authored Indian-language
 // courses live in ./indic. This merges them and keeps the Indian languages
@@ -79,10 +83,15 @@ function repairChapter(c: any): any | null {
   return ch;
 }
 
+// Languages whose generated course only had working chapters 1–2: the rest are
+// hand-written (chapters 3–6) and appended after the repaired base chapters.
+const EXTRA_CHAPTERS: Record<string, any[]> = { pt: portugueseExtra, nl: dutchExtra, he: hebrewExtra };
+
 export const LANGS: Record<string, LanguageData> = Object.fromEntries(
   Object.entries(merged).map(([code, lang]) => {
-    const chapters = (lang.chapters || [])
-      .map(repairChapter)
+    const base = (lang.chapters || []).map(repairChapter).filter(Boolean);
+    const extra = (EXTRA_CHAPTERS[code] || []).map((input: any, i: number) => repairChapter(chapter(base.length + i + 1, lang.name, input)));
+    const chapters = [...base, ...extra]
       .filter(Boolean)
       // Keep the numbering in the title honest if shells in the middle were dropped.
       .map((c: any, i: number) => ({ ...c, chapterTitle: String(c.chapterTitle).replace(/^Chapter \d+/, `Chapter ${i + 1}`) }));

@@ -123,18 +123,33 @@ async function recognitionMatchScore(audio: Buffer, locale: string, refText: str
 
   const ref = normalize(refText);
   const hyp = normalize(data.DisplayText || '');
-  // Longest common subsequence: words said in the right order.
-  const dp = Array.from({ length: ref.length + 1 }, () => new Array(hyp.length + 1).fill(0));
-  for (let i = 1; i <= ref.length; i++)
-    for (let j = 1; j <= hyp.length; j++)
-      dp[i][j] = ref[i - 1] === hyp[j - 1] ? dp[i - 1][j - 1] + 1 : Math.max(dp[i - 1][j], dp[i][j - 1]);
-  const matched = new Set<number>();
-  for (let i = ref.length, j = hyp.length; i > 0 && j > 0; ) {
-    if (ref[i - 1] === hyp[j - 1]) { matched.add(i - 1); i--; j--; }
-    else if (dp[i - 1][j] >= dp[i][j - 1]) i--;
-    else j--;
-  }
-  const score = ref.length ? Math.round((matched.size / ref.length) * 100) : 0;
+
+  // Per-word credit: 1 for an exact match, partial for a close one (the
+  // recogniser often swaps a letter or two in languages it knows less well).
+  const similarity = (a: string, b: string) => {
+    if (a === b) return 1;
+    const m = a.length, n = b.length;
+    if (!m || !n) return 0;
+    const d = Array.from({ length: m + 1 }, (_, i) => [i, ...new Array(n).fill(0)]);
+    for (let j = 1; j <= n; j++) d[0][j] = j;
+    for (let i = 1; i <= m; i++)
+      for (let j = 1; j <= n; j++)
+        d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+    const sim = 1 - d[m][n] / Math.max(m, n);
+    return sim >= 0.5 ? sim : 0;
+  };
+  // Align in order: each reference word takes the best unused later hypothesis word.
+  let cursor = 0;
+  const credits = ref.map((w) => {
+    let best = 0, at = -1;
+    for (let j = cursor; j < hyp.length; j++) {
+      const sc = similarity(w, hyp[j]);
+      if (sc > best) { best = sc; at = j; }
+    }
+    if (at >= 0) cursor = at + 1;
+    return best;
+  });
+  const score = ref.length ? Math.round((credits.reduce((x, y) => x + y, 0) / ref.length) * 100) : 0;
   return {
     score,
     accuracyScore: score,
@@ -143,8 +158,8 @@ async function recognitionMatchScore(audio: Buffer, locale: string, refText: str
     basic: true,
     words: ref.map((w, i) => ({
       word: w,
-      accuracyScore: matched.has(i) ? 100 : 0,
-      errorType: matched.has(i) ? 'None' : 'Omission',
+      accuracyScore: Math.round(credits[i] * 100),
+      errorType: credits[i] >= 0.8 ? 'None' : credits[i] > 0 ? 'Mispronunciation' : 'Omission',
       phonemes: [],
     })),
   };

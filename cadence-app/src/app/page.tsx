@@ -11,9 +11,11 @@ import { TermsContent } from '@/components/TermsContent';
 import { LANGS } from '@/lib/allLanguages';
 import immerseDataRaw from '@/lib/immerse.json';
 import { INDIC_IMMERSE } from '@/lib/indic/immerse';
+import { IMMERSE_1 } from '@/lib/extra/immerse1';
+import { IMMERSE_2 } from '@/lib/extra/immerse2';
 import { scenarioMeta } from '@/lib/scenarios';
 
-const immerseData: Record<string, any[]> = { ...immerseDataRaw, ...INDIC_IMMERSE };
+const immerseData: Record<string, any[]> = { ...immerseDataRaw, ...INDIC_IMMERSE, ...IMMERSE_1, ...IMMERSE_2 };
 import { WavRecorder } from '@/lib/WavRecorder';
 import { AudioVisualizer } from '@/components/AudioVisualizer';
 
@@ -27,6 +29,25 @@ function computeStreak(days: string[]): number {
   let n = 0;
   while (set.has(dayKey(cur))) { n++; cur.setDate(cur.getDate() - 1); }
   return n;
+}
+
+// Splits text into words and separators. Languages written without spaces
+// (Japanese, Chinese, Thai) need the platform's word segmenter, otherwise a
+// whole sentence would be a single tappable "word".
+const WORD_RE = /[\p{L}\p{M}\u200c\u200d]+/u;
+function tokenize(text: string, lang: string): { seg: string; isWord: boolean }[] {
+  const needsSegmenter = ['ja', 'zh', 'th'].includes(lang);
+  const Seg = (Intl as any).Segmenter;
+  if (needsSegmenter && Seg) {
+    try {
+      const out: { seg: string; isWord: boolean }[] = [];
+      for (const part of new Seg(lang, { granularity: 'word' }).segment(text)) {
+        out.push({ seg: part.segment, isWord: !!part.isWordLike });
+      }
+      return out;
+    } catch {}
+  }
+  return text.split(/([^\p{L}\p{M}\u200c\u200d]+)/u).filter((x) => x !== '').map((seg) => ({ seg, isWord: WORD_RE.test(seg) && !/[^\p{L}\p{M}\u200c\u200d]/u.test(seg) }));
 }
 
 export default function App() {
@@ -295,7 +316,7 @@ export default function App() {
   const calculateKnownPercentage = (text: string) => {
     if (!text) return '0%';
     // Unicode-aware so Devanagari, Gujarati, Kannada, Malayalam, Bengali/Assamese etc. count too.
-    const words = text.toLowerCase().match(/[\p{L}\p{M}\u200c\u200d]+/gu) || [];
+    const words = tokenize(text.toLowerCase(), lang).filter((t) => t.isWord).map((t) => t.seg);
     if (words.length === 0) return '0%';
     const knownCount = words.filter(w => knownWords.has(w)).length;
     return Math.round((knownCount / words.length) * 100) + '%';
@@ -2143,8 +2164,7 @@ export default function App() {
                 <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: '25px', lineHeight: 1.12, marginBottom: '4px' }} className={L.font}>{activeImmerseItem.title}</div>
                 <div style={{ fontSize: '14px', color: '#B5A99E', marginBottom: '16px' }}>{activeImmerseItem.englishTitle}</div>
                 <div style={{ fontSize: '16.5px', lineHeight: 1.85, color: '#33291F', whiteSpace: 'pre-wrap' }} className={L.font}>
-                  {activeImmerseItem.text.split(/([^\p{L}\p{M}\u200c\u200d]+)/u).map((seg: string, idx: number) => {
-                    const isWord = /^[\p{L}\p{M}\u200c\u200d]+$/u.test(seg);
+                  {tokenize(activeImmerseItem.text, lang).map(({ seg, isWord }, idx: number) => {
                     const isKnown = knownWords.has(seg.toLowerCase());
                     return isWord ? (
                       <span key={idx} onClick={() => setPop({ term: seg, def: 'Tap 🔊 to hear it, or save it to your words.' })} style={{ background: isKnown ? 'transparent' : '#FBE3D9', borderBottom: isKnown ? 'none' : '2px solid #DB5338', borderRadius: '3px', padding: '0 2px', cursor: 'pointer' }}>
