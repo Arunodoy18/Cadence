@@ -16,6 +16,18 @@ const immerseData: Record<string, any[]> = { ...immerseDataRaw, ...INDIC_IMMERSE
 import { WavRecorder } from '@/lib/WavRecorder';
 import { AudioVisualizer } from '@/components/AudioVisualizer';
 
+// Days (YYYY-MM-DD, local) on which the learner finished a lesson or conversation.
+const dayKey = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+function computeStreak(days: string[]): number {
+  const set = new Set(days);
+  const cur = new Date();
+  // A streak is still alive if you practised today OR yesterday.
+  if (!set.has(dayKey(cur))) cur.setDate(cur.getDate() - 1);
+  let n = 0;
+  while (set.has(dayKey(cur))) { n++; cur.setDate(cur.getDate() - 1); }
+  return n;
+}
+
 export default function App() {
   const { user, status: authStatus, login, signup, logout, setUserName } = useAuth();
 
@@ -169,6 +181,15 @@ export default function App() {
   const [lessonResult, setLessonResult] = useState<string>(''); // 'correct', 'wrong', or ''
   const [showHints, setShowHints] = useState<boolean>(false);
   const [activeChapter, setActiveChapter] = useState<number | null>(null);
+  const [deck, setDeck] = useState<{ term: string; definition: string; due_in_days: number; strength: number }[] | null>(null);
+  useEffect(() => {
+    if (view !== 'deck' || authStatus !== 'authenticated') return;
+    setDeck(null);
+    apiFetch('/api/deck', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ lang }) })
+      .then((r) => (r.ok ? r.json() : Promise.reject()))
+      .then((d) => setDeck(d.cards))
+      .catch(() => setDeck([]));
+  }, [view, lang, authStatus]);
   const [legalBack, setLegalBack] = useState('charter');
   useEffect(() => { backState.current = { view, picker, activeChapter, legalBack }; }, [view, picker, activeChapter, legalBack]);
   const [playingChapter, setPlayingChapter] = useState<number>(0);
@@ -236,6 +257,19 @@ export default function App() {
     }
   };
   const [level, setLevel] = useState('A1');
+  const [practiceDays, setPracticeDays] = useState<string[]>([]);
+  useEffect(() => {
+    try { setPracticeDays(JSON.parse(localStorage.getItem('cadence_practice_days') || '[]')); } catch {}
+  }, []);
+  const markPracticedToday = () => {
+    const today = dayKey(new Date());
+    setPracticeDays((prev) => {
+      if (prev.includes(today)) return prev;
+      const next = [...prev, today].slice(-400);
+      try { localStorage.setItem('cadence_practice_days', JSON.stringify(next)); } catch {}
+      return next;
+    });
+  };
   const [backTo, setBackTo] = useState('you');
   
   // Vocabulary tracking state
@@ -340,6 +374,7 @@ export default function App() {
       if (!res.ok) throw new Error(`API Error: ${res.status}`);
       const data = await res.json();
       setEarnedMilestones(data.milestones.map((m: any) => m.key));
+      setLevel(data.level || 'A1');
     } catch (e) {
       console.error('Milestones fetch error:', e);
       showToast('Failed to load progress. Please check your connection.');
@@ -524,6 +559,7 @@ export default function App() {
         setPlaceMsgs([...updatedMsgs, { who: 'p', n: data.reply, en: data.english || '' }]);
         setPlaceDone(true);
         setPlaceLevel(data.level || 'A1');
+        setLevel(data.level || 'A1');
       } else {
         setPlaceMsgs([...updatedMsgs, { who: 'p', n: data.reply, en: data.english || '' }]);
       }
@@ -543,6 +579,7 @@ export default function App() {
     const _L = LANGS[lang] || LANGS.es;
     const L = { ..._L, ...(_L.chapters?.[playingChapter || 0] || {}) };
     const ok = answer.length === L.correct.length && answer.every((id, i) => id === L.correct[i]);
+    if (ok) markPracticedToday();
     setLessonResult(ok ? 'correct' : 'wrong');
 
     if (ok && authStatus === 'authenticated') {
@@ -922,6 +959,10 @@ export default function App() {
   };
 
   const completeMilestone = async (milestoneKey: string) => {
+    markPracticedToday();
+    // The culture note is shown once per chapter; the later finish points
+    // (pronounce, live conversation) go straight to the milestone screen.
+    const firstFinishInChapter = !earnedMilestones.some((k) => k.startsWith(`ch${playingChapter}_`));
     // Show the culture note + celebration screen on the way back — these were
     // fully built (culture facts, milestone stats, share flow) but nothing
     // was routing into them, so every chapter finish silently dumped straight
@@ -937,7 +978,7 @@ export default function App() {
       console.error('Failed to save milestone', e);
     }
     handleReset();
-    setView('culture');
+    setView(firstFinishInChapter ? 'culture' : 'complete');
   };
 
   const _L = LANGS[lang] || LANGS.es;
@@ -961,20 +1002,19 @@ export default function App() {
     iconStyle: "color:#fff;"
   }));
 
+  // Only badges the app can genuinely award: one per chapter, plus three that
+  // are computed from real activity (saved words, daily streak, CEFR level).
+  const lvIdx = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'].indexOf(String(level).replace('+', ''));
   const baseBadges = [
     ...dynamicBadges,
-    { key: "12_day_rhythm", icon: "🌱", title: "12-day rhythm", sub: "Kept it up", iconBg: "#2A2320", iconStyle: "color:#46C46E;" },
-    { key: "100_words", icon: "✦", title: "100 words", sub: "Vocabulary", iconBg: "#F0E7D8", iconStyle: "color:#E1A23A;" },
-    { key: "eavesdropper", icon: "🎧", title: "Eavesdropper", sub: "Understood audio", iconBg: "#5B3A56", iconStyle: "color:#FBF6EE;" },
-    { key: "past_tense", icon: "🕐", title: "Past tense", sub: "Tell a story", iconBg: "#F0E7D8", iconStyle: "opacity:0.6;filter:grayscale(1);" },
-    { key: "first_debate", icon: "⚖", title: "First debate", sub: "B2 skill", iconBg: "#EBE3D5", iconStyle: "opacity:0.3;filter:grayscale(1);" },
-    { key: "no_subtitles", icon: "🎬", title: "No subtitles", sub: "Watch a film", iconBg: "#EBE3D5", iconStyle: "opacity:0.3;filter:grayscale(1);" },
-    { key: "reached_b1", icon: "🏔", title: "Reached B1", sub: "Level up", iconBg: "#F0E7D8", iconStyle: "opacity:0.6;filter:grayscale(1);" }
-  ];
+    { key: "12_day_rhythm", icon: "🌱", title: "12-day rhythm", sub: "Practise 12 days in a row", iconBg: "#2A2320", iconStyle: "color:#46C46E;", earned: computeStreak(practiceDays) >= 12 },
+    { key: "100_words", icon: "✦", title: "100 words", sub: "Save 100 words", iconBg: "#F0E7D8", iconStyle: "color:#E1A23A;", earned: knownWords.size >= 100 },
+    { key: "reached_b1", icon: "🏔", title: "Reached B1", sub: "Level up", iconBg: "#F0E7D8", iconStyle: "color:#2A2320;", earned: lvIdx >= 2 }
+  ] as any[];
 
   const badges = baseBadges.map((b, idx) => {
-    const isEarned = earnedMilestones.includes(b.key);
-    const isNext = idx === earnedMilestones.length;
+    const isEarned = b.earned ?? earnedMilestones.includes(b.key);
+    const isNext = !isEarned && baseBadges.slice(0, idx).every((x: any) => x.earned ?? earnedMilestones.includes(x.key));
     if (isEarned) {
       return { ...b, state: "earned", bg: "#FBF6EE", border: "1px solid #EDE4D6", titleColor: "#2A2320" };
     } else if (isNext) {
@@ -1076,7 +1116,7 @@ export default function App() {
   const currentLevel = activeLevelIndex === -1 ? Math.max(0, chapters.length - 1) : activeLevelIndex;
   
   const userLevel = currentLevel + 1;
-  const userStreak = earnedMilestones.length > 0 ? 1 : 0;
+  const userStreak = computeStreak(practiceDays);
   const userDiamonds = earnedMilestones.length * 20;
 
   const currentChapter = chapters[currentLevel] || { title: '' };
@@ -1992,34 +2032,52 @@ export default function App() {
           {/* ===== DEBRIEF SCREEN ===== */}
           {view === 'debrief' && (
             <div className="cd-screen" style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
-              <div style={{ padding: '14px 24px 0', flex: 'none' }}>
-                <div style={{ fontSize: '11px', letterSpacing: '.1em', textTransform: 'uppercase', color: '#BFA38C', marginBottom: '6px' }}>Conversation debrief</div>
-                <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: '26px', lineHeight: 1.05, marginBottom: '4px' }}>You held a real chat 🎉</div>
-                <div style={{ fontSize: '13px', color: '#5C5048' }}>...and <span className={L.font}>{sMeta.partnerName.split(' ')[0]}</span> understood you.</div>
-              </div>
-              <div className="cd-scroll" style={{ flex: 1, overflowY: 'auto', padding: '16px 20px 0' }}>
-                <div style={{ display: 'flex', gap: '10px', marginBottom: '16px' }}>
-                  <div style={{ flex: 1, background: '#fff', border: '1px solid #EDE4D6', borderRadius: '13px', padding: '12px', textAlign: 'center' }}>
-                    <div style={{ fontSize: '19px', fontWeight: 700, color: '#2F8F83' }}>{convo.msgs.filter(m => m.who === 'u').length || 2}</div>
-                    <div style={{ fontSize: '10.5px', color: '#9A8E84' }}>your turns</div>
-                  </div>
-                  <div style={{ flex: 1, background: '#fff', border: '1px solid #EDE4D6', borderRadius: '13px', padding: '12px', textAlign: 'center' }}>
-                    <div style={{ fontSize: '19px', fontWeight: 700, color: '#2F8F83' }}>88%</div>
-                    <div style={{ fontSize: '10.5px', color: '#9A8E84' }}>understood</div>
-                  </div>
-                  <div style={{ flex: 1, background: '#fff', border: '1px solid #EDE4D6', borderRadius: '13px', padding: '12px', textAlign: 'center' }}>
-                    <div style={{ fontSize: '19px', fontWeight: 700, color: '#E1A23A' }}>{L.debrief.length}</div>
-                    <div style={{ fontSize: '10.5px', color: '#9A8E84' }}>to polish</div>
-                  </div>
-                </div>
-                <div style={{ fontSize: '11px', letterSpacing: '.08em', textTransform: 'uppercase', color: '#BFA38C', marginBottom: '9px' }}>Worth a second look</div>
-                {L.debrief.map((d: any, idx: number) => (
-                  <div key={idx} style={{ background: '#fff', border: '1px solid #EDE4D6', borderRadius: '13px', padding: '12px 14px', marginBottom: '9px' }}>
-                    <div style={{ fontSize: '14px', fontWeight: 600, marginBottom: '3px' }} className={L.font}>{d.title}</div>
-                    <div style={{ fontSize: '12px', color: '#6B5F58', lineHeight: 1.4 }}>{d.body}</div>
-                  </div>
-                ))}
-              </div>
+              {(() => {
+                // Everything here comes from what the learner actually said: each of
+                // their messages carries the AI partner's tip (if it had one).
+                const mine = convo.msgs.filter((m: any) => m.who === 'u');
+                const fixes = mine.filter((m: any) => m.fb);
+                const clean = mine.length - fixes.length;
+                const pct = mine.length ? Math.round((clean / mine.length) * 100) : null;
+                return (
+                  <>
+                    <div style={{ padding: '14px 24px 0', flex: 'none' }}>
+                      <div style={{ fontSize: '11px', letterSpacing: '.1em', textTransform: 'uppercase', color: '#BFA38C', marginBottom: '6px' }}>Conversation debrief</div>
+                      <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: '26px', lineHeight: 1.05, marginBottom: '4px' }}>{mine.length ? 'You held a real chat 🎉' : 'Nothing said yet'}</div>
+                      <div style={{ fontSize: '13px', color: '#5C5048' }}>{mine.length ? <>...with <span className={L.font}>{sMeta.partnerName.split(' ')[0]}</span>.</> : 'Say something next time and your feedback will appear here.'}</div>
+                    </div>
+                    <div className="cd-scroll" style={{ flex: 1, overflowY: 'auto', padding: '16px 20px 0' }}>
+                      <div style={{ display: 'flex', gap: '10px', marginBottom: '16px' }}>
+                        <div style={{ flex: 1, background: '#fff', border: '1px solid #EDE4D6', borderRadius: '13px', padding: '12px', textAlign: 'center' }}>
+                          <div style={{ fontSize: '19px', fontWeight: 700, color: '#2F8F83' }}>{mine.length}</div>
+                          <div style={{ fontSize: '10.5px', color: '#9A8E84' }}>your turns</div>
+                        </div>
+                        <div style={{ flex: 1, background: '#fff', border: '1px solid #EDE4D6', borderRadius: '13px', padding: '12px', textAlign: 'center' }}>
+                          <div style={{ fontSize: '19px', fontWeight: 700, color: '#2F8F83' }}>{pct === null ? '—' : `${pct}%`}</div>
+                          <div style={{ fontSize: '10.5px', color: '#9A8E84' }}>no corrections</div>
+                        </div>
+                        <div style={{ flex: 1, background: '#fff', border: '1px solid #EDE4D6', borderRadius: '13px', padding: '12px', textAlign: 'center' }}>
+                          <div style={{ fontSize: '19px', fontWeight: 700, color: '#E1A23A' }}>{fixes.length}</div>
+                          <div style={{ fontSize: '10.5px', color: '#9A8E84' }}>to polish</div>
+                        </div>
+                      </div>
+                      {fixes.length > 0 ? (
+                        <>
+                          <div style={{ fontSize: '11px', letterSpacing: '.08em', textTransform: 'uppercase', color: '#BFA38C', marginBottom: '9px' }}>Worth a second look</div>
+                          {fixes.map((m: any, idx: number) => (
+                            <div key={idx} style={{ background: '#fff', border: '1px solid #EDE4D6', borderRadius: '13px', padding: '12px 14px', marginBottom: '9px' }}>
+                              <div style={{ fontSize: '14px', fontWeight: 600, marginBottom: '3px' }} className={L.font}>“{m.n}”</div>
+                              <div style={{ fontSize: '12px', color: '#6B5F58', lineHeight: 1.4 }}>{m.fb}</div>
+                            </div>
+                          ))}
+                        </>
+                      ) : mine.length > 0 ? (
+                        <div style={{ background: '#E6F0EE', border: '1px solid #BFE0DA', borderRadius: '13px', padding: '14px', fontSize: '13px', color: '#2F6F66' }}>Nothing to fix — every message landed cleanly. Nicely done.</div>
+                      ) : null}
+                    </div>
+                  </>
+                );
+              })()}
               <div style={{ padding: '14px 20px 26px', flex: 'none' }}>
                 <div onClick={() => completeMilestone(`ch${playingChapter}_regular`)} style={{ background: '#DB5338', color: '#FBF6EE', borderRadius: '14px', padding: '14px', textAlign: 'center', fontSize: '15px', fontWeight: 600, cursor: 'pointer' }}>Save words & finish</div>
               </div>
@@ -2031,7 +2089,7 @@ export default function App() {
             <div className="cd-screen cd-scroll" style={{ flex: 1, overflowY: 'auto', paddingBottom: '74px' }}>
               <div style={{ padding: '8px 24px 0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: '27px' }}>Immerse</div>
-                <div style={{ fontSize: '12px', fontWeight: 600, color: '#2F8F83', border: '1px solid #BFE0DA', background: '#E6F0EE', borderRadius: '99px', padding: '4px 11px' }}>Matched to A2</div>
+                <div style={{ fontSize: '12px', fontWeight: 600, color: '#2F8F83', border: '1px solid #BFE0DA', background: '#E6F0EE', borderRadius: '99px', padding: '4px 11px' }}>A2 reading & listening</div>
               </div>
               <div style={{ padding: '12px 18px 0' }}>
                 {(immerseData[lang] || []).map((it, idx) => {
@@ -2178,53 +2236,67 @@ export default function App() {
                 </div>
               </div>
 
-              {/* CEFRverified Proof badge */}
-              <div onClick={() => setView('score')} style={{ margin: '12px 18px 0', background: '#2A2320', borderRadius: '20px', padding: '18px', color: '#F3ECE2', cursor: 'pointer' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '12px' }}>
-                  <div>
-                    <div style={{ fontSize: '11px', color: '#A99C90', letterSpacing: '.06em', textTransform: 'uppercase' }}>Now</div>
-                    <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: '34px', lineHeight: 1 }}>{placeLevel}<span style={{ fontSize: '16px', color: '#A99C90' }}> → {placeLevel === 'A1' ? 'A2' : 'B1'}</span></div>
-                  </div>
-                  <div style={{ textAlign: 'right' }}>
-                    <div style={{ fontSize: '11px', color: '#A99C90' }}>progress snapshot ›</div>
-                    <div style={{ fontSize: '18px', fontWeight: 700, color: '#E1A23A' }}>12%</div>
-                  </div>
-                </div>
-                <div style={{ height: '7px', background: 'rgba(255,255,255,.14)', borderRadius: '99px', overflow: 'hidden' }}>
-                  <div style={{ width: '12%', height: '100%', background: 'linear-gradient(90deg,#E1A23A,#DB5338)', borderRadius: '99px' }}></div>
-                </div>
-              </div>
+              {(() => {
+                // Real progress: chapters finished in this language, and the level from placement.
+                const lv = String(level).replace('+', '');
+                const order = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
+                const li = Math.max(0, order.indexOf(lv));
+                const nextLv = order[Math.min(order.length - 1, li + 1)];
+                const total = Math.max(1, chapters.length);
+                const done = chapters.filter((_: any, i: number) => earnedMilestones.includes(`ch${i}_regular`));
+                const pctDone = Math.round((done.length / total) * 100);
+                const climbPct = Math.round(((li + done.length / total) / order.length) * 100);
+                return (
+                  <>
+                    <div onClick={() => setView('score')} style={{ margin: '12px 18px 0', background: '#2A2320', borderRadius: '20px', padding: '18px', color: '#F3ECE2', cursor: 'pointer' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '12px' }}>
+                        <div>
+                          <div style={{ fontSize: '11px', color: '#A99C90', letterSpacing: '.06em', textTransform: 'uppercase' }}>Now</div>
+                          <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: '34px', lineHeight: 1 }}>{lv}<span style={{ fontSize: '16px', color: '#A99C90' }}> → {nextLv}</span></div>
+                        </div>
+                        <div style={{ textAlign: 'right' }}>
+                          <div style={{ fontSize: '11px', color: '#A99C90' }}>{done.length} of {total} chapters ›</div>
+                          <div style={{ fontSize: '18px', fontWeight: 700, color: '#E1A23A' }}>{pctDone}%</div>
+                        </div>
+                      </div>
+                      <div style={{ height: '7px', background: 'rgba(255,255,255,.14)', borderRadius: '99px', overflow: 'hidden' }}>
+                        <div style={{ width: `${pctDone}%`, height: '100%', background: 'linear-gradient(90deg,#E1A23A,#DB5338)', borderRadius: '99px', transition: 'width .4s' }}></div>
+                      </div>
+                    </div>
 
-              {/* Journey details climb */}
-              <div onClick={() => setView('journey')} style={{ margin: '14px 18px 0', background: 'linear-gradient(140deg,#2F8F83,#256B61)', borderRadius: '18px', padding: '16px', color: '#F2F7F5', cursor: 'pointer' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-                  <div style={{ fontSize: '10.5px', letterSpacing: '.08em', textTransform: 'uppercase', opacity: .85 }}>Your journey · A1 → C2</div>
-                  <span style={{ fontSize: '12px', fontWeight: 600 }}>See the climb →</span>
-                </div>
-                <div style={{ display: 'flex', gap: '5px', alignItems: 'center' }}>
-                  <div style={{ flex: 1, height: '8px', background: 'rgba(255,255,255,.2)', borderRadius: '99px', overflow: 'hidden' }}>
-                    <div style={{ width: '38%', height: '100%', background: '#FBF6EE', borderRadius: '99px' }}></div>
-                  </div>
-                </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '7px', fontSize: '10px', opacity: .8 }}>
-                  <span>A1</span><span style={{ fontWeight: 700 }}>▲ you're at {placeLevel}</span><span>C2</span>
-                </div>
-              </div>
+                    <div onClick={() => setView('journey')} style={{ margin: '14px 18px 0', background: 'linear-gradient(140deg,#2F8F83,#256B61)', borderRadius: '18px', padding: '16px', color: '#F2F7F5', cursor: 'pointer' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+                        <div style={{ fontSize: '10.5px', letterSpacing: '.08em', textTransform: 'uppercase', opacity: .85 }}>Your journey · A1 → C2</div>
+                        <span style={{ fontSize: '12px', fontWeight: 600 }}>See the climb →</span>
+                      </div>
+                      <div style={{ display: 'flex', gap: '5px', alignItems: 'center' }}>
+                        <div style={{ flex: 1, height: '8px', background: 'rgba(255,255,255,.2)', borderRadius: '99px', overflow: 'hidden' }}>
+                          <div style={{ width: `${climbPct}%`, height: '100%', background: '#FBF6EE', borderRadius: '99px', transition: 'width .4s' }}></div>
+                        </div>
+                      </div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '7px', fontSize: '10px', opacity: .8 }}>
+                        <span>A1</span><span style={{ fontWeight: 700 }}>▲ you're at {lv}</span><span>C2</span>
+                      </div>
+                    </div>
 
-              <div style={{ padding: '16px 20px 0' }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
-                  <div style={{ fontSize: '11px', letterSpacing: '.08em', textTransform: 'uppercase', color: '#BFA38C' }}>Real-world milestones</div>
-                  <span onClick={() => setView('achievements')} style={{ fontSize: '12px', fontWeight: 600, color: '#DB5338', cursor: 'pointer' }}>All badges →</span>
-                </div>
-                <div style={{ display: 'flex', gap: '10px', alignItems: 'center', marginBottom: '10px' }}>
-                  <div style={{ width: '30px', height: '30px', borderRadius: '9px', background: '#2F8F83', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '13px', flexShrink: 0 }}>✓</div>
-                  <div style={{ fontSize: '13.5px', fontWeight: 600 }}>Order food & coffee</div>
-                </div>
-                <div style={{ display: 'flex', gap: '10px', alignItems: 'center', marginBottom: '10px' }}>
-                  <div style={{ width: '30px', height: '30px', borderRadius: '9px', background: '#2F8F83', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '13px', flexShrink: 0 }}>✓</div>
-                  <div style={{ fontSize: '13.5px', fontWeight: 600 }}>Small talk with strangers</div>
-                </div>
-              </div>
+                    <div style={{ padding: '16px 20px 0' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
+                        <div style={{ fontSize: '11px', letterSpacing: '.08em', textTransform: 'uppercase', color: '#BFA38C' }}>Real-world milestones</div>
+                        <span onClick={() => setView('achievements')} style={{ fontSize: '12px', fontWeight: 600, color: '#DB5338', cursor: 'pointer' }}>All badges →</span>
+                      </div>
+                      {done.length === 0 && (
+                        <div style={{ fontSize: '13px', color: '#8A7E73', lineHeight: 1.45 }}>Finish your first chapter — lesson plus a live conversation — to earn your first real-world milestone.</div>
+                      )}
+                      {done.slice(-3).reverse().map((c: any, i: number) => (
+                        <div key={i} style={{ display: 'flex', gap: '10px', alignItems: 'center', marginBottom: '10px' }}>
+                          <div style={{ width: '30px', height: '30px', borderRadius: '9px', background: '#2F8F83', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '13px', flexShrink: 0 }}>✓</div>
+                          <div style={{ fontSize: '13.5px', fontWeight: 600 }}>{c.milestoneTitle}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                );
+              })()}
 
               <div style={{ padding: '14px 20px 0', display: 'flex', gap: '10px' }}>
                 <div onClick={() => setView('deck')} style={{ flex: 1, background: '#5B3A56', color: '#F3ECE2', borderRadius: '14px', padding: '13px 14px', cursor: 'pointer' }}>
@@ -2250,23 +2322,29 @@ export default function App() {
                 <span style={{ fontSize: '15px', color: 'transparent' }}>Aa</span>
               </div>
               <div className="cd-scroll" style={{ flex: 1, overflowY: 'auto', padding: '18px 24px' }}>
-                <div style={{ fontSize: '13px', color: '#8A7E73', marginBottom: '16px' }}>Words you have encountered, scheduled for review:</div>
-                {[
-                  { w: L.reviewWord, def: L.reviewMeaning, due: 'Due now', dueColor: '#DB5338', strength: '20%' },
-                  { w: L.bank[L.correct[0]], def: 'from your café lesson', due: 'Due in 2d', dueColor: '#E1A23A', strength: '55%' },
-                  { w: L.bank[L.correct[1]], def: 'from your word bank', due: 'Strong', dueColor: '#2F8F83', strength: '88%' }
-                ].map((wd, idx) => (
-                  <div key={idx} style={{ background: '#fff', border: '1px solid #EDE4D6', borderRadius: '14px', padding: '14px', marginBottom: '9px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <div>
-                      <div style={{ fontSize: '16px', fontWeight: 600 }} className={L.font}>{wd.w}</div>
-                      <div style={{ fontSize: '12px', color: '#8A7E73' }}>{wd.def}</div>
-                    </div>
-                    <div style={{ textAlign: 'right' }}>
-                      <span style={{ fontSize: '11px', color: wd.dueColor, fontWeight: 600, border: `1px solid ${wd.dueColor}40`, padding: '2px 8px', borderRadius: '99px' }}>{wd.due}</span>
-                      <div style={{ fontSize: '10.5px', color: '#9A8E84', marginTop: '4px' }}>Strength: {wd.strength}</div>
-                    </div>
+                <div style={{ fontSize: '13px', color: '#8A7E73', marginBottom: '16px' }}>Words you have practised, scheduled for review at the moment you are about to forget them:</div>
+                {deck === null && <div style={{ fontSize: '13px', color: '#9A8E84', textAlign: 'center', padding: '30px 0' }}>Loading your words…</div>}
+                {deck !== null && deck.length === 0 && (
+                  <div style={{ background: '#fff', border: '1px dashed #D8CDBB', borderRadius: '16px', padding: '22px', textAlign: 'center', fontSize: '13px', color: '#8A7E73', lineHeight: 1.45 }}>
+                    No words yet. Finish a lesson or save words while reading, and they will appear here with their review schedule.
                   </div>
-                ))}
+                )}
+                {(deck || []).map((wd, idx) => {
+                  const dueNow = wd.due_in_days <= 0;
+                  const color = dueNow ? '#DB5338' : wd.strength >= 80 ? '#2F8F83' : '#E1A23A';
+                  return (
+                    <div key={idx} style={{ background: '#fff', border: '1px solid #EDE4D6', borderRadius: '14px', padding: '14px', marginBottom: '9px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <div style={{ minWidth: 0, paddingRight: '10px' }}>
+                        <div style={{ fontSize: '16px', fontWeight: 600 }} className={L.font}>{wd.term}</div>
+                        <div style={{ fontSize: '12px', color: '#8A7E73' }}>{wd.definition}</div>
+                      </div>
+                      <div style={{ textAlign: 'right', flex: 'none' }}>
+                        <span style={{ fontSize: '11px', color, fontWeight: 600, border: `1px solid ${color}40`, padding: '2px 8px', borderRadius: '99px' }}>{dueNow ? 'Due now' : `Due in ${wd.due_in_days}d`}</span>
+                        <div style={{ fontSize: '10.5px', color: '#9A8E84', marginTop: '4px' }}>Strength: {wd.strength}%</div>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           )}
@@ -2281,13 +2359,17 @@ export default function App() {
               </div>
               <div className="cd-scroll" style={{ flex: 1, overflowY: 'auto', padding: '18px 24px' }}>
                 {[
-                  { level: 'A1', title: 'First words', can: 'Greet, order, ask prices, introduce yourself.', state: 'done' },
-                  { level: 'A2', title: 'Everyday life', can: 'Small talk, get around, handle a café or shop alone.', state: 'current' },
-                  { level: 'B1', title: 'Holding your own', can: 'Tell stories in the past, explain opinions.', state: 'next' },
-                  { level: 'B2', title: 'Real conversations', can: 'Debate, follow films without subtitles.', state: 'locked' },
-                  { level: 'C1', title: 'Fluent & nuanced', can: 'Catch humor, read novels, present at work.', state: 'locked' },
-                  { level: 'C2', title: 'Like a native', can: 'Effortless in any setting — idioms, slang, the lot.', state: 'locked' }
-                ].map((j, idx) => {
+                  { level: 'A1', title: 'First words', can: 'Greet, order, ask prices, introduce yourself.' },
+                  { level: 'A2', title: 'Everyday life', can: 'Small talk, get around, handle a café or shop alone.' },
+                  { level: 'B1', title: 'Holding your own', can: 'Tell stories in the past, explain opinions.' },
+                  { level: 'B2', title: 'Real conversations', can: 'Debate, follow films without subtitles.' },
+                  { level: 'C1', title: 'Fluent & nuanced', can: 'Catch humor, read novels, present at work.' },
+                  { level: 'C2', title: 'Like a native', can: 'Effortless in any setting — idioms, slang, the lot.' }
+                ].map((j, i, arr) => {
+                  // Where the learner really is: the level from their placement chat.
+                  const at = Math.max(0, arr.findIndex((x) => x.level === String(level).replace('+', '')));
+                  return { ...j, state: i < at ? 'done' : i === at ? 'current' : i === at + 1 ? 'next' : 'locked' };
+                }).map((j, idx) => {
                   const isActive = j.state === 'current';
                   const isDone = j.state === 'done';
                   return (
@@ -2582,7 +2664,7 @@ export default function App() {
               </div>
               <div className="cd-scroll" style={{ flex: 1, overflowY: 'auto', padding: '10px 20px 24px' }}>
                 <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: '26px', lineHeight: 1.08, marginBottom: '4px' }}>Things you can actually do</div>
-                <div style={{ fontSize: '12.5px', color: '#8A7E73', marginBottom: '18px' }}>Every badge is a real-world skill — not a points total. <strong style={{ color: '#2F8F83' }}>8 earned</strong> · 4 in progress</div>
+                <div style={{ fontSize: '12.5px', color: '#8A7E73', marginBottom: '18px' }}>Every badge is a real-world skill — not a points total. <strong style={{ color: '#2F8F83' }}>{badges.filter((b: any) => b.state === 'earned').length} earned</strong> · {badges.filter((b: any) => b.state === 'progress').length} up next</div>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '11px' }}>
                   {badges.map((b, i) => (
                     <div key={i} style={{ background: b.bg, border: b.border, borderRadius: '16px', padding: '13px 8px', textAlign: 'center' }}>
@@ -2643,7 +2725,7 @@ export default function App() {
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 22px 6px', flex: 'none' }}>
                 <span style={{ fontSize: '18px', color: 'transparent' }}>‹</span>
                 <span style={{ fontSize: '12.5px', fontWeight: 600, color: '#8A7E73' }}>Together</span>
-                <span onClick={() => setView('correct')} style={{ fontSize: '16px', color: '#DB5338', cursor: 'pointer' }}>＋</span>
+                <span style={{ width: '18px' }}></span>
               </div>
               <div className="cd-scroll" style={{ flex: 1, overflowY: 'auto', padding: '8px 20px 120px' }}>
                 <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: '26px', lineHeight: 1.05, marginBottom: '22px' }}>Your circle</div>
@@ -2658,7 +2740,7 @@ export default function App() {
                   ))}
                 </div>
                 <div style={{ marginTop: '10px', background: '#fff', border: '1px dashed #D8CDBB', borderRadius: '14px', padding: '18px', textAlign: 'center' }}>
-                  <div style={{ fontSize: '13px', color: '#5C5048', marginBottom: '12px', lineHeight: 1.4 }}>No one here yet — invite friends to compare progress and keep each other honest.</div>
+                  <div style={{ fontSize: '13px', color: '#5C5048', marginBottom: '12px', lineHeight: 1.4 }}>Friends and shared progress are coming soon. Invite someone to learn with you in the meantime.</div>
                   <div onClick={handleInvite} style={{ background: '#DB5338', color: '#FBF6EE', borderRadius: '12px', padding: '10px 20px', textAlign: 'center', fontSize: '13.5px', fontWeight: 600, cursor: 'pointer', display: 'inline-block' }}>
                     Invite friends →
                   </div>
@@ -2666,7 +2748,7 @@ export default function App() {
                 <div style={{ marginTop: '22px', borderTop: '1px solid #EDE4D6', paddingTop: '22px' }}>
                   <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: '22px', marginBottom: '14px' }}>Native corrections</div>
                   <div style={{ background: '#fff', border: '1px solid #EDE4D6', borderRadius: '16px', padding: '18px', textAlign: 'center' }}>
-                    <div style={{ fontSize: '13px', color: '#8A7E73', lineHeight: 1.4 }}>No corrections yet. When a native speaker reviews one of your recordings, it'll show up here.</div>
+                    <div style={{ fontSize: '13px', color: '#8A7E73', lineHeight: 1.4 }}>Native-speaker corrections are coming soon. For now, your AI conversation partner gives you a correction after every message.</div>
                   </div>
                 </div>
               </div>

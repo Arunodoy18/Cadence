@@ -20,12 +20,12 @@ export async function POST(req: NextRequest) {
 
     // Get enrollment for this user and language
     const enrollments = await sql`
-      SELECT id FROM enrollments 
+      SELECT id, cefr_level FROM enrollments 
       WHERE user_id = ${user.id} AND lang = ${lang}
     `;
 
     if (enrollments.length === 0) {
-      return NextResponse.json({ milestones: [] }, { status: 200 });
+      return NextResponse.json({ milestones: [], level: null }, { status: 200 });
     }
 
     const enrollment = enrollments[0];
@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
       WHERE enrollment_id = ${enrollment.id}
     `;
 
-    return NextResponse.json({ milestones });
+    return NextResponse.json({ milestones, level: enrollment.cefr_level || null });
   } catch (error: any) {
     console.error('Milestones API error:', error);
     return NextResponse.json({ error: error.message }, { status: 500 });
