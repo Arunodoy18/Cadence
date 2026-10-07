@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import { useAuth } from '@/components/Providers';
 import { apiFetch } from '@/lib/api';
 import { APP_DOWNLOAD_URL } from '@/lib/legal';
@@ -359,7 +360,7 @@ export default function App() {
 
   // Fetch milestones when visiting gamification screens
   useEffect(() => {
-    if (authStatus === 'authenticated' && (view === 'you' || view === 'achievements')) {
+    if (authStatus === 'authenticated' && (view === 'home' || view === 'you' || view === 'achievements' || view === 'journey' || view === 'score')) {
       fetchMilestones();
     }
   }, [authStatus, view, lang]);
@@ -373,11 +374,18 @@ export default function App() {
       });
       if (!res.ok) throw new Error(`API Error: ${res.status}`);
       const data = await res.json();
-      setEarnedMilestones(data.milestones.map((m: any) => m.key));
+      const keys = data.milestones.map((m: any) => m.key);
+      setEarnedMilestones(keys);
       setLevel(data.level || 'A1');
+      // Keep a copy on the phone so progress still shows when offline.
+      try { localStorage.setItem(`cadence_progress_${lang}`, JSON.stringify({ keys, level: data.level || 'A1' })); } catch {}
     } catch (e) {
       console.error('Milestones fetch error:', e);
-      showToast('Failed to load progress. Please check your connection.');
+      try {
+        const cached = JSON.parse(localStorage.getItem(`cadence_progress_${lang}`) || 'null');
+        if (cached) { setEarnedMilestones(cached.keys); setLevel(cached.level || 'A1'); }
+      } catch {}
+      showToast("You're offline — showing your last saved progress.");
     }
   };
 
@@ -1481,14 +1489,17 @@ export default function App() {
                 })}
               </div>
 
-              {lockedToast && (
-                <div style={{ position: 'fixed', bottom: '100px', left: '50%', transform: 'translateX(-50%)', background: '#2A2320', color: '#FBF6EE', padding: '12px 24px', borderRadius: '99px', fontSize: '14px', fontWeight: 600, zIndex: 200, boxShadow: '0 4px 14px rgba(0,0,0,0.2)', whiteSpace: 'nowrap', animation: 'floatUp 0.3s ease-out' }}>
-                  🔒 {lockedToast}
-                </div>
+              {lockedToast && createPortal(
+                <div style={{ position: 'fixed', bottom: '110px', left: 0, right: 0, display: 'flex', justifyContent: 'center', zIndex: 200, pointerEvents: 'none', padding: '0 16px' }}>
+                  <div style={{ background: '#2A2320', color: '#FBF6EE', padding: '12px 24px', borderRadius: '99px', fontSize: '14px', fontWeight: 600, boxShadow: '0 4px 14px rgba(0,0,0,0.2)', textAlign: 'center', animation: 'popIn 0.3s ease-out forwards' }}>
+                    🔒 {lockedToast}
+                  </div>
+                </div>,
+                document.body
               )}
 
               {/* Bottom Sheet Drawer */}
-              {activeChapter !== null && (
+              {activeChapter !== null && createPortal(
                 <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 100, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
                   <div onClick={() => setActiveChapter(null)} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(42,35,32,0.6)', backdropFilter: 'blur(4px)', animation: 'cdIn 0.3s ease-out' }}></div>
                   <div className="cd-scroll" style={{ background: '#FBF6EE', borderTopLeftRadius: '32px', borderTopRightRadius: '32px', padding: '16px 0 32px', position: 'relative', zIndex: 1, boxShadow: '0 -10px 40px rgba(0,0,0,0.15)', maxHeight: '85vh', overflowY: 'auto', animation: 'slideUpDrawer 0.4s cubic-bezier(0.2, 0.8, 0.2, 1)' }}>
@@ -1572,7 +1583,7 @@ export default function App() {
                               <div style={{ flex: 1 }}>
                                 <div style={{ fontSize: '16px', fontWeight: 700, color: '#2A2320', marginBottom: '2px' }}>{ch.partnerLabel}</div>
                                 <div style={{ fontSize: '13px', color: (ch1PronDone && !ch1LiveDone) ? '#2F8F83' : '#A8927C', fontWeight: 500 }}>
-                                  {ch1LiveDone ? 'Live conversation · done' : 'Live conversation · premium'}
+                                  {ch1LiveDone ? 'Live conversation · done' : 'Live conversation'}
                                 </div>
                               </div>
                             </div>
@@ -1581,7 +1592,8 @@ export default function App() {
                       );
                     })()}
                   </div>
-                </div>
+                </div>,
+                document.body
               )}
             </div>
           )}

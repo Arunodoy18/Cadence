@@ -54,16 +54,38 @@ jobs:
       - name: Sync Capacitor
         run: npx cap sync android
 
-      - name: Build debug APK
+      # Android only installs an APK over an existing one if both are signed with
+      # the SAME key. Without a stable key, every CI run signs with a fresh random
+      # debug key and phones refuse the update ("App not installed"). So when the
+      # signing secrets exist (see scripts/set-ci-signing-secrets.sh) we build a
+      # properly signed release APK; otherwise we fall back to an unsigned-key
+      # debug build that works for a first install only.
+      - name: Build APK
+        id: build
         working-directory: cadence-app/android
+        env:
+          KS_B64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          KS_PASS: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          KEY_PASS: ${{ secrets.ANDROID_KEY_PASSWORD }}
         run: |
           chmod +x gradlew
-          ./gradlew assembleDebug --no-daemon
+          if [ -n "$KS_B64" ]; then
+            echo "$KS_B64" | base64 --decode > ci-release.jks
+            printf 'storeFile=ci-release.jks\nstorePassword=%s\nkeyAlias=%s\nkeyPassword=%s\n' "$KS_PASS" "$KEY_ALIAS" "$KEY_PASS" > keystore.properties
+            ./gradlew assembleRelease --no-daemon
+            echo "apk=app/build/outputs/apk/release/app-release.apk" >> "$GITHUB_OUTPUT"
+            echo "signed=stable release key" >> "$GITHUB_OUTPUT"
+          else
+            ./gradlew assembleDebug --no-daemon
+            echo "apk=app/build/outputs/apk/debug/app-debug.apk" >> "$GITHUB_OUTPUT"
+            echo "signed=temporary debug key (updates need uninstall first)" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Name the APK
         run: |
-          cp android/app/build/outputs/apk/debug/app-debug.apk "Cadence-${GITHUB_SHA::7}.apk"
-          cp android/app/build/outputs/apk/debug/app-debug.apk Cadence-latest.apk
+          cp "android/${{ steps.build.outputs.apk }}" "Cadence-${GITHUB_SHA::7}.apk"
+          cp "android/${{ steps.build.outputs.apk }}" Cadence-latest.apk
 
       - uses: actions/upload-artifact@v4
         with:
@@ -80,5 +102,5 @@ jobs:
             --repo "$GITHUB_REPOSITORY" \
             --target "$GITHUB_SHA" \
             --title "Cadence APK (latest)" \
-            --notes "Auto-built from ${GITHUB_SHA::7} on every push to main. Debug-signed; sideload onto an Android phone." \
+            --notes "Auto-built from ${GITHUB_SHA::7} on every push to main. Signed with: ${{ steps.build.outputs.signed }}. Sideload onto an Android phone." \
             --prerelease
