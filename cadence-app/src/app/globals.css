@@ -177,7 +177,9 @@ body {
   display: none;
 }
 
-@media (max-width: 800px) {
+/* Full-screen app layout for any phone/tablet (touch device) in either orientation,
+   not just narrow windows — otherwise rotating a phone shows the desktop mock-up frame. */
+@media (max-width: 800px), (hover: none) and (pointer: coarse) {
   .cd-status-bar { display: none !important; }
   .cd-phone-shell { display: none !important; }
   .cd-quicknav { display: none !important; }

@@ -8,7 +8,7 @@
 - **versionCode** increases automatically on every CI build; **versionName** is 1.0.0.
 - **Privacy policy URL:** https://cadence.buildc3.tech/privacy
 - **Account-deletion URL:** https://cadence.buildc3.tech/account-deletion
-- **Contact email:** doifodeyash961@gmail.com
+- **Contact email:** arunodoy630@gmail.com
 
 ## Your steps in Play Console
 1. Create the app (name *Cadence*, default language English, App, Free).
