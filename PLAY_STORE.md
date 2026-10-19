@@ -60,3 +60,11 @@ ask the way, meet a family, check into a hotel, shop at a market, call for help.
 - Replace or confirm the support email above.
 - Have native speakers review the Hindi-family, Dravidian and Assamese courses.
 - Run through Play's *pre-launch report* (automatic after the first upload).
+
+## Update 2026-10: Play policy fixes already applied
+- Removed `SCHEDULE_EXACT_ALARM` / `USE_EXACT_ALARM` (Play restricts them; the daily reminder doesn't need exact timing).
+- Removed the push-notification plugin and Firebase (no push is used), so there is no FCM token or `c2dm` permission,
+  matching the Privacy Notice.
+- Remaining permissions: INTERNET, RECORD_AUDIO, MODIFY_AUDIO_SETTINGS, POST_NOTIFICATIONS, VIBRATE,
+  RECEIVE_BOOT_COMPLETED (re-arms the daily reminder after reboot), WAKE_LOCK.
+- Verified: target SDK 36, 16 KB page-size aligned, release-signed.
