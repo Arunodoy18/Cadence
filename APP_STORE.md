@@ -1,13 +1,13 @@
 # Publishing Cadence to the Apple App Store — status and checklist
 
-**Status: NOT ready. iOS has never been built or run.** The Xcode project exists (`cadence-app/ios`), but the
-development Mac does not have Xcode installed (only Command Line Tools), so nothing could be compiled or tested.
+**Status: builds successfully for the iOS Simulator (Xcode 27.1, iOS 27.1 SDK); NOT yet run, signed or submitted.**
+Still needed: signing with your Apple team, a run on a simulator/real iPhone, and the App Store Connect steps below.
 
 ## What is already in place
 - Bundle ID `tech.buildc3.cadence`, deployment target iOS 15, version 1.0 (1).
 - `NSMicrophoneUsageDescription` in Info.plist.
 - Push entitlement removed (no push is used). Daily reminder uses local notifications.
-- `PrivacyInfo.xcprivacy` written (data types + required-reason APIs) — see step 3 below.
+- `PrivacyInfo.xcprivacy` written and registered in the Xcode project (bundled in the app — verified).
 - Account deletion exists in-app (Settings → Data charter) — required by Apple 5.1.1(v).
 - Privacy policy URL: https://cadence.buildc3.tech/privacy · Support: arunodoy630@gmail.com
 - No third-party login, so *Sign in with Apple* is not required.
@@ -15,8 +15,7 @@ development Mac does not have Xcode installed (only Command Line Tools), so noth
 ## What YOU / a Mac must do
 1. **Apple Developer Program** membership (US$99/year) and an App Store Connect record for `tech.buildc3.cadence`.
 2. Install **Xcode** on a Mac. Then: `cd cadence-app && npm run build:native && npx cap sync ios && npx cap open ios`.
-3. In Xcode: add `ios/App/App/PrivacyInfo.xcprivacy` to the App target (drag in, tick *Copy if needed* and the App target).
-   Set your Team under *Signing & Capabilities*.
+3. In Xcode: set your Team under *Signing & Capabilities* (the privacy manifest is already included).
 4. **Run on a real iPhone and test everything** (I could not): sign-up, lessons, conversation, microphone permission,
    speech playback, reminder permission, rotation, safe areas/notch, offline launch. Expect iOS-specific fixes.
 5. App icon (1024×1024, no transparency) and launch screen check; 6.9" and 6.5" iPhone screenshots (and iPad if enabled).
