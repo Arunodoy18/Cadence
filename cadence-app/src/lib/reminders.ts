@@ -52,6 +52,9 @@ export async function applyReminder(next: Reminder, langName: string, minutes = 
         title: 'Time for your Cadence',
         body: `Your ${minutes}-minute ${langName} practice is waiting.`,
         schedule: { on: { hour: next.hour, minute: 0 }, allowWhileIdle: true },
+        // A daily nudge doesn't need to fire to the second. Exact alarms would also send the
+        // user to Android's "Alarms & reminders" settings page, which Google Play restricts.
+        isExactNotification: false,
       },
     ],
   });
