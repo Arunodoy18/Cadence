@@ -3,6 +3,7 @@ import { decode } from 'next-auth/jwt';
 import { headers } from 'next/headers';
 import { authOptions } from '@/app/api/auth/[...nextauth]/options';
 import { NextResponse } from 'next/server';
+import { sql } from '@/lib/db';
 
 type SessionUser = { id: string; email: string; name: string; plan: string };
 
@@ -25,24 +26,35 @@ async function getBearerUser(): Promise<SessionUser | null> {
       id: token.userId as string,
       email: (token.email as string) || '',
       name: (token.name as string) || '',
-      plan: 'plus',
+      plan: 'free',
     };
   } catch {
     return null;
   }
 }
 
-export async function requireAuth() {
-  const bearerUser = await getBearerUser();
-  if (bearerUser) return { error: null, user: bearerUser };
+const unauthorized = () => ({ error: NextResponse.json({ error: 'Unauthorized' }, { status: 401 }), user: null });
 
-  const session = await getSession();
-  if (!session?.user) {
-    return { error: NextResponse.json({ error: 'Unauthorized' }, { status: 401 }), user: null };
-  }
-  return { error: null, user: session.user as unknown as SessionUser };
+// A signed token proves who you were when you signed in — not that the account still exists.
+// Without this check, a deleted user's token would keep working for the rest of its 30 days.
+async function userStillExists(id: string): Promise<boolean> {
+  if (!/^[0-9a-f-]{36}$/i.test(id)) return false;
+  const rows = await sql`SELECT 1 FROM users WHERE id = ${id}`;
+  return rows.length > 0;
 }
 
-// Cadence has no paid tier — every feature is open to every signed-in user.
-// Kept as a named export so the (many) call sites don't change.
+export async function requireAuth() {
+  const bearerUser = await getBearerUser();
+  if (bearerUser) {
+    return (await userStillExists(bearerUser.id)) ? { error: null, user: bearerUser } : unauthorized();
+  }
+
+  const session = await getSession();
+  if (!session?.user) return unauthorized();
+  const user = session.user as unknown as SessionUser;
+  return (await userStillExists(user.id)) ? { error: null, user } : unauthorized();
+}
+
+// Kept as a named export so the (many) call sites don't change. Plan limits are enforced
+// separately, per feature, in usage.ts.
 export const requirePlus = requireAuth;

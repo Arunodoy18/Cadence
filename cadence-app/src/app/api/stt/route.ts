@@ -17,16 +17,25 @@ export async function POST(req: NextRequest) {
 
     const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || process.env.OPEN_AI_API || 'dummy-key' });
 
-    const formData = await req.formData();
+    let formData: FormData;
+    try { formData = await req.formData(); } catch { return NextResponse.json({ error: 'Invalid request' }, { status: 400 }); }
+    const audioFile = formData.get('file') as File | null;
+    const lang = formData.get('lang');
+    if (!audioFile || typeof audioFile === 'string') {
+      return NextResponse.json({ error: 'No audio file provided' }, { status: 400 });
+    }
+    // A voice clip is a few seconds; refuse anything big before it reaches the paid speech API.
+    if (audioFile.size > 5 * 1024 * 1024) {
+      return NextResponse.json({ error: 'Recording is too large' }, { status: 413 });
+    }
+    if (lang !== null && (typeof lang !== 'string' || lang.length > 20)) {
+      return NextResponse.json({ error: 'Invalid language' }, { status: 400 });
+    }
 
+    // Charge only for requests that are valid.
     const c = await consume(auth.user!.id, 'stt', 1);
     if (!c.ok) return limitResponse('stt', c);
     charged = { userId: auth.user!.id, kind: 'stt', units: 1 };
-    const audioFile = formData.get('file') as File;
-    const lang = formData.get('lang') as string;
-    if (!audioFile) {
-      return NextResponse.json({ error: 'No audio file provided' }, { status: 400 });
-    }
 
     const buffer = Buffer.from(await audioFile.arrayBuffer());
     const file = await toFile(buffer, 'audio.wav', { type: 'audio/wav' });
@@ -38,7 +47,7 @@ export async function POST(req: NextRequest) {
 
     if (lang) {
       // Whisper expects ISO-639-1 format (e.g. 'en', 'es', 'fr')
-      requestParams.language = lang.split('-')[0];
+      requestParams.language = (lang as string).split('-')[0];
     }
 
     try {
@@ -55,7 +64,7 @@ export async function POST(req: NextRequest) {
     if (charged) await refund(charged.userId, charged.kind, charged.units);
     const e = error as Error;
     console.error('STT API error:', e);
-    return NextResponse.json({ error: e.message }, { status: 500 });
+    return NextResponse.json({ error: 'Something went wrong. Please try again.' }, { status: 500 });
   }
 }
 

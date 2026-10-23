@@ -849,7 +849,7 @@ export default function App() {
   };
 
   const submitConvo = async (text: string) => {
-    const trimmed = text.trim();
+    const trimmed = text.trim().slice(0, 500); // the server rejects longer messages
     if (!trimmed) return;
 
     const _L = LANGS[lang] || LANGS.es;

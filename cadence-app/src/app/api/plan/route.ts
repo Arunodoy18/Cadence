@@ -15,7 +15,8 @@ export async function POST(req: NextRequest) {
     }
 
     const { lang } = await req.json();
-    if (!lang) {
+    // `lang` becomes a database row — keep it a short plain name, not arbitrary text.
+    if (typeof lang !== 'string' || !lang || lang.length > 40) {
       return NextResponse.json({ error: 'Language is required' }, { status: 400 });
     }
 
@@ -149,6 +150,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ plan: planItems });
   } catch (error: any) {
     console.error('Plan API error:', error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ error: 'Something went wrong. Please try again.' }, { status: 500 });
   }
 }

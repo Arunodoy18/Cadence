@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { encode } from 'next-auth/jwt';
-import { authorizeCredentials } from '@/lib/credentials';
+import { authorizeCredentials, AuthError } from '@/lib/credentials';
+import { hitLimit } from '@/lib/usage';
 import { requireAuth } from '@/lib/auth';
 
 const MAX_AGE = 30 * 24 * 60 * 60; // 30 days, same as the web session
@@ -12,6 +13,16 @@ export async function POST(req: NextRequest) {
     if (!secret) return NextResponse.json({ error: 'Server is not configured' }, { status: 500 });
 
     const body = await req.json();
+    if (!body || typeof body !== 'object') return NextResponse.json({ error: 'Invalid request' }, { status: 400 });
+
+    // One visitor (IP) can't mass-create accounts to farm free AI quotas or hammer logins.
+    // Netlify sets x-nf-client-connection-ip; fall back to the first x-forwarded-for hop.
+    const ip = (req.headers.get('x-nf-client-connection-ip') || req.headers.get('x-forwarded-for') || 'unknown').split(',')[0].trim();
+    const signup = body.action === 'signup';
+    if (!(await hitLimit(`${signup ? 'signup' : 'login'}-ip:${ip}`, signup ? 25 : 60, signup ? 3600 : 60))) {
+      return NextResponse.json({ error: 'Too many attempts from your network. Please try again later.' }, { status: 429 });
+    }
+
     const user = await authorizeCredentials({
       email: typeof body.email === 'string' ? body.email.trim() : undefined,
       password: body.password,
@@ -28,8 +39,10 @@ export async function POST(req: NextRequest) {
     });
     return NextResponse.json({ token, user });
   } catch (e: any) {
-    // authorizeCredentials throws user-facing messages (bad password, etc.)
-    return NextResponse.json({ error: e?.message || 'Sign-in failed' }, { status: 400 });
+    // AuthError messages are user-facing (bad password, etc.); anything else is internal — don't leak it.
+    if (e instanceof AuthError) return NextResponse.json({ error: e.message }, { status: 400 });
+    console.error('mobile auth error:', e);
+    return NextResponse.json({ error: 'Something went wrong. Please try again.' }, { status: e instanceof SyntaxError ? 400 : 500 });
   }
 }
 

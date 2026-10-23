@@ -22,6 +22,13 @@ export async function POST(req: NextRequest) {
 
     const origin = req.nextUrl.origin;
 
+    // No payments are live yet. Never hand out the demo "mock" checkout in production:
+    // it would let a user mark themselves as paid.
+    const providerConfigured = provider === 'stripe' ? Boolean(process.env.STRIPE_SECRET_KEY) : Boolean(process.env.RAZORPAY_KEY_ID && process.env.RAZORPAY_KEY_SECRET && process.env.RAZORPAY_PLAN_ID);
+    if (process.env.NODE_ENV === 'production' && !providerConfigured) {
+      return NextResponse.json({ error: 'Payments are not available yet.' }, { status: 503 });
+    }
+
     if (provider === 'stripe') {
       const stripeKey = process.env.STRIPE_SECRET_KEY;
       if (!stripeKey) {
@@ -103,6 +110,6 @@ export async function POST(req: NextRequest) {
     }
   } catch (error: any) {
     console.error('Checkout API error:', error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ error: 'Something went wrong. Please try again.' }, { status: 500 });
   }
 }

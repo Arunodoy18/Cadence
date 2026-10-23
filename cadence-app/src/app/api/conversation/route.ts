@@ -16,6 +16,16 @@ export async function POST(req: NextRequest) {
 
     const { messages, lang, scenario, partnerName, persona, level } = await req.json();
 
+    // Bound every field: this text goes straight into a paid LLM prompt.
+    const str = (v: unknown, max: number) => typeof v === 'string' && v.length <= max;
+    if (
+      !Array.isArray(messages) || messages.length > 60 ||
+      !messages.every((m) => m && typeof m === 'object' && typeof m.who === 'string' && str(m.n, 600)) ||
+      !str(lang, 60) || !lang || !str(scenario, 120) || !str(partnerName, 60) || !str(persona, 200) || !str(level, 20)
+    ) {
+      return NextResponse.json({ error: 'Invalid conversation request' }, { status: 400 });
+    }
+
     // The partner's opening line is free; every reply to the learner uses one AI message.
     if (Array.isArray(messages) && messages.length > 0) {
       const c = await consume(auth.user!.id, 'convo', 1);
@@ -46,7 +56,8 @@ ${messages.length === 0 ? "IMPORTANT: The user has just entered the scenario. Yo
   } catch (error) {
     if (charged) await refund(charged.userId, charged.kind, charged.units);
     const e = error as Error;
+    if (e instanceof SyntaxError) return NextResponse.json({ error: 'Invalid request' }, { status: 400 });
     console.error('Conversation API error:', e);
-    return NextResponse.json({ error: e.message }, { status: 500 });
+    return NextResponse.json({ error: 'Something went wrong. Please try again.' }, { status: 500 });
   }
 }

@@ -20,9 +20,27 @@ export function ensureBillingTables() {
       await sql`CREATE TABLE IF NOT EXISTS plus_waitlist (
         user_id uuid PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
         created_at timestamptz DEFAULT now())`;
+      await sql`CREATE TABLE IF NOT EXISTS rate_hits (
+        key text NOT NULL, bucket bigint NOT NULL, n int NOT NULL DEFAULT 0,
+        PRIMARY KEY (key, bucket))`;
     })().catch((e) => { ready = null; throw e; });
   }
   return ready;
+}
+
+// Shared (database-backed) rate limit for the abuse-prone auth endpoints. The in-memory limiter
+// in rateLimit.ts resets on every serverless instance, so it can't stop a determined script.
+// Returns false once `key` has been hit more than `limit` times in the current window (windows must be ≤ 1 hour).
+export async function hitLimit(key: string, limit: number, windowSec: number): Promise<boolean> {
+  await ensureBillingTables();
+  const now = Math.floor(Date.now() / 1000);
+  const bucket = Math.floor(now / windowSec) * windowSec; // window start, in epoch seconds (comparable across windows)
+  const rows = await sql`
+    INSERT INTO rate_hits (key, bucket, n) VALUES (${key}, ${bucket}, 1)
+    ON CONFLICT (key, bucket) DO UPDATE SET n = rate_hits.n + 1
+    RETURNING n`;
+  if (Math.random() < 0.02) { try { await sql`DELETE FROM rate_hits WHERE bucket < ${now - 7200}`; } catch {} }
+  return (rows[0]?.n as number) <= limit;
 }
 
 // Limits reset at midnight India time (the main audience).

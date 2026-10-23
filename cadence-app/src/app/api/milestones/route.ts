@@ -40,6 +40,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ milestones, level: enrollment.cefr_level || null });
   } catch (error: any) {
     console.error('Milestones API error:', error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ error: 'Something went wrong. Please try again.' }, { status: 500 });
   }
 }

@@ -17,8 +17,8 @@ export async function POST(req: NextRequest) {
   try {
     const jsonBody = JSON.parse(bodyText);
     if (jsonBody.isMock) {
-      if (realProviderConfigured) {
-        return NextResponse.json({ error: 'Mock checkout is disabled once a real payment provider is configured' }, { status: 403 });
+      if (realProviderConfigured || process.env.NODE_ENV === 'production') {
+        return NextResponse.json({ error: 'Mock checkout is disabled in production' }, { status: 403 });
       }
 
       const auth = await requireAuth();

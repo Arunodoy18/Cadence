@@ -65,7 +65,7 @@ export async function POST(req: NextRequest) {
     }
 
     const { text, lang } = await req.json();
-    if (!text || !lang) {
+    if (typeof text !== 'string' || typeof lang !== 'string' || !text || !lang || lang.length > 20) {
       return NextResponse.json({ error: 'Text and language are required' }, { status: 400 });
     }
     // Keep a single request bounded (cost + latency).
@@ -93,7 +93,8 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     if (charged) await refund(charged.userId, 'tts', charged.units);
     const e = error as Error;
+    if (e instanceof SyntaxError) return NextResponse.json({ error: 'Invalid request' }, { status: 400 });
     console.error('TTS API error:', e);
-    return NextResponse.json({ error: e.message }, { status: 500 });
+    return NextResponse.json({ error: 'Something went wrong. Please try again.' }, { status: 500 });
   }
 }

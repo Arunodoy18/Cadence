@@ -14,18 +14,22 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Too many requests — please slow down.' }, { status: 429 });
     }
 
-    const formData = await req.formData();
+    let formData: FormData;
+    try { formData = await req.formData(); } catch { return NextResponse.json({ error: 'Invalid request' }, { status: 400 }); }
+    const audioFile = formData.get('file') as File | null;
+    const refText = formData.get('refText');
+    const lang = formData.get('lang');
 
+    if (!audioFile || typeof audioFile === 'string' || typeof refText !== 'string' || !refText || typeof lang !== 'string' || !lang) {
+      return NextResponse.json({ error: 'Audio file, reference text, and language are required' }, { status: 400 });
+    }
+    if (audioFile.size > 5 * 1024 * 1024) return NextResponse.json({ error: 'Recording is too large' }, { status: 413 });
+    if (refText.length > 400 || lang.length > 20) return NextResponse.json({ error: 'Invalid request' }, { status: 400 });
+
+    // Charge only for requests that are valid.
     const c = await consume(auth.user!.id, 'pron', 1);
     if (!c.ok) return limitResponse('pron', c);
     charged = { userId: auth.user!.id, kind: 'pron', units: 1 };
-    const audioFile = formData.get('file') as File;
-    const refText = formData.get('refText') as string;
-    const lang = formData.get('lang') as string;
-
-    if (!audioFile || !refText || !lang) {
-      return NextResponse.json({ error: 'Audio file, reference text, and language are required' }, { status: 400 });
-    }
 
     const locale = localeMap[lang] || 'en-US';
     const azureKey = process.env.AZURE_API_KEY;
@@ -102,7 +106,7 @@ export async function POST(req: NextRequest) {
     if (charged) await refund(charged.userId, charged.kind, charged.units);
     const e = error as Error;
     console.error('Pronounce API error:', e);
-    return NextResponse.json({ error: e.message }, { status: 500 });
+    return NextResponse.json({ error: 'Something went wrong. Please try again.' }, { status: 500 });
   }
 }
 
