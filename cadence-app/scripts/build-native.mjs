@@ -16,6 +16,7 @@ const aside = [
   ['src/lib/push.ts', '.native-build-aside/push.ts'],
   ['src/lib/rateLimit.ts', '.native-build-aside/rateLimit.ts'],
   ['src/lib/migrate.ts', '.native-build-aside/migrate.ts'],
+  ['src/lib/usage.ts', '.native-build-aside/usage.ts'],
 ];
 
 import { mkdirSync } from 'node:fs';
