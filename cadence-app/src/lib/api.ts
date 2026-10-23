@@ -41,6 +41,7 @@ export function hasToken() {
 }
 
 export const UNAUTHORIZED_EVENT = 'cadence:unauthorized';
+export const LIMIT_EVENT = 'cadence:limit';
 
 // A hung request should fail fast with a clear message, not leave the user
 // staring at a spinner. Generous enough for AI replies and speech uploads.
@@ -56,6 +57,10 @@ export async function apiFetch(path: string, init: RequestInit = {}): Promise<Re
   });
   if (res.status === 401 && memoryToken && typeof window !== 'undefined') {
     window.dispatchEvent(new Event(UNAUTHORIZED_EVENT));
+  }
+  // Free daily limit reached: tell the app so it can show the upgrade sheet.
+  if (res.status === 402 && typeof window !== 'undefined') {
+    res.clone().json().then((d) => window.dispatchEvent(new CustomEvent(LIMIT_EVENT, { detail: d }))).catch(() => {});
   }
   return res;
 }

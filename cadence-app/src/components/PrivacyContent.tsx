@@ -23,6 +23,7 @@ export function PrivacyContent() {
         <li style={li}><strong>Account data</strong> — name, email address and a hashed password. <em>Purpose:</em> to create and secure your account and keep your progress across devices.</li>
         <li style={li}><strong>Learning data</strong> — chosen language, level, goals, lesson and milestone progress, vocabulary you save, and your practice attempts. <em>Purpose:</em> to personalise lessons and spaced-repetition reviews.</li>
         <li style={li}><strong>Voice recordings</strong> — only while you hold the microphone button in a conversation or pronunciation exercise, and only after you grant microphone permission. <em>Purpose:</em> to turn your speech into text, reply conversationally and score pronunciation. We do not record in the background.</li>
+        <li style={li}><strong>Daily usage counts</strong> — how many AI messages, pronunciation checks and voice requests you used today, and whether you joined the Cadence Plus waiting list. <em>Purpose:</em> to apply the free daily limits and tell you when Plus is ready.</li>
         <li style={li}><strong>Reminders</strong> — if you switch on the daily reminder, it is scheduled on your phone. Nothing about it is sent to us.</li>
       </ul>
       <p>We collect only what these purposes need. We do not use your data for advertising and we do not sell it.</p>

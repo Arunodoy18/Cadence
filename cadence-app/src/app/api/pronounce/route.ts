@@ -1,9 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requirePlus } from '@/lib/auth';
 import { rateLimit } from '@/lib/rateLimit';
+import { consume, refund, limitResponse } from '@/lib/usage';
 import { localeMap } from '@/lib/speechLocales';
 
 export async function POST(req: NextRequest) {
+  let charged: { userId: string; kind: any; units: number } | null = null;
   try {
     const auth = await requirePlus();
     if (auth.error) return auth.error;
@@ -13,6 +15,10 @@ export async function POST(req: NextRequest) {
     }
 
     const formData = await req.formData();
+
+    const c = await consume(auth.user!.id, 'pron', 1);
+    if (!c.ok) return limitResponse('pron', c);
+    charged = { userId: auth.user!.id, kind: 'pron', units: 1 };
     const audioFile = formData.get('file') as File;
     const refText = formData.get('refText') as string;
     const lang = formData.get('lang') as string;
@@ -93,6 +99,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json(result);
   } catch (error) {
+    if (charged) await refund(charged.userId, charged.kind, charged.units);
     const e = error as Error;
     console.error('Pronounce API error:', e);
     return NextResponse.json({ error: e.message }, { status: 500 });

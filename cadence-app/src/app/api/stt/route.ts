@@ -2,9 +2,11 @@ import { NextRequest, NextResponse } from 'next/server';
 import OpenAI, { toFile } from 'openai';
 import { requirePlus } from '@/lib/auth';
 import { rateLimit } from '@/lib/rateLimit';
+import { consume, refund, limitResponse } from '@/lib/usage';
 import { localeMap } from '@/lib/speechLocales';
 
 export async function POST(req: NextRequest) {
+  let charged: { userId: string; kind: any; units: number } | null = null;
   try {
     const auth = await requirePlus();
     if (auth.error) return auth.error;
@@ -16,6 +18,10 @@ export async function POST(req: NextRequest) {
     const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || process.env.OPEN_AI_API || 'dummy-key' });
 
     const formData = await req.formData();
+
+    const c = await consume(auth.user!.id, 'stt', 1);
+    if (!c.ok) return limitResponse('stt', c);
+    charged = { userId: auth.user!.id, kind: 'stt', units: 1 };
     const audioFile = formData.get('file') as File;
     const lang = formData.get('lang') as string;
     if (!audioFile) {
@@ -46,6 +52,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ transcript });
     }
   } catch (error) {
+    if (charged) await refund(charged.userId, charged.kind, charged.units);
     const e = error as Error;
     console.error('STT API error:', e);
     return NextResponse.json({ error: e.message }, { status: 500 });

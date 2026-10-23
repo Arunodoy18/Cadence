@@ -3,6 +3,7 @@ import { sql } from '@/lib/db';
 import { requireAuth } from '@/lib/auth';
 import { rateLimit } from '@/lib/rateLimit';
 import { ensureConsentColumns } from '@/lib/credentials';
+import { ensureBillingTables } from '@/lib/usage';
 
 // Backs the "Data charter" screen's "Export my data" / "Delete account & data"
 // promises — those buttons must do something real, not just look like they do.
@@ -17,6 +18,7 @@ export async function GET(req: NextRequest) {
   }
 
   await ensureConsentColumns();
+  await ensureBillingTables();
 
   const [users, enrollments, attempts] = await Promise.all([
     sql`SELECT id, email, name, auth_provider, native_lang, created_at, consent_at, consent_version, age_confirmed FROM users WHERE id = ${user.id}`,
@@ -43,6 +45,9 @@ export async function GET(req: NextRequest) {
     attempts,
     milestones,
     subscriptions,
+    entitlements: await sql`SELECT plan, source, status, expires_at, created_at FROM entitlements WHERE user_id = ${user.id}`,
+    usage_daily: await sql`SELECT day, kind, used FROM usage_daily WHERE user_id = ${user.id} ORDER BY day DESC LIMIT 90`,
+    plus_waitlist: await sql`SELECT created_at FROM plus_waitlist WHERE user_id = ${user.id}`,
   });
 }
 

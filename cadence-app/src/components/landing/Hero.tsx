@@ -104,7 +104,7 @@ export function Hero() {
         <p className="ld-sub">Cadence builds a speaker, not a streak. Talk with an AI partner from your very first lesson, get kind corrections on every sentence, and learn the culture behind the words.</p>
         <DownloadButton large id="download" />
         <ul className="ld-ticks">
-          <li>No ads, no paywall — ever</li>
+          <li>No ads. Lessons, reading and your word deck are free forever</li>
           <li>Hindi, Marathi, Gujarati, Assamese, Malayalam, Kannada &amp; more</li>
           <li>Your data stays yours — export or delete anytime</li>
         </ul>

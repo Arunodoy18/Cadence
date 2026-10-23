@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireAuth } from '@/lib/auth';
 import { rateLimit } from '@/lib/rateLimit';
+import { consume, refund, limitResponse } from '@/lib/usage';
 import { azureVoices } from '@/lib/azureVoices';
 
 const escapeXml = (s: string) =>
@@ -54,6 +55,7 @@ async function elevenLabsSpeak(text: string): Promise<Buffer | null> {
 }
 
 export async function POST(req: NextRequest) {
+  let charged: { userId: string; units: number } | null = null;
   try {
     const auth = await requireAuth();
     if (auth.error) return auth.error;
@@ -69,8 +71,15 @@ export async function POST(req: NextRequest) {
     // Keep a single request bounded (cost + latency).
     const clipped = String(text).slice(0, 3000);
 
+    // Cloud voice is billed by character. When the free budget is used up the app
+    // quietly falls back to the phone's own voice, so nothing breaks.
+    const c = await consume(auth.user!.id, 'tts', clipped.length);
+    if (!c.ok) return limitResponse('tts', c);
+    charged = { userId: auth.user!.id, units: clipped.length };
+
     const audio = (await azureSpeak(clipped, lang)) ?? (await elevenLabsSpeak(clipped));
     if (!audio) {
+      if (charged) await refund(charged.userId, 'tts', charged.units);
       return NextResponse.json({ error: 'Voice synthesis is unavailable right now' }, { status: 502 });
     }
 
@@ -82,6 +91,7 @@ export async function POST(req: NextRequest) {
       },
     });
   } catch (error) {
+    if (charged) await refund(charged.userId, 'tts', charged.units);
     const e = error as Error;
     console.error('TTS API error:', e);
     return NextResponse.json({ error: e.message }, { status: 500 });

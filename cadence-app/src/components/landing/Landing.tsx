@@ -19,7 +19,7 @@ const FEATURES = [
 ];
 
 const FAQ = [
-  { q: 'Is Cadence free?', a: 'Yes. Every feature is free, with no ads and no paywall.' },
+  { q: 'Is Cadence free?', a: 'Free to download, with no ads. Lessons, reading, culture notes and your word deck are free forever. Daily AI conversation and pronunciation practice are free up to a daily limit; Cadence Plus (coming soon) makes them unlimited.' },
   { q: 'Why does Android say “unknown apps”?', a: 'Cadence installs straight from this page, not the Play Store yet, so Android asks you to allow your browser to install it once. The file is signed with our release key and the full source code is public on GitHub. A Play Store version is on the way.' },
   { q: 'Is there an iPhone version?', a: 'Not yet. Android comes first; iOS is planned.' },
   { q: 'Which Android versions work?', a: 'Android 7.0 and newer. It needs internet for conversation, voice and saving progress.' },

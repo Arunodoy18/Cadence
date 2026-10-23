@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { useAuth } from '@/components/Providers';
-import { apiFetch } from '@/lib/api';
+import { apiFetch, LIMIT_EVENT } from '@/lib/api';
 import { APP_DOWNLOAD_URL } from '@/lib/legal';
 import { applyReminder, loadReminder, type Reminder } from '@/lib/reminders';
 import { PrivacyContent } from '@/components/PrivacyContent';
@@ -172,6 +172,33 @@ export default function App() {
   const [picker, setPicker] = useState(false);
   const [pickerNext, setPickerNext] = useState<string | null>(null);
   const [toast, setToast] = useState<string | null>(null);
+
+  // ---- free daily limits (Cadence Plus) --------------------------------------
+  type Usage = { plan: 'free' | 'plus'; enforced: boolean; limits: Record<string, number>; used: Record<string, number>; resetsAt: string };
+  const [usage, setUsage] = useState<Usage | null>(null);
+  const [paywall, setPaywall] = useState<{ kind: string; limit: number; resetsAt: string } | null>(null);
+  const [waitlisted, setWaitlisted] = useState(false);
+  const fetchUsage = useCallback(async () => {
+    try {
+      const r = await apiFetch('/api/usage');
+      if (r.ok) setUsage(await r.json());
+    } catch {}
+  }, []);
+  useEffect(() => {
+    const onLimit = (e: Event) => {
+      const d = (e as CustomEvent).detail || {};
+      // Cloud voice quietly falls back to the phone's voice — only interrupt for the paid-for features.
+      if (d.kind && d.kind !== 'tts') { setPaywall({ kind: d.kind, limit: d.limit, resetsAt: d.resetsAt }); fetchUsage(); }
+    };
+    window.addEventListener(LIMIT_EVENT, onLimit);
+    return () => window.removeEventListener(LIMIT_EVENT, onLimit);
+  }, [fetchUsage]);
+  const joinWaitlist = async () => {
+    try {
+      const r = await apiFetch('/api/waitlist', { method: 'POST' });
+      if (r.ok) { setWaitlisted(true); showToast("You're on the list — we'll tell you when Plus is ready."); }
+    } catch { showToast('Could not join the list. Please check your connection.'); }
+  };
 
   const showToast = (msg: string) => {
     setToast(msg);
@@ -378,6 +405,10 @@ export default function App() {
       setView('welcome');
     }
   }, [authStatus, view]);
+
+  useEffect(() => {
+    if (authStatus === 'authenticated' && (view === 'speakHub' || view === 'convo' || view === 'pronounce')) fetchUsage();
+  }, [authStatus, view, fetchUsage]);
 
   // Fetch milestones when visiting gamification screens
   useEffect(() => {
@@ -676,7 +707,7 @@ export default function App() {
         body: formData,
       });
       if (!res.ok) {
-        showToast('API Error: Failed to analyze pronunciation.');
+        if (res.status !== 402) showToast('API Error: Failed to analyze pronunciation.');
         setPronScore(0);
         return;
       }
@@ -744,7 +775,7 @@ export default function App() {
         body: formData,
       });
       if (!res.ok) {
-        showToast('API Error: Failed to convert speech to text.');
+        if (res.status !== 402) showToast('API Error: Failed to convert speech to text.');
         setConvo((prev) => ({ ...prev, listening: false }));
         return;
       }
@@ -850,8 +881,13 @@ export default function App() {
       });
 
       if (!res.ok) {
-        showToast("API Error: Failed to connect to the conversation AI.");
-        setConvo((prev) => ({ ...prev, thinking: false }));
+        if (res.status === 402) {
+          // Free limit reached: take the learner's message back out of the chat so it isn't left unanswered.
+          setConvo((prev) => ({ ...prev, thinking: false, msgs: prev.msgs.slice(0, -1) }));
+        } else {
+          showToast("API Error: Failed to connect to the conversation AI.");
+          setConvo((prev) => ({ ...prev, thinking: false }));
+        }
         return;
       }
       
@@ -1917,7 +1953,19 @@ export default function App() {
             <div className="cd-screen cd-scroll" style={{ flex: 1, overflowY: 'auto', paddingBottom: '74px' }}>
               <div style={{ padding: '8px 24px 0' }}>
                 <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: '27px', lineHeight: 1.05 }}>Who do you want to talk to?</div>
-                <div style={{ fontSize: '12.5px', color: '#8A7E73', marginTop: '3px' }}>Real scenarios · speaks at your level · always free</div>
+                <div style={{ fontSize: '12.5px', color: '#8A7E73', marginTop: '3px' }}>Real scenarios · speaks at your level</div>
+                {usage && usage.plan === 'free' && usage.enforced && (() => {
+                  const left = Math.max(0, usage.limits.convo - usage.used.convo);
+                  return (
+                    <div onClick={() => setPaywall({ kind: 'convo', limit: usage.limits.convo, resetsAt: usage.resetsAt })} style={{ marginTop: '10px', display: 'inline-flex', alignItems: 'center', gap: '8px', background: left === 0 ? '#FCE8E2' : '#E6F0EE', color: left === 0 ? '#B23E27' : '#2F6F66', border: `1px solid ${left === 0 ? '#F4C7BB' : '#BFE0DA'}`, borderRadius: '99px', padding: '6px 12px', fontSize: '12px', fontWeight: 700, cursor: 'pointer' }}>
+                      <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: left === 0 ? '#DB5338' : '#2F8F83' }}></span>
+                      {left === 0 ? 'Free AI practice used today' : `${left} of ${usage.limits.convo} free AI messages left today`}
+                    </div>
+                  );
+                })()}
+                {usage && usage.plan === 'plus' && (
+                  <div style={{ marginTop: '10px', display: 'inline-flex', background: '#2A2320', color: '#FBF6EE', borderRadius: '99px', padding: '6px 12px', fontSize: '12px', fontWeight: 700 }}>★ Cadence Plus</div>
+                )}
               </div>
               <div style={{ padding: '16px 18px 0' }}>
                 <div onClick={() => startScenario('cafe')} style={{ background: 'linear-gradient(140deg,#DB5338,#B23E27)', borderRadius: '18px', padding: '16px', color: '#FBF6EE', marginBottom: '14px', cursor: 'pointer' }}>
@@ -3049,6 +3097,32 @@ export default function App() {
                 <span style={{ fontSize: '10px', marginTop: '2px', fontWeight: 600 }}>You</span>
               </div>
             </div>
+          )}
+
+          {/* ===== FREE LIMIT / CADENCE PLUS SHEET ===== */}
+          {paywall && createPortal(
+            <div style={{ position: 'fixed', inset: 0, zIndex: 300, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
+              <div onClick={() => setPaywall(null)} style={{ position: 'absolute', inset: 0, background: 'rgba(42,35,32,.6)', backdropFilter: 'blur(4px)', animation: 'cdIn .25s ease-out' }}></div>
+              <div style={{ position: 'relative', background: '#FBF6EE', borderRadius: '30px 30px 0 0', padding: '14px 24px calc(28px + env(safe-area-inset-bottom))', animation: 'slideUpDrawer .35s cubic-bezier(.2,.8,.2,1)', boxShadow: '0 -10px 40px rgba(0,0,0,.2)' }}>
+                <div style={{ width: '44px', height: '5px', background: '#E0D5C1', borderRadius: '99px', margin: '0 auto 18px' }}></div>
+                <div style={{ fontSize: '34px', textAlign: 'center' }}>🌱</div>
+                <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: '28px', lineHeight: 1.1, textAlign: 'center', margin: '6px 0 8px' }}>That’s today’s free practice</div>
+                <div style={{ fontSize: '14px', color: '#5C5048', lineHeight: 1.5, textAlign: 'center', marginBottom: '16px' }}>
+                  You’ve used your {paywall.limit} free {paywall.kind === 'convo' ? 'AI messages' : paywall.kind === 'pron' ? 'pronunciation checks' : 'voice messages'} for today. They come back at {new Date(paywall.resetsAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}. Lessons, reading and your word deck stay free and unlimited.
+                </div>
+                <div style={{ background: '#fff', border: '1px solid #EDE4D6', borderRadius: '18px', padding: '14px 16px', marginBottom: '16px' }}>
+                  <div style={{ fontSize: '12px', letterSpacing: '.08em', textTransform: 'uppercase', color: '#BFA38C', fontWeight: 800, marginBottom: '8px' }}>Cadence Plus · coming soon</div>
+                  {['Unlimited AI conversation', 'Unlimited pronunciation lab', 'Support the Indian-language courses'].map((t) => (
+                    <div key={t} style={{ display: 'flex', gap: '10px', fontSize: '14px', padding: '4px 0' }}><span style={{ color: '#2F8F83', fontWeight: 900 }}>✓</span>{t}</div>
+                  ))}
+                </div>
+                <div onClick={waitlisted ? undefined : joinWaitlist} style={{ background: waitlisted ? '#2F8F83' : '#DB5338', color: '#FBF6EE', borderRadius: '16px', padding: '15px', textAlign: 'center', fontSize: '16px', fontWeight: 700, cursor: waitlisted ? 'default' : 'pointer', marginBottom: '10px' }}>
+                  {waitlisted ? "You're on the list ✓" : 'Tell me when Plus is ready'}
+                </div>
+                <div onClick={() => setPaywall(null)} style={{ textAlign: 'center', fontSize: '14px', color: '#8A7E73', padding: '8px', cursor: 'pointer' }}>Maybe later</div>
+              </div>
+            </div>,
+            document.body
           )}
 
           {/* ===== LANGUAGE SELECTOR OVERLAY ===== */}

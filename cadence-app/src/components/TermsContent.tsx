@@ -28,7 +28,10 @@ export function TermsContent() {
       <h2 style={{ fontSize: '1.8rem', marginTop: '40px', marginBottom: '20px', borderBottom: '2px solid #E8DEC9', paddingBottom: '10px' }}>3. User Content and Audio</h2>
       <p>You grant us permission to process the audio recordings (your voice) that you transmit through the App solely for the purpose of providing the speech-to-text and pronunciation assessment services. We do not claim ownership of your voice data.</p>
 
-      <h2 style={{ fontSize: '1.8rem', marginTop: '40px', marginBottom: '20px', borderBottom: '2px solid #E8DEC9', paddingBottom: '10px' }}>4. Termination</h2>
+      <h2 style={{ fontSize: '1.8rem', marginTop: '40px', marginBottom: '20px', borderBottom: '2px solid #E8DEC9', paddingBottom: '10px' }}>4. Free use and paid plans</h2>
+      <p>Cadence is free to download and use. Lessons, reading, culture notes and your vocabulary deck are free. AI conversation, voice and pronunciation features are free up to a daily limit, which resets at midnight India time. We may offer a paid plan (&quot;Cadence Plus&quot;) with higher limits; if we do, the price and terms will be shown clearly before you buy, and nothing is charged without your action. We may change the free limits with notice in the app.</p>
+
+      <h2 style={{ fontSize: '1.8rem', marginTop: '40px', marginBottom: '20px', borderBottom: '2px solid #E8DEC9', paddingBottom: '10px' }}>5. Termination</h2>
       <p>You may terminate these Terms at any time by deleting your account via the "Delete Account" button in the App. We may terminate or suspend your access to the App immediately if you breach these Terms.</p>
     </>
   );
