@@ -7,6 +7,7 @@ Team ID 8HZ47NK2Y6 is set in the project. Still needed: a registered iPhone (for
 - Bundle ID `tech.buildc3.cadence`, deployment target iOS 15, version 1.0 (1).
 - `NSMicrophoneUsageDescription` in Info.plist.
 - iPhone is portrait-only (matches Android); `ITSAppUsesNonExemptEncryption=false` set (HTTPS only) so no export-compliance prompt.
+- UIScene life cycle adopted (`SceneDelegate.swift` + scene manifest). REQUIRED: apps built with the iOS 27 SDK crash at launch without it. Verified: app launches on the iOS 27.1 simulator and loads its bundled UI.
 - Push entitlement removed (no push is used). Daily reminder uses local notifications.
 - `PrivacyInfo.xcprivacy` written and registered in the Xcode project (bundled in the app — verified).
 - Account deletion exists in-app (Settings → Data charter) — required by Apple 5.1.1(v).
