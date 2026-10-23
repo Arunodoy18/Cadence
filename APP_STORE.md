@@ -1,7 +1,7 @@
 # Publishing Cadence to the Apple App Store — status and checklist
 
 **Status: builds successfully for the iOS Simulator (Xcode 27.1, iOS 27.1 SDK); NOT yet run, signed or submitted.**
-Still needed: signing with your Apple team, a run on a simulator/real iPhone, and the App Store Connect steps below.
+Team ID 8HZ47NK2Y6 is set in the project. Still needed: a registered iPhone (for the first signing profile), a run on a simulator/real iPhone, and the App Store Connect steps below.
 
 ## What is already in place
 - Bundle ID `tech.buildc3.cadence`, deployment target iOS 15, version 1.0 (1).
