@@ -1,6 +1,7 @@
 # Publishing Cadence to the Apple App Store — status and checklist
 
-**Status: builds successfully for the iOS Simulator (Xcode 27.1, iOS 27.1 SDK); NOT yet run, signed or submitted.**
+**Status (2026-10-23): build 1.0 (1) signed with the Apple Distribution cert + "Cadence App Store" profile (team 8HZ47NK2Y6) and UPLOADED to App Store Connect. Next: TestFlight test, store listing, submit.**
+Re-upload recipe: `npm run build:native && npx cap sync ios`, bump CURRENT_PROJECT_VERSION in project.pbxproj, then `xcodebuild archive` (Release, generic/platform=iOS) and `xcodebuild -exportArchive` with an app-store-connect/upload export plist.
 Team ID 8HZ47NK2Y6 is set in the project. Still needed: a registered iPhone (for the first signing profile), a run on a simulator/real iPhone, and the App Store Connect steps below.
 
 ## What is already in place
