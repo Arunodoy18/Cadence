@@ -45,6 +45,8 @@ ask the way, meet a family, check into a hotel, shop at a market, call for help.
 | Personal info → Name, Email | Collected, required for account, not shared for ads |
 | Audio → Voice recordings | Collected only while the user holds the mic; processed to give the result; **not stored** |
 | App activity → in-app progress | Collected, for app functionality |
+| App activity → daily AI usage counts | Collected, for app functionality (free daily limits) |
+| Purchases | None yet (no payments in the app; optional "notify me" waitlist stores only the account) |
 | Device IDs / location / contacts / photos | Not collected |
 
 ## Other forms
@@ -68,3 +70,13 @@ ask the way, meet a family, check into a hotel, shop at a market, call for help.
 - Remaining permissions: INTERNET, RECORD_AUDIO, MODIFY_AUDIO_SETTINGS, POST_NOTIFICATIONS, VIBRATE,
   RECEIVE_BOOT_COMPLETED (re-arms the daily reminder after reboot), WAKE_LOCK.
 - Verified: target SDK 36, 16 KB page-size aligned, release-signed.
+
+## Pre-submission checklist (tick before pressing Publish)
+- [ ] **Closed-test requirement:** a *new personal* Play developer account must run a closed test with **12+ testers opted in for 14 continuous days** before Production access. (Organization accounts are exempt.) Start this the day the first AAB is uploaded.
+- [ ] Developer identity verification done (ID + address; D-U-N-S for organization accounts).
+- [ ] App access: give Play reviewers a demo login (create one in the app; keep it alive).
+- [ ] Data-safety form matches the table above; Privacy policy URL loads (200 verified).
+- [ ] Generative-AI disclosure answered; content rating questionnaire done.
+- [ ] 512x512 icon, 1024x500 feature graphic, 2-8 phone screenshots (from `/screenshots`).
+- [ ] Release notes written; Internal test install verified from the Play link.
+- [ ] Pre-launch report reviewed (crashes/accessibility) before promoting.
